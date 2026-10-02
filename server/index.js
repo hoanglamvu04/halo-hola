@@ -13,6 +13,7 @@ const app = express()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const uploadsDir = path.join(__dirname, '..', 'uploads')
+const distDir = path.join(__dirname, '..', 'dist')
 fs.mkdirSync(uploadsDir, { recursive: true })
 
 const upload = multer({
@@ -119,6 +120,16 @@ app.patch('/api/admin/submissions/:id/status', adminOnly, async (req, res, next)
     }))
   } catch (error) { next(error) }
 })
+
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir))
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+      return res.sendFile(path.join(distDir, 'index.html'))
+    }
+    next()
+  })
+}
 
 app.use((error, _req, res, _next) => {
   console.error(error)
