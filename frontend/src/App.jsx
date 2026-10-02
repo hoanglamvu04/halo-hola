@@ -18,7 +18,7 @@ import ThemePage from './pages/ThemePage.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => window.scrollTo({ top: 0, behavior: 'instant' }), [pathname])
+  useEffect(() => {\n    window.scrollTo(0, 0)\n  }, [pathname])
   return null
 }
 
