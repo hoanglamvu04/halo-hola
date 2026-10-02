@@ -2,9 +2,9 @@ import { useMemo, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Camera, Video, FileText, Palette, Upload, MapPin, Check, Copy, Image as ImageIcon, Loader2 } from 'lucide-react'
 import PageHero from '../components/PageHero.jsx'
 import { themes, colorStories, img } from '../data/siteData.js'
+import { submitArtwork } from '../services/api.js'
 
 const steps = ['Thông tin tác giả','Loại hình','Tải tác phẩm','Chọn chủ đề','Chọn sắc màu','Địa điểm & câu chuyện','Xác nhận']
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
 export default function SubmitPage(){
   const [step,setStep]=useState(1)
@@ -27,12 +27,13 @@ export default function SubmitPage(){
     }
     setSubmitting(true)
     try {
-      const fd = new FormData()
-      Object.entries(form).forEach(([key,value]) => fd.append(key === 'display' ? 'displayName' : key, String(value)))
-      files.forEach(file => fd.append('files', file))
-      const response = await fetch(`${API_URL}/submissions`, { method: 'POST', body: fd })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Không thể gửi tác phẩm')
+      const data = await submitArtwork({
+        fields: {
+          ...form,
+          displayName: form.display
+        },
+        files
+      })
       setResult(data)
     } catch (err) {
       setError(err.message || 'Có lỗi xảy ra khi gửi tác phẩm')
