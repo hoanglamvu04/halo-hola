@@ -1,0 +1,88 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(160) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(30) NOT NULL DEFAULT 'EDITOR' CHECK (role IN ('EDITOR','MODERATOR','ADMIN')),
+  account_status VARCHAR(30) NOT NULL DEFAULT 'ACTIVE' CHECK (account_status IN ('ACTIVE','SUSPENDED')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code VARCHAR(32) NOT NULL UNIQUE,
+  name VARCHAR(160) NOT NULL,
+  display_name VARCHAR(160),
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(60),
+  bio TEXT,
+  type VARCHAR(80) NOT NULL,
+  theme VARCHAR(180) NOT NULL,
+  color VARCHAR(120),
+  location VARCHAR(255) NOT NULL,
+  story TEXT NOT NULL,
+  status VARCHAR(30) NOT NULL DEFAULT 'PENDING'
+    CHECK (status IN ('PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED')),
+  allow_media_use BOOLEAN NOT NULL DEFAULT TRUE,
+  allow_newsletter BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS submission_media (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  submission_id UUID NOT NULL REFERENCES submissions(id) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  original_name TEXT NOT NULL,
+  mime_type VARCHAR(150) NOT NULL,
+  size_bytes INTEGER NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS places (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug VARCHAR(180) NOT NULL UNIQUE,
+  name VARCHAR(220) NOT NULL,
+  category VARCHAR(120) NOT NULL,
+  lat DOUBLE PRECISION NOT NULL,
+  lng DOUBLE PRECISION NOT NULL,
+  image TEXT,
+  description TEXT,
+  published BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS tours (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  number VARCHAR(20) NOT NULL UNIQUE,
+  title VARCHAR(220) NOT NULL,
+  dates VARCHAR(120) NOT NULL,
+  kicker VARCHAR(220) NOT NULL,
+  description TEXT NOT NULL,
+  image TEXT,
+  status VARCHAR(30) NOT NULL DEFAULT 'DRAFT'
+    CHECK (status IN ('DRAFT','PUBLISHED','CLOSED')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS stories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug VARCHAR(220) NOT NULL UNIQUE,
+  title VARCHAR(280) NOT NULL,
+  author VARCHAR(180) NOT NULL,
+  excerpt TEXT NOT NULL,
+  content TEXT NOT NULL,
+  image TEXT,
+  published BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_submissions_status_created ON submissions(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_places_published_name ON places(published, name);
+CREATE INDEX IF NOT EXISTS idx_stories_published_created ON stories(published, created_at DESC);
