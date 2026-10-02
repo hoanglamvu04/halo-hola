@@ -18,17 +18,23 @@ import ThemePage from './pages/ThemePage.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => {\n    window.scrollTo(0, 0)\n  }, [pathname])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return null
 }
 
 function SiteShell() {
   const { pathname } = useLocation()
   const isAdmin = pathname.startsWith('/admin')
+
   return (
     <>
       <ScrollToTop />
       {!isAdmin && <Header />}
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/gui-goc-nhin" element={<SubmitPage />} />
@@ -45,6 +51,7 @@ function SiteShell() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
+
       {!isAdmin && <Footer />}
     </>
   )
