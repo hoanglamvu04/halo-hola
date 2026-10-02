@@ -1,95 +1,147 @@
-# HALO HOLA
+# HALO HOLA 2026
 
-Website HALO HOLA 2026 — **52 góc nhìn · 1 Hòa Lạc**.
+Nền tảng **HALO HOLA — 52 góc nhìn · 1 Hòa Lạc**.
 
-## Stack
-- React 18 **JSX** + Vite
+Kiến trúc dự án được tổ chức theo cùng cách với **Bản đồ Hòa Lạc**: frontend và backend tách riêng, root chỉ dùng để điều phối lệnh chạy.
+
+## Architecture
+
+```
+.
+├── frontend/              React 18 + Vite + React Router
+│   └── src/
+│       ├── components/
+│       ├── data/
+│       ├── pages/
+│       └── services/
+├── backend/               Node.js + Express REST API
+│   └── src/
+│       ├── config/
+│       ├── database/
+│       ├── middleware/
+│       ├── routes/
+│       ├── services/
+│       ├── utils/
+│       └── validators/
+└── package.json           chạy frontend + backend cùng lúc
+```
+
+**Local development không dùng Docker.**
+
+## Công nghệ
+
+### Frontend
+- React 18 JSX
+- Vite
 - React Router
+- Axios
 - React Leaflet + OpenStreetMap
-- Lucide icons
-- CSS responsive theo visual HALO HOLA
-- Node.js + Express API
-- Prisma + **SQLite**
+- Lucide React
+
+### Backend
+- Node.js + Express
+- PostgreSQL chạy native
+- JWT auth
+- bcrypt
+- Zod validation
+- Helmet + CORS + rate limit
 - Multer upload
 
-**Không dùng Docker. Không cần cài PostgreSQL để chạy local.**
+## Chuẩn bị PostgreSQL
+
+Tạo database:
+
+```sql
+CREATE DATABASE halo_hola;
+```
+
+HALO HOLA hiện không cần PostGIS để chạy chức năng lõi.
 
 ## Chạy local trên Windows
 
-### 1. Cài package
+### 1. Cài dependencies
+
+Ở thư mục gốc:
+
 ```powershell
 npm install
+npm run install:all
 ```
 
-### 2. Tạo file môi trường
-PowerShell:
+### 2. Tạo env
+
 ```powershell
-Copy-Item .env.example .env
+Copy-Item backend/.env.example backend/.env
+Copy-Item frontend/.env.example frontend/.env
 ```
 
-Nếu đã có `.env` rồi thì bỏ qua bước này.
+Mở `backend/.env` và sửa:
 
-### 3. Khởi tạo database local
+```
+DATABASE_URL=postgresql://postgres:MAT_KHAU_POSTGRES@localhost:5432/halo_hola
+JWT_SECRET=CHUOI_BI_MAT_DAI_NGAU_NHIEN
+```
+
+### 3. Tạo bảng + dữ liệu mẫu
+
 ```powershell
-npm run setup
+npm run db:migrate
+npm run db:seed
 ```
 
-Lệnh này tự:
-- tạo Prisma Client
-- tạo database SQLite ở `prisma/dev.db`
-- seed dữ liệu HOLA Tour và HOLA Map
+Nếu muốn tạo tài khoản admin, điền ba biến sau trong `backend/.env`:
 
-### 4. Chạy toàn bộ web + API
+```
+ADMIN_SEED_NAME=HALO HOLA Admin
+ADMIN_SEED_EMAIL=admin@halohola.vn
+ADMIN_SEED_PASSWORD=MAT_KHAU_CUA_BAN
+```
+
+Sau đó:
+
+```powershell
+npm run db:seed:admin
+```
+
+### 4. Chạy cả frontend + backend
+
 ```powershell
 npm run dev
 ```
 
-Sau đó mở:
-- Web: http://localhost:5173
-- API health: http://localhost:4000/api/health
-- Admin: http://localhost:5173/admin
+Mặc định:
+- Frontend: http://localhost:5173
+- Backend: http://localhost:5000/api
+- Health: http://localhost:5000/api/health
 
-Admin dev key mặc định trong `.env.example`:
-```
-halo-hola-admin-dev
-```
+Nếu cổng bị chiếm, cả Vite và backend đều có cơ chế thử cổng tiếp theo.
 
-## Chạy riêng từng phần
-Frontend:
-```powershell
-npm run dev:web
-```
+## Các màn hình hiện có
 
-Backend:
-```powershell
-npm run dev:api
-```
-
-## Route chính
 - `/` Trang chủ
 - `/gui-goc-nhin` Gửi tác phẩm 7 bước
 - `/hola-map` HOLA Map
 - `/top52` TOP52
 - `/tac-pham/:slug` Chi tiết tác phẩm
 - `/hola-tour` HOLA Tour
-- `/hola-day` HOLA DAY 2026
+- `/hola-day` HOLA DAY
 - `/stories` Stories
 - `/we-hola` WE HOLA
 - `/dong-hanh` Đối tác
 - `/hello` QR landing
 - `/admin` Admin
 
-## API chính
+## API lõi
+
 - `GET /api/health`
+- `POST /api/auth/login`
 - `POST /api/submissions`
 - `GET /api/places`
 - `GET /api/tours`
 - `GET /api/stories`
-- `GET /api/admin/submissions` — cần header `x-admin-key`
+- `GET /api/admin/submissions`
 - `PATCH /api/admin/submissions/:id/status`
 
-## Production
-Khi đưa lên VPS, chạy Node/PM2 như các dự án khác. Có thể giữ SQLite cho quy mô nhỏ hoặc chuyển datasource sang PostgreSQL nếu cần tải lớn hơn.
+## Ghi chú triển khai
 
-## Lưu ý
-Ảnh giao diện hiện dùng nguồn ảnh online để khóa layout. Khi có image bank HALO HOLA chính thức chỉ cần thay asset/URL, không phải dựng lại layout.
+Production chạy Node/PM2 + PostgreSQL native giống hướng triển khai Bản đồ Hòa Lạc. Không cần Docker.
