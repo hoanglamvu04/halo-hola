@@ -16,7 +16,7 @@ export default function Header() {
         {items.map(([label, href]) => <NavLink key={href} to={href} onClick={() => setOpen(false)}>{label}</NavLink>)}
       </nav>
       <div className="header-actions">
-        <button className="icon-btn search-btn" aria-label="Tìm kiếm"><Search size={18}/></button>
+        <Link className="icon-btn search-btn" to="/tra-cuu" aria-label="Tra cứu tác phẩm" title="Tra cứu tác phẩm"><Search size={18}/></Link>
         <Link className="btn btn-terra btn-sm" to="/gui-goc-nhin">GỬI GÓC NHÌN <ArrowRight size={16}/></Link>
         <button className="menu-btn" onClick={() => setOpen(v => !v)} aria-label="Menu">{open ? <X/> : <Menu/>}</button>
       </div>
