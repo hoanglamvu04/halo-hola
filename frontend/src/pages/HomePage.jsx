@@ -183,12 +183,52 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('change')&&<section className="change-band">
-      <div className="container change-grid">
-        <div className="change-copy"><h2>{change.title}</h2><p>{change.description}</p><Link to="/stories" className="text-link">Xem câu chuyện hành trình <ArrowRight size={16}/></Link></div>
-        <div className="era-card"><img src={change.image1}/><span><b>Cội nguồn</b><small>Xứ Đoài · Làng xóm · Đá ong</small></span></div>
-        <div className="era-card"><img src={change.image2}/><span><b>Hôm nay</b><small>Tri thức · Kiến trúc · Con người</small></span></div>
-        <div className="era-card"><img src={change.image3}/><span><b>Tương lai</b><small>Đô thị sáng tạo · Kết nối</small></span></div>
+    {sectionOn('change')&&<section className="change-band change-band-reference">
+      <div className="change-decor change-decor-left"/>
+      <div className="change-decor change-decor-right"/>
+      <div className="change-grid">
+        <div className="change-copy">
+          <div className="change-eyebrow-row">
+            <span className="eyebrow">HÒA LẠC – HÀNH TRÌNH KIẾN TẠO TƯƠNG LAI</span>
+            <i/>
+          </div>
+          <h2>{change.title}</h2>
+          <p>{change.description}</p>
+          <Link to="/stories" className="change-cta">Xem câu chuyện hành trình <ArrowRight size={17}/></Link>
+        </div>
+
+        <Link to="/stories" className="era-card era-card-reference">
+          <img src={change.image1} alt="Cội nguồn Hòa Lạc"/>
+          <div className="era-shade"/>
+          <span className="era-content">
+            <b>Cội nguồn</b>
+            <i/>
+            <small>Xứ Đoài · Làng xóm · Đá ong</small>
+          </span>
+          <span className="era-arrow"><ArrowRight/></span>
+        </Link>
+
+        <Link to="/stories" className="era-card era-card-reference">
+          <img src={change.image2} alt="Hòa Lạc hôm nay"/>
+          <div className="era-shade"/>
+          <span className="era-content">
+            <b>Hôm nay</b>
+            <i/>
+            <small>Tri thức · Kiến trúc · Con người</small>
+          </span>
+          <span className="era-arrow"><ArrowRight/></span>
+        </Link>
+
+        <Link to="/stories" className="era-card era-card-reference">
+          <img src={change.image3} alt="Tương lai Hòa Lạc"/>
+          <div className="era-shade"/>
+          <span className="era-content">
+            <b>Tương lai</b>
+            <i/>
+            <small>Đô thị sáng tạo · Kết nối</small>
+          </span>
+          <span className="era-arrow"><ArrowRight/></span>
+        </Link>
       </div>
     </section>}
 
