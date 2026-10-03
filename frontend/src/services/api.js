@@ -18,7 +18,10 @@ client.interceptors.request.use((config) => {
 
 function unwrap(promise) {
   return promise.then((res) => res.data).catch((error) => {
-    const message = error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.';
+    const isNetworkError = !error.response && (error.code === 'ERR_NETWORK' || error.message === 'Network Error');
+    const message = isNetworkError
+      ? 'Không kết nối được máy chủ HALO HOLA API. Hãy kiểm tra backend đang chạy ở cổng 5000.'
+      : (error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.');
     const wrapped = new Error(message);
     wrapped.status = error.response?.status;
     wrapped.details = error.response?.data?.details;
