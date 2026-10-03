@@ -3,16 +3,17 @@ import { Link } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star
+  AlertTriangle, ExternalLink, Star, Home
 } from 'lucide-react'
 import { artworks, mapPlaces, tours } from '../data/siteData.js'
+import HomepageManager from '../components/HomepageManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
 } from '../services/api.js'
 
 const nav=[
-  ['Tổng quan',LayoutDashboard],['Tác phẩm',Images],['Tác giả',Users],['TOP52',Images],
+  ['Tổng quan',LayoutDashboard],['Trang chủ',Home],['Tác phẩm',Images],['Tác giả',Users],['TOP52',Images],
   ['HOLA Map',Map],['HOLA Tour',CalendarDays],['Stories',BookOpen],['Đối tác',Handshake],['Cài đặt',Settings]
 ]
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
@@ -128,6 +129,7 @@ export default function AdminPage(){
          </div>
        </div>
      </>:
+     active==='Trang chủ'?<HomepageManager/>:
      active==='HOLA Tour'?<div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>:
      active==='Tác phẩm'?<div className="admin-workspace">
        <div className="admin-panel submissions-panel">
