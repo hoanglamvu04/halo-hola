@@ -34,7 +34,13 @@ export default function TourPage(){
   useEffect(()=>{
     getTours().then(data=>setRemoteTours((data||[]).map(normalizeTour))).catch(()=>{})
   },[])
-  const tours=useMemo(()=>remoteTours.length?remoteTours:fallbackTours.map(normalizeTour),[remoteTours])
+  const tours=useMemo(()=>{
+    const base=fallbackTours.map(normalizeTour)
+    if(!remoteTours.length) return base
+    const map=new Map(base.map(item=>[String(item.no),item]))
+    remoteTours.forEach(item=>map.set(String(item.no),{...map.get(String(item.no)),...item}))
+    return Array.from(map.values()).sort((a,b)=>String(a.no).localeCompare(String(b.no)))
+  },[remoteTours])
   const tour=tours[selected]||tours[0]
   const currentItinerary=Array.isArray(tour?.itinerary)&&tour.itinerary.length
     ? tour.itinerary.map((item,index)=>[
