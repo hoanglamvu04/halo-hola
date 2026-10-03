@@ -145,3 +145,28 @@ Nếu cổng bị chiếm, cả Vite và backend đều có cơ chế thử cổ
 ## Ghi chú triển khai
 
 Production chạy Node/PM2 + PostgreSQL native giống hướng triển khai Bản đồ Hòa Lạc. Không cần Docker.
+
+
+## Nâng cấp vận hành 03/10/2026
+
+- Form gửi tác phẩm 7 bước có auto-save draft.
+- Bổ sung tên tác phẩm, thời gian thực hiện, giải thưởng trước đó, quyền tác giả, quyền hình ảnh và guardian consent.
+- File original lưu Cloudflare R2 theo key `2026/submissions/HH26-xxxxx/original/v1/`.
+- Lưu SHA-256, dung lượng, MIME, revision và metadata file trong PostgreSQL.
+- Trang `/tra-cuu` tra cứu bằng mã tác phẩm + email.
+- Admin có filter/search, quyền sử dụng, Original Vault và signed download.
+- `/jury` có Blind Mode, keyboard navigation, Shortlist và ghi chú BGK.
+- HOLA Tour có form đăng ký và mã `HT26-xxxx`.
+- Homepage có live campaign stats và timeline 2026.
+- Email xác nhận sau submission hoạt động nếu cấu hình SMTP.
+
+### Sau khi pull bản nâng cấp
+
+```powershell
+git pull
+npm run install:all
+npm run db:migrate
+npm run dev
+```
+
+`db:migrate` cần chạy lại vì schema đã bổ sung metadata submission, R2 media vault và bảng đăng ký HOLA Tour.
