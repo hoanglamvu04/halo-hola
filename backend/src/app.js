@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.routes.js';
 import submissionsRoutes from './routes/submissions.routes.js';
 import contentRoutes from './routes/content.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
 
 export function createApp() {
   const app = express();
@@ -38,6 +39,7 @@ export function createApp() {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/submissions', submissionsRoutes);
+  app.use('/api/tour-registrations', tourRegistrationsRoutes);
   app.use('/api', contentRoutes);
   app.use('/api/admin', adminRoutes);
 
