@@ -122,10 +122,27 @@ export default function HomePage() {
         <div className="campaign-visual" aria-label="Hòa Lạc qua những góc nhìn">
           <img className="campaign-visual-bg" src={campaign.backgroundImage} alt="Phong cảnh Hòa Lạc"/>
           <div className="campaign-visual-shade"/>
+          <div className="campaign-visual-glow"/>
+
           <div className="campaign-place-sign"><MapPin/><span>Hòa Lạc</span></div>
-          <div className="campaign-polaroid polaroid-discover"><img src={campaign.discoverImage} alt="Khám phá Hòa Lạc"/><span>Khám phá</span></div>
-          <div className="campaign-polaroid polaroid-keep"><img src={campaign.keepImage} alt="Lưu giữ Hòa Lạc"/><span>Lưu giữ</span></div>
-          <div className="campaign-polaroid polaroid-share"><img src={campaign.shareImage} alt="Chia sẻ Hòa Lạc"/><span>Chia sẻ</span></div>
+
+          <div className="campaign-photo-main">
+            <img src={campaign.discoverImage} alt="Khám phá Hòa Lạc"/>
+            <span>Khám phá</span>
+          </div>
+
+          <div className="campaign-photo-secondary">
+            <img src={campaign.keepImage} alt="Lưu giữ Hòa Lạc"/>
+            <span>Lưu giữ</span>
+          </div>
+
+          <div className="campaign-note-card">
+            <img src={campaign.shareImage} alt="Chia sẻ Hòa Lạc"/>
+            <div>
+              <small>Góc nhìn cộng đồng</small>
+              <b>Chia sẻ một Hòa Lạc đang chuyển mình</b>
+            </div>
+          </div>
         </div>
       </div>
     </section>}
