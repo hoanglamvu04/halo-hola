@@ -4,7 +4,7 @@ const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').re
 
 export const client = axios.create({
   baseURL: API_URL,
-  timeout: 20000
+  timeout: 120000
 });
 
 client.interceptors.request.use((config) => {
@@ -21,6 +21,7 @@ function unwrap(promise) {
     const message = error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.';
     const wrapped = new Error(message);
     wrapped.status = error.response?.status;
+    wrapped.details = error.response?.data?.details;
     throw wrapped;
   });
 }
@@ -55,6 +56,18 @@ export function submitArtwork(payload) {
   return unwrap(client.post('/submissions', form));
 }
 
+export function lookupSubmission(params) {
+  return unwrap(client.get('/submissions/lookup', { params }));
+}
+
+export function getCampaignStats() {
+  return unwrap(client.get('/submissions/stats'));
+}
+
+export function registerTour(payload) {
+  return unwrap(client.post('/tour-registrations', payload));
+}
+
 export function getPlaces() {
   return unwrap(client.get('/places'));
 }
@@ -77,6 +90,14 @@ export function getAdminSubmissions(params = {}) {
 
 export function updateSubmissionStatus(id, status) {
   return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/status', { status }));
+}
+
+export function updateJuryNote(id, note) {
+  return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/jury-note', { note }));
+}
+
+export function getOriginalDownload(mediaId) {
+  return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download'));
 }
 
 export { API_URL };
