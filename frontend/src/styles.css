@@ -6113,3 +6113,12 @@
   .story-related-inner>header{display:grid}
   .story-related-grid{grid-template-columns:1fr}
 }
+
+.story-side-actions button.active{
+  background:#174a38;
+  color:#fff;
+  border-color:#174a38;
+}
+.story-side-actions button.active svg{
+  color:#fff;
+}
