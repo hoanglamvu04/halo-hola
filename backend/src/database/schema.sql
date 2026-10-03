@@ -179,3 +179,64 @@ INSERT INTO site_sections (section_key,label,enabled,sort_order,content) VALUES
   ('stories','TOP52 / Stories',TRUE,90,'{}'::jsonb),
   ('community','WE HOLA',TRUE,100,'{}'::jsonb)
 ON CONFLICT (section_key) DO NOTHING;
+
+
+-- CMS V2 enrichments
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS role VARCHAR(160);
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS category VARCHAR(180);
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS location VARCHAR(220);
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS read_time VARCHAR(80);
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS lead TEXT;
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS quote TEXT;
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS body JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS gallery JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS featured BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE stories ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS itinerary JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS highlights JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS stops JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS location VARCHAR(220) DEFAULT 'Hòa Lạc, Hà Nội';
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS duration_label VARCHAR(80) DEFAULT '2 ngày';
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS audience_label VARCHAR(120) DEFAULT '15–20 người';
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE places ADD COLUMN IF NOT EXISTS tags JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE places ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE site_assets ADD COLUMN IF NOT EXISTS title VARCHAR(220);
+ALTER TABLE site_assets ADD COLUMN IF NOT EXISTS alt_text VARCHAR(280);
+ALTER TABLE site_assets ADD COLUMN IF NOT EXISTS folder VARCHAR(120) DEFAULT 'general';
+ALTER TABLE site_assets ADD COLUMN IF NOT EXISTS tags TEXT DEFAULT '';
+ALTER TABLE site_assets ADD COLUMN IF NOT EXISTS archived BOOLEAN NOT NULL DEFAULT FALSE;
+
+CREATE TABLE IF NOT EXISTS partners (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(220) NOT NULL,
+  tier VARCHAR(80) NOT NULL DEFAULT 'PARTNER',
+  description TEXT,
+  logo TEXT,
+  website TEXT,
+  published BOOLEAN NOT NULL DEFAULT TRUE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS site_settings (
+  setting_key VARCHAR(100) PRIMARY KEY,
+  value JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_stories_sort ON stories(featured DESC, sort_order ASC, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tours_sort ON tours(sort_order ASC, number ASC);
+CREATE INDEX IF NOT EXISTS idx_places_sort ON places(sort_order ASC, name ASC);
+CREATE INDEX IF NOT EXISTS idx_site_assets_library ON site_assets(archived, folder, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_partners_sort ON partners(published, sort_order ASC, name ASC);
+
+INSERT INTO site_settings (setting_key,value) VALUES
+  ('brand','{"siteName":"HALO HOLA","tagline":"52 góc nhìn · 1 Hòa Lạc"}'::jsonb),
+  ('seo','{"defaultTitle":"HALO HOLA","defaultDescription":"Cùng kể những câu chuyện về Hòa Lạc."}'::jsonb),
+  ('footer','{}'::jsonb)
+ON CONFLICT (setting_key) DO NOTHING;
