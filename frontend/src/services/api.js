@@ -130,4 +130,84 @@ export function getOriginalDownload(mediaId) {
   return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download'));
 }
 
+
+export function getAdminCmsStories() {
+  return unwrap(client.get('/admin/cms/stories'));
+}
+export function createAdminCmsStory(payload) {
+  return unwrap(client.post('/admin/cms/stories', payload));
+}
+export function updateAdminCmsStory(id, payload) {
+  return unwrap(client.put('/admin/cms/stories/' + encodeURIComponent(id), payload));
+}
+export function deleteAdminCmsStory(id) {
+  return unwrap(client.delete('/admin/cms/stories/' + encodeURIComponent(id)));
+}
+
+export function getAdminCmsTours() {
+  return unwrap(client.get('/admin/cms/tours'));
+}
+export function createAdminCmsTour(payload) {
+  return unwrap(client.post('/admin/cms/tours', payload));
+}
+export function updateAdminCmsTour(id, payload) {
+  return unwrap(client.put('/admin/cms/tours/' + encodeURIComponent(id), payload));
+}
+export function deleteAdminCmsTour(id) {
+  return unwrap(client.delete('/admin/cms/tours/' + encodeURIComponent(id)));
+}
+
+export function getAdminCmsPlaces() {
+  return unwrap(client.get('/admin/cms/places'));
+}
+export function createAdminCmsPlace(payload) {
+  return unwrap(client.post('/admin/cms/places', payload));
+}
+export function updateAdminCmsPlace(id, payload) {
+  return unwrap(client.put('/admin/cms/places/' + encodeURIComponent(id), payload));
+}
+export function deleteAdminCmsPlace(id) {
+  return unwrap(client.delete('/admin/cms/places/' + encodeURIComponent(id)));
+}
+
+export function getAdminCmsPartners() {
+  return unwrap(client.get('/admin/cms/partners'));
+}
+export function createAdminCmsPartner(payload) {
+  return unwrap(client.post('/admin/cms/partners', payload));
+}
+export function updateAdminCmsPartner(id, payload) {
+  return unwrap(client.put('/admin/cms/partners/' + encodeURIComponent(id), payload));
+}
+export function deleteAdminCmsPartner(id) {
+  return unwrap(client.delete('/admin/cms/partners/' + encodeURIComponent(id)));
+}
+
+export function getAdminCmsSettings() {
+  return unwrap(client.get('/admin/cms/settings'));
+}
+export function updateAdminCmsSetting(key, payload) {
+  return unwrap(client.put('/admin/cms/settings/' + encodeURIComponent(key), payload));
+}
+
+export function getAdminMediaLibrary(params = {}) {
+  return unwrap(client.get('/admin/media-library', { params }));
+}
+export function updateAdminMediaAsset(id, payload) {
+  return unwrap(client.patch('/admin/media-library/' + encodeURIComponent(id), payload));
+}
+export function deleteAdminMediaAsset(id) {
+  return unwrap(client.delete('/admin/media-library/' + encodeURIComponent(id)));
+}
+
+export function getStoryBySlug(slug) {
+  return unwrap(client.get('/stories/' + encodeURIComponent(slug)));
+}
+export function getPartners() {
+  return unwrap(client.get('/partners'));
+}
+export function getSiteSettings() {
+  return unwrap(client.get('/site-settings'));
+}
+
 export { API_URL };
