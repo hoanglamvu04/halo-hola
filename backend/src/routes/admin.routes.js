@@ -6,6 +6,14 @@ import { listTourRegistrations } from '../services/tourRegistration.service.js';
 import { upload } from '../middleware/upload.js';
 import { getHomepageSections, updateHomepageSection, listSiteAssets, saveSiteAsset } from '../services/siteContent.service.js';
 import {
+  listAdminStories, createAdminStory, updateAdminStory, deleteAdminStory,
+  listAdminTours, createAdminTour, updateAdminTour, deleteAdminTour,
+  listAdminPlaces, createAdminPlace, updateAdminPlace, deleteAdminPlace,
+  listAdminPartners, createAdminPartner, updateAdminPartner, deleteAdminPartner,
+  getSiteSettings, updateSiteSetting,
+  listMediaLibrary, updateMediaAsset, deleteMediaAsset
+} from '../services/cms.service.js';
+import {
   listSubmissions,
   updateSubmissionStatus,
   updateJuryNote,
@@ -58,6 +66,122 @@ router.post('/site-assets', upload.single('file'), async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.get('/cms/stories', async (_req,res,next)=>{
+  try{res.json(await listAdminStories());}catch(error){next(error);}
+});
+router.post('/cms/stories', async (req,res,next)=>{
+  try{res.status(201).json(await createAdminStory(req.body||{}));}catch(error){next(error);}
+});
+router.put('/cms/stories/:id', async (req,res,next)=>{
+  try{
+    const item=await updateAdminStory(req.params.id,req.body||{});
+    if(!item) throw new AppError('Không tìm thấy Story.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+router.delete('/cms/stories/:id', async (req,res,next)=>{
+  try{
+    const item=await deleteAdminStory(req.params.id);
+    if(!item) throw new AppError('Không tìm thấy Story.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+
+router.get('/cms/tours', async (_req,res,next)=>{
+  try{res.json(await listAdminTours());}catch(error){next(error);}
+});
+router.post('/cms/tours', async (req,res,next)=>{
+  try{res.status(201).json(await createAdminTour(req.body||{}));}catch(error){next(error);}
+});
+router.put('/cms/tours/:id', async (req,res,next)=>{
+  try{
+    const item=await updateAdminTour(req.params.id,req.body||{});
+    if(!item) throw new AppError('Không tìm thấy Tour.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+router.delete('/cms/tours/:id', async (req,res,next)=>{
+  try{
+    const item=await deleteAdminTour(req.params.id);
+    if(!item) throw new AppError('Không tìm thấy Tour.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+
+router.get('/cms/places', async (_req,res,next)=>{
+  try{res.json(await listAdminPlaces());}catch(error){next(error);}
+});
+router.post('/cms/places', async (req,res,next)=>{
+  try{res.status(201).json(await createAdminPlace(req.body||{}));}catch(error){next(error);}
+});
+router.put('/cms/places/:id', async (req,res,next)=>{
+  try{
+    const item=await updateAdminPlace(req.params.id,req.body||{});
+    if(!item) throw new AppError('Không tìm thấy địa điểm.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+router.delete('/cms/places/:id', async (req,res,next)=>{
+  try{
+    const item=await deleteAdminPlace(req.params.id);
+    if(!item) throw new AppError('Không tìm thấy địa điểm.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+
+router.get('/cms/partners', async (_req,res,next)=>{
+  try{res.json(await listAdminPartners());}catch(error){next(error);}
+});
+router.post('/cms/partners', async (req,res,next)=>{
+  try{res.status(201).json(await createAdminPartner(req.body||{}));}catch(error){next(error);}
+});
+router.put('/cms/partners/:id', async (req,res,next)=>{
+  try{
+    const item=await updateAdminPartner(req.params.id,req.body||{});
+    if(!item) throw new AppError('Không tìm thấy đối tác.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+router.delete('/cms/partners/:id', async (req,res,next)=>{
+  try{
+    const item=await deleteAdminPartner(req.params.id);
+    if(!item) throw new AppError('Không tìm thấy đối tác.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+
+router.get('/cms/settings', async (_req,res,next)=>{
+  try{res.json(await getSiteSettings());}catch(error){next(error);}
+});
+router.put('/cms/settings/:key', async (req,res,next)=>{
+  try{res.json(await updateSiteSetting(req.params.key,req.body||{}));}catch(error){next(error);}
+});
+
+router.get('/media-library', async (req,res,next)=>{
+  try{
+    res.json(await listMediaLibrary({
+      q:req.query.q,
+      folder:req.query.folder,
+      sectionKey:req.query.sectionKey,
+      archived:req.query.archived==='true'
+    }));
+  }catch(error){next(error);}
+});
+router.patch('/media-library/:id', async (req,res,next)=>{
+  try{
+    const item=await updateMediaAsset(req.params.id,req.body||{});
+    if(!item) throw new AppError('Không tìm thấy media.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+router.delete('/media-library/:id', async (req,res,next)=>{
+  try{
+    const item=await deleteMediaAsset(req.params.id);
+    if(!item) throw new AppError('Không tìm thấy media.',404);
+    res.json(item);
+  }catch(error){next(error);}
 });
 
 router.get('/tour-registrations', async (req, res, next) => {
