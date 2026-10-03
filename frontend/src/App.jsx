@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
+import BottomNav from './components/BottomNav.jsx'
 import HomePage from './pages/HomePage.jsx'
 import SubmitPage from './pages/SubmitPage.jsx'
 import MapPage from './pages/MapPage.jsx'
@@ -32,9 +33,10 @@ function ScrollToTop() {
 function SiteShell() {
   const { pathname } = useLocation()
   const isAdmin = pathname.startsWith('/admin') || pathname.startsWith('/jury')
+  const showBottomNav = !isAdmin && pathname !== '/gui-goc-nhin'
 
   return (
-    <>
+    <div className={'site-shell '+(showBottomNav?'has-mobile-bottom-nav':'')}>
       <ScrollToTop />
       {!isAdmin && <Header />}
 
@@ -59,7 +61,8 @@ function SiteShell() {
       </Routes>
 
       {!isAdmin && <Footer />}
-    </>
+      {showBottomNav && <BottomNav />}
+    </div>
   )
 }
 
