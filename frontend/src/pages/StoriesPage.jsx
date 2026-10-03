@@ -1,9 +1,85 @@
-import { ArrowRight } from 'lucide-react'
-import PageHero from '../components/PageHero.jsx'
-import { stories, img } from '../data/siteData.js'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Eye, MapPin, Clock3, BookOpen, Heart, Users, Leaf } from 'lucide-react'
+import { stories } from '../data/siteData.js'
 
 export default function StoriesPage(){
- return <main><PageHero eyebrow="CÂU CHUYỆN HÒA LẠC" title="Stories" accent="Những điều đáng được kể" desc="Con người, nơi chốn, ký ức và những đổi thay đang diễn ra từng ngày ở Hòa Lạc." image={img.camera}/>
- <section className="container section story-feature"><img src={img.village}/><div><span className="eyebrow">FEATURED STORY</span><h2>Một Hòa Lạc đang lớn lên</h2><p>Những lớp ký ức Xứ Đoài, văn hóa Mường, cảnh quan tự nhiên đang đồng thời đón nhận tri thức, công nghệ, đô thị và những cộng đồng mới.</p><a className="text-link" href="#">Đọc câu chuyện <ArrowRight size={15}/></a></div></section>
- <section className="container section"><div className="story-grid large">{stories.concat(stories).map((s,i)=><article className="story-card" key={`${s.title}-${i}`}><img src={s.image}/><div><span className="eyebrow">STORIES</span><h3>{s.title}</h3><small>{s.author}</small><p>{s.excerpt}</p><a href="#">Đọc thêm →</a></div></article>)}</div></section></main>
+  const featured=stories[0]
+  const rest=stories.slice(1)
+
+  return <main className="stories-page-ref">
+    <section className="stories-intro-ref">
+      <div className="stories-contours"/>
+      <div className="stories-intro-inner">
+        <div>
+          <div className="stories-kicker"><span>CÂU CHUYỆN HÒA LẠC</span><i/></div>
+          <h1>Stories</h1>
+          <h2>Những điều đáng được kể</h2>
+        </div>
+        <div className="stories-intro-side">
+          <p>Con người, nơi chốn, ký ức và những đổi thay đang diễn ra từng ngày ở Hòa Lạc.</p>
+          <div className="stories-intro-stats">
+            <span><BookOpen/> {stories.length} câu chuyện</span>
+            <span><Users/> Góc nhìn cộng đồng</span>
+            <span><Leaf/> Hòa Lạc 2026</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="stories-feature-ref">
+      <div className="stories-feature-inner">
+        <Link className="stories-feature-image" to={'/stories/'+featured.slug}>
+          <img src={featured.cover||featured.image} alt={featured.title}/>
+          <span className="stories-feature-badge">FEATURED STORY</span>
+        </Link>
+
+        <div className="stories-feature-copy">
+          <span className="eyebrow">FEATURED STORY</span>
+          <h2>{featured.title}</h2>
+          <p className="stories-feature-lead">{featured.excerpt}</p>
+          <div className="stories-feature-meta">
+            <span><MapPin/> {featured.location}</span>
+            <span><Clock3/> {featured.readTime}</span>
+          </div>
+          <p className="stories-feature-author">Bởi <b>{featured.author}</b> · {featured.date}</p>
+          <Link className="stories-read-link" to={'/stories/'+featured.slug}>Đọc câu chuyện <ArrowRight/></Link>
+        </div>
+      </div>
+    </section>
+
+    <section className="stories-list-ref">
+      <div className="stories-list-inner">
+        <header className="stories-list-head">
+          <div>
+            <div className="stories-kicker"><span>NHỮNG CÂU CHUYỆN KHÁC</span><i/></div>
+            <h2>Khám phá Hòa Lạc qua nhiều lớp góc nhìn</h2>
+          </div>
+          <p>Mỗi câu chuyện là một lát cắt: văn hóa, thiên nhiên, kiến trúc, con người, tuổi trẻ và những chuyển động mới.</p>
+        </header>
+
+        <div className="stories-grid-ref">
+          {rest.map((s,index)=><Link className="story-card-ref" to={'/stories/'+s.slug} key={s.slug}>
+            <div className="story-card-media">
+              <img src={s.image} alt={s.title}/>
+              <span className="story-card-heart"><Heart/></span>
+              <span className="story-card-index">{String(index+2).padStart(2,'0')}</span>
+            </div>
+            <div className="story-card-copy">
+              <span className="story-card-category">{s.category}</span>
+              <h3>{s.title}</h3>
+              <p>{s.excerpt}</p>
+              <div className="story-card-author">
+                <span>{s.author?.charAt(0)}</span>
+                <div><b>{s.author}</b><small>{s.role}</small></div>
+              </div>
+              <div className="story-card-bottom">
+                <span><MapPin/> {s.location}</span>
+                <span><Clock3/> {s.readTime}</span>
+              </div>
+            </div>
+          </Link>)}
+        </div>
+      </div>
+    </section>
+  </main>
 }
