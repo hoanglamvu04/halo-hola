@@ -10,6 +10,7 @@ import ArtworkPage from './pages/ArtworkPage.jsx'
 import TourPage from './pages/TourPage.jsx'
 import HolaDayPage from './pages/HolaDayPage.jsx'
 import StoriesPage from './pages/StoriesPage.jsx'
+import StoryDetailPage from './pages/StoryDetailPage.jsx'
 import WeHolaPage from './pages/WeHolaPage.jsx'
 import PartnersPage from './pages/PartnersPage.jsx'
 import HelloPage from './pages/HelloPage.jsx'
@@ -46,6 +47,7 @@ function SiteShell() {
         <Route path="/hola-tour" element={<TourPage />} />
         <Route path="/hola-day" element={<HolaDayPage />} />
         <Route path="/stories" element={<StoriesPage />} />
+        <Route path="/stories/:slug" element={<StoryDetailPage />} />
         <Route path="/we-hola" element={<WeHolaPage />} />
         <Route path="/dong-hanh" element={<PartnersPage />} />
         <Route path="/hello" element={<HelloPage />} />
