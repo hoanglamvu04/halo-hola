@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, MapPin, Clock3, CalendarDays, Quote, Share2,
@@ -9,6 +10,29 @@ export default function StoryDetailPage(){
   const {slug}=useParams()
   const story=stories.find(s=>s.slug===slug) || stories[0]
   const related=stories.filter(s=>s.slug!==story.slug).slice(0,3)
+  const [saved,setSaved]=useState(()=>{
+    try{return localStorage.getItem('halo-story-'+story.slug)==='1'}catch{return false}
+  })
+  const [shareLabel,setShareLabel]=useState('Chia sẻ')
+
+  const toggleSaved=()=>{
+    const next=!saved
+    setSaved(next)
+    try{localStorage.setItem('halo-story-'+story.slug,next?'1':'0')}catch{}
+  }
+
+  const shareStory=async()=>{
+    const url=window.location.href
+    try{
+      if(navigator.share){
+        await navigator.share({title:story.title,text:story.excerpt,url})
+      }else{
+        await navigator.clipboard.writeText(url)
+        setShareLabel('Đã sao chép')
+        setTimeout(()=>setShareLabel('Chia sẻ'),1800)
+      }
+    }catch{}
+  }
 
   return <main className="story-detail-page">
     <section className="story-detail-hero">
@@ -49,8 +73,8 @@ export default function StoryDetailPage(){
           </div>
 
           <div className="story-side-actions">
-            <button><Heart/> Lưu câu chuyện</button>
-            <button><Share2/> Chia sẻ</button>
+            <button className={saved?'active':''} onClick={toggleSaved}><Heart fill={saved?'currentColor':'none'}/> {saved?'Đã lưu':'Lưu câu chuyện'}</button>
+            <button onClick={shareStory}><Share2/> {shareLabel}</button>
           </div>
 
           <div className="story-side-index">
