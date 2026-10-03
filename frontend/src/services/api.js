@@ -53,7 +53,7 @@ export function submitArtwork(payload) {
     if (value !== undefined && value !== null) form.append(key, String(value));
   });
   (payload.files || []).forEach((file) => form.append('files', file));
-  return unwrap(client.post('/submissions', form));
+  return unwrap(client.post('/submissions', form, { timeout: 0 }));
 }
 
 export function lookupSubmission(params) {
