@@ -68,3 +68,6 @@
   .jury-nav span{display:none}
   .tour-register-form{grid-template-columns:1fr}.tour-register-form .full{grid-column:auto}
 }
+
+.tour-admin-list{display:grid;gap:0}.tour-admin-list>div{display:grid;grid-template-columns:1.3fr 1fr auto;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid #eef0ec}.tour-admin-list b,.tour-admin-list span,.tour-admin-list small{display:block}.tour-admin-list b{font-size:.76rem}.tour-admin-list span{font-size:.72rem}.tour-admin-list small{font-size:.64rem;color:var(--muted);margin-top:3px}
+@media(max-width:680px){.tour-admin-list>div{grid-template-columns:1fr}.tour-admin-list .status{justify-self:start}}
