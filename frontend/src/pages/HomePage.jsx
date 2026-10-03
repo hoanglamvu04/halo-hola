@@ -325,9 +325,56 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('tours')&&<section className="section container">
-      <SectionHeading eyebrow={toursCopy.eyebrow} title={toursCopy.title} desc={toursCopy.description} />
-      <div className="tour-grid">{tours.map(t => <Link to="/hola-tour" className="tour-card" key={t.no}><img src={t.image}/><div><span>Tour #{t.no}</span><h3>{t.title}</h3><p>{t.desc}</p><b>{t.dates}</b></div></Link>)}</div>
+    {sectionOn('tours')&&<section className="home-tour-section">
+      <div className="home-tour-contour"/>
+      <div className="home-tour-sun"/>
+      <Leaf className="home-tour-leaf home-tour-leaf-left"/>
+      <Leaf className="home-tour-leaf home-tour-leaf-right"/>
+
+      <div className="home-tour-inner">
+        <header className="home-tour-head">
+          <div className="home-tour-title">
+            <span className="eyebrow">{toursCopy.eyebrow}</span>
+            <h2>HOLA Tour</h2>
+            <span className="home-tour-stroke"/>
+          </div>
+
+          <div className="home-tour-desc">
+            <i/>
+            <p>{toursCopy.description}</p>
+          </div>
+        </header>
+
+        <div className="home-tour-grid">
+          {tours.map(t => <Link to="/hola-tour" className="home-tour-card" key={t.no}>
+            <div className="home-tour-media">
+              <img src={t.image} alt={t.title}/>
+              <span className="home-tour-image-shade"/>
+            </div>
+
+            <div className="home-tour-card-body">
+              <div className="home-tour-card-top">
+                <span>Tour #{t.no}</span>
+                <Leaf/>
+              </div>
+
+              <h3>{t.title}</h3>
+              <span className="home-tour-card-line"/>
+              <p>{t.desc}</p>
+
+              <div className="home-tour-date">
+                <CalendarDays/>
+                <b>{t.dates}</b>
+              </div>
+
+              <div className="home-tour-card-footer">
+                <span>Khám phá tour <i>⟶</i></span>
+                <b><ArrowRight/></b>
+              </div>
+            </div>
+          </Link>)}
+        </div>
+      </div>
     </section>}
 
     {sectionOn('map')&&<section className="map-teaser paper-bg">
