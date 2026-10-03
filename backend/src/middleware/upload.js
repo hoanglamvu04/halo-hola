@@ -15,9 +15,17 @@ const storage = multer.diskStorage({
   }
 });
 
-const allowed = new Set([
-  'image/jpeg','image/png','image/webp','video/mp4','video/quicktime',
-  'application/pdf','audio/mpeg','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+const allowedMime = new Set([
+  'image/jpeg','image/png','image/webp','image/tiff',
+  'image/x-adobe-dng','image/x-canon-cr2','image/x-nikon-nef','image/x-sony-arw',
+  'video/mp4','video/quicktime',
+  'application/pdf','audio/mpeg',
+  'application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+]);
+
+const allowedExtensions = new Set([
+  '.jpg','.jpeg','.png','.webp','.tif','.tiff','.dng','.cr2','.nef','.arw',
+  '.mp4','.mov','.pdf','.doc','.docx','.mp3'
 ]);
 
 export const upload = multer({
@@ -27,7 +35,8 @@ export const upload = multer({
     files: env.maxUploadFileCount
   },
   fileFilter: (_req, file, cb) => {
-    if (!allowed.has(file.mimetype)) {
+    const ext = path.extname(file.originalname || '').toLowerCase();
+    if (!allowedMime.has(file.mimetype) && !allowedExtensions.has(ext)) {
       return cb(new AppError('Định dạng tệp không được hỗ trợ.', 400));
     }
     cb(null, true);
