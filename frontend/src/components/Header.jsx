@@ -1,4 +1,4 @@
-import { Menu, Search, X, ArrowRight } from 'lucide-react'
+import { Menu, Search, X, ArrowRight, Leaf } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getHomepageContent } from '../services/api.js'
@@ -23,8 +23,11 @@ export default function Header() {
 
   return <header className="site-header">
     <div className="container header-inner">
-      <Link className={'brand '+(config.logoImage?'brand-image':'')} to="/">
-        {config.logoImage?<img src={config.logoImage} alt="HALO HOLA"/>:<>HAL<span>O</span> HOLA</>}
+      <Link className={'brand '+(config.logoImage?'brand-image':'brand-lockup')} to="/">
+        {config.logoImage?<img src={config.logoImage} alt="HALO HOLA"/>:<>
+          <span className="brand-emblem"><Leaf/></span>
+          <span className="brand-wordmark">HAL<span>O</span> HOLA</span>
+        </>}
       </Link>
       <nav className={'main-nav '+(open ? 'open' : '')}>
         {items.map(([label, href]) => <NavLink key={href} to={href} onClick={() => setOpen(false)}>{label}</NavLink>)}
