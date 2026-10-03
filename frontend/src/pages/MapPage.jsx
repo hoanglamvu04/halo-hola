@@ -1,12 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import { MapPin, SlidersHorizontal, Leaf, Building2, Users, BookOpen, Landmark, Utensils, ArrowRight } from 'lucide-react'
 import PageHero from '../components/PageHero.jsx'
-import { mapPlaces, img } from '../data/siteData.js'
+import { mapPlaces as fallbackPlaces, img } from '../data/siteData.js'
+import { getPlaces } from '../services/api.js'
+import { normalizePlace } from '../utils/contentAdapters.js'
 
 const cats=[['Tất cả',MapPin],['Điểm đến',MapPin],['Câu chuyện',BookOpen],['Con người',Users],['Kiến trúc',Building2],['Thiên nhiên',Leaf],['Ẩm thực',Utensils],['Văn hóa',Landmark]]
 export default function MapPage(){
- const [active,setActive]=useState(mapPlaces[0]); const [filter,setFilter]=useState('Tất cả')
+ const [remotePlaces,setRemotePlaces]=useState([])
+ const [active,setActive]=useState(normalizePlace(fallbackPlaces[0]))
+ const [filter,setFilter]=useState('Tất cả')
+ useEffect(()=>{
+   getPlaces().then(data=>{
+     const normalized=(data||[]).map(item=>{
+       const fallback=fallbackPlaces.find(x=>x.slug===item.slug||x.name===item.name)
+       return normalizePlace({...fallback,...item,image:item.image||fallback?.image,description:item.description||fallback?.desc})
+     })
+     setRemotePlaces(normalized)
+     if(normalized.length) setActive(normalized[0])
+   }).catch(()=>{})
+ },[])
+ const mapPlaces=useMemo(()=>remotePlaces.length?remotePlaces:fallbackPlaces.map(normalizePlace),[remotePlaces])
  const visible=filter==='Tất cả'?mapPlaces:mapPlaces.filter(p=>p.category===filter)
  return <main><PageHero eyebrow="BẢN ĐỒ TRẢI NGHIỆM HÒA LẠC" title="HOLA" accent="Map" desc="Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ Hòa Lạc." image={img.lake}/>
  <section className="container section map-page-grid">
