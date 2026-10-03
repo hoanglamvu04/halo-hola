@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen
 } from 'lucide-react'
 import { artworks, mapPlaces, tours } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
+import AdminContentManager from '../components/AdminContentManager.jsx'
+import MediaLibrary from '../components/MediaLibrary.jsx'
+import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
 } from '../services/api.js'
 
 const nav=[
-  ['Tổng quan',LayoutDashboard],['Trang chủ',Home],['Tác phẩm',Images],['Tác giả',Users],['TOP52',Images],
+  ['Tổng quan',LayoutDashboard],['Trang chủ',Home],['Media Library',FolderOpen],['Tác phẩm',Images],['Tác giả',Users],['TOP52',Images],
   ['HOLA Map',Map],['HOLA Tour',CalendarDays],['Stories',BookOpen],['Đối tác',Handshake],['Cài đặt',Settings]
 ]
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
@@ -130,7 +133,36 @@ export default function AdminPage(){
        </div>
      </>:
      active==='Trang chủ'?<HomepageManager/>:
-     active==='HOLA Tour'?<div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>:
+     active==='Media Library'?<MediaLibrary/>:
+     active==='Stories'?<AdminContentManager type="stories"/>:
+     active==='HOLA Map'?<AdminContentManager type="places"/>:
+     active==='Đối tác'?<AdminContentManager type="partners"/>:
+     active==='Cài đặt'?<SiteSettingsManager/>:
+     active==='HOLA Tour'?<div className="admin-cms-stack">
+       <AdminContentManager type="tours"/>
+       <div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>
+     </div>:
+     active==='Tác giả'?<div className="admin-panel">
+       <div className="admin-panel-head"><h2>Tác giả / người gửi</h2><span>{uniqueCreators} người</span></div>
+       <div className="admin-author-grid">
+         {Array.from(new Map(submissions.map(s=>[s.email,s])).values()).map(author=><div key={author.email}>
+           <span className="avatar">{(author.display_name||author.name||author.email)?.charAt(0)?.toUpperCase()}</span>
+           <div><b>{author.display_name||author.name||'Chưa có tên'}</b><small>{author.email}</small><small>{author.phone||'Chưa có số điện thoại'}</small></div>
+           <span>{submissions.filter(s=>s.email===author.email).length} tác phẩm</span>
+         </div>)}
+         {!submissions.length&&<p>Chưa có dữ liệu tác giả.</p>}
+       </div>
+     </div>:
+     active==='TOP52'?<div className="admin-panel">
+       <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
+       <div className="admin-top52-grid">
+         {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);setActive('Tác phẩm')}}>
+           <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
+           <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
+         </button>)}
+         {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có tác phẩm TOP52. Đổi trạng thái tác phẩm sang TOP52 để hiển thị tại đây.</p>}
+       </div>
+     </div>:
      active==='Tác phẩm'?<div className="admin-workspace">
        <div className="admin-panel submissions-panel">
          <div className="admin-toolbar">
