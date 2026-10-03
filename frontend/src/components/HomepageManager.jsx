@@ -107,6 +107,7 @@ export default function HomepageManager(){
   const [saving,setSaving]=useState(false)
   const [uploading,setUploading]=useState('')
   const [message,setMessage]=useState('')
+  const [targetField,setTargetField]=useState('')
 
   const load=async()=>{
     const data=await getAdminHomepageSections()
@@ -116,7 +117,11 @@ export default function HomepageManager(){
   }
 
   useEffect(()=>{load().catch(err=>setMessage(err.message))},[])
-  useEffect(()=>{getAdminSiteAssets({sectionKey:active}).then(setAssets).catch(()=>{})},[active])
+  useEffect(()=>{
+    getAdminSiteAssets({sectionKey:active}).then(setAssets).catch(()=>{})
+    const firstImage=(definitions[active]?.fields||[]).find(field=>field[2]==='image')
+    setTargetField(firstImage?.[0]||'')
+  },[active])
 
   const section=useMemo(()=>sections.find(s=>s.section_key===active),[sections,active])
   const def=definitions[active]||{label:section?.label||active,fields:[]}
@@ -176,8 +181,21 @@ export default function HomepageManager(){
       </div>
 
       <div className="cms-library">
-        <div className="cms-library-head"><div><ImagePlus/><div><b>Media Library của section</b><small>Ảnh đã tải gần đây — bấm để dùng lại.</small></div></div></div>
-        <div className="cms-asset-grid">{assets.length?assets.slice(0,12).map(asset=><button key={asset.id} onClick={()=>navigator.clipboard?.writeText(asset.url)} title="Bấm để copy URL"><img src={asset.url} alt={asset.original_name}/><span>{asset.original_name}</span></button>):<div className="cms-empty-assets">Chưa có ảnh tải lên cho section này.</div>}</div>
+        <div className="cms-library-head">
+          <div><ImagePlus/><div><b>Media Library của section</b><small>Chọn vị trí ảnh rồi bấm vào ảnh để dùng lại ngay.</small></div></div>
+          {(def.fields||[]).some(field=>field[2]==='image')&&<select value={targetField} onChange={e=>setTargetField(e.target.value)}>
+            {(def.fields||[]).filter(field=>field[2]==='image').map(field=><option key={field[0]} value={field[0]}>{field[1]}</option>)}
+          </select>}
+        </div>
+        <div className="cms-asset-grid">{assets.length?assets.slice(0,12).map(asset=><button key={asset.id} onClick={()=>{
+          if(targetField){
+            patchContent(targetField,asset.url)
+            setMessage('Đã chọn ảnh từ Media Library. Bấm "Lưu thay đổi" để áp dụng.')
+          }else{
+            navigator.clipboard?.writeText(asset.url)
+            setMessage('Đã copy URL ảnh.')
+          }
+        }} title="Dùng ảnh này"><img src={asset.url} alt={asset.original_name}/><span>{asset.original_name}</span></button>):<div className="cms-empty-assets">Chưa có ảnh tải lên cho section này.</div>}</div>
       </div>
     </section>
   </div>
