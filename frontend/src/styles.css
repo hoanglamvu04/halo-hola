@@ -816,3 +816,6 @@
   .cms-image-preview img{width:90px;height:65px}
   .cms-asset-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+.cms-library-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cms-library-head select{max-width:220px;padding:9px 10px;border:1px solid #d9dfd8;border-radius:9px;background:#fff;color:var(--ink);font-size:.68rem}
