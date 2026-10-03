@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authenticateAdmin } from '../middleware/auth.js';
 import { AppError } from '../utils/AppError.js';
 import { statusSchema, juryNoteSchema } from '../validators/submission.validators.js';
+import { listTourRegistrations } from '../services/tourRegistration.service.js';
 import {
   listSubmissions,
   updateSubmissionStatus,
@@ -11,6 +12,14 @@ import {
 
 const router = Router();
 router.use(authenticateAdmin);
+
+router.get('/tour-registrations', async (req, res, next) => {
+  try {
+    res.json(await listTourRegistrations(req.query.tourNumber));
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get('/submissions', async (req, res, next) => {
   try {
