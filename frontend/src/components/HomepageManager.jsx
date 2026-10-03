@@ -10,6 +10,7 @@ import {
 const definitions={
   header:{
     label:'Header',
+    defaults:{ctaText:'GỬI GÓC NHÌN',logoImage:''},
     fields:[
       ['ctaText','Nút CTA','text'],
       ['logoImage','Logo ảnh (không bắt buộc)','image']
@@ -17,6 +18,11 @@ const definitions={
   },
   hero:{
     label:'Hero',
+    defaults:{
+      eyebrow:'NƠI NHỮNG CÂU CHUYỆN HÒA LẠC ĐƯỢC KỂ LẠI',
+      titleLine1:'HELLO',titleAccent:'HÒA LẠC',tagline:'52 góc nhìn · 1 Hòa Lạc',
+      description:'Mỗi tuần một góc nhìn. Mỗi góc nhìn một câu chuyện.'
+    },
     fields:[
       ['eyebrow','Eyebrow','text'],
       ['titleLine1','Tiêu đề chính','text'],
@@ -30,6 +36,12 @@ const definitions={
   },
   campaign:{
     label:'HALO HOLA đang diễn ra',
+    defaults:{
+      eyebrow:'HALO HOLA ĐANG DIỄN RA',
+      title:'Mỗi ngày thêm một góc nhìn mới.',
+      description:'Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.',
+      ctaText:'Gửi góc nhìn'
+    },
     fields:[
       ['eyebrow','Eyebrow','text'],
       ['title','Tiêu đề','text'],
@@ -43,6 +55,10 @@ const definitions={
   },
   change:{
     label:'Hòa Lạc đang thay đổi',
+    defaults:{
+      title:'Hòa Lạc đang thay đổi',
+      description:'Từ Xứ Đoài trầm tích, làng xóm yên bình và những viên đá ong mộc mạc, Hòa Lạc hôm nay đang vươn mình thành trung tâm tri thức, công nghệ và đổi mới sáng tạo.'
+    },
     fields:[
       ['title','Tiêu đề','text'],
       ['description','Mô tả','textarea'],
@@ -51,13 +67,14 @@ const definitions={
       ['image3','Ảnh Tương lai','image']
     ]
   },
-  themes:{label:'8 chủ đề',fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
-  colors:{label:'Sắc màu Hòa Lạc',fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
-  tours:{label:'HOLA Tour',fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
-  map:{label:'HOLA Map',fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
-  stories:{label:'TOP52 / Stories',fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  themes:{label:'8 chủ đề',defaults:{eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',title:'8 chủ đề về Hòa Lạc',description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  colors:{label:'Sắc màu Hòa Lạc',defaults:{eyebrow:'SẮC MÀU HÒA LẠC',title:'Hòa Lạc trong bạn có màu gì?',description:'Mỗi màu sắc là một lát cắt của Hòa Lạc.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  tours:{label:'HOLA Tour',defaults:{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Những hành trình khám phá Hòa Lạc qua trải nghiệm thực tế.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  map:{label:'HOLA Map',defaults:{eyebrow:'KHÁM PHÁ MỌI HÒA LẠC',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  stories:{label:'TOP52 / Stories',defaults:{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'52 góc nhìn, 52 câu chuyện về Hòa Lạc qua lăng kính cộng đồng.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
   community:{
     label:'WE HOLA',
+    defaults:{eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',title:'WE HOLA – Chúng ta là Hòa Lạc',description:'Cùng nhau kể chuyện, lan tỏa giá trị, chung tay làm Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.'},
     fields:[
       ['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea'],
       ['backgroundImage','Ảnh nền','image']
@@ -99,7 +116,7 @@ export default function HomepageManager(){
 
   const section=useMemo(()=>sections.find(s=>s.section_key===active),[sections,active])
   const def=definitions[active]||{label:section?.label||active,fields:[]}
-  const content=section?.content||{}
+  const content={...(def.defaults||{}),...(section?.content||{})}
 
   const patchContent=(key,value)=>{
     setSections(prev=>prev.map(s=>s.section_key===active?{...s,content:{...(s.content||{}),[key]:value}}:s))
