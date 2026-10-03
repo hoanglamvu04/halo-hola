@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   CalendarDays, MapPin, Users, Bus, Utensils, Flag, ArrowRight, ArrowLeft,
   CheckCircle2, Compass, Leaf, Camera, Heart, FileText, Building2
 } from 'lucide-react'
-import { tours, img } from '../data/siteData.js'
-import { registerTour } from '../services/api.js'
+import { tours as fallbackTours, img } from '../data/siteData.js'
+import { getTours, registerTour } from '../services/api.js'
+import { normalizeTour } from '../utils/contentAdapters.js'
 
 const itinerary=[
   ['07:30','Xuất phát từ Hà Nội',Bus,'Khám phá gặp gỡ và ghi lại những nét đặc trưng Hòa Lạc.'],
@@ -24,12 +25,32 @@ const stopCards=[
 
 export default function TourPage(){
   const [selected,setSelected]=useState(0)
+  const [remoteTours,setRemoteTours]=useState([])
   const [showForm,setShowForm]=useState(false)
   const [form,setForm]=useState({name:'',email:'',phone:'',roleLabel:'',equipment:'',note:''})
   const [result,setResult]=useState(null)
   const [error,setError]=useState('')
   const [loading,setLoading]=useState(false)
-  const tour=tours[selected]
+  useEffect(()=>{
+    getTours().then(data=>setRemoteTours((data||[]).map(normalizeTour))).catch(()=>{})
+  },[])
+  const tours=useMemo(()=>remoteTours.length?remoteTours:fallbackTours.map(normalizeTour),[remoteTours])
+  const tour=tours[selected]||tours[0]
+  const currentItinerary=Array.isArray(tour?.itinerary)&&tour.itinerary.length
+    ? tour.itinerary.map((item,index)=>[
+        item.time||item[0]||'',
+        item.title||item[1]||'Điểm dừng',
+        [Bus,MapPin,Utensils,Users,Camera,Flag][index%6],
+        item.description||item.desc||item[3]||''
+      ])
+    : itinerary
+  const currentStops=Array.isArray(tour?.stops)&&tour.stops.length
+    ? tour.stops.map((item,index)=>[
+        item.name||item.title||'Điểm dừng',
+        item.image||[img.village,img.lake,img.architecture,img.sunset][index%4],
+        item.description||item.desc||''
+      ])
+    : stopCards
 
   const submit=async(e)=>{
     e.preventDefault()
@@ -94,9 +115,9 @@ export default function TourPage(){
           <h2>{tour.title}</h2>
           <h3>{tour.kicker}</h3>
           <div className="tour-selected-facts">
-            <span><MapPin/> Hòa Lạc, Hà Nội</span>
-            <span><CalendarDays/> 2 ngày</span>
-            <span><Users/> 15–20 người</span>
+            <span><MapPin/> {tour.location||'Hòa Lạc, Hà Nội'}</span>
+            <span><CalendarDays/> {tour.durationLabel||'2 ngày'}</span>
+            <span><Users/> {tour.audienceLabel||'15–20 người'}</span>
           </div>
           <p>{tour.desc} Hành trình ưu tiên trải nghiệm thật, gặp người thật và tạo ra những câu chuyện có chiều sâu về vùng đất.</p>
           <div className="tour-selected-actions">
@@ -135,7 +156,7 @@ export default function TourPage(){
         <div className="tour-itinerary">
           <h2>Lịch trình trải nghiệm</h2>
           <div className="tour-itinerary-list">
-            {itinerary.map(([time,title,I,desc])=><div key={time}>
+            {currentItinerary.map(([time,title,I,desc])=><div key={time}>
               <span className="tour-time">{time}</span>
               <span className="tour-itinerary-icon"><I/></span>
               <div><b>{title}</b><p>{desc}</p></div>
@@ -166,7 +187,7 @@ export default function TourPage(){
         <div className="tour-stops">
           <div className="tour-stops-head"><h2>Các điểm dừng nổi bật</h2><LinkMore/></div>
           <div className="tour-stop-grid">
-            {stopCards.map(([name,image,desc])=><div className="tour-stop-card" key={name}>
+            {currentStops.map(([name,image,desc])=><div className="tour-stop-card" key={name}>
               <img src={image} alt={name}/>
               <div><h3>{name}</h3><p>{desc}</p><span><ArrowRight/></span></div>
             </div>)}
