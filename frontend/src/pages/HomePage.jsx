@@ -232,9 +232,50 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('themes')&&<section className="section container">
-      <SectionHeading eyebrow={themesCopy.eyebrow} title={themesCopy.title} desc={themesCopy.description} action={<Link className="text-link" to="/chu-de/net-doai">Xem tất cả chủ đề <ArrowRight size={15}/></Link>} />
-      <div className="theme-grid">{themes.map(t => <Link to={'/chu-de/'+t.slug} className="theme-card" key={t.id}><img src={t.image}/><div><h3>{t.title}</h3><p>{t.desc}</p><span>↗</span></div></Link>)}</div>
+    {sectionOn('themes')&&<section className="themes-showcase">
+      <div className="themes-decor themes-decor-left"><Leaf/></div>
+      <div className="themes-decor themes-decor-right"><Leaf/></div>
+      <div className="themes-showcase-inner">
+        <header className="themes-showcase-head">
+          <div className="themes-showcase-title">
+            <div className="themes-eyebrow-row">
+              <span className="eyebrow">{themesCopy.eyebrow}</span>
+              <i/>
+            </div>
+            <h2>
+              <span>8 chủ đề về</span>
+              <em>Hòa Lạc</em>
+            </h2>
+            <span className="themes-title-stroke"/>
+          </div>
+
+          <div className="themes-showcase-side">
+            <p>{themesCopy.description}</p>
+            <Link className="themes-all-link" to="/chu-de/net-doai">
+              Xem tất cả chủ đề <ArrowRight size={17}/>
+            </Link>
+          </div>
+        </header>
+
+        <div className="themes-card-grid">
+          {themes.map((t,index) => <Link to={'/chu-de/'+t.slug} className="theme-card theme-card-reference" key={t.id}>
+            <div className="theme-card-media">
+              <img src={t.image} alt={t.title}/>
+              <span className="theme-card-glow"/>
+            </div>
+            <div className="theme-card-body">
+              <div className="theme-card-number">
+                <b>{String(index+1).padStart(2,'0')}</b>
+                <i/>
+              </div>
+              <h3>{t.title}</h3>
+              <p>{t.desc}</p>
+              <span className="theme-card-arrow"><ArrowRight/></span>
+              <Leaf className="theme-card-leaf"/>
+            </div>
+          </Link>)}
+        </div>
+      </div>
     </section>}
 
     {sectionOn('colors')&&<section className="color-section paper-bg">
