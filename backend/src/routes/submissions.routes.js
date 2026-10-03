@@ -23,7 +23,6 @@ router.get('/lookup', async (req, res, next) => {
     if (!item) throw new AppError('Không tìm thấy tác phẩm với mã và email này.', 404);
     res.json(item);
   } catch (error) {
-    await Promise.all((req.files || []).map((file) => fs.unlink(file.path).catch(() => {})));
     if (error?.name === 'ZodError') {
       return next(new AppError('Mã tác phẩm hoặc email chưa hợp lệ.', 400, error.issues));
     }
@@ -37,6 +36,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
     if (!(req.files || []).length && !data.externalLink) {
       throw new AppError('Cần ít nhất một file gốc hoặc link tác phẩm.', 400);
     }
+
     const created = await createSubmission(data, req.files || []);
 
     res.status(201).json({
@@ -55,6 +55,8 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       }))
     });
   } catch (error) {
+    await Promise.all((req.files || []).map((file) => fs.unlink(file.path).catch(() => {})));
+
     if (error?.name === 'ZodError') {
       return next(new AppError('Thông tin tác phẩm chưa hợp lệ.', 400, error.issues));
     }
