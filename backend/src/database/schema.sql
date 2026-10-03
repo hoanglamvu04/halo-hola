@@ -141,3 +141,41 @@ CREATE INDEX IF NOT EXISTS idx_media_submission ON submission_media(submission_i
 CREATE INDEX IF NOT EXISTS idx_tour_registrations_tour ON tour_registrations(tour_number, status);
 CREATE INDEX IF NOT EXISTS idx_places_published_name ON places(published, name);
 CREATE INDEX IF NOT EXISTS idx_stories_published_created ON stories(published, created_at DESC);
+
+
+CREATE TABLE IF NOT EXISTS site_sections (
+  section_key VARCHAR(80) PRIMARY KEY,
+  label VARCHAR(160) NOT NULL,
+  enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  content JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS site_assets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  section_key VARCHAR(80),
+  original_name TEXT NOT NULL,
+  mime_type VARCHAR(150) NOT NULL,
+  size_bytes INTEGER NOT NULL,
+  storage_provider VARCHAR(30) NOT NULL DEFAULT 'LOCAL',
+  bucket VARCHAR(180),
+  object_key TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_site_sections_sort ON site_sections(sort_order);
+CREATE INDEX IF NOT EXISTS idx_site_assets_section ON site_assets(section_key, created_at DESC);
+
+INSERT INTO site_sections (section_key,label,enabled,sort_order,content) VALUES
+  ('header','Header',TRUE,10,'{}'::jsonb),
+  ('hero','Hero',TRUE,20,'{}'::jsonb),
+  ('campaign','HALO HOLA đang diễn ra',TRUE,30,'{}'::jsonb),
+  ('change','Hòa Lạc đang thay đổi',TRUE,40,'{}'::jsonb),
+  ('themes','8 chủ đề',TRUE,50,'{}'::jsonb),
+  ('colors','Sắc màu Hòa Lạc',TRUE,60,'{}'::jsonb),
+  ('tours','HOLA Tour',TRUE,70,'{}'::jsonb),
+  ('map','HOLA Map',TRUE,80,'{}'::jsonb),
+  ('stories','TOP52 / Stories',TRUE,90,'{}'::jsonb),
+  ('community','WE HOLA',TRUE,100,'{}'::jsonb)
+ON CONFLICT (section_key) DO NOTHING;
