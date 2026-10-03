@@ -19,6 +19,18 @@ export default function Header() {
     }).catch(()=>{})
   },[])
 
+  useEffect(()=>{
+    if(!open) return undefined
+    const previous=document.body.style.overflow
+    document.body.style.overflow='hidden'
+    const onKey=(e)=>{ if(e.key==='Escape') setOpen(false) }
+    window.addEventListener('keydown',onKey)
+    return ()=>{
+      document.body.style.overflow=previous
+      window.removeEventListener('keydown',onKey)
+    }
+  },[open])
+
   if(!config.enabled) return null
 
   return <header className="site-header">
@@ -30,7 +42,15 @@ export default function Header() {
         </>}
       </Link>
       <nav className={'main-nav '+(open ? 'open' : '')}>
+        <div className="mobile-nav-head">
+          <span>Khám phá HALO HOLA</span>
+          <button onClick={()=>setOpen(false)} aria-label="Đóng menu"><X/></button>
+        </div>
         {items.map(([label, href]) => <NavLink key={href} to={href} onClick={() => setOpen(false)}>{label}</NavLink>)}
+        <div className="mobile-nav-actions">
+          <Link to="/tra-cuu" onClick={()=>setOpen(false)}><Search/> Tra cứu tác phẩm</Link>
+          <Link className="mobile-nav-cta" to="/gui-goc-nhin" onClick={()=>setOpen(false)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></Link>
+        </div>
       </nav>
       <div className="header-actions">
         <Link className="icon-btn search-btn" to="/tra-cuu" aria-label="Tra cứu tác phẩm" title="Tra cứu tác phẩm"><Search size={18}/></Link>
