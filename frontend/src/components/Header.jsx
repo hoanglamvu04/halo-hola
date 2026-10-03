@@ -10,15 +10,16 @@ const items = [
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [config,setConfig]=useState({ctaText:'GỬI GÓC NHÌN',logoImage:''})
+  const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:''})
 
   useEffect(()=>{
     getHomepageContent().then(data=>{
       const section=data?.header
-      if(section?.enabled===false) return
-      setConfig(v=>({...v,...(section?.content||{})}))
+      setConfig(v=>({...v,enabled:section?.enabled!==false,...(section?.content||{})}))
     }).catch(()=>{})
   },[])
+
+  if(!config.enabled) return null
 
   return <header className="site-header">
     <div className="container header-inner">
