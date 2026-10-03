@@ -6,6 +6,7 @@ import {
   updateAdminHomepageSection,
   uploadAdminSiteAsset
 } from '../services/api.js'
+import { img } from '../data/siteData.js'
 
 const definitions={
   header:{
@@ -21,7 +22,8 @@ const definitions={
     defaults:{
       eyebrow:'NƠI NHỮNG CÂU CHUYỆN HÒA LẠC ĐƯỢC KỂ LẠI',
       titleLine1:'HELLO',titleAccent:'HÒA LẠC',tagline:'52 góc nhìn · 1 Hòa Lạc',
-      description:'Mỗi tuần một góc nhìn. Mỗi góc nhìn một câu chuyện.'
+      description:'Mỗi tuần một góc nhìn. Mỗi góc nhìn một câu chuyện.',
+      mainImage:img.lake,floatImageA:img.architecture,floatImageB:img.people
     },
     fields:[
       ['eyebrow','Eyebrow','text'],
@@ -40,7 +42,8 @@ const definitions={
       eyebrow:'HALO HOLA ĐANG DIỄN RA',
       title:'Mỗi ngày thêm một góc nhìn mới.',
       description:'Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.',
-      ctaText:'Gửi góc nhìn'
+      ctaText:'Gửi góc nhìn',
+      backgroundImage:img.sunset,discoverImage:img.hills,keepImage:img.architecture,shareImage:img.student
     },
     fields:[
       ['eyebrow','Eyebrow','text'],
@@ -57,7 +60,8 @@ const definitions={
     label:'Hòa Lạc đang thay đổi',
     defaults:{
       title:'Hòa Lạc đang thay đổi',
-      description:'Từ Xứ Đoài trầm tích, làng xóm yên bình và những viên đá ong mộc mạc, Hòa Lạc hôm nay đang vươn mình thành trung tâm tri thức, công nghệ và đổi mới sáng tạo.'
+      description:'Từ Xứ Đoài trầm tích, làng xóm yên bình và những viên đá ong mộc mạc, Hòa Lạc hôm nay đang vươn mình thành trung tâm tri thức, công nghệ và đổi mới sáng tạo.',
+      image1:img.village,image2:img.student,image3:img.architecture
     },
     fields:[
       ['title','Tiêu đề','text'],
@@ -74,7 +78,7 @@ const definitions={
   stories:{label:'TOP52 / Stories',defaults:{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'52 góc nhìn, 52 câu chuyện về Hòa Lạc qua lăng kính cộng đồng.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
   community:{
     label:'WE HOLA',
-    defaults:{eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',title:'WE HOLA – Chúng ta là Hòa Lạc',description:'Cùng nhau kể chuyện, lan tỏa giá trị, chung tay làm Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.'},
+    defaults:{eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',title:'WE HOLA – Chúng ta là Hòa Lạc',description:'Cùng nhau kể chuyện, lan tỏa giá trị, chung tay làm Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.',backgroundImage:img.people},
     fields:[
       ['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea'],
       ['backgroundImage','Ảnh nền','image']
