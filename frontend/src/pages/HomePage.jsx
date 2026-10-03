@@ -57,7 +57,7 @@ export default function HomePage() {
     backgroundImage:img.people
   })
 
-  const colorIcons=[Map,Sun,Leaf,BookOpen,MapPin,Users]
+  const colorImages=[img.village,img.sunset,img.green,img.architecture,img.village,img.lake]
 
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
@@ -280,43 +280,48 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('colors')&&<section className="color-section color-section-reference">
-      <div className="colors-decor colors-decor-left"><Leaf/></div>
-      <div className="colors-decor colors-decor-right"><Leaf/></div>
-      <div className="colors-landscape"/>
+    {sectionOn('colors')&&<section className="color-section color-section-v3">
+      <div className="color-v3-contours"/>
+      <div className="color-v3-blur color-v3-blur-left"/>
+      <div className="color-v3-blur color-v3-blur-right"/>
 
-      <div className="color-row">
+      <div className="color-v3-top">
         <div className="color-copy">
           <div className="colors-eyebrow-row">
             <span className="eyebrow">{colorsCopy.eyebrow}</span>
             <i/>
           </div>
           <h2>
-            <span>Hòa Lạc trong bạn có</span>
-            <em>màu gì?</em>
+            <span>Hòa Lạc trong bạn</span>
+            <em>có màu gì?</em>
           </h2>
-          <span className="colors-title-stroke"/>
           <p>{colorsCopy.description}</p>
         </div>
 
-        <div className="swatches color-card-grid">
-          {colorStories.map((c,index) => {
-            const ColorIcon=colorIcons[index] || Leaf
-            return <Link to="/chu-de/sac-mau" className={'swatch color-card color-card-'+(index+1)} key={c.name}>
-              <div className="color-card-visual">
-                <span className="color-orb" style={{background:c.color}}/>
-                <ColorIcon className="color-card-ornament"/>
-              </div>
-              <div className="color-card-copy">
-                <div>
-                  <b>{c.name}</b>
-                  <small>{c.story}</small>
-                </div>
-                <span className="color-card-arrow"><ArrowRight/></span>
-              </div>
-            </Link>
-          })}
+        <div className="color-v3-story">
+          <span className="color-v3-script">Hòa Lạc</span>
+          <div className="color-v3-window color-v3-window-a"><img src={img.hills} alt="Phong cảnh Hòa Lạc"/></div>
+          <div className="color-v3-window color-v3-window-b"><img src={img.lake} alt="Không gian Hòa Lạc"/></div>
+          <div className="color-v3-note">
+            <MapPin/>
+            <span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span>
+            <i/>
+          </div>
         </div>
+      </div>
+
+      <div className="color-v3-cards">
+        {colorStories.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.name}>
+          <div className="color-v3-card-head">
+            <span className="color-v3-dot" style={{background:c.color}}/>
+            <div>
+              <b>{c.name}</b>
+              <small>{c.story}</small>
+            </div>
+            <span className="color-v3-arrow"><ArrowRight/></span>
+          </div>
+          <img src={colorImages[index]} alt={c.name}/>
+        </Link>)}
       </div>
     </section>}
 
