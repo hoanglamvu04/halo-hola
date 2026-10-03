@@ -68,27 +68,63 @@ export default function HomePage() {
   ]
 
   return <main>
-    {sectionOn('hero')&&<section className="home-hero paper-bg">
-      <div className="container home-hero-grid">
+    {sectionOn('hero')&&<section className="home-hero home-hero-reference">
+      <div className="home-hero-art">
         <div className="home-hero-copy">
-          <span className="eyebrow">{hero.eyebrow}</span>
-          <h1>{hero.titleLine1}<br/><em>{hero.titleAccent}</em></h1>
+          <div className="hero-eyebrow-row">
+            <span className="eyebrow">{hero.eyebrow}</span>
+            <i/>
+          </div>
+          <h1><span>{hero.titleLine1}</span><em>{hero.titleAccent}</em></h1>
+          <span className="hero-title-stroke"/>
           <h3>{hero.tagline}</h3>
           <p>{hero.description}</p>
-          <div className="actions"><Link to="/top52" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link><Link to="/hola-map" className="btn btn-outline"><MapPin size={17}/> Xem HOLA Map</Link></div>
-          <div className="pillar-row">
-            <div><Leaf/><b>Thiên nhiên</b><small>Màu xanh bền vững</small></div>
-            <div><BookOpen/><b>Tri thức</b><small>Nơi ươm mầm tương lai</small></div>
-            <div><Users/><b>Con người</b><small>Những câu chuyện thật</small></div>
-            <div><Sun/><b>Tương lai</b><small>Một Hòa Lạc đang lớn lên</small></div>
+
+          <div className="hero-actions">
+            <Link to="/top52" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link>
+            <Link to="/hola-map" className="btn btn-outline"><MapPin size={17}/> Xem HOLA Map</Link>
           </div>
         </div>
+
         <div className="hero-collage">
-          <img className="hero-main-img" src={hero.mainImage} alt="Hòa Lạc"/>
-          <img className="hero-float hero-float-a" src={hero.floatImageA} alt="Kiến trúc Hòa Lạc"/>
-          <img className="hero-float hero-float-b" src={hero.floatImageB} alt="Con người Hòa Lạc"/>
-          <div className="hero-stone">HÒA LẠC<br/><span>NƠI NHỮNG ƯỚC MƠ BẮT ĐẦU</span></div>
-          <span className="hand-note home-note">Hòa Lạc<br/>Hôm nay<br/>và mai sau...</span>
+          <span className="hero-orbit orbit-a"/>
+          <span className="hero-orbit orbit-b"/>
+          <Leaf className="hero-leaf leaf-a"/>
+          <Leaf className="hero-leaf leaf-b"/>
+
+          <div className="hero-main-frame">
+            <img className="hero-main-img" src={hero.mainImage} alt="Hòa Lạc"/>
+          </div>
+
+          <div className="hero-float hero-float-a"><img src={hero.floatImageA} alt="Kiến trúc Hòa Lạc"/></div>
+          <div className="hero-float hero-float-b"><img src={hero.floatImageB} alt="Con người Hòa Lạc"/></div>
+
+          <div className="hero-stone">
+            <b>HÒA LẠC</b>
+            <span>NƠI NHỮNG ƯỚC MƠ BẮT ĐẦU</span>
+            <i/>
+          </div>
+
+          <span className="hand-note home-note">Hòa Lạc<br/>hôm nay<br/>và mai sau...</span>
+        </div>
+
+        <div className="hero-pillar-band">
+          <div className="hero-pillar-item">
+            <span className="pillar-icon green"><Leaf/></span>
+            <div><b>Thiên nhiên</b><small>Màu xanh bền vững</small></div>
+          </div>
+          <div className="hero-pillar-item">
+            <span className="pillar-icon terra"><BookOpen/></span>
+            <div><b>Tri thức</b><small>Nơi ươm mầm tương lai</small></div>
+          </div>
+          <div className="hero-pillar-item">
+            <span className="pillar-icon green"><Users/></span>
+            <div><b>Con người</b><small>Những câu chuyện thật</small></div>
+          </div>
+          <div className="hero-pillar-item">
+            <span className="pillar-icon terra"><Sun/></span>
+            <div><b>Tương lai</b><small>Một Hòa Lạc đang lớn lên</small></div>
+          </div>
         </div>
       </div>
     </section>}
