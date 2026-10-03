@@ -11,7 +11,10 @@
     "install:all": "npm install --prefix backend && npm install --prefix frontend",
     "db:migrate": "npm run db:migrate --prefix backend",
     "db:seed": "npm run db:seed --prefix backend",
-    "db:seed:admin": "npm run db:seed:admin --prefix backend"
+    "db:seed:admin": "npm run db:seed:admin --prefix backend",
+    "dev:auto": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/auto-dev.ps1",
+    "auto:install": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-auto-start.ps1",
+    "auto:remove": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/remove-auto-start.ps1"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
