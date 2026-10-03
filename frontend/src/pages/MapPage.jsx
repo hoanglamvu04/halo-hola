@@ -21,7 +21,13 @@ export default function MapPage(){
      if(normalized.length) setActive(normalized[0])
    }).catch(()=>{})
  },[])
- const mapPlaces=useMemo(()=>remotePlaces.length?remotePlaces:fallbackPlaces.map(normalizePlace),[remotePlaces])
+ const mapPlaces=useMemo(()=>{
+   const base=fallbackPlaces.map(normalizePlace)
+   if(!remotePlaces.length) return base
+   const map=new Map(base.map(item=>[item.slug||item.name,item]))
+   remotePlaces.forEach(item=>map.set(item.slug||item.name,{...map.get(item.slug||item.name),...item}))
+   return Array.from(map.values())
+ },[remotePlaces])
  const visible=filter==='Tất cả'?mapPlaces:mapPlaces.filter(p=>p.category===filter)
  return <main><PageHero eyebrow="BẢN ĐỒ TRẢI NGHIỆM HÒA LẠC" title="HOLA" accent="Map" desc="Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ Hòa Lạc." image={img.lake}/>
  <section className="container section map-page-grid">
