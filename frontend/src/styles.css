@@ -3316,3 +3316,354 @@
     min-height:135px;
   }
 }
+
+
+/* === Homepage HOLA Tour — premium editorial reference === */
+.home-tour-section{
+  position:relative;
+  overflow:hidden;
+  padding:52px 0 60px;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(255,255,255,.98),transparent 30%),
+    radial-gradient(circle at 86% 90%,rgba(226,204,166,.14),transparent 28%),
+    linear-gradient(112deg,#fbf8f0 0%,#faf4e8 52%,#fcf8ef 100%);
+  border-block:1px solid rgba(23,61,45,.08);
+}
+.home-tour-section:before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:.34;
+  background:
+    radial-gradient(ellipse at 94% 10%,transparent 0 110px,rgba(184,114,70,.11) 111px 112px,transparent 113px 150px),
+    radial-gradient(ellipse at 5% 93%,transparent 0 155px,rgba(184,114,70,.07) 156px 157px,transparent 158px 200px);
+}
+.home-tour-inner{
+  position:relative;
+  z-index:2;
+  width:min(1760px,calc(100% - 82px));
+  margin-inline:auto;
+}
+.home-tour-head{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:56px;
+  align-items:end;
+  margin-bottom:30px;
+}
+.home-tour-title .eyebrow{
+  margin:0 0 8px;
+  color:#c75a32;
+  font-size:.72rem;
+  letter-spacing:.22em;
+}
+.home-tour-title h2{
+  margin:0;
+  color:#0e4a36;
+  font-size:clamp(4.7rem,6vw,7.5rem);
+  line-height:.9;
+  letter-spacing:-.06em;
+}
+.home-tour-stroke{
+  display:block;
+  width:115px;
+  height:4px;
+  margin-top:8px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ca7d57 0 72%,transparent 72%);
+  transform:rotate(-7deg);
+}
+.home-tour-desc{
+  display:grid;
+  grid-template-columns:1px 1fr;
+  gap:26px;
+  align-items:start;
+  max-width:710px;
+  justify-self:end;
+  padding-bottom:14px;
+}
+.home-tour-desc i{
+  width:1px;
+  height:64px;
+  background:rgba(201,105,68,.46);
+}
+.home-tour-desc p{
+  margin:0;
+  color:#65716a;
+  font-size:1rem;
+  line-height:1.72;
+}
+
+.home-tour-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.home-tour-card{
+  display:grid;
+  grid-template-columns:42% 58%;
+  min-height:365px;
+  overflow:hidden;
+  border:1px solid rgba(23,61,45,.09);
+  border-radius:22px;
+  background:rgba(255,251,244,.94);
+  box-shadow:0 14px 34px rgba(57,48,34,.07);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.home-tour-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(196,91,50,.18);
+  box-shadow:0 24px 42px rgba(57,48,34,.12);
+}
+.home-tour-media{
+  position:relative;
+  overflow:hidden;
+  min-height:100%;
+}
+.home-tour-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(.94) contrast(.98);
+  transition:transform .45s ease;
+}
+.home-tour-card:hover .home-tour-media img{
+  transform:scale(1.04);
+}
+.home-tour-image-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(9,35,24,.10));
+  pointer-events:none;
+}
+.home-tour-card-body{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:28px 26px 24px;
+}
+.home-tour-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.home-tour-card-top>span{
+  color:#c75a32;
+  font-size:.82rem;
+  font-weight:700;
+}
+.home-tour-card-top svg{
+  width:22px;
+  height:22px;
+  color:#d4b58d;
+  stroke-width:1.4;
+  transform:rotate(-18deg);
+}
+.home-tour-card-body h3{
+  margin:0;
+  color:#123f31;
+  font-size:clamp(1.8rem,2vw,2.35rem);
+  line-height:.98;
+  letter-spacing:-.03em;
+}
+.home-tour-card-line{
+  width:38px;
+  height:2px;
+  margin:14px 0 17px;
+  background:rgba(201,105,68,.74);
+  border-radius:999px;
+}
+.home-tour-card-body p{
+  margin:0;
+  min-height:95px;
+  color:#67716a;
+  font-size:.86rem;
+  line-height:1.65;
+}
+.home-tour-date{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:14px;
+  color:#123f31;
+}
+.home-tour-date svg{
+  width:19px;
+  height:19px;
+  color:#c75a32;
+}
+.home-tour-date b{
+  font-size:.9rem;
+}
+.home-tour-card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:auto;
+  padding-top:20px;
+}
+.home-tour-card-footer>span{
+  color:#c75a32;
+  font-size:.84rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+.home-tour-card-footer>span i{
+  margin-left:9px;
+  font-style:normal;
+}
+.home-tour-card-footer>b{
+  width:52px;
+  height:52px;
+  flex:0 0 52px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#cf6a3d;
+  color:#fff;
+  box-shadow:0 9px 20px rgba(207,106,61,.20);
+  transition:transform .22s ease,background .22s ease;
+}
+.home-tour-card-footer>b svg{
+  width:20px;
+  height:20px;
+}
+.home-tour-card:hover .home-tour-card-footer>b{
+  transform:translateX(3px);
+  background:#bb5b33;
+}
+
+/* subtle mountain/sun/leaf decoration */
+.home-tour-contour{
+  position:absolute;
+  z-index:1;
+  right:-2%;
+  top:48px;
+  width:28%;
+  height:180px;
+  opacity:.13;
+  background:
+    repeating-radial-gradient(ellipse at 52% 76%,transparent 0 18px,rgba(97,88,68,.34) 19px 20px,transparent 21px 29px);
+  transform:rotate(-8deg);
+  pointer-events:none;
+}
+.home-tour-sun{
+  position:absolute;
+  z-index:1;
+  right:7%;
+  top:28px;
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:rgba(236,177,94,.17);
+  box-shadow:0 0 0 18px rgba(236,177,94,.035);
+  pointer-events:none;
+}
+.home-tour-leaf{
+  position:absolute;
+  z-index:1;
+  width:105px;
+  height:105px;
+  color:#315e47;
+  opacity:.28;
+  stroke-width:1.1;
+  pointer-events:none;
+}
+.home-tour-leaf-left{
+  left:-20px;
+  top:12px;
+  transform:rotate(-48deg);
+}
+.home-tour-leaf-right{
+  right:-14px;
+  bottom:18px;
+  transform:rotate(36deg) scaleX(-1);
+}
+
+@media(max-width:1380px){
+  .home-tour-inner{
+    width:min(100% - 44px,1380px);
+  }
+  .home-tour-head{
+    gap:34px;
+  }
+  .home-tour-card{
+    min-height:345px;
+  }
+  .home-tour-card-body{
+    padding:24px 22px 21px;
+  }
+  .home-tour-card-body p{
+    min-height:86px;
+    font-size:.8rem;
+  }
+}
+@media(max-width:1080px){
+  .home-tour-head{
+    grid-template-columns:1fr;
+    gap:14px;
+    align-items:start;
+  }
+  .home-tour-desc{
+    justify-self:start;
+    max-width:760px;
+    padding-bottom:0;
+  }
+  .home-tour-grid{
+    grid-template-columns:1fr;
+  }
+  .home-tour-card{
+    grid-template-columns:38% 62%;
+    min-height:305px;
+  }
+  .home-tour-card-body p{
+    min-height:auto;
+  }
+}
+@media(max-width:720px){
+  .home-tour-section{
+    padding:40px 0 44px;
+  }
+  .home-tour-inner{
+    width:calc(100% - 22px);
+  }
+  .home-tour-title h2{
+    font-size:clamp(3.5rem,14vw,5rem);
+  }
+  .home-tour-desc{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .home-tour-desc i{
+    width:54px;
+    height:1px;
+  }
+  .home-tour-desc p{
+    font-size:.84rem;
+  }
+  .home-tour-card{
+    grid-template-columns:1fr;
+  }
+  .home-tour-media{
+    min-height:220px;
+  }
+  .home-tour-card-body{
+    padding:20px 18px 18px;
+  }
+  .home-tour-card-body h3{
+    font-size:1.7rem;
+  }
+  .home-tour-card-footer>b{
+    width:48px;
+    height:48px;
+    flex-basis:48px;
+  }
+  .home-tour-leaf{
+    opacity:.14;
+  }
+}
