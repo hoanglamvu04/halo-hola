@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText } from 'lucide-react'
+import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SectionHeading from '../components/SectionHeading.jsx'
-import ArtworkCard from '../components/ArtworkCard.jsx'
 import { themes, colorStories, tours, artworks, img } from '../data/siteData.js'
 import { getCampaignStats, getHomepageContent } from '../services/api.js'
 
@@ -381,9 +380,53 @@ export default function HomePage() {
       <div className="container map-teaser-grid"><div><span className="eyebrow">{mapCopy.eyebrow}</span><h2>{mapCopy.title}</h2><p>{mapCopy.description}</p><Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link></div><div className="fake-map"><div className="map-road r1"/><div className="map-road r2"/><span className="pin p1"><MapPin/></span><span className="pin p2"><MapPin/></span><span className="pin p3"><MapPin/></span><span className="map-label l1">Hồ Đồng Mô</span><span className="map-label l2">Khu CNC Hòa Lạc</span><span className="map-label l3">ĐHQG Hà Nội</span></div><div className="place-preview"><img src={img.lake}/><h3>Hồ Đồng Mô</h3><small>Thiên nhiên · Trải nghiệm</small><p>Một khoảng xanh rộng lớn, điểm hẹn cho những hành trình khám phá Hòa Lạc.</p></div></div>
     </section>}
 
-    {sectionOn('stories')&&<section className="section container">
-      <SectionHeading eyebrow={storiesCopy.eyebrow} title={storiesCopy.title} desc={storiesCopy.description} action={<Link className="text-link" to="/top52">Xem TOP52 <ArrowRight size={15}/></Link>} />
-      <div className="art-grid compact">{artworks.slice(0,5).map(a => <ArtworkCard key={a.slug} item={a}/>)}</div>
+    {sectionOn('stories')&&<section className="top52-showcase">
+      <div className="top52-contours"/>
+      <div className="top52-blur top52-blur-right"/>
+      <div className="top52-inner">
+        <header className="top52-head">
+          <div className="top52-title-block">
+            <div className="top52-eyebrow-row">
+              <span className="eyebrow">{storiesCopy.eyebrow}</span>
+              <i/>
+            </div>
+            <h2>TOP52 <span>/ Stories</span></h2>
+            <p>{storiesCopy.description}</p>
+          </div>
+
+          <div className="top52-head-side">
+            <p>Những con người, địa điểm và trải nghiệm chân thật tạo nên một Hòa Lạc đầy màu sắc, đang đổi mới mỗi ngày.</p>
+            <Link className="top52-all-link" to="/top52">Xem tất cả TOP52 <ArrowRight/></Link>
+          </div>
+
+          <div className="top52-nav">
+            <Link to="/top52" aria-label="Xem TOP52"><ArrowLeft/></Link>
+            <Link to="/top52" className="active" aria-label="Xem tất cả TOP52"><ArrowRight/></Link>
+          </div>
+        </header>
+
+        <div className="top52-card-grid">
+          {artworks.slice(0,5).map((a,index)=><Link to={'/top52/'+a.slug} className="top52-card" key={a.slug}>
+            <div className="top52-card-media">
+              <img src={a.image} alt={a.title}/>
+              <span className="top52-badge">TOP52</span>
+              <span className="top52-heart"><Heart/></span>
+            </div>
+
+            <div className="top52-card-body">
+              <span className="top52-category">{a.theme} · {a.location}</span>
+              <h3>{a.title}</h3>
+              <p><b>{a.author}</b><br/>{index===0?'chia sẻ vẻ đẹp bình yên...':index===1?'về một buổi chiều đáng nhớ.':index===2?'về những đổi thay tích cực.':index===3?'về những con người mến khách.':'về một Hòa Lạc đang sống hơn.'}</p>
+
+              <div className="top52-card-meta">
+                <span><Eye/> {a.views}</span>
+                <i/>
+                <span className="top52-author"><img src={a.image} alt=""/>{a.author}</span>
+              </div>
+            </div>
+          </Link>)}
+        </div>
+      </div>
     </section>}
 
     {sectionOn('community')&&<section className="we-banner"><img src={community.backgroundImage}/><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><span className="hand-note">Nhiều góc nhìn<br/>Một cộng đồng<br/>Một Hòa Lạc</span></div></section>}
