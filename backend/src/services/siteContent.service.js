@@ -92,7 +92,7 @@ export async function saveSiteAsset({ sectionKey, file }) {
     const client=createR2Client();
     const buckets=getR2Buckets();
     bucket=buckets.public;
-    objectKey=`2026/site/homepage/${sectionKey || 'general'}/${Date.now()}-${safeName(file.originalname)}`;
+    objectKey=`2026/site/${sectionKey || 'general'}/${Date.now()}-${safeName(file.originalname)}`;
     await putR2Object({
       client,
       bucket,
