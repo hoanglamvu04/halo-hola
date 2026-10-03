@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const allowed = new Set([
   'image/jpeg','image/png','image/webp','video/mp4','video/quicktime',
-  'application/pdf','audio/mpeg'
+  'application/pdf','audio/mpeg','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ]);
 
 export const upload = multer({
