@@ -5,6 +5,7 @@ import { submissionRateLimiter } from '../middleware/rateLimit.js';
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
 import { createSubmission, lookupSubmission, getPublicStats } from '../services/submission.service.js';
+import { sendSubmissionReceived } from '../services/mail.service.js';
 
 const router = Router();
 
@@ -38,6 +39,13 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
     }
 
     const created = await createSubmission(data, req.files || []);
+
+    sendSubmissionReceived({
+      to: created.email,
+      name: created.display_name || created.name,
+      code: created.code,
+      title: created.title
+    }).catch((error) => console.warn('Submission email skipped/failed:', error.message));
 
     res.status(201).json({
       id: created.id,
