@@ -84,6 +84,10 @@ export function adminLogin(payload) {
   return unwrap(client.post('/auth/login', payload));
 }
 
+export function getAdminTourRegistrations(params = {}) {
+  return unwrap(client.get('/admin/tour-registrations', { params }));
+}
+
 export function getAdminSubmissions(params = {}) {
   return unwrap(client.get('/admin/submissions', { params }));
 }
