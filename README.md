@@ -170,3 +170,38 @@ npm run dev
 ```
 
 `db:migrate` cần chạy lại vì schema đã bổ sung metadata submission, R2 media vault và bảng đăng ký HOLA Tour.
+
+
+## Tự động đồng bộ máy Windows với GitHub
+
+Repo có chế độ dành cho máy development chính:
+
+```powershell
+npm run dev:auto
+```
+
+Lệnh này tự:
+- kiểm tra `origin/main` mỗi 20 giây;
+- `git pull --ff-only` khi có commit mới;
+- tự cài package nếu `package.json/package-lock.json` thay đổi;
+- tự chạy `npm run db:migrate`;
+- tự restart frontend + backend;
+- không tự pull nếu máy đang có file local chưa commit, để tránh mất code.
+
+Muốn không phải chạy lệnh sau mỗi lần mở máy, cài Windows Scheduled Task **một lần duy nhất**:
+
+```powershell
+npm run auto:install
+```
+
+Sau đó mỗi lần đăng nhập Windows, HALO HOLA Auto Sync tự chạy nền. Gỡ bằng:
+
+```powershell
+npm run auto:remove
+```
+
+Log nằm ở:
+- `auto-sync.log`
+- `dev-server.log`
+
+Có thể double-click `Start-HALO-HOLA.cmd` nếu muốn chạy thủ công mà không mở terminal gõ lệnh.
