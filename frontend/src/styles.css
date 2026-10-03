@@ -2400,3 +2400,386 @@
     padding:15px 78px 22px 20px;
   }
 }
+
+
+/* === Sắc màu Hòa Lạc — reference matched light editorial section === */
+.color-section-reference{
+  position:relative;
+  overflow:hidden;
+  padding:58px 0 66px;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(255,255,255,.98),transparent 28%),
+    radial-gradient(circle at 78% 88%,rgba(226,205,169,.17),transparent 30%),
+    linear-gradient(112deg,#fbf8f0 0%,#faf4e8 52%,#fcf8ef 100%);
+  border-block:1px solid rgba(23,61,45,.08);
+}
+.color-section-reference:before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:.42;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 92% 11%,transparent 0 105px,rgba(184,114,70,.11) 106px 107px,transparent 108px 142px),
+    radial-gradient(ellipse at 7% 94%,transparent 0 165px,rgba(184,114,70,.07) 166px 167px,transparent 168px 210px),
+    repeating-radial-gradient(ellipse at 74% 36%,transparent 0 34px,rgba(198,125,77,.045) 35px 36px,transparent 37px 48px);
+}
+.color-section-reference:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:.16;
+  background:
+    radial-gradient(circle at 14% 72%,rgba(18,73,53,.17) 0 1px,transparent 1.4px),
+    radial-gradient(circle at 85% 23%,rgba(190,91,51,.13) 0 1px,transparent 1.4px);
+  background-size:30px 30px,38px 38px;
+  mask-image:linear-gradient(90deg,#000,transparent 48%,#000);
+}
+.color-section-reference .color-row{
+  position:relative;
+  z-index:2;
+  width:min(1740px,calc(100% - 86px));
+  margin-inline:auto;
+  display:grid;
+  grid-template-columns:42% 58%;
+  gap:44px;
+  align-items:center;
+}
+.color-copy{
+  position:relative;
+  align-self:center;
+  padding:12px 34px 36px 12px;
+}
+.colors-eyebrow-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:16px;
+}
+.colors-eyebrow-row .eyebrow{
+  margin:0;
+  color:#c55b34;
+  font-size:.72rem;
+  letter-spacing:.22em;
+}
+.colors-eyebrow-row i{
+  width:66px;
+  height:1px;
+  background:linear-gradient(90deg,#c46b47,rgba(196,107,71,.08));
+}
+.color-copy h2{
+  display:grid;
+  margin:0;
+  max-width:690px;
+  font-size:clamp(4.4rem,5.5vw,7rem);
+  line-height:.88;
+  letter-spacing:-.055em;
+}
+.color-copy h2 span{
+  color:#0e4a36;
+  font-weight:600;
+}
+.color-copy h2 em{
+  color:#cb582f;
+  font-style:normal;
+  font-weight:600;
+}
+.colors-title-stroke{
+  display:block;
+  width:122px;
+  height:4px;
+  margin:15px 0 22px 18%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ca8b5f 0 72%,transparent 72%);
+  transform:rotate(-5deg);
+}
+.color-copy>p{
+  max-width:650px;
+  margin:0;
+  color:#68746d;
+  font-size:1rem;
+  line-height:1.75;
+}
+
+.color-card-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.color-card{
+  position:relative;
+  min-height:236px;
+  display:grid;
+  grid-template-rows:1fr auto;
+  overflow:hidden;
+  border:1px solid rgba(24,77,57,.09);
+  border-radius:22px;
+  background:rgba(255,251,244,.94);
+  box-shadow:0 14px 34px rgba(57,48,34,.07);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.color-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(194,92,51,.20);
+  box-shadow:0 24px 42px rgba(57,48,34,.12);
+}
+.color-card-visual{
+  position:relative;
+  min-height:150px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.color-orb{
+  position:relative;
+  z-index:2;
+  width:118px;
+  height:118px;
+  display:block;
+  border-radius:50%;
+  border:7px solid rgba(255,255,255,.86);
+  box-shadow:
+    0 10px 26px rgba(54,48,34,.10),
+    inset 0 0 0 1px rgba(255,255,255,.18);
+  transition:transform .28s ease;
+}
+.color-card:hover .color-orb{
+  transform:scale(1.035);
+}
+.color-card-ornament{
+  position:absolute;
+  z-index:1;
+  right:18px;
+  bottom:12px;
+  width:82px;
+  height:82px;
+  color:#cdbd9f;
+  opacity:.36;
+  stroke-width:1;
+}
+.color-card-1 .color-card-ornament{transform:rotate(-14deg)}
+.color-card-2 .color-card-ornament{
+  right:10px;
+  top:18px;
+  bottom:auto;
+  width:96px;
+  height:96px;
+  color:#e5b94e;
+  opacity:.22;
+}
+.color-card-3 .color-card-ornament{
+  width:88px;
+  height:88px;
+  color:#56764f;
+  opacity:.24;
+}
+.color-card-4 .color-card-ornament{
+  right:8px;
+  bottom:4px;
+  width:92px;
+  height:92px;
+  color:#77994c;
+  opacity:.26;
+}
+.color-card-5 .color-card-ornament{
+  width:86px;
+  height:86px;
+  color:#c3ab84;
+  opacity:.28;
+}
+.color-card-6 .color-card-ornament{
+  width:90px;
+  height:90px;
+  color:#c9835a;
+  opacity:.24;
+}
+
+.color-card-copy{
+  position:relative;
+  min-height:78px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px 16px 18px;
+}
+.color-card-copy>div{
+  min-width:0;
+}
+.color-card-copy b,
+.color-card-copy small{
+  display:block;
+}
+.color-card-copy b{
+  color:#143f31;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1.22rem;
+  line-height:1.05;
+  letter-spacing:-.025em;
+}
+.color-card-copy small{
+  margin-top:5px;
+  color:#737b76;
+  font-size:.7rem;
+}
+.color-card-arrow{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(196,91,50,.34);
+  border-radius:50%;
+  color:#c85a32;
+  background:rgba(255,251,244,.9);
+  transition:transform .22s ease,background .22s ease,color .22s ease;
+}
+.color-card-arrow svg{
+  width:17px;
+  height:17px;
+}
+.color-card:hover .color-card-arrow{
+  transform:translateX(3px);
+  background:#c85a32;
+  color:white;
+}
+
+.colors-decor{
+  position:absolute;
+  z-index:1;
+  color:#2c5d43;
+  opacity:.62;
+  pointer-events:none;
+}
+.colors-decor svg{
+  width:128px;
+  height:128px;
+  stroke-width:1.1;
+}
+.colors-decor-left{
+  left:-20px;
+  bottom:90px;
+  transform:rotate(-42deg);
+}
+.colors-decor-right{
+  right:-14px;
+  top:22px;
+  transform:rotate(37deg) scaleX(-1);
+}
+.colors-landscape{
+  position:absolute;
+  z-index:1;
+  left:-5%;
+  bottom:-38px;
+  width:56%;
+  height:250px;
+  opacity:.16;
+  pointer-events:none;
+  background:
+    repeating-radial-gradient(ellipse at 48% 100%,transparent 0 24px,rgba(34,85,61,.38) 25px 26px,transparent 27px 37px),
+    radial-gradient(ellipse at 48% 120%,rgba(82,120,90,.20),transparent 54%);
+  filter:blur(.2px);
+}
+
+@media(max-width:1320px){
+  .color-section-reference .color-row{
+    width:min(100% - 46px,1380px);
+    grid-template-columns:40% 60%;
+    gap:28px;
+  }
+  .color-copy{
+    padding-right:18px;
+  }
+  .color-copy h2{
+    font-size:clamp(3.8rem,5.2vw,5.8rem);
+  }
+  .color-card{
+    min-height:220px;
+  }
+  .color-card-visual{
+    min-height:138px;
+  }
+  .color-orb{
+    width:108px;
+    height:108px;
+  }
+}
+@media(max-width:980px){
+  .color-section-reference{
+    padding:44px 0 50px;
+  }
+  .color-section-reference .color-row{
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .color-copy{
+    padding:0 4px;
+  }
+  .color-copy h2{
+    max-width:780px;
+    font-size:clamp(3.7rem,9vw,5.4rem);
+  }
+  .color-copy>p{
+    max-width:760px;
+  }
+  .color-card-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:720px){
+  .color-card-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .color-orb{
+    width:98px;
+    height:98px;
+  }
+  .colors-decor{
+    opacity:.28;
+  }
+}
+@media(max-width:520px){
+  .color-section-reference{
+    padding:36px 0 42px;
+  }
+  .color-section-reference .color-row{
+    width:calc(100% - 22px);
+  }
+  .colors-eyebrow-row .eyebrow{
+    font-size:.58rem;
+  }
+  .color-copy h2{
+    font-size:clamp(3.15rem,15vw,4.4rem);
+  }
+  .color-copy>p{
+    font-size:.84rem;
+  }
+  .color-card-grid{
+    grid-template-columns:1fr;
+    gap:13px;
+  }
+  .color-card{
+    min-height:205px;
+    grid-template-columns:145px 1fr;
+    grid-template-rows:1fr;
+  }
+  .color-card-visual{
+    min-height:205px;
+  }
+  .color-card-copy{
+    min-height:205px;
+    padding:18px 16px;
+  }
+  .color-card-copy b{
+    font-size:1.3rem;
+  }
+  .color-card-ornament{
+    width:64px;
+    height:64px;
+  }
+  .colors-decor{
+    display:none;
+  }
+}
