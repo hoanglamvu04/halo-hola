@@ -20,9 +20,9 @@ export default function Header() {
       const brand=settings?.brand||{}
       setConfig(v=>({
         ...v,
+        ...(section?.content||{}),
         enabled:section?.enabled!==false,
         logoImage:section?.content?.logoImage||brand.logo||v.logoImage,
-        ...(section?.content||{}),
         siteName:brand.siteName||'HALO HOLA'
       }))
     })
