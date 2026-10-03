@@ -1,19 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, MapPin, Clock3, CalendarDays, Quote, Share2,
   Heart, BookOpen, UserRound, Image as ImageIcon
 } from 'lucide-react'
-import { stories } from '../data/siteData.js'
+import { stories as fallbackStories } from '../data/siteData.js'
+import { getStoryBySlug } from '../services/api.js'
+import { normalizeStory } from '../utils/contentAdapters.js'
 
 export default function StoryDetailPage(){
   const {slug}=useParams()
-  const story=stories.find(s=>s.slug===slug) || stories[0]
-  const related=stories.filter(s=>s.slug!==story.slug).slice(0,3)
-  const [saved,setSaved]=useState(()=>{
-    try{return localStorage.getItem('halo-story-'+story.slug)==='1'}catch{return false}
-  })
+  const fallbackStory=normalizeStory(fallbackStories.find(s=>s.slug===slug) || fallbackStories[0])
+  const [story,setStory]=useState(fallbackStory)
+  const [saved,setSaved]=useState(false)
   const [shareLabel,setShareLabel]=useState('Chia sẻ')
+  const related=fallbackStories.map(normalizeStory).filter(s=>s.slug!==story.slug).slice(0,3)
+
+  useEffect(()=>{
+    setStory(fallbackStory)
+    getStoryBySlug(slug).then(data=>setStory(normalizeStory(data))).catch(()=>{})
+  },[slug])
+
+  useEffect(()=>{
+    try{setSaved(localStorage.getItem('halo-story-'+story.slug)==='1')}catch{setSaved(false)}
+  },[story.slug])
 
   const toggleSaved=()=>{
     const next=!saved
