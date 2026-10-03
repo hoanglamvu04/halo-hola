@@ -1,7 +1,7 @@
 import { Menu, Search, X, ArrowRight, Leaf } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { getHomepageContent } from '../services/api.js'
+import { getHomepageContent, getSiteSettings } from '../services/api.js'
 
 const items = [
   ['Khám phá', '/'], ['Chủ đề', '/chu-de/net-doai'], ['HOLA Tour', '/hola-tour'],
@@ -13,10 +13,19 @@ export default function Header() {
   const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:''})
 
   useEffect(()=>{
-    getHomepageContent().then(data=>{
+    Promise.allSettled([getHomepageContent(),getSiteSettings()]).then(([homeResult,settingsResult])=>{
+      const data=homeResult.status==='fulfilled'?homeResult.value:null
+      const settings=settingsResult.status==='fulfilled'?settingsResult.value:{}
       const section=data?.header
-      setConfig(v=>({...v,enabled:section?.enabled!==false,...(section?.content||{})}))
-    }).catch(()=>{})
+      const brand=settings?.brand||{}
+      setConfig(v=>({
+        ...v,
+        enabled:section?.enabled!==false,
+        logoImage:section?.content?.logoImage||brand.logo||v.logoImage,
+        ...(section?.content||{}),
+        siteName:brand.siteName||'HALO HOLA'
+      }))
+    })
   },[])
 
   useEffect(()=>{
@@ -36,7 +45,7 @@ export default function Header() {
   return <header className="site-header">
     <div className="container header-inner">
       <Link className={'brand '+(config.logoImage?'brand-image':'brand-lockup')} to="/">
-        {config.logoImage?<img src={config.logoImage} alt="HALO HOLA"/>:<>
+        {config.logoImage?<img src={config.logoImage} alt={config.siteName||"HALO HOLA"}/>:<>
           <span className="brand-emblem"><Leaf/></span>
           <span className="brand-wordmark">HAL<span>O</span> HOLA</span>
         </>}
