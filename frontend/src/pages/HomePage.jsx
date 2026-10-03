@@ -57,6 +57,8 @@ export default function HomePage() {
     backgroundImage:img.people
   })
 
+  const colorIcons=[Map,Sun,Leaf,BookOpen,MapPin,Users]
+
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
     ['17.10','HOLA Tour #01'],
@@ -278,8 +280,44 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('colors')&&<section className="color-section paper-bg">
-      <div className="container color-row"><div><span className="eyebrow">{colorsCopy.eyebrow}</span><h2>{colorsCopy.title}</h2><p>{colorsCopy.description}</p></div><div className="swatches">{colorStories.map(c => <div className="swatch" key={c.name}><span style={{background:c.color}}/><b>{c.name}</b><small>{c.story}</small></div>)}</div></div>
+    {sectionOn('colors')&&<section className="color-section color-section-reference">
+      <div className="colors-decor colors-decor-left"><Leaf/></div>
+      <div className="colors-decor colors-decor-right"><Leaf/></div>
+      <div className="colors-landscape"/>
+
+      <div className="color-row">
+        <div className="color-copy">
+          <div className="colors-eyebrow-row">
+            <span className="eyebrow">{colorsCopy.eyebrow}</span>
+            <i/>
+          </div>
+          <h2>
+            <span>Hòa Lạc trong bạn có</span>
+            <em>màu gì?</em>
+          </h2>
+          <span className="colors-title-stroke"/>
+          <p>{colorsCopy.description}</p>
+        </div>
+
+        <div className="swatches color-card-grid">
+          {colorStories.map((c,index) => {
+            const ColorIcon=colorIcons[index] || Leaf
+            return <Link to="/chu-de/sac-mau" className={'swatch color-card color-card-'+(index+1)} key={c.name}>
+              <div className="color-card-visual">
+                <span className="color-orb" style={{background:c.color}}/>
+                <ColorIcon className="color-card-ornament"/>
+              </div>
+              <div className="color-card-copy">
+                <div>
+                  <b>{c.name}</b>
+                  <small>{c.story}</small>
+                </div>
+                <span className="color-card-arrow"><ArrowRight/></span>
+              </div>
+            </Link>
+          })}
+        </div>
+      </div>
     </section>}
 
     {sectionOn('tours')&&<section className="section container">
