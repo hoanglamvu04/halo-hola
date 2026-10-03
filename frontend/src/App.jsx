@@ -15,6 +15,8 @@ import PartnersPage from './pages/PartnersPage.jsx'
 import HelloPage from './pages/HelloPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import ThemePage from './pages/ThemePage.jsx'
+import LookupPage from './pages/LookupPage.jsx'
+import JuryPage from './pages/JuryPage.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -28,7 +30,7 @@ function ScrollToTop() {
 
 function SiteShell() {
   const { pathname } = useLocation()
-  const isAdmin = pathname.startsWith('/admin')
+  const isAdmin = pathname.startsWith('/admin') || pathname.startsWith('/jury')
 
   return (
     <>
@@ -49,6 +51,8 @@ function SiteShell() {
         <Route path="/hello" element={<HelloPage />} />
         <Route path="/chu-de/:slug" element={<ThemePage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/tra-cuu" element={<LookupPage />} />
+        <Route path="/jury" element={<JuryPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
 
