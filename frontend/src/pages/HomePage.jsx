@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays } from 'lucide-react'
+import { ArrowRight, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SectionHeading from '../components/SectionHeading.jsx'
 import ArtworkCard from '../components/ArtworkCard.jsx'
@@ -50,21 +50,49 @@ export default function HomePage() {
     </section>
 
     <section className="campaign-live">
-      <div className="container campaign-live-grid">
+      <div className="campaign-live-grid">
         <div className="live-counter">
-          <span className="eyebrow">HALO HOLA ĐANG DIỄN RA</span>
-          <h2>Mỗi ngày thêm một góc nhìn mới.</h2>
+          <div className="campaign-kicker"><span className="eyebrow">HALO HOLA ĐANG DIỄN RA</span><i/></div>
+          <h2>Mỗi ngày thêm<br/>một góc nhìn mới.</h2>
+          <span className="campaign-accent-line"/>
+          <p className="campaign-desc">Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.</p>
+
           <div className="live-stats">
-            <div><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></div>
-            <div><b>{stats.creators}</b><small>Người kể chuyện</small></div>
-            <div><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></div>
-            <div><b>{stats.top52}</b><small>Tác phẩm TOP52</small></div>
+            <div className="live-stat stat-camera"><Camera/><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></div>
+            <div className="live-stat stat-people"><Users/><b>{stats.creators}</b><small>Người kể chuyện</small></div>
+            <div className="live-stat stat-place"><MapPin/><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></div>
+            <div className="live-stat stat-top52"><FileText/><b>{stats.top52}</b><small>Tác phẩm TOP52</small></div>
           </div>
-          <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi góc nhìn <ArrowRight size={16}/></Link>
+
+          <Link className="campaign-cta" to="/gui-goc-nhin">Gửi góc nhìn <ArrowRight size={22}/></Link>
         </div>
+
         <div className="campaign-timeline">
           <div className="timeline-title"><CalendarDays/><b>Hành trình 2026</b></div>
-          {milestones.map(([date,label],i)=><div className="campaign-milestone" key={date}><span>{date}</span><i className={i===0?'active':''}/><b>{label}</b></div>)}
+          <div className="campaign-milestones">
+            {milestones.map(([date,label],i)=><div className="campaign-milestone" key={date}>
+              <span>{date}</span><i className={i===0?'active':''}/><b>{label}</b>
+            </div>)}
+          </div>
+        </div>
+
+        <div className="campaign-visual" aria-label="Hòa Lạc qua những góc nhìn">
+          <img className="campaign-visual-bg" src={img.sunset} alt="Phong cảnh Hòa Lạc"/>
+          <div className="campaign-visual-shade"/>
+          <div className="campaign-place-sign"><MapPin/><span>Hòa Lạc</span></div>
+
+          <div className="campaign-polaroid polaroid-discover">
+            <img src={img.hills} alt="Khám phá Hòa Lạc"/>
+            <span>Khám phá</span>
+          </div>
+          <div className="campaign-polaroid polaroid-keep">
+            <img src={img.architecture} alt="Lưu giữ Hòa Lạc"/>
+            <span>Lưu giữ</span>
+          </div>
+          <div className="campaign-polaroid polaroid-share">
+            <img src={img.student} alt="Chia sẻ Hòa Lạc"/>
+            <span>Chia sẻ</span>
+          </div>
         </div>
       </div>
     </section>
