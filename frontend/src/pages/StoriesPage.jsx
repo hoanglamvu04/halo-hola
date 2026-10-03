@@ -10,7 +10,13 @@ export default function StoriesPage(){
   useEffect(()=>{
     getStories().then(data=>setRemoteStories((data||[]).map(normalizeStory))).catch(()=>{})
   },[])
-  const stories=useMemo(()=>remoteStories.length?remoteStories:fallbackStories.map(normalizeStory),[remoteStories])
+  const stories=useMemo(()=>{
+    const base=fallbackStories.map(normalizeStory)
+    if(!remoteStories.length) return base
+    const map=new Map(base.map(item=>[item.slug,item]))
+    remoteStories.forEach(item=>map.set(item.slug,{...map.get(item.slug),...item}))
+    return Array.from(map.values()).sort((a,b)=>Number(Boolean(b.featured))-Number(Boolean(a.featured)))
+  },[remoteStories])
   const featured=stories.find(s=>s.featured)||stories[0]
   const rest=stories.filter(s=>s.slug!==featured?.slug)
 
