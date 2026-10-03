@@ -1,10 +1,28 @@
-import { ArrowRight, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SectionHeading from '../components/SectionHeading.jsx'
 import ArtworkCard from '../components/ArtworkCard.jsx'
 import { themes, colorStories, tours, artworks, img } from '../data/siteData.js'
+import { getCampaignStats } from '../services/api.js'
 
 export default function HomePage() {
+  const [stats,setStats]=useState({submissions:0,creators:0,locations:0,top52:0})
+
+  useEffect(()=>{
+    getCampaignStats().then(setStats).catch(()=>{})
+  },[])
+
+  const milestones=[
+    ['10.10','Mở nhận tác phẩm'],
+    ['17.10','HOLA Tour #01'],
+    ['24.10','HOLA Tour #02'],
+    ['31.10','HOLA Tour #03'],
+    ['10.11','Đóng nhận tác phẩm'],
+    ['18.11','Công bố TOP52'],
+    ['28.11','HOLA DAY']
+  ]
+
   return <main>
     <section className="home-hero paper-bg">
       <div className="container home-hero-grid">
@@ -27,6 +45,26 @@ export default function HomePage() {
           <img className="hero-float hero-float-b" src={img.people} alt="Con người Hòa Lạc"/>
           <div className="hero-stone">HÒA LẠC<br/><span>NƠI NHỮNG ƯỚC MƠ BẮT ĐẦU</span></div>
           <span className="hand-note home-note">Hòa Lạc<br/>Hôm nay<br/>và mai sau...</span>
+        </div>
+      </div>
+    </section>
+
+    <section className="campaign-live">
+      <div className="container campaign-live-grid">
+        <div className="live-counter">
+          <span className="eyebrow">HALO HOLA ĐANG DIỄN RA</span>
+          <h2>Mỗi ngày thêm một góc nhìn mới.</h2>
+          <div className="live-stats">
+            <div><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></div>
+            <div><b>{stats.creators}</b><small>Người kể chuyện</small></div>
+            <div><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></div>
+            <div><b>{stats.top52}</b><small>Tác phẩm TOP52</small></div>
+          </div>
+          <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi góc nhìn <ArrowRight size={16}/></Link>
+        </div>
+        <div className="campaign-timeline">
+          <div className="timeline-title"><CalendarDays/><b>Hành trình 2026</b></div>
+          {milestones.map(([date,label],i)=><div className="campaign-milestone" key={date}><span>{date}</span><i className={i===0?'active':''}/><b>{label}</b></div>)}
         </div>
       </div>
     </section>
