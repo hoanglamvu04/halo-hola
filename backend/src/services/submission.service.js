@@ -276,5 +276,6 @@ export async function getMediaDownloadUrl(mediaId) {
     };
   }
 
-  return { filename: media.original_name, url: media.url };
+  const base = (process.env.PUBLIC_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+  return { filename: media.original_name, url: media.url?.startsWith('/') ? base + media.url : media.url };
 }
