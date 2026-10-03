@@ -1,10 +1,18 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Eye, MapPin, Clock3, BookOpen, Heart, Users, Leaf } from 'lucide-react'
-import { stories } from '../data/siteData.js'
+import { stories as fallbackStories } from '../data/siteData.js'
+import { getStories } from '../services/api.js'
+import { normalizeStory } from '../utils/contentAdapters.js'
 
 export default function StoriesPage(){
-  const featured=stories[0]
-  const rest=stories.slice(1)
+  const [remoteStories,setRemoteStories]=useState([])
+  useEffect(()=>{
+    getStories().then(data=>setRemoteStories((data||[]).map(normalizeStory))).catch(()=>{})
+  },[])
+  const stories=useMemo(()=>remoteStories.length?remoteStories:fallbackStories.map(normalizeStory),[remoteStories])
+  const featured=stories.find(s=>s.featured)||stories[0]
+  const rest=stories.filter(s=>s.slug!==featured?.slug)
 
   return <main className="stories-page-ref">
     <section className="stories-intro-ref">
