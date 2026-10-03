@@ -2783,3 +2783,195 @@
     display:none;
   }
 }
+
+
+/* === Sắc màu v2 — compact, balanced proportions === */
+.color-section-reference{
+  padding:42px 0 46px;
+}
+.color-section-reference .color-row{
+  width:min(1660px,calc(100% - 82px));
+  grid-template-columns:39% 61%;
+  gap:34px;
+  align-items:center;
+}
+.color-copy{
+  padding:6px 26px 18px 8px;
+}
+.colors-eyebrow-row{
+  margin-bottom:12px;
+}
+.color-copy h2{
+  max-width:610px;
+  font-size:clamp(3.55rem,4.75vw,5.75rem);
+  line-height:.9;
+}
+.colors-title-stroke{
+  width:105px;
+  height:3px;
+  margin:12px 0 17px 16%;
+}
+.color-copy>p{
+  max-width:575px;
+  font-size:.92rem;
+  line-height:1.65;
+}
+
+.color-card-grid{
+  gap:14px;
+}
+.color-card{
+  min-height:198px;
+  border-radius:18px;
+}
+.color-card-visual{
+  min-height:118px;
+  padding-top:4px;
+}
+.color-orb{
+  width:92px;
+  height:92px;
+  border-width:6px;
+  box-shadow:
+    0 8px 20px rgba(54,48,34,.09),
+    inset 0 0 0 1px rgba(255,255,255,.18);
+}
+.color-card-copy{
+  min-height:70px;
+  padding:9px 13px 12px 15px;
+}
+.color-card-copy b{
+  font-size:1.08rem;
+}
+.color-card-copy small{
+  margin-top:4px;
+  font-size:.64rem;
+}
+.color-card-arrow{
+  width:36px;
+  height:36px;
+}
+.color-card-arrow svg{
+  width:15px;
+  height:15px;
+}
+.color-card-ornament{
+  right:12px;
+  bottom:8px;
+  width:62px;
+  height:62px;
+  opacity:.25;
+}
+.color-card-2 .color-card-ornament{
+  right:8px;
+  top:12px;
+  width:72px;
+  height:72px;
+}
+.color-card-3 .color-card-ornament,
+.color-card-4 .color-card-ornament,
+.color-card-5 .color-card-ornament,
+.color-card-6 .color-card-ornament{
+  width:66px;
+  height:66px;
+}
+.colors-decor svg{
+  width:106px;
+  height:106px;
+}
+.colors-decor-left{
+  bottom:68px;
+}
+.colors-landscape{
+  width:50%;
+  height:205px;
+  bottom:-30px;
+  opacity:.13;
+}
+
+@media(max-width:1320px){
+  .color-section-reference .color-row{
+    width:min(100% - 42px,1320px);
+    grid-template-columns:38% 62%;
+    gap:24px;
+  }
+  .color-copy{
+    padding-right:14px;
+  }
+  .color-copy h2{
+    font-size:clamp(3.25rem,4.5vw,5rem);
+  }
+  .color-card{
+    min-height:188px;
+  }
+  .color-card-visual{
+    min-height:110px;
+  }
+  .color-orb{
+    width:84px;
+    height:84px;
+  }
+}
+@media(max-width:980px){
+  .color-section-reference{
+    padding:38px 0 42px;
+  }
+  .color-section-reference .color-row{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .color-copy h2{
+    max-width:720px;
+    font-size:clamp(3.2rem,8vw,4.8rem);
+  }
+  .color-copy>p{
+    max-width:720px;
+  }
+  .color-card-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:720px){
+  .color-card-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .color-card{
+    min-height:184px;
+  }
+  .color-card-visual{
+    min-height:108px;
+  }
+  .color-orb{
+    width:82px;
+    height:82px;
+  }
+}
+@media(max-width:520px){
+  .color-section-reference{
+    padding:32px 0 36px;
+  }
+  .color-section-reference .color-row{
+    width:calc(100% - 22px);
+  }
+  .color-copy h2{
+    font-size:clamp(2.9rem,14vw,4rem);
+  }
+  .color-card-grid{
+    grid-template-columns:1fr;
+  }
+  .color-card{
+    min-height:160px;
+    grid-template-columns:118px 1fr;
+  }
+  .color-card-visual{
+    min-height:160px;
+  }
+  .color-card-copy{
+    min-height:160px;
+    padding:14px 14px;
+  }
+  .color-orb{
+    width:78px;
+    height:78px;
+  }
+}
