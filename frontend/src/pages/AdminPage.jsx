@@ -8,7 +8,7 @@ import {
 import { artworks, mapPlaces, tours } from '../data/siteData.js'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
-  updateSubmissionStatus, getOriginalDownload
+  updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
 } from '../services/api.js'
 
 const nav=[
@@ -28,6 +28,7 @@ export default function AdminPage(){
  const [statusFilter,setStatusFilter]=useState('')
  const [query,setQuery]=useState('')
  const [selected,setSelected]=useState(null)
+ const [tourRegistrations,setTourRegistrations]=useState([])
 
  const load=async()=>{
    if(!token) return
@@ -44,6 +45,7 @@ export default function AdminPage(){
  }
 
  useEffect(()=>{ if(token) load() },[token,statusFilter])
+ useEffect(()=>{ if(token&&active==='HOLA Tour') getAdminTourRegistrations().then(setTourRegistrations).catch(err=>setError(err.message)) },[token,active])
 
  const login=async(e)=>{
    e.preventDefault()
@@ -126,6 +128,7 @@ export default function AdminPage(){
          </div>
        </div>
      </>:
+     active==='HOLA Tour'?<div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>:
      active==='Tác phẩm'?<div className="admin-workspace">
        <div className="admin-panel submissions-panel">
          <div className="admin-toolbar">
