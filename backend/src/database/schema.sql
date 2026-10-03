@@ -19,6 +19,16 @@ CREATE TABLE IF NOT EXISTS submissions (
   email VARCHAR(255) NOT NULL,
   phone VARCHAR(60),
   bio TEXT,
+  title VARCHAR(280),
+  captured_at DATE,
+  external_link TEXT,
+  previous_award BOOLEAN NOT NULL DEFAULT FALSE,
+  previous_award_note TEXT,
+  rights_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+  image_consent_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+  is_minor BOOLEAN NOT NULL DEFAULT FALSE,
+  guardian_name VARCHAR(180),
+  guardian_consent BOOLEAN NOT NULL DEFAULT FALSE,
   type VARCHAR(80) NOT NULL,
   theme VARCHAR(180) NOT NULL,
   color VARCHAR(120),
@@ -28,9 +38,22 @@ CREATE TABLE IF NOT EXISTS submissions (
     CHECK (status IN ('PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED')),
   allow_media_use BOOLEAN NOT NULL DEFAULT TRUE,
   allow_newsletter BOOLEAN NOT NULL DEFAULT FALSE,
+  jury_note TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS title VARCHAR(280);
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS captured_at DATE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS external_link TEXT;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS previous_award BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS previous_award_note TEXT;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS rights_confirmed BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS image_consent_confirmed BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS is_minor BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS guardian_name VARCHAR(180);
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS guardian_consent BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS jury_note TEXT;
 
 CREATE TABLE IF NOT EXISTS submission_media (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -39,8 +62,19 @@ CREATE TABLE IF NOT EXISTS submission_media (
   original_name TEXT NOT NULL,
   mime_type VARCHAR(150) NOT NULL,
   size_bytes INTEGER NOT NULL,
+  storage_provider VARCHAR(30) NOT NULL DEFAULT 'LOCAL',
+  bucket VARCHAR(180),
+  object_key TEXT,
+  sha256 VARCHAR(64),
+  revision INTEGER NOT NULL DEFAULT 1,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE submission_media ADD COLUMN IF NOT EXISTS storage_provider VARCHAR(30) NOT NULL DEFAULT 'LOCAL';
+ALTER TABLE submission_media ADD COLUMN IF NOT EXISTS bucket VARCHAR(180);
+ALTER TABLE submission_media ADD COLUMN IF NOT EXISTS object_key TEXT;
+ALTER TABLE submission_media ADD COLUMN IF NOT EXISTS sha256 VARCHAR(64);
+ALTER TABLE submission_media ADD COLUMN IF NOT EXISTS revision INTEGER NOT NULL DEFAULT 1;
 
 CREATE TABLE IF NOT EXISTS places (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -66,6 +100,24 @@ CREATE TABLE IF NOT EXISTS tours (
   image TEXT,
   status VARCHAR(30) NOT NULL DEFAULT 'DRAFT'
     CHECK (status IN ('DRAFT','PUBLISHED','CLOSED')),
+  capacity INTEGER NOT NULL DEFAULT 20,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+ALTER TABLE tours ADD COLUMN IF NOT EXISTS capacity INTEGER NOT NULL DEFAULT 20;
+
+CREATE TABLE IF NOT EXISTS tour_registrations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code VARCHAR(32) NOT NULL UNIQUE,
+  tour_number VARCHAR(20) NOT NULL,
+  name VARCHAR(160) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(60) NOT NULL,
+  role_label VARCHAR(120),
+  equipment VARCHAR(220),
+  note TEXT,
+  status VARCHAR(30) NOT NULL DEFAULT 'REGISTERED'
+    CHECK (status IN ('REGISTERED','CONFIRMED','WAITLIST','ATTENDED','CANCELLED')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -84,5 +136,8 @@ CREATE TABLE IF NOT EXISTS stories (
 );
 
 CREATE INDEX IF NOT EXISTS idx_submissions_status_created ON submissions(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_submissions_code_email ON submissions(code, email);
+CREATE INDEX IF NOT EXISTS idx_media_submission ON submission_media(submission_id);
+CREATE INDEX IF NOT EXISTS idx_tour_registrations_tour ON tour_registrations(tour_number, status);
 CREATE INDEX IF NOT EXISTS idx_places_published_name ON places(published, name);
 CREATE INDEX IF NOT EXISTS idx_stories_published_created ON stories(published, created_at DESC);
