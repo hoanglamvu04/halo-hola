@@ -1,18 +1,18 @@
 import { createApp } from './app.js';
 import { env } from './config/env.js';
-import { listenWithFallback } from './utils/listen.js';
 
 const app = createApp();
 
-listenWithFallback(app, env.port, {
-  onFallback: (busyPort, nextPort) => {
-    console.warn(`Port ${busyPort} is busy, trying ${nextPort}...`);
-  },
-  onListening: (port) => {
-    if (port !== env.port) {
-      console.warn(`Configured PORT ${env.port} was busy. Update frontend VITE_API_URL if needed.`);
-    }
-    console.log(`HALO HOLA API listening on port ${port} (${env.nodeEnv})`);
-    console.log(`Server running at: http://localhost:${port}`);
+const server = app.listen(env.port, () => {
+  console.log(`HALO HOLA API listening on port ${env.port} (${env.nodeEnv})`);
+  console.log(`Server running at: http://localhost:${env.port}`);
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${env.port} is already in use. Stop the other process or change PORT and VITE_API_URL together.`);
+    process.exit(1);
   }
+
+  throw error;
 });
