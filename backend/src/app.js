@@ -19,6 +19,7 @@ export function createApp() {
   const app = express();
 
   app.disable('x-powered-by');
+  if (env.nodeEnv === 'production') app.set('trust proxy', 1);
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
   app.use(cors({ origin: resolveCorsOrigin }));
   app.use(express.json({ limit: '2mb' }));
