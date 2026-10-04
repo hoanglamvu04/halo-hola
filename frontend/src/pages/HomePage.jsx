@@ -95,6 +95,7 @@ export default function HomePage() {
 
           <div className="hero-main-frame">
             <img className="hero-main-img" src={hero.mainImage} alt="Hòa Lạc"/>
+            <span className="hero-mobile-place"><MapPin/> <b>Hòa Lạc</b><small>hôm nay</small></span>
           </div>
 
           <div className="hero-float hero-float-a"><img src={hero.floatImageA} alt="Kiến trúc Hòa Lạc"/></div>
@@ -113,18 +114,22 @@ export default function HomePage() {
           <div className="hero-pillar-item">
             <span className="pillar-icon green"><Leaf/></span>
             <div><b>Thiên nhiên</b><small>Màu xanh bền vững</small></div>
+            <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
             <span className="pillar-icon terra"><BookOpen/></span>
             <div><b>Tri thức</b><small>Nơi ươm mầm tương lai</small></div>
+            <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
             <span className="pillar-icon green"><Users/></span>
             <div><b>Con người</b><small>Những câu chuyện thật</small></div>
+            <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
             <span className="pillar-icon terra"><Sun/></span>
             <div><b>Tương lai</b><small>Một Hòa Lạc đang lớn lên</small></div>
+            <ArrowRight className="mobile-pillar-arrow"/>
           </div>
         </div>
       </div>
