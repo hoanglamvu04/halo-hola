@@ -66,13 +66,15 @@ git pull --ff-only origin main
 sudo -u postgres psql
 ```
 
-Example:
+Nếu VPS đã có PostgreSQL cho các dự án khác, **giữ nguyên user/password hiện tại** để không làm ảnh hưởng ứng dụng đang chạy. Chỉ tạo database mới nếu chưa có:
 
 ```sql
-CREATE DATABASE halo_hola;
-ALTER USER postgres WITH PASSWORD 'CHANGE_TO_A_STRONG_PASSWORD';
+SELECT 'CREATE DATABASE halo_hola'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'halo_hola')\gexec
 \q
 ```
+
+Sau đó dùng đúng user/password PostgreSQL hiện có trong `DATABASE_URL`.
 
 ## 5. Production env
 
