@@ -49,7 +49,11 @@ export default function PublicationManager(){
     setBusy(key);setError('');setMessage('')
     try{await fn();setMessage(success);await load()}catch(err){setError(err.message)}finally{setBusy('')}
   }
-  const payload=action=>({action,scheduledAt:action==='SCHEDULE'?scheduledAt:undefined,reason})
+  const payload=action=>({
+    action,
+    scheduledAt:action==='SCHEDULE'&&scheduledAt?new Date(scheduledAt).toISOString():undefined,
+    reason
+  })
   const single=(item,action)=>run(`${action}-${item.id}`,()=>setAdminPublication(item.id,payload(action)),`${actionLabels[action]} ${item.code} thành công.`)
   const bulk=action=>run(`bulk-${action}`,()=>bulkSetAdminPublication({ids:selected,...payload(action)}),`Đã ${actionLabels[action].toLowerCase()} ${selected.length} tác phẩm.`)
 
