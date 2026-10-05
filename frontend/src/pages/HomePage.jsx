@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import SectionHeading from '../components/SectionHeading.jsx'
-import { themes, colorStories, tours, artworks, img } from '../data/siteData.js'
-import { getCampaignStats, getHomepageContent } from '../services/api.js'
+import { colorStories, img } from '../data/siteData.js'
+import { getCampaignStats, getHomepageContent, getThemes, getTours, getPublicArtworks } from '../services/api.js'
+import { normalizeTour } from '../utils/contentAdapters.js'
 
 export default function HomePage() {
   const [stats,setStats]=useState({submissions:0,creators:0,locations:0,top52:0})
   const [homepage,setHomepage]=useState({})
+  const [themes,setThemes]=useState([])
+  const [tours,setTours]=useState([])
+  const [artworks,setArtworks]=useState([])
 
   useEffect(()=>{
     getCampaignStats().then(setStats).catch(()=>{})
     getHomepageContent().then(setHomepage).catch(()=>{})
+    getThemes().then(data=>setThemes(Array.isArray(data)?data:[])).catch(()=>{})
+    getTours().then(data=>setTours((data||[]).map(normalizeTour))).catch(()=>{})
+    getPublicArtworks({limit:5}).then(data=>setArtworks(Array.isArray(data)?data:[])).catch(()=>{})
   },[])
 
   const sectionOn=(key)=>homepage[key]?.enabled!==false
@@ -248,34 +254,26 @@ export default function HomePage() {
               <span className="eyebrow">{themesCopy.eyebrow}</span>
               <i/>
             </div>
-            <h2>
-              <span>8 chủ đề về</span>
-              <em>Hòa Lạc</em>
-            </h2>
+            <h2><span>8 chủ đề về</span><em>Hòa Lạc</em></h2>
             <span className="themes-title-stroke"/>
           </div>
 
           <div className="themes-showcase-side">
             <p>{themesCopy.description}</p>
-            <Link className="themes-all-link" to="/chu-de/net-doai">
-              Xem tất cả chủ đề <ArrowRight size={17}/>
-            </Link>
+            <Link className="themes-all-link" to="/chu-de">Xem tất cả chủ đề <ArrowRight size={17}/></Link>
           </div>
         </header>
 
         <div className="themes-card-grid">
-          {themes.map((t,index) => <Link to={'/chu-de/'+t.slug} className="theme-card theme-card-reference" key={t.id}>
+          {themes.map((t,index) => <Link to={'/chu-de/'+t.slug} className="theme-card theme-card-reference" key={t.id||t.slug}>
             <div className="theme-card-media">
-              <img src={t.image} alt={t.title}/>
+              {t.image?<img src={t.image} alt={t.title}/>:<div className="theme-card-placeholder"/>}
               <span className="theme-card-glow"/>
             </div>
             <div className="theme-card-body">
-              <div className="theme-card-number">
-                <b>{String(index+1).padStart(2,'0')}</b>
-                <i/>
-              </div>
+              <div className="theme-card-number"><b>{String(t.id||index+1).padStart(2,'0')}</b><i/></div>
               <h3>{t.title}</h3>
-              <p>{t.desc}</p>
+              <p>{t.description}</p>
               <span className="theme-card-arrow"><ArrowRight/></span>
               <Leaf className="theme-card-leaf"/>
             </div>
@@ -291,14 +289,8 @@ export default function HomePage() {
 
       <div className="color-v3-top">
         <div className="color-copy">
-          <div className="colors-eyebrow-row">
-            <span className="eyebrow">{colorsCopy.eyebrow}</span>
-            <i/>
-          </div>
-          <h2>
-            <span>Hòa Lạc trong bạn</span>
-            <em>có màu gì?</em>
-          </h2>
+          <div className="colors-eyebrow-row"><span className="eyebrow">{colorsCopy.eyebrow}</span><i/></div>
+          <h2><span>Hòa Lạc trong bạn</span><em>có màu gì?</em></h2>
           <p>{colorsCopy.description}</p>
         </div>
 
@@ -306,24 +298,13 @@ export default function HomePage() {
           <span className="color-v3-script">Hòa Lạc</span>
           <div className="color-v3-window color-v3-window-a"><img src={img.hills} alt="Phong cảnh Hòa Lạc"/></div>
           <div className="color-v3-window color-v3-window-b"><img src={img.lake} alt="Không gian Hòa Lạc"/></div>
-          <div className="color-v3-note">
-            <MapPin/>
-            <span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span>
-            <i/>
-          </div>
+          <div className="color-v3-note"><MapPin/><span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span><i/></div>
         </div>
       </div>
 
       <div className="color-v3-cards">
         {colorStories.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.name}>
-          <div className="color-v3-card-head">
-            <span className="color-v3-dot" style={{background:c.color}}/>
-            <div>
-              <b>{c.name}</b>
-              <small>{c.story}</small>
-            </div>
-            <span className="color-v3-arrow"><ArrowRight/></span>
-          </div>
+          <div className="color-v3-card-head"><span className="color-v3-dot" style={{background:c.color}}/><div><b>{c.name}</b><small>{c.story}</small></div><span className="color-v3-arrow"><ArrowRight/></span></div>
           <img src={colorImages[index]} alt={c.name}/>
         </Link>)}
       </div>
@@ -337,44 +318,18 @@ export default function HomePage() {
 
       <div className="home-tour-inner">
         <header className="home-tour-head">
-          <div className="home-tour-title">
-            <span className="eyebrow">{toursCopy.eyebrow}</span>
-            <h2>HOLA Tour</h2>
-            <span className="home-tour-stroke"/>
-          </div>
-
-          <div className="home-tour-desc">
-            <i/>
-            <p>{toursCopy.description}</p>
-          </div>
+          <div className="home-tour-title"><span className="eyebrow">{toursCopy.eyebrow}</span><h2>HOLA Tour</h2><span className="home-tour-stroke"/></div>
+          <div className="home-tour-desc"><i/><p>{toursCopy.description}</p></div>
         </header>
 
         <div className="home-tour-grid">
-          {tours.map(t => <Link to="/hola-tour" className="home-tour-card" key={t.no}>
-            <div className="home-tour-media">
-              <img src={t.image} alt={t.title}/>
-              <span className="home-tour-image-shade"/>
-            </div>
-
+          {tours.map(t => <Link to="/hola-tour" className="home-tour-card" key={t.id||t.no}>
+            <div className="home-tour-media">{t.image?<img src={t.image} alt={t.title}/>:<div className="theme-card-placeholder"/>}<span className="home-tour-image-shade"/></div>
             <div className="home-tour-card-body">
-              <div className="home-tour-card-top">
-                <span>Tour #{t.no}</span>
-                <Leaf/>
-              </div>
-
-              <h3>{t.title}</h3>
-              <span className="home-tour-card-line"/>
-              <p>{t.desc}</p>
-
-              <div className="home-tour-date">
-                <CalendarDays/>
-                <b>{t.dates}</b>
-              </div>
-
-              <div className="home-tour-card-footer">
-                <span>Khám phá tour <i>⟶</i></span>
-                <b><ArrowRight/></b>
-              </div>
+              <div className="home-tour-card-top"><span>Tour #{t.no}</span><Leaf/></div>
+              <h3>{t.title}</h3><span className="home-tour-card-line"/><p>{t.desc}</p>
+              <div className="home-tour-date"><CalendarDays/><b>{t.dates}</b></div>
+              <div className="home-tour-card-footer"><span>Khám phá tour <i>⟶</i></span><b><ArrowRight/></b></div>
             </div>
           </Link>)}
         </div>
@@ -390,44 +345,19 @@ export default function HomePage() {
       <div className="top52-blur top52-blur-right"/>
       <div className="top52-inner">
         <header className="top52-head">
-          <div className="top52-title-block">
-            <div className="top52-eyebrow-row">
-              <span className="eyebrow">{storiesCopy.eyebrow}</span>
-              <i/>
-            </div>
-            <h2>TOP52 <span>/ Stories</span></h2>
-            <p>{storiesCopy.description}</p>
-          </div>
-
-          <div className="top52-head-side">
-            <p>Những con người, địa điểm và trải nghiệm chân thật tạo nên một Hòa Lạc đầy màu sắc, đang đổi mới mỗi ngày.</p>
-            <Link className="top52-all-link" to="/top52">Xem tất cả TOP52 <ArrowRight/></Link>
-          </div>
-
-          <div className="top52-nav">
-            <Link to="/top52" aria-label="Xem TOP52"><ArrowLeft/></Link>
-            <Link to="/top52" className="active" aria-label="Xem tất cả TOP52"><ArrowRight/></Link>
-          </div>
+          <div className="top52-title-block"><div className="top52-eyebrow-row"><span className="eyebrow">{storiesCopy.eyebrow}</span><i/></div><h2>TOP52 <span>/ Stories</span></h2><p>{storiesCopy.description}</p></div>
+          <div className="top52-head-side"><p>Những con người, địa điểm và trải nghiệm chân thật tạo nên một Hòa Lạc đầy màu sắc, đang đổi mới mỗi ngày.</p><Link className="top52-all-link" to="/top52">Xem tất cả TOP52 <ArrowRight/></Link></div>
+          <div className="top52-nav"><Link to="/top52" aria-label="Xem TOP52"><ArrowLeft/></Link><Link to="/top52" className="active" aria-label="Xem tất cả TOP52"><ArrowRight/></Link></div>
         </header>
 
         <div className="top52-card-grid">
-          {artworks.slice(0,5).map((a,index)=><Link to={'/top52/'+a.slug} className="top52-card" key={a.slug}>
-            <div className="top52-card-media">
-              <img src={a.image} alt={a.title}/>
-              <span className="top52-badge">TOP52</span>
-              <span className="top52-heart"><Heart/></span>
-            </div>
-
+          {artworks.slice(0,5).map((a,index)=><Link to={'/tac-pham/'+a.slug} className="top52-card" key={a.id||a.slug}>
+            <div className="top52-card-media">{a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}<span className="top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span><span className="top52-heart"><Heart/></span></div>
             <div className="top52-card-body">
               <span className="top52-category">{a.theme} · {a.location}</span>
-              <h3>{a.title}</h3>
-              <p><b>{a.author}</b><br/>{index===0?'chia sẻ vẻ đẹp bình yên...':index===1?'về một buổi chiều đáng nhớ.':index===2?'về những đổi thay tích cực.':index===3?'về những con người mến khách.':'về một Hòa Lạc đang sống hơn.'}</p>
-
-              <div className="top52-card-meta">
-                <span><Eye/> {a.views}</span>
-                <i/>
-                <span className="top52-author"><img src={a.image} alt=""/>{a.author}</span>
-              </div>
+              <h3>{a.title||a.code}</h3>
+              <p><b>{a.author}</b><br/>{a.story?.slice(0,90)}{a.story?.length>90?'…':''}</p>
+              <div className="top52-card-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span className="top52-author">{a.image&&<img src={a.image} alt=""/>}{a.author}</span></div>
             </div>
           </Link>)}
         </div>
