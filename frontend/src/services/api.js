@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { getHolaPlacesInBounds, normalizeHolaPlace } from './holaMapsApi.js';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
+const HOME_HOLA_BOUNDS = { north: 21.145, south: 20.885, east: 105.665, west: 105.325 };
 
 export const client = axios.create({
   baseURL: API_URL,
@@ -55,7 +57,14 @@ export function submitArtwork(payload) {
 export function lookupSubmission(params) { return unwrap(client.get('/submissions/lookup', { params })); }
 export function getCampaignStats() { return unwrap(client.get('/submissions/stats')); }
 export function registerTour(payload) { return unwrap(client.post('/tour-registrations', payload)); }
-export function getPlaces() { return unwrap(client.get('/places')); }
+
+// Compatibility facade for the homepage teaser. Public place data comes from Hola Maps Developer API,
+// never from HALO HOLA's legacy /api/places endpoint.
+export async function getPlaces() {
+  const result = await getHolaPlacesInBounds(HOME_HOLA_BOUNDS);
+  return (result.items || []).map(normalizeHolaPlace).filter(Boolean);
+}
+
 export function getThemes() { return unwrap(client.get('/themes')); }
 export function getTheme(slug) { return unwrap(client.get('/themes/' + encodeURIComponent(slug))); }
 export function getColors() { return unwrap(client.get('/colors')); }
