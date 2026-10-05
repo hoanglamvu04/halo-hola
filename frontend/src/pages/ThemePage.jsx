@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, MapPin, Users, BookOpen, Eye, Play,
-  Grid2X2, Landmark, Trees, Building2, Image as ImageIcon, Heart
+  Grid2X2, Building2, Image as ImageIcon, Heart
 } from 'lucide-react'
 import {
   getTheme,
@@ -12,6 +12,8 @@ import {
 } from '../services/api.js'
 import './ThemePagePreview.css'
 
+const PAGE_SIZE=12
+
 const previewStatusLabel={
   PENDING:'CHỜ DUYỆT',
   VALID:'HỢP LỆ',
@@ -20,45 +22,128 @@ const previewStatusLabel={
   AWARDED:'ĐẠT GIẢI'
 }
 
+const artworkTypes=[
+  {value:'',label:'Tất cả',Icon:Grid2X2},
+  {value:'Photo',label:'Ảnh',Icon:ImageIcon},
+  {value:'Video',label:'Video',Icon:Play},
+  {value:'Story & Creative',label:'Story',Icon:BookOpen},
+  {value:'Art & Design',label:'Art & Design',Icon:Building2}
+]
+
+function normalizePage(rows,offset=0){
+  const source=Array.isArray(rows)?rows:[]
+  const total=Number(source[0]?.totalCount)
+  const items=source.slice(0,PAGE_SIZE)
+  const resolvedTotal=Number.isFinite(total)?total:offset+items.length+(source.length>PAGE_SIZE?1:0)
+  return {
+    items,
+    total:resolvedTotal,
+    hasMore:offset+items.length<resolvedTotal || source.length>PAGE_SIZE
+  }
+}
+
 export default function ThemePage(){
   const {slug}=useParams()
   const [theme,setTheme]=useState(null)
   const [related,setRelated]=useState([])
   const [isAdminPreview,setIsAdminPreview]=useState(false)
+  const [activeType,setActiveType]=useState('')
+  const [totalCount,setTotalCount]=useState(0)
+  const [allCount,setAllCount]=useState(0)
+  const [hasMore,setHasMore]=useState(false)
   const [loading,setLoading]=useState(true)
+  const [galleryLoading,setGalleryLoading]=useState(false)
+  const [loadingMore,setLoadingMore]=useState(false)
   const [error,setError]=useState('')
+  const [collectionError,setCollectionError]=useState('')
 
   useEffect(()=>{
     let alive=true
-    setLoading(true);setError('');setIsAdminPreview(false)
+    setLoading(true)
+    setError('')
+    setCollectionError('')
+    setIsAdminPreview(false)
+    setActiveType('')
+    setRelated([])
+
     getTheme(slug).then(async data=>{
       if(!alive)return
       setTheme(data)
 
-      let works=await getPublicArtworks({theme:data.title,limit:12})
-      works=Array.isArray(works)?works:[]
+      const params={theme:data.title,limit:PAGE_SIZE+1,offset:0}
+      let rows=[]
+      let previewMode=false
 
       if(getAdminToken()){
         try{
-          const preview=await getAdminPublicPreviewArtworks({theme:data.title,limit:50})
-          if(alive&&Array.isArray(preview)){
-            works=preview
-            setIsAdminPreview(true)
-          }
+          rows=await getAdminPublicPreviewArtworks(params)
+          previewMode=true
         }catch{
-          // Token hết hạn hoặc không phải ADMIN/MODERATOR: giữ nguyên dữ liệu public.
+          rows=await getPublicArtworks(params)
         }
+      }else{
+        rows=await getPublicArtworks(params)
       }
 
-      if(alive)setRelated(works)
+      if(!alive)return
+      const page=normalizePage(rows,0)
+      setIsAdminPreview(previewMode)
+      setRelated(page.items)
+      setTotalCount(page.total)
+      setAllCount(previewMode?page.total:Number(data.artworkCount||page.total))
+      setHasMore(page.hasMore)
     }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
+
     return()=>{alive=false}
   },[slug])
+
+  const loadCollection=async(type)=>{
+    if(!theme)return
+    setActiveType(type)
+    setGalleryLoading(true)
+    setCollectionError('')
+    try{
+      const params={theme:theme.title,limit:PAGE_SIZE+1,offset:0}
+      if(type)params.type=type
+      const rows=isAdminPreview
+        ? await getAdminPublicPreviewArtworks(params)
+        : await getPublicArtworks(params)
+      const page=normalizePage(rows,0)
+      setRelated(page.items)
+      setTotalCount(page.total)
+      setHasMore(page.hasMore)
+    }catch(err){
+      setCollectionError(err.message)
+    }finally{
+      setGalleryLoading(false)
+    }
+  }
+
+  const loadMore=async()=>{
+    if(!theme||loadingMore||!hasMore)return
+    setLoadingMore(true)
+    setCollectionError('')
+    try{
+      const params={theme:theme.title,limit:PAGE_SIZE+1,offset:related.length}
+      if(activeType)params.type=activeType
+      const rows=isAdminPreview
+        ? await getAdminPublicPreviewArtworks(params)
+        : await getPublicArtworks(params)
+      const page=normalizePage(rows,related.length)
+      setRelated(current=>[...current,...page.items])
+      setTotalCount(page.total)
+      setHasMore(page.hasMore)
+    }catch(err){
+      setCollectionError(err.message)
+    }finally{
+      setLoadingMore(false)
+    }
+  }
 
   if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
   if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
 
-  const visibleCount=isAdminPreview?related.length:Number(theme.artworkCount||0)
+  const visibleCount=isAdminPreview?allCount:Number(theme.artworkCount||0)
 
   return <main className="theme-page-ref">
     <section className="theme-hero-ref">
@@ -80,7 +165,7 @@ export default function ThemePage(){
           <div className="theme-hero-stats">
             <div><span><Users/></span><b>{visibleCount}</b><small>{isAdminPreview?'Tác phẩm trong hệ thống':'Tác phẩm đã công bố'}</small></div>
             <div><span><BookOpen/></span><b>Câu chuyện</b><small>Góc nhìn cộng đồng</small></div>
-            <div><span><Trees/></span><b>Hòa Lạc</b><small>Thiên nhiên · con người · tương lai</small></div>
+            <div><span><ImageIcon/></span><b>4 loại hình</b><small>Ảnh · Video · Story · Art</small></div>
           </div>
         </div>
 
@@ -127,30 +212,43 @@ export default function ThemePage(){
 
         {isAdminPreview&&<div className="theme-admin-preview"><Eye/><div><b>Chế độ xem trước Admin đang bật.</b><br/>Các thẻ có thể gồm dữ liệu DEMO hoặc tác phẩm chưa công bố. Nhấp thẻ xem trước sẽ mở bài tương ứng trong Jury Workspace.</div></div>}
 
-        <div className="theme-filter-row">
-          <button className="active"><Grid2X2/>Tất cả</button>
-          <button><Landmark/>Văn hóa - Lịch sử</button>
-          <button><Trees/>Thiên nhiên</button>
-          <button><Users/>Con người</button>
-          <button><Building2/>Kiến trúc</button>
+        <div className="theme-gallery-toolbar">
+          <div className="theme-filter-row">
+            {artworkTypes.map(({value,label,Icon})=><button
+              type="button"
+              key={value||'all'}
+              className={activeType===value?'active':''}
+              onClick={()=>loadCollection(value)}
+              disabled={galleryLoading}
+            ><Icon/>{label}</button>)}
+          </div>
+          <div className="theme-gallery-count"><b>{totalCount}</b> tác phẩm <span>·</span> đang hiển thị <b>{related.length}</b></div>
         </div>
 
-        {related.length===0?<div className="jw-empty">{isAdminPreview?'Chưa có tác phẩm nào trong chủ đề này.':'Chưa có tác phẩm công khai trong chủ đề này.'}</div>:<div className="theme-related-grid">
-          {related.map(a=><Link to={a.preview?('/jury/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
-            <div className="theme-related-media">
-              {a.image?<img src={a.image} alt={a.title}/>:<div className="theme-card-placeholder"/>}
-              {a.preview&&<span className={'theme-preview-status'+(a.isDemo?' demo':'')}>{a.isDemo?'MẪU · ':''}{previewStatusLabel[a.status]||a.status}</span>}
-              <span className="theme-top52-badge">{a.preview?(previewStatusLabel[a.status]||a.status):(a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52')}</span>
-              <span className="theme-related-heart"><Heart/></span>
+        {collectionError&&<div className="theme-gallery-error">{collectionError}</div>}
+        {galleryLoading?<div className="theme-gallery-loading">Đang tải tác phẩm...</div>:
+          related.length===0?<div className="jw-empty">{isAdminPreview?'Chưa có tác phẩm nào phù hợp bộ lọc.':'Chưa có tác phẩm công khai phù hợp bộ lọc.'}</div>:<>
+            <div className="theme-related-grid theme-gallery-grid">
+              {related.map(a=><Link to={a.preview?('/jury/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
+                <div className="theme-related-media">
+                  {a.image?<img loading="lazy" decoding="async" src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
+                  {a.preview&&<span className={'theme-preview-status'+(a.isDemo?' demo':'')}>{a.isDemo?'MẪU · ':''}{previewStatusLabel[a.status]||a.status}</span>}
+                  <span className="theme-top52-badge">{a.preview?(previewStatusLabel[a.status]||a.status):(a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52')}</span>
+                  <span className="theme-related-heart"><Heart/></span>
+                </div>
+                <div className="theme-related-body">
+                  <span className="theme-related-category">{a.theme} · {a.location}</span>
+                  <h3>{a.title||a.code}</h3>
+                  <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author}</b></div>
+                  <div className="theme-related-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {a.location}</span></div>
+                </div>
+              </Link>)}
             </div>
-            <div className="theme-related-body">
-              <span className="theme-related-category">{a.theme} · {a.location}</span>
-              <h3>{a.title||a.code}</h3>
-              <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author}</b></div>
-              <div className="theme-related-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {a.location}</span></div>
-            </div>
-          </Link>)}
-        </div>}
+
+            {hasMore&&<div className="theme-gallery-more">
+              <button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Đang tải...':`Xem thêm ${Math.min(PAGE_SIZE,Math.max(0,totalCount-related.length))} tác phẩm`} <ArrowRight/></button>
+            </div>}
+          </>}
       </div>
     </section>
   </main>
