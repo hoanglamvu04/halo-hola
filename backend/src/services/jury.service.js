@@ -31,7 +31,11 @@ export async function listJurySubmissions({jurorId,filters={}}={}){
   const conditions=[];
   const q=String(filters.q||'').trim();
 
-  if(q) add(values,conditions,`(s.code ILIKE ? OR s.title ILIKE ? OR s.name ILIKE ? OR s.email ILIKE ? OR s.location ILIKE ?)`, `%${q}%`);
+  if(q){
+    values.push(`%${q}%`);
+    const p=`$${values.length}`;
+    conditions.push(`(s.code ILIKE ${p} OR s.title ILIKE ${p} OR s.name ILIKE ${p} OR s.email ILIKE ${p} OR s.location ILIKE ${p})`);
+  }
   if(filters.status) add(values,conditions,'s.status = ?',filters.status);
   if(filters.type) add(values,conditions,'s.type = ?',filters.type);
   if(filters.theme) add(values,conditions,'s.theme = ?',filters.theme);
