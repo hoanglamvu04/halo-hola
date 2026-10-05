@@ -152,6 +152,10 @@ export async function getJuryScorecard(submissionId,jurorId){
 export async function saveJuryScore({submissionId,jurorId,input}){
   const currentJuror=jurorUuid(jurorId);
   if(!currentJuror) throw new Error('JUROR_ACCOUNT_REQUIRED');
+
+  const {rows:roundRows}=await pool.query(`SELECT status FROM jury_rounds WHERE code='PRELIMINARY' LIMIT 1`);
+  if(roundRows[0]?.status==='LOCKED') throw new Error('JURY_ROUND_LOCKED');
+
   const quality=clampScore(input.quality);
   const representation=clampScore(input.representation);
   const story=clampScore(input.story);
