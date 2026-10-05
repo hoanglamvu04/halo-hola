@@ -179,8 +179,9 @@ export async function getPublicStats() {
       COUNT(*)::int AS submissions,
       COUNT(DISTINCT email)::int AS creators,
       COUNT(DISTINCT NULLIF(location,''))::int AS locations,
-      COUNT(*) FILTER (WHERE status = 'TOP52')::int AS top52
-     FROM submissions`
+      COUNT(*) FILTER (WHERE status IN ('TOP52','AWARDED'))::int AS top52
+     FROM submissions
+     WHERE is_demo = FALSE`
   );
   return rows[0] || { submissions: 0, creators: 0, locations: 0, top52: 0 };
 }
