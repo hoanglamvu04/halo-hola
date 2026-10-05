@@ -56,6 +56,10 @@ export function lookupSubmission(params) { return unwrap(client.get('/submission
 export function getCampaignStats() { return unwrap(client.get('/submissions/stats')); }
 export function registerTour(payload) { return unwrap(client.post('/tour-registrations', payload)); }
 export function getPlaces() { return unwrap(client.get('/places')); }
+export function getThemes() { return unwrap(client.get('/themes')); }
+export function getTheme(slug) { return unwrap(client.get('/themes/' + encodeURIComponent(slug))); }
+export function getPublicArtworks(params = {}) { return unwrap(client.get('/artworks', { params })); }
+export function getPublicArtwork(slug) { return unwrap(client.get('/artworks/' + encodeURIComponent(slug))); }
 export function getTours() { return unwrap(client.get('/tours')); }
 export function getStories() { return unwrap(client.get('/stories')); }
 export function getHomepageContent() { return unwrap(client.get('/site/homepage')); }
