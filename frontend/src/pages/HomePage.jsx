@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { img } from '../data/siteData.js'
-import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPlaces, getPublicArtworks } from '../services/api.js'
+import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPublicArtworks } from '../services/api.js'
+import { getHolaMapConfig } from '../services/holaMapsApi.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
 
 export default function HomePage() {
@@ -11,7 +12,7 @@ export default function HomePage() {
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
   const [tours,setTours]=useState([])
-  const [places,setPlaces]=useState([])
+  const [holaMapEmbedUrl,setHolaMapEmbedUrl]=useState('')
   const [artworks,setArtworks]=useState([])
 
   useEffect(()=>{
@@ -20,7 +21,7 @@ export default function HomePage() {
     getThemes().then(data=>setThemes(Array.isArray(data)?data:[])).catch(()=>{})
     getColors().then(data=>setColors(Array.isArray(data)?data:[])).catch(()=>{})
     getTours().then(data=>setTours((data||[]).map(normalizeTour))).catch(()=>{})
-    getPlaces().then(data=>setPlaces(Array.isArray(data)?data:[])).catch(()=>{})
+    getHolaMapConfig().then(config=>setHolaMapEmbedUrl(config?.embedUrl||'https://maps.dothihoalac.vn/embed')).catch(()=>setHolaMapEmbedUrl('https://maps.dothihoalac.vn/embed'))
     getPublicArtworks({limit:5}).then(data=>setArtworks(Array.isArray(data)?data:[])).catch(()=>{})
   },[])
 
@@ -67,7 +68,6 @@ export default function HomePage() {
   })
 
   const colorImages=[img.village,img.sunset,img.green,img.architecture,img.village,img.lake]
-  const mapPreview=places[0]||null
 
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
@@ -341,8 +341,28 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('map')&&<section className="map-teaser paper-bg">
-      <div className="container map-teaser-grid"><div><span className="eyebrow">{mapCopy.eyebrow}</span><h2>{mapCopy.title}</h2><p>{mapCopy.description}</p><Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link></div><div className="fake-map"><div className="map-road r1"/><div className="map-road r2"/>{places.slice(0,3).map((p,index)=><span className={'pin p'+(index+1)} key={p.id}><MapPin/></span>)}{places.slice(0,3).map((p,index)=><span className={'map-label l'+(index+1)} key={'label-'+p.id}>{p.name}</span>)}</div>{mapPreview?<div className="place-preview">{mapPreview.image?<img src={mapPreview.image} alt={mapPreview.name}/>:<div className="theme-card-placeholder"/>}<h3>{mapPreview.name}</h3><small>{mapPreview.category}</small><p>{mapPreview.description}</p></div>:<div className="place-preview"><div className="theme-card-placeholder"/><h3>HOLA Map</h3><small>Đang cập nhật địa điểm</small><p>Dữ liệu địa điểm sẽ xuất hiện khi được xuất bản từ hệ thống.</p></div>}</div>
+    {sectionOn('map')&&<section className="map-teaser paper-bg home-map-live-section">
+      <div className="container map-teaser-grid home-map-live-grid">
+        <div className="home-map-live-copy">
+          <span className="eyebrow">{mapCopy.eyebrow}</span>
+          <h2>{mapCopy.title}</h2>
+          <p>{mapCopy.description}</p>
+          <div className="home-map-live-meta"><MapPin size={15}/><span>Địa điểm thật · dữ liệu trực tiếp từ Hola Maps</span></div>
+          <Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link>
+        </div>
+
+        <div className="home-map-live-frame">
+          {holaMapEmbedUrl
+            ? <iframe
+                src={holaMapEmbedUrl}
+                title="Hola Maps - Bản đồ Hòa Lạc"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            : <div className="home-map-live-loading"><MapPin/><span>Đang tải Hola Maps…</span></div>}
+          <div className="home-map-live-badge"><span className="home-map-live-dot"/>LIVE · HOLA MAPS</div>
+        </div>
+      </div>
     </section>}
 
     {sectionOn('stories')&&<section className="top52-showcase">

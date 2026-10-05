@@ -7861,3 +7861,21 @@
   .hero-pillar-item b{font-size:.64rem}
   .hero-pillar-item small{font-size:.47rem}
 }
+
+
+/* homepage official Hola Maps embed */
+.home-map-live-section{padding:56px 0 58px;overflow:hidden}
+.home-map-live-grid{grid-template-columns:minmax(250px,.72fr) minmax(0,2.28fr);gap:34px;align-items:center}
+.home-map-live-copy{min-width:0}
+.home-map-live-copy h2{margin:4px 0 12px}
+.home-map-live-copy>p{color:#56625a;line-height:1.68;max-width:420px;margin-bottom:13px}
+.home-map-live-meta{display:flex;align-items:center;gap:7px;color:#6d766f;font-size:.72rem;margin:0 0 20px}
+.home-map-live-meta svg{color:var(--terra);flex:0 0 auto}
+.home-map-live-frame{position:relative;height:360px;min-width:0;border-radius:22px;overflow:hidden;background:#dfe7df;border:1px solid rgba(23,61,45,.13);box-shadow:0 18px 44px rgba(40,48,42,.12)}
+.home-map-live-frame iframe{display:block;width:100%;height:100%;border:0;background:#e8eee9}
+.home-map-live-loading{height:100%;display:flex;align-items:center;justify-content:center;gap:9px;color:#667169;font-size:.8rem;background:linear-gradient(145deg,#e7eee7,#dce7df)}
+.home-map-live-loading svg{color:var(--terra)}
+.home-map-live-badge{position:absolute;left:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.93);backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(25,40,31,.12);font-size:.61rem;font-weight:850;letter-spacing:.09em;color:var(--forest);pointer-events:none}
+.home-map-live-dot{width:7px;height:7px;border-radius:50%;background:#2c9b61;box-shadow:0 0 0 4px rgba(44,155,97,.13)}
+@media(max-width:900px){.home-map-live-grid{grid-template-columns:1fr;gap:22px}.home-map-live-copy>p{max-width:620px}.home-map-live-frame{height:380px}}
+@media(max-width:600px){.home-map-live-section{padding:38px 0 42px}.home-map-live-frame{height:310px;border-radius:16px}.home-map-live-grid{gap:18px}.home-map-live-meta{margin-bottom:15px}.home-map-live-badge{left:10px;bottom:10px;font-size:.56rem;padding:6px 9px}}
