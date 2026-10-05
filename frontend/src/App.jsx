@@ -20,10 +20,46 @@ import ThemePage from './pages/ThemePage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import LookupPage from './pages/LookupPage.jsx'
 import JurorWorkspacePage from './pages/JurorWorkspacePage.jsx'
+import { getSiteSettings } from './services/api.js'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
+function clampNumber(value,min,max,fallback){
+  const number=Number(value)
+  if(!Number.isFinite(number)) return fallback
+  return Math.min(max,Math.max(min,number))
+}
+
+function BrandRuntime(){
+  useEffect(()=>{
+    let alive=true
+    getSiteSettings().then(settings=>{
+      if(!alive) return
+      const brand=settings?.brand||{}
+      const root=document.documentElement
+      const background=brand.backgroundColor||'#fbf7ef'
+      const primary=brand.primaryColor||'#173d2d'
+      const accent=brand.accentColor||'#c45b32'
+      const logoWidth=clampNumber(brand.logoWidth,110,280,190)
+      const logoWidthMobile=clampNumber(brand.logoWidthMobile,90,200,145)
+
+      root.style.setProperty('--site-background',background)
+      root.style.setProperty('--cream',background)
+      root.style.setProperty('--forest',primary)
+      root.style.setProperty('--terra',accent)
+      root.style.setProperty('--site-logo-width',`${logoWidth}px`)
+      root.style.setProperty('--site-logo-width-mobile',`${logoWidthMobile}px`)
+      document.body.style.backgroundColor=background
+
+      const themeMeta=document.querySelector('meta[name="theme-color"]')
+      if(themeMeta) themeMeta.setAttribute('content',primary)
+    }).catch(()=>{})
+    return()=>{alive=false}
+  },[])
   return null
 }
 
@@ -34,6 +70,7 @@ function SiteShell() {
 
   return (
     <div className={'site-shell '+(showBottomNav?'has-mobile-bottom-nav':'')}>
+      <BrandRuntime />
       <ScrollToTop />
       {!isAdmin && <Header />}
       <Routes>
