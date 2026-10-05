@@ -1,24 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Eye, MapPin, Clock3, BookOpen, Heart, Users, Leaf } from 'lucide-react'
-import { stories as fallbackStories } from '../data/siteData.js'
+import { ArrowRight, MapPin, Clock3, BookOpen, Heart, Users, Leaf } from 'lucide-react'
 import { getStories } from '../services/api.js'
 import { normalizeStory } from '../utils/contentAdapters.js'
 
 export default function StoriesPage(){
-  const [remoteStories,setRemoteStories]=useState([])
+  const [stories,setStories]=useState([])
+  const [loading,setLoading]=useState(true)
+  const [error,setError]=useState('')
   useEffect(()=>{
-    getStories().then(data=>setRemoteStories((data||[]).map(normalizeStory))).catch(()=>{})
+    setLoading(true);setError('')
+    getStories().then(data=>setStories((data||[]).map(normalizeStory))).catch(err=>setError(err.message)).finally(()=>setLoading(false))
   },[])
-  const stories=useMemo(()=>{
-    const base=fallbackStories.map(normalizeStory)
-    if(!remoteStories.length) return base
-    const map=new Map(base.map(item=>[item.slug,item]))
-    remoteStories.forEach(item=>map.set(item.slug,{...map.get(item.slug),...item}))
-    return Array.from(map.values()).sort((a,b)=>Number(Boolean(b.featured))-Number(Boolean(a.featured)))
-  },[remoteStories])
   const featured=stories.find(s=>s.featured)||stories[0]
-  const rest=stories.filter(s=>s.slug!==featured?.slug)
+  const rest=featured?stories.filter(s=>s.slug!==featured.slug):[]
 
   return <main className="stories-page-ref">
     <section className="stories-intro-ref">
@@ -40,10 +35,14 @@ export default function StoriesPage(){
       </div>
     </section>
 
-    <section className="stories-feature-ref">
+    {loading&&<div className="jw-empty">Đang tải Stories từ hệ thống...</div>}
+    {error&&<div className="form-error">{error}</div>}
+    {!loading&&!error&&!featured&&<div className="jw-empty">Chưa có câu chuyện nào được xuất bản.</div>}
+
+    {featured&&<section className="stories-feature-ref">
       <div className="stories-feature-inner">
         <Link className="stories-feature-image" to={'/stories/'+featured.slug}>
-          <img src={featured.cover||featured.image} alt={featured.title}/>
+          {featured.cover||featured.image?<img src={featured.cover||featured.image} alt={featured.title}/>:<div className="theme-card-placeholder"/>}
           <span className="stories-feature-badge">FEATURED STORY</span>
         </Link>
 
@@ -59,9 +58,9 @@ export default function StoriesPage(){
           <Link className="stories-read-link" to={'/stories/'+featured.slug}>Đọc câu chuyện <ArrowRight/></Link>
         </div>
       </div>
-    </section>
+    </section>}
 
-    <section className="stories-list-ref">
+    {rest.length>0&&<section className="stories-list-ref">
       <div className="stories-list-inner">
         <header className="stories-list-head">
           <div>
@@ -74,7 +73,7 @@ export default function StoriesPage(){
         <div className="stories-grid-ref">
           {rest.map((s,index)=><Link className="story-card-ref" to={'/stories/'+s.slug} key={s.slug}>
             <div className="story-card-media">
-              <img src={s.image} alt={s.title}/>
+              {s.image?<img src={s.image} alt={s.title}/>:<div className="theme-card-placeholder"/>}
               <span className="story-card-heart"><Heart/></span>
               <span className="story-card-index">{String(index+2).padStart(2,'0')}</span>
             </div>
@@ -94,6 +93,6 @@ export default function StoriesPage(){
           </Link>)}
         </div>
       </div>
-    </section>
+    </section>}
   </main>
 }
