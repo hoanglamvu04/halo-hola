@@ -87,6 +87,7 @@ export function uploadAdminSiteAsset(sectionKey, file) {
 
 export function getAdminTourRegistrations(params = {}) { return unwrap(client.get('/admin/tour-registrations', { params })); }
 export function getAdminSubmissions(params = {}) { return unwrap(client.get('/admin/submissions', { params })); }
+export function getAdminPublicPreviewArtworks(params = {}) { return unwrap(client.get('/admin/public-preview/artworks', { params })); }
 export function updateSubmissionStatus(id, status) { return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/status', { status })); }
 export function updateJuryNote(id, note) { return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/jury-note', { note })); }
 export function getOriginalDownload(mediaId) { return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download')); }
