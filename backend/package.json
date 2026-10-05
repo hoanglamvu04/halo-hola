@@ -9,6 +9,7 @@
     "db:migrate": "node src/database/migrate.js",
     "db:seed": "node src/database/seed.js",
     "db:seed:demo": "node src/database/seedDemo.js",
+    "db:seed:media-demo": "node src/database/seedMediaDemo.js",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "r2:test": "node src/storage/testR2.js"
   },
