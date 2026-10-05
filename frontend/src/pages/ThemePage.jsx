@@ -4,29 +4,61 @@ import {
   ArrowRight, ArrowLeft, MapPin, Users, BookOpen, Eye, Play,
   Grid2X2, Landmark, Trees, Building2, Image as ImageIcon, Heart
 } from 'lucide-react'
-import { getTheme, getPublicArtworks } from '../services/api.js'
+import {
+  getTheme,
+  getPublicArtworks,
+  getAdminToken,
+  getAdminPublicPreviewArtworks
+} from '../services/api.js'
+import './ThemePagePreview.css'
+
+const previewStatusLabel={
+  PENDING:'CHỜ DUYỆT',
+  VALID:'HỢP LỆ',
+  SHORTLIST:'SHORTLIST',
+  TOP52:'TOP52',
+  AWARDED:'ĐẠT GIẢI'
+}
 
 export default function ThemePage(){
   const {slug}=useParams()
   const [theme,setTheme]=useState(null)
   const [related,setRelated]=useState([])
+  const [isAdminPreview,setIsAdminPreview]=useState(false)
   const [loading,setLoading]=useState(true)
   const [error,setError]=useState('')
 
   useEffect(()=>{
     let alive=true
-    setLoading(true);setError('')
+    setLoading(true);setError('');setIsAdminPreview(false)
     getTheme(slug).then(async data=>{
       if(!alive)return
       setTheme(data)
-      const works=await getPublicArtworks({theme:data.title,limit:12})
-      if(alive)setRelated(Array.isArray(works)?works:[])
+
+      let works=await getPublicArtworks({theme:data.title,limit:12})
+      works=Array.isArray(works)?works:[]
+
+      if(getAdminToken()){
+        try{
+          const preview=await getAdminPublicPreviewArtworks({theme:data.title,limit:50})
+          if(alive&&Array.isArray(preview)){
+            works=preview
+            setIsAdminPreview(true)
+          }
+        }catch{
+          // Token hết hạn hoặc không phải ADMIN/MODERATOR: giữ nguyên dữ liệu public.
+        }
+      }
+
+      if(alive)setRelated(works)
     }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
     return()=>{alive=false}
   },[slug])
 
   if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
   if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
+
+  const visibleCount=isAdminPreview?related.length:Number(theme.artworkCount||0)
 
   return <main className="theme-page-ref">
     <section className="theme-hero-ref">
@@ -46,7 +78,7 @@ export default function ThemePage(){
           </div>
 
           <div className="theme-hero-stats">
-            <div><span><Users/></span><b>{Number(theme.artworkCount||0)}</b><small>Tác phẩm đã công bố</small></div>
+            <div><span><Users/></span><b>{visibleCount}</b><small>{isAdminPreview?'Tác phẩm trong hệ thống':'Tác phẩm đã công bố'}</small></div>
             <div><span><BookOpen/></span><b>Câu chuyện</b><small>Góc nhìn cộng đồng</small></div>
             <div><span><Trees/></span><b>Hòa Lạc</b><small>Thiên nhiên · con người · tương lai</small></div>
           </div>
@@ -84,12 +116,16 @@ export default function ThemePage(){
       <div className="theme-related-inner">
         <header className="theme-related-head">
           <div>
-            <div className="theme-kicker"><span>TÁC PHẨM ĐÃ CÔNG BỐ</span><i/></div>
+            <div className="theme-kicker"><span>{isAdminPreview?'BẢN XEM TRƯỚC QUẢN TRỊ':'TÁC PHẨM ĐÃ CÔNG BỐ'}</span><i/></div>
             <h2>Tác phẩm thuộc {theme.title}</h2>
-            <p>Dữ liệu lấy trực tiếp từ các tác phẩm TOP52/đạt giải đã được công bố trong hệ thống.</p>
+            <p>{isAdminPreview
+              ? 'Bạn đang đăng nhập quản trị nên có thể xem cả tác phẩm đang chờ duyệt, shortlist và dữ liệu mẫu. Khách truy cập bình thường vẫn chỉ thấy tác phẩm thực đã được công bố.'
+              : 'Dữ liệu lấy trực tiếp từ các tác phẩm TOP52/đạt giải đã được công bố trong hệ thống.'}</p>
           </div>
           <div className="theme-related-actions"><Link className="theme-view-all" to="/top52">Xem TOP52 <ArrowRight/></Link></div>
         </header>
+
+        {isAdminPreview&&<div className="theme-admin-preview"><Eye/><div><b>Chế độ xem trước Admin đang bật.</b><br/>Các thẻ có thể gồm dữ liệu DEMO hoặc tác phẩm chưa công bố. Nhấp thẻ xem trước sẽ mở bài tương ứng trong Jury Workspace.</div></div>}
 
         <div className="theme-filter-row">
           <button className="active"><Grid2X2/>Tất cả</button>
@@ -99,11 +135,12 @@ export default function ThemePage(){
           <button><Building2/>Kiến trúc</button>
         </div>
 
-        {related.length===0?<div className="jw-empty">Chưa có tác phẩm công khai trong chủ đề này.</div>:<div className="theme-related-grid">
-          {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.id||a.slug}>
+        {related.length===0?<div className="jw-empty">{isAdminPreview?'Chưa có tác phẩm nào trong chủ đề này.':'Chưa có tác phẩm công khai trong chủ đề này.'}</div>:<div className="theme-related-grid">
+          {related.map(a=><Link to={a.preview?('/jury/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
             <div className="theme-related-media">
               {a.image?<img src={a.image} alt={a.title}/>:<div className="theme-card-placeholder"/>}
-              <span className="theme-top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span>
+              {a.preview&&<span className={'theme-preview-status'+(a.isDemo?' demo':'')}>{a.isDemo?'MẪU · ':''}{previewStatusLabel[a.status]||a.status}</span>}
+              <span className="theme-top52-badge">{a.preview?(previewStatusLabel[a.status]||a.status):(a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52')}</span>
               <span className="theme-related-heart"><Heart/></span>
             </div>
             <div className="theme-related-body">
