@@ -1,0 +1,60 @@
+name: Hola Maps CORS recheck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hola-maps-cors-recheck.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify production origin can read Hola Maps
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://maps.dothihoalac.vn/api/public/v1'
+          ORIGIN='https://halohola.xspace.vn'
+
+          check_get() {
+            local path="$1"
+            echo "===== GET ${path} ====="
+            status=$(curl --silent --show-error \
+              --connect-timeout 10 --max-time 30 \
+              -D /tmp/hola-headers.txt \
+              -H 'Accept: application/json' \
+              -H "Origin: ${ORIGIN}" \
+              -o /tmp/hola-body.txt \
+              -w '%{http_code}' \
+              "${BASE}${path}")
+            echo "status=${status}"
+            grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+            echo 'body-preview:'
+            head -c 600 /tmp/hola-body.txt || true
+            echo
+            test "$status" = '200'
+            grep -Eiq "^access-control-allow-origin: ${ORIGIN//./\.}\r?$" /tmp/hola-headers.txt
+          }
+
+          check_get '/meta'
+          check_get '/categories'
+          check_get '/places?limit=1'
+          check_get '/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325'
+
+          echo '===== OPTIONS /places (future PARTNER key preflight) ====='
+          status=$(curl --silent --show-error \
+            --connect-timeout 10 --max-time 30 \
+            -X OPTIONS \
+            -D /tmp/hola-options-headers.txt \
+            -H "Origin: ${ORIGIN}" \
+            -H 'Access-Control-Request-Method: GET' \
+            -H 'Access-Control-Request-Headers: x-hola-api-key' \
+            -o /tmp/hola-options-body.txt \
+            -w '%{http_code}' \
+            "${BASE}/places?limit=1")
+          echo "status=${status}"
+          grep -Ei '^(HTTP/|access-control-allow-origin:|access-control-allow-methods:|access-control-allow-headers:|access-control-allow-credentials:|vary:)' /tmp/hola-options-headers.txt || true
+          cat /tmp/hola-options-body.txt || true
+          echo
