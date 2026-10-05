@@ -231,6 +231,34 @@ CREATE TABLE IF NOT EXISTS site_settings (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS themes (
+  id SMALLINT PRIMARY KEY,
+  slug VARCHAR(120) NOT NULL UNIQUE,
+  title VARCHAR(220) NOT NULL,
+  description TEXT NOT NULL,
+  intro TEXT NOT NULL,
+  image TEXT,
+  color VARCHAR(40),
+  location_label VARCHAR(220) DEFAULT 'Hòa Lạc',
+  published BOOLEAN NOT NULL DEFAULT TRUE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO themes (id,slug,title,description,intro,image,color,location_label,published,sort_order) VALUES
+  (1,'net-doai','Nét Đoài tại Hòa Lạc','Văn hóa, làng xóm, trầm tích Xứ Đoài','Khám phá những dấu ấn Xứ Đoài qua những câu chuyện đời sống, làng xóm, kiến trúc, tập tục và con người Hòa Lạc – nơi quá khứ, hiện tại và tương lai cùng giao hòa.','https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1400&q=85','#9d6c46','Thạch Thất',TRUE,10),
+  (2,'sac-muong','Sắc Mường Hòa Lạc','Bản sắc, con người, đời sống văn hóa','Đi sâu vào đời sống, bản sắc và những lớp văn hóa Mường còn hiện diện trong con người, ký ức và nhịp sống Hòa Lạc hôm nay.','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85','#7d553b','Hòa Lạc',TRUE,20),
+  (3,'kien-truc','Không gian Kiến trúc Hòa Lạc','Công trình, cảnh quan, không gian sống','Quan sát cách kiến trúc, cảnh quan và không gian sống đang tạo nên diện mạo mới của Hòa Lạc mà vẫn đối thoại với thiên nhiên và con người.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85','#b57b4d','Hòa Lạc',TRUE,30),
+  (4,'hoa-lac-xanh','Hòa Lạc xanh','Thiên nhiên, mặt nước, phát triển bền vững','Khám phá những khoảng xanh, mặt nước, triền đồi và cách con người đang gìn giữ một Hòa Lạc phát triển bền vững.','https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85','#557a45','Hòa Lạc',TRUE,40),
+  (5,'nang-hoa-lac','Nắng Hòa Lạc','Ánh sáng, cảm xúc, khoảnh khắc phía Tây','Theo ánh sáng để kể về Hòa Lạc: nắng sớm, chiều vàng, những triền đồi và khoảnh khắc cảm xúc của vùng đất phía Tây.','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85','#e9a541','Phía Tây Hòa Lạc',TRUE,50),
+  (6,'cau-chuyen','Câu chuyện Hòa Lạc','Con người, ký ức, những câu chuyện đáng kể','Những ký ức, lát cắt đời sống và câu chuyện nhỏ giúp Hòa Lạc hiện ra gần gũi, chân thật và nhiều chiều hơn.','https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1400&q=85','#7a5a44','Hòa Lạc',TRUE,60),
+  (7,'uoc-mo','Ước mơ Hòa Lạc','Góc nhìn học sinh – sinh viên về tương lai','Nhìn Hòa Lạc qua góc nhìn của học sinh, sinh viên và người trẻ – những người đang học tập, sáng tạo và hình dung về tương lai nơi đây.','https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=85','#91b653','Hòa Lạc',TRUE,70),
+  (8,'sac-mau','Sắc màu Hòa Lạc','06 đặc trưng sắc màu của vùng đất','Sáu sắc màu đại diện cho thiên nhiên, vật liệu, ánh sáng, tri thức và chuyển động mới của Hòa Lạc.','https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1400&q=85','#c45b32','Hòa Lạc',TRUE,80)
+ON CONFLICT (slug) DO NOTHING;
+
+CREATE INDEX IF NOT EXISTS idx_themes_published_sort ON themes(published, sort_order, id);
+
 -- Review Workspace V2: one scorecard per juror per submission.
 CREATE TABLE IF NOT EXISTS jury_scores (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
