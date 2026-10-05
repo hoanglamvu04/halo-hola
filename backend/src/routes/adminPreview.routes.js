@@ -88,4 +88,56 @@ router.get('/artworks', async (req, res, next) => {
   }
 });
 
+router.get('/artworks/:id', async (req, res, next) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT s.id, LOWER(s.code) AS slug, s.code, s.title,
+             COALESCE(NULLIF(s.display_name,''), s.name) AS author,
+             s.type, s.theme, s.color, s.location, s.story,
+             s.captured_at AS "capturedAt", s.status,
+             s.is_demo AS "isDemo", s.allow_media_use AS "allowMediaUse",
+             s.created_at AS "createdAt",
+             COALESCE(jury.avg_score,0)::float AS "juryScore"
+      FROM submissions s
+      LEFT JOIN LATERAL (
+        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
+        FROM jury_scores js
+        WHERE js.submission_id = s.id
+          AND js.submitted = TRUE
+          AND js.conflict_of_interest = FALSE
+      ) jury ON TRUE
+      WHERE s.id = $1 AND s.status <> 'REJECTED'
+      LIMIT 1
+    `, [req.params.id]);
+
+    if (!rows[0]) return res.status(404).json({ error: 'Không tìm thấy tác phẩm để xem trước.' });
+
+    const mediaResult = await pool.query(`
+      SELECT id, mime_type AS "mimeType", original_name AS "originalName"
+      FROM submission_media
+      WHERE submission_id = $1
+      ORDER BY created_at ASC
+    `, [req.params.id]);
+
+    const media = (await Promise.all(mediaResult.rows.map(async (entry) => {
+      try {
+        const download = await getMediaDownloadUrl(entry.id);
+        if (!download?.url) return null;
+        return { ...entry, url: download.url };
+      } catch {
+        return null;
+      }
+    }))).filter(Boolean);
+
+    res.json({
+      ...rows[0],
+      media,
+      image: media[0]?.url || '',
+      preview: true
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;
