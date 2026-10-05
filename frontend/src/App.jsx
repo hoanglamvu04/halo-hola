@@ -57,6 +57,7 @@ function SiteShell() {
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/tra-cuu" element={<LookupPage />} />
         <Route path="/jury" element={<JuryPage />} />
+        <Route path="/jury/:submissionId" element={<JuryPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
 
