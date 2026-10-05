@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS submissions (
   allow_media_use BOOLEAN NOT NULL DEFAULT TRUE,
   allow_newsletter BOOLEAN NOT NULL DEFAULT FALSE,
   jury_note TEXT,
+  is_demo BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -54,6 +55,7 @@ ALTER TABLE submissions ADD COLUMN IF NOT EXISTS is_minor BOOLEAN NOT NULL DEFAU
 ALTER TABLE submissions ADD COLUMN IF NOT EXISTS guardian_name VARCHAR(180);
 ALTER TABLE submissions ADD COLUMN IF NOT EXISTS guardian_consent BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE submissions ADD COLUMN IF NOT EXISTS jury_note TEXT;
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS is_demo BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE TABLE IF NOT EXISTS submission_media (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -118,9 +120,11 @@ CREATE TABLE IF NOT EXISTS tour_registrations (
   note TEXT,
   status VARCHAR(30) NOT NULL DEFAULT 'REGISTERED'
     CHECK (status IN ('REGISTERED','CONFIRMED','WAITLIST','ATTENDED','CANCELLED')),
+  is_demo BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+ALTER TABLE tour_registrations ADD COLUMN IF NOT EXISTS is_demo BOOLEAN NOT NULL DEFAULT FALSE;
 
 CREATE TABLE IF NOT EXISTS stories (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -141,7 +145,6 @@ CREATE INDEX IF NOT EXISTS idx_media_submission ON submission_media(submission_i
 CREATE INDEX IF NOT EXISTS idx_tour_registrations_tour ON tour_registrations(tour_number, status);
 CREATE INDEX IF NOT EXISTS idx_places_published_name ON places(published, name);
 CREATE INDEX IF NOT EXISTS idx_stories_published_created ON stories(published, created_at DESC);
-
 
 CREATE TABLE IF NOT EXISTS site_sections (
   section_key VARCHAR(80) PRIMARY KEY,
@@ -179,7 +182,6 @@ INSERT INTO site_sections (section_key,label,enabled,sort_order,content) VALUES
   ('stories','TOP52 / Stories',TRUE,90,'{}'::jsonb),
   ('community','WE HOLA',TRUE,100,'{}'::jsonb)
 ON CONFLICT (section_key) DO NOTHING;
-
 
 -- CMS V2 enrichments
 ALTER TABLE stories ADD COLUMN IF NOT EXISTS role VARCHAR(160);
@@ -234,6 +236,8 @@ CREATE INDEX IF NOT EXISTS idx_tours_sort ON tours(sort_order ASC, number ASC);
 CREATE INDEX IF NOT EXISTS idx_places_sort ON places(sort_order ASC, name ASC);
 CREATE INDEX IF NOT EXISTS idx_site_assets_library ON site_assets(archived, folder, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_partners_sort ON partners(published, sort_order ASC, name ASC);
+CREATE INDEX IF NOT EXISTS idx_submissions_demo ON submissions(is_demo, status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tour_registrations_demo ON tour_registrations(is_demo, tour_number, status);
 
 INSERT INTO site_settings (setting_key,value) VALUES
   ('brand','{"siteName":"HALO HOLA","tagline":"52 góc nhìn · 1 Hòa Lạc"}'::jsonb),
