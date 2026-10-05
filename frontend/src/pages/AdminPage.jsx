@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, Images, Users, Map, CalendarDays, BookOpen, Handshake, Settings,
+  LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
   AlertTriangle, ExternalLink, Star, Home, FolderOpen
 } from 'lucide-react'
-import { artworks, mapPlaces, tours } from '../data/siteData.js'
+import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
 import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
@@ -16,14 +16,31 @@ import {
 } from '../services/api.js'
 
 const nav=[
-  ['Tổng quan',LayoutDashboard],['Trang chủ',Home],['Media Library',FolderOpen],['Tác phẩm',Images],['Tác giả',Users],['TOP52',Images],
-  ['HOLA Map',Map],['HOLA Tour',CalendarDays],['Stories',BookOpen],['Đối tác',Handshake],['Cài đặt',Settings]
+  {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
+  {label:'Trang chủ',icon:Home,path:'/admin/homepage'},
+  {label:'Media Library',icon:FolderOpen,path:'/admin/media'},
+  {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
+  {label:'Tác giả',icon:Users,path:'/admin/authors'},
+  {label:'TOP52',icon:Images,path:'/admin/top52'},
+  {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
+  {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
+  {label:'Stories',icon:BookOpen,path:'/admin/stories'},
+  {label:'Đối tác',icon:Handshake,path:'/admin/partners'},
+  {label:'Cài đặt',icon:Settings,path:'/admin/settings'}
 ]
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
 const statusLabels={PENDING:'Mới nhận',VALID:'Hợp lệ',SHORTLIST:'Shortlist',TOP52:'TOP52',AWARDED:'Đạt giải',REJECTED:'Không hợp lệ'}
 
 export default function AdminPage(){
- const [active,setActive]=useState('Tổng quan')
+ const location=useLocation()
+ const navigate=useNavigate()
+ const active=useMemo(()=>{
+   const current=nav.find(item=>item.path==='/admin'
+     ? location.pathname==='/admin' || location.pathname==='/admin/'
+     : location.pathname===item.path || location.pathname.startsWith(item.path+'/'))
+   return current?.label || 'Tổng quan'
+ },[location.pathname])
+
  const [token,setToken]=useState(()=>getAdminToken() || '')
  const [credentials,setCredentials]=useState({email:'',password:''})
  const [submissions,setSubmissions]=useState([])
@@ -33,6 +50,11 @@ export default function AdminPage(){
  const [query,setQuery]=useState('')
  const [selected,setSelected]=useState(null)
  const [tourRegistrations,setTourRegistrations]=useState([])
+
+ const go=(label)=>{
+   const item=nav.find(x=>x.label===label)
+   if(item) navigate(item.path)
+ }
 
  const load=async()=>{
    if(!token) return
@@ -49,7 +71,11 @@ export default function AdminPage(){
  }
 
  useEffect(()=>{ if(token) load() },[token,statusFilter])
- useEffect(()=>{ if(token&&active==='HOLA Tour') getAdminTourRegistrations().then(setTourRegistrations).catch(err=>setError(err.message)) },[token,active])
+ useEffect(()=>{
+   if(token&&active==='HOLA Tour'){
+     getAdminTourRegistrations().then(setTourRegistrations).catch(err=>setError(err.message))
+   }
+ },[token,active])
 
  const login=async(e)=>{
    e.preventDefault()
@@ -77,6 +103,7 @@ export default function AdminPage(){
  }
 
  const uniqueCreators=useMemo(()=>new Set(submissions.map(x=>x.email)).size,[submissions])
+ const authors=useMemo(()=>Array.from(new globalThis.Map(submissions.map(s=>[s.email,s])).values()),[submissions])
  const totalBytes=useMemo(()=>submissions.reduce((sum,s)=>sum+(s.media||[]).reduce((a,m)=>a+Number(m.size||0),0),0),[submissions])
  const pendingCount=submissions.filter(x=>x.status==='PENDING').length
  const shortlistCount=submissions.filter(x=>x.status==='SHORTLIST').length
@@ -94,7 +121,7 @@ export default function AdminPage(){
  return <main className="admin-shell">
    <aside className="admin-sidebar">
      <div className="brand admin-brand">HAL<span>O</span> HOLA</div><small>ADMIN 2026</small>
-     <nav>{nav.map(([n,I])=><button className={active===n?'active':''} key={n} onClick={()=>setActive(n)}><I size={18}/>{n}</button>)}</nav>
+     <nav>{nav.map(({label,icon:I,path})=><button className={active===label?'active':''} key={path} onClick={()=>navigate(path)}><I size={18}/>{label}</button>)}</nav>
      <Link className="admin-jury-link" to="/jury"><Star size={17}/> Jury Mode</Link>
      <button className="admin-logout" onClick={()=>{setAdminToken(null);setToken('')}}>Đăng xuất</button>
    </aside>
@@ -116,8 +143,8 @@ export default function AdminPage(){
        </div>
        <div className="admin-grid">
          <div className="admin-panel">
-           <div className="admin-panel-head"><h2>Tác phẩm mới</h2><button className="text-button" onClick={()=>setActive('Tác phẩm')}>Xem tất cả</button></div>
-           {(submissions.length?submissions:artworks.slice(0,6)).slice(0,8).map((a)=><button className="admin-row admin-row-button" key={a.id||a.slug} onClick={()=>a.id&&setSelected(a)}>
+           <div className="admin-panel-head"><h2>Tác phẩm mới</h2><button className="text-button" onClick={()=>go('Tác phẩm')}>Xem tất cả</button></div>
+           {(submissions.length?submissions:artworks.slice(0,6)).slice(0,8).map((a)=><button className="admin-row admin-row-button" key={a.id||a.slug} onClick={()=>{if(a.id){setSelected(a);go('Tác phẩm')}}}>
              <div className="admin-row-thumb">{a.media?.length?<ShieldCheck/>:<Images/>}</div>
              <div><b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name||a.author} · {a.code||''}</small></div>
              <span className={'status '+((a.status||'VALID')==='PENDING'?'pending':'approved')}>{(a.status||'VALID')==='PENDING'?<Clock3/>:<CheckCircle2/>}{statusLabels[a.status]||a.status||'Hợp lệ'}</span>
@@ -145,7 +172,7 @@ export default function AdminPage(){
      active==='Tác giả'?<div className="admin-panel">
        <div className="admin-panel-head"><h2>Tác giả / người gửi</h2><span>{uniqueCreators} người</span></div>
        <div className="admin-author-grid">
-         {Array.from(new Map(submissions.map(s=>[s.email,s])).values()).map(author=><div key={author.email}>
+         {authors.map(author=><div key={author.email}>
            <span className="avatar">{(author.display_name||author.name||author.email)?.charAt(0)?.toUpperCase()}</span>
            <div><b>{author.display_name||author.name||'Chưa có tên'}</b><small>{author.email}</small><small>{author.phone||'Chưa có số điện thoại'}</small></div>
            <span>{submissions.filter(s=>s.email===author.email).length} tác phẩm</span>
@@ -156,7 +183,7 @@ export default function AdminPage(){
      active==='TOP52'?<div className="admin-panel">
        <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
        <div className="admin-top52-grid">
-         {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);setActive('Tác phẩm')}}>
+         {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Tác phẩm')}}>
            <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
            <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
          </button>)}
