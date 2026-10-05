@@ -81,7 +81,19 @@ export default function JurorWorkspacePage(){
     setLoading(true);setError('');setMessage('')
     try{
       const saved=await saveJuryScore(item.id,{...score,submitted:submitted&&!score.conflictOfInterest})
-      const card=await getJuryScorecard(item.id);setScore({...emptyScore,...saved});setScorecard(card);setStats(await getJuryStats());setMessage(submitted?'Đã chốt điểm.':'Đã lưu nháp.')
+      const card=await getJuryScorecard(item.id)
+      setScore({...emptyScore,...saved})
+      setScorecard(card)
+      setItems(current=>current.map(x=>x.id===item.id?{
+        ...x,
+        my_score:saved,
+        avg_score:card?.aggregate?.average??0,
+        score_count:card?.aggregate?.count??0,
+        min_score:card?.aggregate?.min??0,
+        max_score:card?.aggregate?.max??0
+      }:x))
+      setStats(await getJuryStats())
+      setMessage(submitted?'Đã chốt điểm.':'Đã lưu nháp.')
     }catch(err){setError(err.message)}finally{setLoading(false)}
   }
   const moderate=async status=>{if(!item||!isManager)return;try{await updateSubmissionStatus(item.id,status);setItems(v=>v.map(x=>x.id===item.id?{...x,status}:x));setMessage('Đã đổi trạng thái: '+statusLabels[status])}catch(err){setError(err.message)}}
