@@ -20,11 +20,12 @@ jobs:
 
           check_get() {
             local path="$1"
+            local accept="${2:-application/json}"
             echo "===== GET ${path} ====="
             status=$(curl --silent --show-error \
               --connect-timeout 10 --max-time 30 \
               -D /tmp/hola-headers.txt \
-              -H 'Accept: application/json' \
+              -H "Accept: ${accept}" \
               -H "Origin: ${ORIGIN}" \
               -o /tmp/hola-body.txt \
               -w '%{http_code}' \
@@ -32,16 +33,20 @@ jobs:
             echo "status=${status}"
             grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
             echo 'body-preview:'
-            head -c 600 /tmp/hola-body.txt || true
+            head -c 500 /tmp/hola-body.txt || true
             echo
             test "$status" = '200'
-            grep -Eiq "^access-control-allow-origin: ${ORIGIN//./\.}\r?$" /tmp/hola-headers.txt
+            tr -d '\r' < /tmp/hola-headers.txt | grep -Fi "Access-Control-Allow-Origin: ${ORIGIN}" >/dev/null
           }
 
           check_get '/meta'
           check_get '/categories'
           check_get '/places?limit=1'
-          check_get '/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325'
+          check_get '/places/bounds?north=21.145&south=20.885&east=105.665&west=105.325&limit=2'
+          check_get '/places/nearby?lat=21.0183736&lng=105.5476382&radius=5000&limit=2'
+          check_get '/places/645'
+          check_get '/places/slug/lach-tach-cafe-photobooth'
+          check_get '/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325' 'application/geo+json, application/json'
 
           echo '===== OPTIONS /places (future PARTNER key preflight) ====='
           status=$(curl --silent --show-error \
