@@ -70,6 +70,7 @@ export function getTheme(slug) { return unwrap(client.get('/themes/' + encodeURI
 export function getColors() { return unwrap(client.get('/colors')); }
 export function getPublicArtworks(params = {}) { return unwrap(client.get('/artworks', { params })); }
 export function getPublicArtwork(slug) { return unwrap(client.get('/artworks/' + encodeURIComponent(slug))); }
+export function getPublicTop52(params = {}) { return unwrap(client.get('/top52', { params })); }
 export function getTours() { return unwrap(client.get('/tours')); }
 export function getStories() { return unwrap(client.get('/stories')); }
 export function getHomepageContent() { return unwrap(client.get('/site/homepage')); }
