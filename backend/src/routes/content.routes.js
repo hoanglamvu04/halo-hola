@@ -83,8 +83,14 @@ router.get('/artworks', async (req,res,next)=>{
     if(req.query.theme){values.push(String(req.query.theme));conditions.push(`s.theme=$${values.length}`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
     if(req.query.color){values.push(String(req.query.color));conditions.push(`s.color=$${values.length}`);}
+
     const limit=Math.max(1,Math.min(100,Number(req.query.limit)||52));
+    const offset=Math.max(0,Number(req.query.offset)||0);
     values.push(limit);
+    const limitParam=values.length;
+    values.push(offset);
+    const offsetParam=values.length;
+
     const {rows}=await pool.query(`
       SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
              COALESCE(NULLIF(s.display_name,''),s.name) AS author,
@@ -92,7 +98,8 @@ router.get('/artworks', async (req,res,next)=>{
              s.status,s.created_at AS "createdAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
-             COALESCE(jury.avg_score,0)::float AS "juryScore"
+             COALESCE(jury.avg_score,0)::float AS "juryScore",
+             COUNT(*) OVER()::int AS "totalCount"
       FROM submissions s
       LEFT JOIN LATERAL (
         SELECT json_agg(json_build_object('id',m.id,'url','/api/public-media/'||m.id::text,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
@@ -106,7 +113,7 @@ router.get('/artworks', async (req,res,next)=>{
       ) jury ON TRUE
       WHERE ${conditions.join(' AND ')}
       ORDER BY CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,jury.avg_score DESC NULLS LAST,s.created_at ASC
-      LIMIT $${values.length}
+      LIMIT $${limitParam} OFFSET $${offsetParam}
     `,values);
     res.json(rows);
   }catch(error){next(error);}
