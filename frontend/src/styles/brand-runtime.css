@@ -1,7 +1,9 @@
 :root{
   --site-background:#fbf7ef;
   --site-logo-width:190px;
+  --site-logo-height:52px;
   --site-logo-width-mobile:145px;
+  --site-logo-height-mobile:42px;
 }
 
 html,
@@ -37,15 +39,15 @@ main{
 .brand-image img{
   display:block;
   width:var(--site-logo-width)!important;
+  height:var(--site-logo-height)!important;
   max-width:none!important;
-  height:auto!important;
-  max-height:52px;
+  max-height:none!important;
   object-fit:contain;
 }
 
 @media(max-width:900px){
   .brand-image img{
     width:var(--site-logo-width-mobile)!important;
-    max-height:42px;
+    height:var(--site-logo-height-mobile)!important;
   }
 }
