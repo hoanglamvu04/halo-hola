@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getHomepageContent, getSiteSettings } from '../services/api.js'
 
 const items = [
-  ['Khám phá', '/'], ['Chủ đề', '/chu-de/net-doai'], ['HOLA Tour', '/hola-tour'],
+  ['Khám phá', '/'], ['Chủ đề', '/chu-de'], ['HOLA Tour', '/hola-tour'],
   ['HOLA Map', '/hola-map'], ['Stories', '/stories'], ['TOP52', '/top52'], ['WE HOLA', '/we-hola']
 ]
 
@@ -67,7 +67,7 @@ export default function Header() {
           <span>Khám phá HALO HOLA</span>
           <button onClick={()=>setOpen(false)} aria-label="Đóng menu"><X/></button>
         </div>
-        {items.map(([label, href]) => <NavLink key={href} to={href} onClick={() => setOpen(false)}>{label}</NavLink>)}
+        {items.map(([label, href]) => <NavLink key={href} to={href} end={href==='/'} onClick={() => setOpen(false)}>{label}</NavLink>)}
         <div className="mobile-nav-actions">
           <Link to="/tra-cuu" onClick={()=>setOpen(false)}><Search/> Tra cứu tác phẩm</Link>
           <Link className="mobile-nav-cta" to="/gui-goc-nhin" onClick={()=>setOpen(false)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></Link>
