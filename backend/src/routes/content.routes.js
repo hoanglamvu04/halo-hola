@@ -3,6 +3,7 @@ import { pool } from '../database/pool.js';
 import { getMediaDownloadUrl } from '../services/submission.service.js';
 
 const router = Router();
+const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
 
 router.get('/places', async (_req, res, next) => {
   try {
@@ -20,7 +21,7 @@ router.get('/themes', async (_req,res,next)=>{
     const {rows}=await pool.query(`
       SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
              t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
-             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE)::int AS "artworkCount"
+             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
       FROM themes t
       LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
       WHERE t.published=TRUE
@@ -36,7 +37,7 @@ router.get('/themes/:slug', async (req,res,next)=>{
     const {rows}=await pool.query(`
       SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
              t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
-             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE)::int AS "artworkCount"
+             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
       FROM themes t
       LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
       WHERE t.published=TRUE AND t.slug=$1
@@ -67,6 +68,7 @@ router.get('/public-media/:id', async (req,res,next)=>{
       FROM submission_media m
       JOIN submissions s ON s.id=m.submission_id
       WHERE m.id=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+        AND ${publicArtworkCondition('s')}
       LIMIT 1
     `,[req.params.id]);
     if(!allowed.rows[0]) return res.status(404).json({error:'Không tìm thấy media công khai.'});
@@ -79,7 +81,7 @@ router.get('/public-media/:id', async (req,res,next)=>{
 router.get('/artworks', async (req,res,next)=>{
   try{
     const values=[];
-    const conditions=["s.status IN ('TOP52','AWARDED')","s.is_demo=FALSE","s.allow_media_use=TRUE"];
+    const conditions=["s.status IN ('TOP52','AWARDED')","s.is_demo=FALSE","s.allow_media_use=TRUE",publicArtworkCondition('s')];
     if(req.query.theme){values.push(String(req.query.theme));conditions.push(`s.theme=$${values.length}`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
     if(req.query.color){values.push(String(req.query.color));conditions.push(`s.color=$${values.length}`);}
@@ -95,7 +97,7 @@ router.get('/artworks', async (req,res,next)=>{
       SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
              COALESCE(NULLIF(s.display_name,''),s.name) AS author,
              s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
-             s.status,s.created_at AS "createdAt",
+             s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
              COALESCE(jury.avg_score,0)::float AS "juryScore",
@@ -125,7 +127,7 @@ router.get('/artworks/:slug', async (req,res,next)=>{
       SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
              COALESCE(NULLIF(s.display_name,''),s.name) AS author,
              s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
-             s.status,s.created_at AS "createdAt",
+             s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
              COALESCE(jury.avg_score,0)::float AS "juryScore"
@@ -141,6 +143,7 @@ router.get('/artworks/:slug', async (req,res,next)=>{
         WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
       ) jury ON TRUE
       WHERE LOWER(s.code)=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+        AND ${publicArtworkCondition('s')}
       LIMIT 1
     `,[String(req.params.slug||'').toLowerCase()]);
     if(!rows[0]) return res.status(404).json({error:'Không tìm thấy tác phẩm công khai.'});
