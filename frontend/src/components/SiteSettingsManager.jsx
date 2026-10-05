@@ -139,8 +139,10 @@ export default function SiteSettingsManager(){
           uploading={uploading==='favicon'}
         />
 
-        <RangeField label="Kích thước logo desktop" value={draft.logoWidth||190} min={110} max={280} onChange={value=>patch('logoWidth',value)} hint="Chiều rộng logo ở header trên desktop."/>
-        <RangeField label="Kích thước logo mobile" value={draft.logoWidthMobile||145} min={90} max={200} onChange={value=>patch('logoWidthMobile',value)} hint="Chiều rộng logo ở header trên điện thoại."/>
+        <RangeField label="Chiều rộng logo desktop" value={draft.logoWidth||190} min={80} max={320} onChange={value=>patch('logoWidth',value)} hint="Độ rộng khung logo trên desktop."/>
+        <RangeField label="Chiều cao logo desktop" value={draft.logoHeight||52} min={24} max={96} onChange={value=>patch('logoHeight',value)} hint="Độ cao khung logo trên desktop; ảnh luôn giữ đúng tỉ lệ bên trong khung."/>
+        <RangeField label="Chiều rộng logo mobile" value={draft.logoWidthMobile||145} min={70} max={240} onChange={value=>patch('logoWidthMobile',value)} hint="Độ rộng khung logo trên điện thoại."/>
+        <RangeField label="Chiều cao logo mobile" value={draft.logoHeightMobile||42} min={22} max={72} onChange={value=>patch('logoHeightMobile',value)} hint="Độ cao khung logo trên điện thoại; ảnh luôn giữ đúng tỉ lệ bên trong khung."/>
 
         <ColorField label="Màu nền chính website" value={draft.backgroundColor} fallback="#fbf7ef" onChange={value=>patch('backgroundColor',value)} hint="Áp dụng cho nền chung và các vùng dùng nền mặc định."/>
         <ColorField label="Màu thương hiệu" value={draft.primaryColor} fallback="#173d2d" onChange={value=>patch('primaryColor',value)}/>
