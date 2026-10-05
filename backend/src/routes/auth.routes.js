@@ -5,6 +5,7 @@ import { pool } from '../database/pool.js';
 import { signToken } from '../utils/jwt.js';
 import { AppError } from '../utils/AppError.js';
 import { authRateLimiter } from '../middleware/rateLimit.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = Router();
 const schema = z.object({
@@ -28,6 +29,7 @@ router.post('/login', authRateLimiter, async (req, res, next) => {
       throw new AppError('Tài khoản đã bị khóa.', 403);
     }
 
+    await pool.query('UPDATE users SET last_login_at=NOW() WHERE id=$1',[user.id]).catch(()=>{});
     const token = signToken(user);
     res.json({
       token,
@@ -39,6 +41,10 @@ router.post('/login', authRateLimiter, async (req, res, next) => {
     }
     return next(error);
   }
+});
+
+router.get('/me', authenticate, async (req,res)=>{
+  res.json({user:req.user});
 });
 
 export default router;
