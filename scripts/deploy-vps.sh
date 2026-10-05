@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="${HALO_HOLA_ROOT:-/var/www/halo-hola}"
 BRANCH="${HALO_HOLA_BRANCH:-main}"
+CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -24,6 +25,14 @@ npm install --prefix frontend
 echo "==> Apply database migrations"
 npm run db:migrate --prefix backend
 
+if [[ ! -f "$CONTENT_SEED_MARKER" ]]; then
+  echo "==> Seed official HALO HOLA 2026 content (one time)"
+  npm run db:seed --prefix backend
+  touch "$CONTENT_SEED_MARKER"
+else
+  echo "==> Official content seed already applied; keeping CMS edits intact"
+fi
+
 echo "==> Build frontend"
 npm run build --prefix frontend
 
@@ -38,4 +47,4 @@ pm2 save
 
 echo "==> Done"
 echo "Frontend: $ROOT/frontend/dist"
-echo "API:      127.0.0.1:5000"
+echo "API:      check backend/.env PORT (currently expected 5104 on production VPS)"
