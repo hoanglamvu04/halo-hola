@@ -1,0 +1,62 @@
+name: Hola Maps SDK smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hola-maps-sdk-smoke.yml'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify map config, style, PMTiles and embed
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://maps.dothihoalac.vn'
+          API="$BASE/api/public/v1"
+          ORIGIN='https://halohola.xspace.vn'
+
+          echo '===== map/config ====='
+          code=$(curl --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 -sS \
+            -H "Origin: $ORIGIN" -D /tmp/config.h -o /tmp/config.json -w '%{http_code}' "$API/map/config")
+          cat /tmp/config.h
+          cat /tmp/config.json
+          test "$code" = '200'
+          tr -d '\r' < /tmp/config.h | grep -Fi "Access-Control-Allow-Origin: $ORIGIN"
+          grep -F '"embedUrl"' /tmp/config.json
+          grep -F '"styleUrl"' /tmp/config.json
+          grep -F '"maxBounds"' /tmp/config.json
+
+          echo '===== map/style.json ====='
+          code=$(curl --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 -sS \
+            -H "Origin: $ORIGIN" -D /tmp/style.h -o /tmp/style.json -w '%{http_code}' "$API/map/style.json")
+          cat /tmp/style.h
+          head -c 1400 /tmp/style.json; echo
+          test "$code" = '200'
+          tr -d '\r' < /tmp/style.h | grep -Fi "Access-Control-Allow-Origin: $ORIGIN"
+          grep -F 'pmtiles://' /tmp/style.json
+
+          echo '===== PMTiles Range ====='
+          code=$(curl --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 -sS \
+            -H "Origin: $ORIGIN" -r 0-15 -D /tmp/pm.h -o /tmp/pm.bin -w '%{http_code}' "$BASE/maps/hoalac.pmtiles")
+          cat /tmp/pm.h
+          echo "status=$code bytes=$(wc -c < /tmp/pm.bin)"
+          test "$code" = '206' -o "$code" = '200'
+
+          echo '===== embed framing headers ====='
+          code=$(curl --retry 2 --retry-delay 2 --connect-timeout 15 --max-time 45 -sS \
+            -D /tmp/embed.h -o /tmp/embed.html -w '%{http_code}' "$BASE/embed")
+          cat /tmp/embed.h
+          echo "status=$code"
+          test "$code" = '200'
+          if tr -d '\r' < /tmp/embed.h | grep -Eiq '^x-frame-options:[[:space:]]*(DENY|SAMEORIGIN)'; then
+            echo 'Embed blocked by X-Frame-Options'
+            exit 1
+          fi
+          if tr -d '\r' < /tmp/embed.h | grep -Eiq '^content-security-policy:.*frame-ancestors[[:space:]]+[^;]*(\x27self\x27|none)[^;]*$'; then
+            echo 'Review frame-ancestors CSP:'
+            tr -d '\r' < /tmp/embed.h | grep -Ei '^content-security-policy:' || true
+          fi
