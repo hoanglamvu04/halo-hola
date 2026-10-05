@@ -4,34 +4,44 @@ import {
   ArrowLeft, ArrowRight, MapPin, Clock3, CalendarDays, Quote, Share2,
   Heart, BookOpen, UserRound, Image as ImageIcon
 } from 'lucide-react'
-import { stories as fallbackStories } from '../data/siteData.js'
-import { getStoryBySlug } from '../services/api.js'
+import { getStoryBySlug, getStories } from '../services/api.js'
 import { normalizeStory } from '../utils/contentAdapters.js'
 
 export default function StoryDetailPage(){
   const {slug}=useParams()
-  const fallbackStory=normalizeStory(fallbackStories.find(s=>s.slug===slug) || fallbackStories[0])
-  const [story,setStory]=useState(fallbackStory)
+  const [story,setStory]=useState(null)
+  const [related,setRelated]=useState([])
   const [saved,setSaved]=useState(false)
   const [shareLabel,setShareLabel]=useState('Chia sẻ')
-  const related=fallbackStories.map(normalizeStory).filter(s=>s.slug!==story.slug).slice(0,3)
+  const [loading,setLoading]=useState(true)
+  const [error,setError]=useState('')
 
   useEffect(()=>{
-    setStory(fallbackStory)
-    getStoryBySlug(slug).then(data=>setStory(normalizeStory(data))).catch(()=>{})
+    let alive=true
+    setLoading(true);setError('')
+    Promise.all([getStoryBySlug(slug),getStories()]).then(([detail,rows])=>{
+      if(!alive)return
+      const normalized=normalizeStory(detail)
+      setStory(normalized)
+      setRelated((rows||[]).map(normalizeStory).filter(s=>s.slug!==slug).slice(0,3))
+    }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
+    return()=>{alive=false}
   },[slug])
 
   useEffect(()=>{
+    if(!story?.slug)return
     try{setSaved(localStorage.getItem('halo-story-'+story.slug)==='1')}catch{setSaved(false)}
-  },[story.slug])
+  },[story?.slug])
 
   const toggleSaved=()=>{
+    if(!story)return
     const next=!saved
     setSaved(next)
     try{localStorage.setItem('halo-story-'+story.slug,next?'1':'0')}catch{}
   }
 
   const shareStory=async()=>{
+    if(!story)return
     const url=window.location.href
     try{
       if(navigator.share){
@@ -43,6 +53,12 @@ export default function StoryDetailPage(){
       }
     }catch{}
   }
+
+  if(loading)return <main className="story-detail-page"><div className="jw-empty">Đang tải câu chuyện từ hệ thống...</div></main>
+  if(error||!story)return <main className="story-detail-page"><div className="container section"><div className="form-error">{error||'Không tìm thấy câu chuyện.'}</div><Link className="btn btn-outline" to="/stories"><ArrowLeft/> Stories</Link></div></main>
+
+  const body=Array.isArray(story.body)?story.body:[]
+  const gallery=Array.isArray(story.gallery)?story.gallery:[]
 
   return <main className="story-detail-page">
     <section className="story-detail-hero">
@@ -63,7 +79,7 @@ export default function StoryDetailPage(){
         </div>
 
         <div className="story-detail-cover">
-          <img src={story.cover||story.image} alt={story.title}/>
+          {story.cover||story.image?<img src={story.cover||story.image} alt={story.title}/>:<div className="theme-card-placeholder"/>}
           <div className="story-detail-cover-tag">HALO HOLA STORIES</div>
           <div className="story-detail-note">Một góc nhìn<br/>Một câu chuyện<br/>Một Hòa Lạc</div>
         </div>
@@ -87,12 +103,12 @@ export default function StoryDetailPage(){
             <button onClick={shareStory}><Share2/> {shareLabel}</button>
           </div>
 
-          <div className="story-side-index">
+          {body.length>0&&<div className="story-side-index">
             <small>TRONG BÀI VIẾT</small>
-            {story.body.map((section,index)=><a href={'#story-section-'+index} key={section.heading}>
+            {body.map((section,index)=><a href={'#story-section-'+index} key={section.heading||index}>
               {String(index+1).padStart(2,'0')} · {section.heading}
             </a>)}
-          </div>
+          </div>}
         </aside>
 
         <article className="story-article">
@@ -101,26 +117,18 @@ export default function StoryDetailPage(){
             <p>{story.lead?.slice(1)}</p>
           </div>
 
-          <blockquote className="story-quote">
-            <Quote/>
-            <p>{story.quote}</p>
-          </blockquote>
+          {story.quote&&<blockquote className="story-quote"><Quote/><p>{story.quote}</p></blockquote>}
 
-          {story.body.map((section,index)=><section id={'story-section-'+index} className="story-article-section" key={section.heading}>
+          {body.length>0?body.map((section,index)=><section id={'story-section-'+index} className="story-article-section" key={section.heading||index}>
             <span className="story-section-no">{String(index+1).padStart(2,'0')}</span>
             <h2>{section.heading}</h2>
-            {section.paragraphs.map((p,i)=><p key={i}>{p}</p>)}
-            {index===0 && story.gallery?.[0] && <figure className="story-inline-image">
-              <img src={story.gallery[0]} alt={section.heading}/>
-              <figcaption>Hòa Lạc qua góc nhìn của người kể chuyện.</figcaption>
-            </figure>}
-          </section>)}
+            {(section.paragraphs||[]).map((p,i)=><p key={i}>{p}</p>)}
+            {index===0 && gallery[0] && <figure className="story-inline-image"><img src={gallery[0]} alt={section.heading}/><figcaption>Hòa Lạc qua góc nhìn của người kể chuyện.</figcaption></figure>}
+          </section>):<section className="story-article-section"><p>{story.content}</p></section>}
 
-          {story.gallery?.length>1 && <section className="story-gallery-section">
+          {gallery.length>1 && <section className="story-gallery-section">
             <div className="story-gallery-title"><ImageIcon/><span>Góc nhìn trong câu chuyện</span></div>
-            <div className="story-gallery-grid">
-              {story.gallery.slice(1).map((image,index)=><img src={image} alt={story.title+' '+(index+2)} key={image}/>)}
-            </div>
+            <div className="story-gallery-grid">{gallery.slice(1).map((image,index)=><img src={image} alt={story.title+' '+(index+2)} key={image+index}/>)}</div>
           </section>}
 
           <div className="story-article-end">
@@ -133,28 +141,16 @@ export default function StoryDetailPage(){
       </div>
     </section>
 
-    <section className="story-related-ref">
+    {related.length>0&&<section className="story-related-ref">
       <div className="story-related-inner">
-        <header>
-          <div>
-            <span className="eyebrow">ĐỌC TIẾP</span>
-            <h2>Những câu chuyện liên quan</h2>
-          </div>
-          <Link className="stories-read-link" to="/stories">Xem tất cả Stories <ArrowRight/></Link>
-        </header>
-
+        <header><div><span className="eyebrow">ĐỌC TIẾP</span><h2>Những câu chuyện liên quan</h2></div><Link className="stories-read-link" to="/stories">Xem tất cả Stories <ArrowRight/></Link></header>
         <div className="story-related-grid">
           {related.map(s=><Link className="story-related-card" to={'/stories/'+s.slug} key={s.slug}>
-            <img src={s.image} alt={s.title}/>
-            <div>
-              <span>{s.category}</span>
-              <h3>{s.title}</h3>
-              <p>{s.excerpt}</p>
-              <small>{s.author} · {s.readTime}</small>
-            </div>
+            {s.image?<img src={s.image} alt={s.title}/>:<div className="theme-card-placeholder"/>}
+            <div><span>{s.category}</span><h3>{s.title}</h3><p>{s.excerpt}</p><small>{s.author} · {s.readTime}</small></div>
           </Link>)}
         </div>
       </div>
-    </section>
+    </section>}
   </main>
 }
