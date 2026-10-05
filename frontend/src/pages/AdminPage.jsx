@@ -10,6 +10,7 @@ import HomepageManager from '../components/HomepageManager.jsx'
 import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
+import JuryBoardManager from '../components/JuryBoardManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -22,6 +23,7 @@ const nav=[
   {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
   {label:'Tác giả',icon:Users,path:'/admin/authors'},
   {label:'TOP52',icon:Images,path:'/admin/top52'},
+  {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
   {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
   {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
   {label:'Stories',icon:BookOpen,path:'/admin/stories'},
@@ -165,6 +167,7 @@ export default function AdminPage(){
      active==='HOLA Map'?<AdminContentManager type="places"/>:
      active==='Đối tác'?<AdminContentManager type="partners"/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
+     active==='Hội đồng BGK'?<JuryBoardManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
        <AdminContentManager type="tours"/>
        <div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>
