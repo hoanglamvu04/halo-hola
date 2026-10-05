@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+import './styles/jury-v2.css'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import BottomNav from './components/BottomNav.jsx'
