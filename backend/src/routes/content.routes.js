@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { pool } from '../database/pool.js';
+import { getMediaDownloadUrl } from '../services/submission.service.js';
 
 const router = Router();
 
@@ -59,6 +60,22 @@ router.get('/colors', async (_req,res,next)=>{
   }catch(error){next(error);}
 });
 
+router.get('/public-media/:id', async (req,res,next)=>{
+  try{
+    const allowed=await pool.query(`
+      SELECT m.id
+      FROM submission_media m
+      JOIN submissions s ON s.id=m.submission_id
+      WHERE m.id=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+      LIMIT 1
+    `,[req.params.id]);
+    if(!allowed.rows[0]) return res.status(404).json({error:'Không tìm thấy media công khai.'});
+    const media=await getMediaDownloadUrl(req.params.id);
+    if(!media?.url) return res.status(404).json({error:'Không tìm thấy file media.'});
+    return res.redirect(302,media.url);
+  }catch(error){next(error);}
+});
+
 router.get('/artworks', async (req,res,next)=>{
   try{
     const values=[];
@@ -78,8 +95,8 @@ router.get('/artworks', async (req,res,next)=>{
              COALESCE(jury.avg_score,0)::float AS "juryScore"
       FROM submissions s
       LEFT JOIN LATERAL (
-        SELECT json_agg(json_build_object('id',m.id,'url',m.url,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
-               (ARRAY_AGG(m.url ORDER BY m.created_at ASC))[1] AS image
+        SELECT json_agg(json_build_object('id',m.id,'url','/api/public-media/'||m.id::text,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
+               (ARRAY_AGG('/api/public-media/'||m.id::text ORDER BY m.created_at ASC))[1] AS image
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
       LEFT JOIN LATERAL (
@@ -107,8 +124,8 @@ router.get('/artworks/:slug', async (req,res,next)=>{
              COALESCE(jury.avg_score,0)::float AS "juryScore"
       FROM submissions s
       LEFT JOIN LATERAL (
-        SELECT json_agg(json_build_object('id',m.id,'url',m.url,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
-               (ARRAY_AGG(m.url ORDER BY m.created_at ASC))[1] AS image
+        SELECT json_agg(json_build_object('id',m.id,'url','/api/public-media/'||m.id::text,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
+               (ARRAY_AGG('/api/public-media/'||m.id::text ORDER BY m.created_at ASC))[1] AS image
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
       LEFT JOIN LATERAL (
