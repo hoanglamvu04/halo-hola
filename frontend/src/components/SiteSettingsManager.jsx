@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Save, Settings, Search, PanelBottom, Palette, Upload, Image as ImageIcon, X } from 'lucide-react'
 import { getAdminCmsSettings, updateAdminCmsSetting, uploadAdminSiteAsset } from '../services/api.js'
+import './SiteSettingsManager.css'
 
 const sections=[
   ['brand','Thương hiệu',Palette],
