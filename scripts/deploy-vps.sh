@@ -5,6 +5,7 @@ ROOT="${HALO_HOLA_ROOT:-/var/www/halo-hola}"
 BRANCH="${HALO_HOLA_BRANCH:-main}"
 CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
+MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -40,6 +41,14 @@ if [[ ! -f "$DEMO_SEED_MARKER" ]]; then
   touch "$DEMO_SEED_MARKER"
 else
   echo "==> Full admin demo dataset already applied"
+fi
+
+if [[ ! -f "$MEDIA_DEMO_SEED_MARKER" ]]; then
+  echo "==> Seed demo Media Library (one time)"
+  npm run db:seed:media-demo --prefix backend
+  touch "$MEDIA_DEMO_SEED_MARKER"
+else
+  echo "==> Demo Media Library already applied"
 fi
 
 echo "==> Build frontend"
