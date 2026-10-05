@@ -44,15 +44,19 @@ function BrandRuntime(){
       const background=brand.backgroundColor||'#fbf7ef'
       const primary=brand.primaryColor||'#173d2d'
       const accent=brand.accentColor||'#c45b32'
-      const logoWidth=clampNumber(brand.logoWidth,110,280,190)
-      const logoWidthMobile=clampNumber(brand.logoWidthMobile,90,200,145)
+      const logoWidth=clampNumber(brand.logoWidth,80,320,190)
+      const logoHeight=clampNumber(brand.logoHeight,24,96,52)
+      const logoWidthMobile=clampNumber(brand.logoWidthMobile,70,240,145)
+      const logoHeightMobile=clampNumber(brand.logoHeightMobile,22,72,42)
 
       root.style.setProperty('--site-background',background)
       root.style.setProperty('--cream',background)
       root.style.setProperty('--forest',primary)
       root.style.setProperty('--terra',accent)
       root.style.setProperty('--site-logo-width',`${logoWidth}px`)
+      root.style.setProperty('--site-logo-height',`${logoHeight}px`)
       root.style.setProperty('--site-logo-width-mobile',`${logoWidthMobile}px`)
+      root.style.setProperty('--site-logo-height-mobile',`${logoHeightMobile}px`)
       document.body.style.backgroundColor=background
 
       const themeMeta=document.querySelector('meta[name="theme-color"]')
