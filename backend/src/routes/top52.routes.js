@@ -3,6 +3,7 @@ import { pool } from '../database/pool.js';
 
 const router=Router();
 const ROUND_CODE='PRELIMINARY';
+const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
 
 function safeNumber(value,fallback=0){
   const n=Number(value);
@@ -23,7 +24,7 @@ router.get('/',async(req,res,next)=>{
     const counts=(await pool.query(`
       SELECT
         COUNT(*) FILTER (WHERE s.is_demo=FALSE)::int AS "selectedCount",
-        COUNT(*) FILTER (WHERE s.is_demo=FALSE AND s.allow_media_use=TRUE AND s.status IN ('TOP52','AWARDED'))::int AS "publishedCount"
+        COUNT(*) FILTER (WHERE s.is_demo=FALSE AND s.allow_media_use=TRUE AND s.status IN ('TOP52','AWARDED') AND ${publicArtworkCondition('s')})::int AS "publishedCount"
       FROM jury_selections sel
       JOIN submissions s ON s.id=sel.submission_id
       WHERE sel.round_id=$1 AND sel.selection_type='TOP52'
@@ -35,7 +36,8 @@ router.get('/',async(req,res,next)=>{
       `sel.selection_type='TOP52'`,
       `s.is_demo=FALSE`,
       `s.allow_media_use=TRUE`,
-      `s.status IN ('TOP52','AWARDED')`
+      `s.status IN ('TOP52','AWARDED')`,
+      publicArtworkCondition('s')
     ];
 
     const q=String(req.query.q||'').trim();
@@ -58,7 +60,7 @@ router.get('/',async(req,res,next)=>{
         s.id,LOWER(s.code) AS slug,s.code,s.title,
         COALESCE(NULLIF(s.display_name,''),s.name) AS author,
         s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
-        s.status,s.created_at AS "createdAt",
+        s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
         sel.source AS "selectionSource",sel.selected_at AS "selectedAt",
         COALESCE(media.media,'[]'::json) AS media,
         media.image,COALESCE(media.media_count,0)::int AS "mediaCount",
