@@ -39,6 +39,26 @@ function BrandAssetField({label,field,value,accept='image/*',hint,onChange,onUpl
   </div>
 }
 
+function RangeField({label,value,min,max,step=1,onChange,hint}){
+  const safe=Number(value)||min
+  return <label className="settings-range-field">
+    <span className="settings-range-head"><b>{label}</b><strong>{safe}px</strong></span>
+    {hint&&<small>{hint}</small>}
+    <input type="range" min={min} max={max} step={step} value={safe} onChange={e=>onChange(Number(e.target.value))}/>
+  </label>
+}
+
+function ColorField({label,value,fallback,onChange,hint}){
+  const current=value||fallback
+  return <label className="settings-color-field">
+    <span><b>{label}</b>{hint&&<small>{hint}</small>}</span>
+    <div>
+      <input className="settings-color-picker" type="color" value={current} onChange={e=>onChange(e.target.value)}/>
+      <input value={current} onChange={e=>onChange(e.target.value)} placeholder={fallback}/>
+    </div>
+  </label>
+}
+
 export default function SiteSettingsManager(){
   const [data,setData]=useState({})
   const [active,setActive]=useState('brand')
@@ -119,8 +139,12 @@ export default function SiteSettingsManager(){
           uploading={uploading==='favicon'}
         />
 
-        <label>Màu thương hiệu<input value={draft.primaryColor||'#174a38'} onChange={e=>patch('primaryColor',e.target.value)}/></label>
-        <label>Màu nhấn<input value={draft.accentColor||'#c75a32'} onChange={e=>patch('accentColor',e.target.value)}/></label>
+        <RangeField label="Kích thước logo desktop" value={draft.logoWidth||190} min={110} max={280} onChange={value=>patch('logoWidth',value)} hint="Chiều rộng logo ở header trên desktop."/>
+        <RangeField label="Kích thước logo mobile" value={draft.logoWidthMobile||145} min={90} max={200} onChange={value=>patch('logoWidthMobile',value)} hint="Chiều rộng logo ở header trên điện thoại."/>
+
+        <ColorField label="Màu nền chính website" value={draft.backgroundColor} fallback="#fbf7ef" onChange={value=>patch('backgroundColor',value)} hint="Áp dụng cho nền chung và các vùng dùng nền mặc định."/>
+        <ColorField label="Màu thương hiệu" value={draft.primaryColor} fallback="#173d2d" onChange={value=>patch('primaryColor',value)}/>
+        <ColorField label="Màu nhấn" value={draft.accentColor} fallback="#c45b32" onChange={value=>patch('accentColor',value)}/>
       </div>}
 
       {active==='seo'&&<div className="settings-fields">
