@@ -128,6 +128,10 @@ export async function getHolaMeta(options = {}) {
   return unwrapItem(await holaFetch('/meta', options))
 }
 
+export async function getHolaMapConfig(options = {}) {
+  return unwrapItem(await holaFetch('/map/config', options))
+}
+
 export async function getHolaCategories(options = {}) {
   return unwrapCollection(await holaFetch('/categories', options))
 }
