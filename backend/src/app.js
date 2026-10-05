@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.routes.js';
 import submissionsRoutes from './routes/submissions.routes.js';
 import contentRoutes from './routes/content.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import adminPreviewRoutes from './routes/adminPreview.routes.js';
 import juryRoutes from './routes/jury.routes.js';
 import juryBoardRoutes from './routes/juryBoard.routes.js';
 import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
@@ -48,6 +49,7 @@ export function createApp() {
   app.use('/api', contentRoutes);
   app.use('/api/jury', juryRoutes);
   app.use('/api/admin/jury-board', juryBoardRoutes);
+  app.use('/api/admin/public-preview', adminPreviewRoutes);
   app.use('/api/admin', adminRoutes);
 
   app.use(notFoundHandler);
