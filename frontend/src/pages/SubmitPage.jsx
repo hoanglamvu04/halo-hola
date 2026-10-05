@@ -5,8 +5,7 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
-import { themes, colorStories, img } from '../data/siteData.js'
-import { submitArtwork } from '../services/api.js'
+import { getColors, getThemes, submitArtwork } from '../services/api.js'
 
 const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
@@ -14,8 +13,8 @@ const DRAFT_KEY = 'halo_hola_submission_draft_v2'
 const initialForm = {
   name:'', display:'', email:'', phone:'', bio:'',
   title:'', capturedAt:'', externalLink:'', previousAward:false, previousAwardNote:'',
-  type:'Ảnh', theme:'Nắng Hòa Lạc', color:'Nắng',
-  location:'Hồ Đồng Mô', story:'',
+  type:'Photo', theme:'', color:'',
+  location:'', story:'',
   rightsConfirmed:false, imageConsentConfirmed:false,
   isMinor:false, guardianName:'', guardianConsent:false,
   allowMediaUse:true, allowNewsletter:false
@@ -26,10 +25,15 @@ export default function SubmitPage(){
   const [form,setForm]=useState(()=>{
     try {
       const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')
-      return saved ? {...initialForm,...saved} : initialForm
+      const merged=saved ? {...initialForm,...saved} : initialForm
+      if(merged.type==='Ảnh') merged.type='Photo'
+      return merged
     } catch { return initialForm }
   })
+  const [themes,setThemes]=useState([])
+  const [colors,setColors]=useState([])
   const [files,setFiles]=useState([])
+  const [previewUrl,setPreviewUrl]=useState('')
   const [submitting,setSubmitting]=useState(false)
   const [result,setResult]=useState(null)
   const [error,setError]=useState('')
@@ -37,7 +41,28 @@ export default function SubmitPage(){
   const inputRef=useRef(null)
   const saveTimer=useRef(null)
   const code=useMemo(()=>result?.code || 'HH26-XXXXX',[result])
-  const types=[['Ảnh',Camera],['Video',Video],['Story & Creative',FileText],['Art & Design',Palette]]
+  const types=[['Photo','Ảnh đơn, bộ ảnh, photo story',Camera],['Video','Reel, short video, phim ngắn, timelapse',Video],['Story & Creative','Câu chuyện, tản văn, ký ức, audio story',FileText],['Art & Design','Tranh, ký họa, illustration, digital art, poster',Palette]]
+
+  useEffect(()=>{
+    Promise.all([getThemes(),getColors()]).then(([themeRows,colorRows])=>{
+      const nextThemes=Array.isArray(themeRows)?themeRows:[]
+      const nextColors=Array.isArray(colorRows)?colorRows:[]
+      setThemes(nextThemes);setColors(nextColors)
+      setForm(current=>({
+        ...current,
+        theme:current.theme||nextThemes[0]?.title||'',
+        color:current.color||nextColors[0]?.name||''
+      }))
+    }).catch(err=>setError(err.message))
+  },[])
+
+  useEffect(()=>{
+    const imageFile=files.find(file=>file.type?.startsWith('image/'))
+    if(!imageFile){setPreviewUrl('');return undefined}
+    const url=URL.createObjectURL(imageFile)
+    setPreviewUrl(url)
+    return()=>URL.revokeObjectURL(url)
+  },[files])
 
   useEffect(()=>{
     if(result) return undefined
@@ -55,7 +80,7 @@ export default function SubmitPage(){
 
   const resetDraft=()=>{
     localStorage.removeItem(DRAFT_KEY)
-    setForm(initialForm)
+    setForm({...initialForm,theme:themes[0]?.title||'',color:colors[0]?.name||''})
     setFiles([])
     setStep(1)
     setResult(null)
@@ -63,8 +88,8 @@ export default function SubmitPage(){
 
   const submit = async () => {
     setError('')
-    if (!form.name || !form.email || !form.title || !form.story || !form.location) {
-      setError('Vui lòng điền đủ họ tên, email, tên tác phẩm, địa điểm và câu chuyện.')
+    if (!form.name || !form.email || !form.title || !form.theme || !form.story || !form.location) {
+      setError('Vui lòng điền đủ họ tên, email, tên tác phẩm, chủ đề, địa điểm và câu chuyện.')
       return
     }
     if (!form.rightsConfirmed) {
@@ -98,8 +123,10 @@ export default function SubmitPage(){
     }
   }
 
+  const heroImage=themes.find(t=>t.title===form.theme)?.image||themes[0]?.image||''
+
   return <main>
-    <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Gửi tác phẩm gốc, câu chuyện và thông tin bản quyền trong một luồng an toàn. File original được giữ nguyên chất lượng." image={img.lake}>
+    <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Gửi tác phẩm gốc, câu chuyện và thông tin bản quyền trong một luồng an toàn. File original được giữ nguyên chất lượng." image={heroImage}>
       <div className="draft-status"><Save size={15}/>{savedAt ? 'Đã lưu nháp lúc ' + savedAt.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}) : 'Tự động lưu nháp'}</div>
     </PageHero>
 
@@ -129,7 +156,7 @@ export default function SubmitPage(){
               <label>Link tác phẩm (nếu có)<input value={form.externalLink} onChange={e=>upd('externalLink',e.target.value)} placeholder="https://..."/></label>
             </div>
             <h3 className="form-subtitle">Loại hình</h3>
-            <div className="type-grid">{types.map(([n,I])=><button key={n} onClick={()=>upd('type',n)} className={form.type===n?'selected':''}><I/><b>{n}</b><small>{n==='Ảnh'?'Ảnh đơn, bộ ảnh, photo story':'Một hình thức sáng tạo về Hòa Lạc'}</small></button>)}</div>
+            <div className="type-grid">{types.map(([value,desc,I])=><button key={value} onClick={()=>upd('type',value)} className={form.type===value?'selected':''}><I/><b>{value}</b><small>{desc}</small></button>)}</div>
           </div>}
 
           {step===3&&<div>
@@ -141,25 +168,25 @@ export default function SubmitPage(){
               <small>JPG, PNG, WEBP, MP4, MOV, PDF, DOC/DOCX, MP3 · tối đa theo cấu hình server.</small>
               <input ref={inputRef} hidden multiple type="file" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" onChange={e=>setFiles(Array.from(e.target.files || []).slice(0,10))}/>
             </div>
-            <div className="upload-thumbs">{files.length?files.map((file,i)=><div className="file-chip" key={file.name + '-' + i}><ImageIcon/><span title={file.name}>{file.name}<small>{(file.size/1024/1024).toFixed(2)} MB</small></span><button onClick={(e)=>{e.stopPropagation();setFiles(v=>v.filter((_,idx)=>idx!==i))}}>×</button></div>):<><img src={img.lake}/><img src={img.village}/><img src={img.architecture}/><button onClick={()=>inputRef.current?.click()}><ImageIcon/> Thêm tệp</button></>}</div>
+            <div className="upload-thumbs">{files.length?files.map((file,i)=><div className="file-chip" key={file.name + '-' + i}><ImageIcon/><span title={file.name}>{file.name}<small>{(file.size/1024/1024).toFixed(2)} MB</small></span><button onClick={(e)=>{e.stopPropagation();setFiles(v=>v.filter((_,idx)=>idx!==i))}}>×</button></div>):<button onClick={()=>inputRef.current?.click()}><ImageIcon/> Chưa có tệp · Thêm tệp</button>}</div>
           </div>}
 
           {step===4&&<div>
             <h2>Chủ đề & sắc màu</h2><p>Chọn lớp câu chuyện phù hợp nhất với góc nhìn của bạn.</p>
-            <div className="theme-select-grid">{themes.map(t=><button key={t.id} onClick={()=>upd('theme',t.title)} className={form.theme===t.title?'selected':''}><img src={t.image}/><span>{t.title}</span></button>)}</div>
+            {themes.length?<div className="theme-select-grid">{themes.map(t=><button key={t.id} onClick={()=>upd('theme',t.title)} className={form.theme===t.title?'selected':''}>{t.image?<img src={t.image} alt={t.title}/>:<span className="theme-card-placeholder"/>}<span>{t.title}</span></button>)}</div>:<div className="jw-empty">Đang tải 8 chủ đề từ hệ thống...</div>}
             <h3 className="form-subtitle">Sắc màu Hòa Lạc</h3>
-            <div className="color-select-grid">{colorStories.map(c=><button key={c.name} onClick={()=>upd('color',c.name)} className={form.color===c.name?'selected':''}><span style={{background:c.color}}/>{form.color===c.name&&<i><Check size={14}/></i>}<b>{c.name}</b><small>{c.story}</small></button>)}</div>
+            {colors.length?<div className="color-select-grid">{colors.map(c=><button key={c.id||c.slug} onClick={()=>upd('color',c.name)} className={form.color===c.name?'selected':''}><span style={{background:c.color}}/>{form.color===c.name&&<i><Check size={14}/></i>}<b>{c.name}</b><small>{c.story}</small></button>)}</div>:<div className="jw-empty">Đang tải sắc màu từ hệ thống...</div>}
           </div>}
 
           {step===5&&<div>
             <h2>Địa điểm & câu chuyện</h2>
             <div className="form-grid">
-              <label className="full">Địa điểm *<div className="input-icon"><MapPin size={17}/><input value={form.location} onChange={e=>upd('location',e.target.value)}/></div></label>
+              <label className="full">Địa điểm *<div className="input-icon"><MapPin size={17}/><input value={form.location} onChange={e=>upd('location',e.target.value)} placeholder="Nhập địa điểm thực hiện tác phẩm"/></div></label>
               <label className="full">Câu chuyện 50–150 chữ *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Kể câu chuyện đằng sau tác phẩm..."/></label>
               <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Tác phẩm này từng tham gia/đạt giải ở chương trình khác</label>
               {form.previousAward&&<label className="full">Thông tin giải/chương trình<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, giải thưởng..."/></label>}
             </div>
-            <div className="mini-map"><span><MapPin/> {form.location}</span></div>
+            <div className="mini-map"><span><MapPin/> {form.location||'Chưa nhập địa điểm'}</span></div>
           </div>}
 
           {step===6&&<div>
@@ -187,9 +214,9 @@ export default function SubmitPage(){
               <div className="review-grid">
                 <div><small>Tác phẩm</small><b>{form.title||'Chưa nhập'}</b></div>
                 <div><small>Tác giả</small><b>{form.display||form.name||'Chưa nhập'}</b></div>
-                <div><small>Chủ đề</small><b>{form.theme}</b></div>
+                <div><small>Chủ đề</small><b>{form.theme||'Chưa chọn'}</b></div>
                 <div><small>File gốc</small><b>{files.length} file</b></div>
-                <div><small>Địa điểm</small><b>{form.location}</b></div>
+                <div><small>Địa điểm</small><b>{form.location||'Chưa nhập'}</b></div>
                 <div><small>Quyền tác giả</small><b>{form.rightsConfirmed?'Đã xác nhận':'Chưa xác nhận'}</b></div>
               </div>
               {error&&<div className="form-error">{error}</div>}
@@ -204,7 +231,7 @@ export default function SubmitPage(){
 
         <aside className="submission-preview">
           <span className="eyebrow">XEM TRƯỚC TÁC PHẨM</span>
-          <div className="preview-card"><img src={img.sunset}/><div className="preview-body"><div className="preview-tags"><span>{form.type}</span><span>{form.theme}</span></div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location}</span><span>{form.color}</span></div></div></div>
+          <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước tác phẩm"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span><span>{form.theme||'Chưa chọn chủ đề'}</span></div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{form.color&&<span>{form.color}</span>}</div></div></div>
           <div className="submission-code"><small>{result?'Mã tác phẩm':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>navigator.clipboard?.writeText(code)}><Copy size={16}/></button>}</div>
           <blockquote>“Mỗi góc nhìn của bạn đều góp phần tạo nên một bức tranh Hòa Lạc đa sắc màu.”</blockquote>
           <Link className="text-link" to="/tra-cuu">Đã gửi trước đó? Tra cứu tác phẩm →</Link>
