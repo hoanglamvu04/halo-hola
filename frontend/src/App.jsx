@@ -82,6 +82,7 @@ function SiteShell() {
         <Route path="/gui-goc-nhin" element={<SubmitPage />} />
         <Route path="/hola-map" element={<MapPage />} />
         <Route path="/top52" element={<Top52Page />} />
+        <Route path="/tac-pham/xem-truoc/:submissionId" element={<ArtworkPage preview />} />
         <Route path="/tac-pham/:slug" element={<ArtworkPage />} />
         <Route path="/hola-tour" element={<TourPage />} />
         <Route path="/hola-day" element={<HolaDayPage />} />
