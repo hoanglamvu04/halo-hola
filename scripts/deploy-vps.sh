@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT="${HALO_HOLA_ROOT:-/var/www/halo-hola}"
 BRANCH="${HALO_HOLA_BRANCH:-main}"
 CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
+DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -31,6 +32,14 @@ if [[ ! -f "$CONTENT_SEED_MARKER" ]]; then
   touch "$CONTENT_SEED_MARKER"
 else
   echo "==> Official content seed already applied; keeping CMS edits intact"
+fi
+
+if [[ ! -f "$DEMO_SEED_MARKER" ]]; then
+  echo "==> Seed full admin demo dataset (one time)"
+  npm run db:seed:demo --prefix backend
+  touch "$DEMO_SEED_MARKER"
+else
+  echo "==> Full admin demo dataset already applied"
 fi
 
 echo "==> Build frontend"
