@@ -94,6 +94,13 @@ export function updateSubmissionStatus(id, status) { return unwrap(client.patch(
 export function updateJuryNote(id, note) { return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/jury-note', { note })); }
 export function getOriginalDownload(mediaId) { return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download')); }
 
+// Publication control: selection/status is separate from public visibility.
+export function getAdminPublicationOverview() { return unwrap(client.get('/admin/publication/overview')); }
+export function getAdminPublicationItems(params = {}) { return unwrap(client.get('/admin/publication/items', { params })); }
+export function setAdminPublication(id,payload) { return unwrap(client.patch('/admin/publication/items/' + encodeURIComponent(id), payload)); }
+export function bulkSetAdminPublication(payload) { return unwrap(client.post('/admin/publication/bulk', payload)); }
+export function getAdminPublicationAudit(params = {}) { return unwrap(client.get('/admin/publication/audit', { params })); }
+
 // Dedicated Jury Workspace API: available to JUROR / MODERATOR / ADMIN.
 export function getJurySubmissions(params = {}) { return unwrap(client.get('/jury/submissions', { params })); }
 export function getJuryScorecard(submissionId) { return unwrap(client.get('/jury/submissions/' + encodeURIComponent(submissionId) + '/score')); }
