@@ -15,8 +15,9 @@ import StoryDetailPage from './pages/StoryDetailPage.jsx'
 import WeHolaPage from './pages/WeHolaPage.jsx'
 import PartnersPage from './pages/PartnersPage.jsx'
 import HelloPage from './pages/HelloPage.jsx'
-import AdminPage from './pages/AdminPage.jsx'
+import ThemesPage from './pages/ThemesPage.jsx'
 import ThemePage from './pages/ThemePage.jsx'
+import AdminPage from './pages/AdminPage.jsx'
 import LookupPage from './pages/LookupPage.jsx'
 import JurorWorkspacePage from './pages/JurorWorkspacePage.jsx'
 
@@ -48,6 +49,7 @@ function SiteShell() {
         <Route path="/we-hola" element={<WeHolaPage />} />
         <Route path="/dong-hanh" element={<PartnersPage />} />
         <Route path="/hello" element={<HelloPage />} />
+        <Route path="/chu-de" element={<ThemesPage />} />
         <Route path="/chu-de/:slug" element={<ThemePage />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/tra-cuu" element={<LookupPage />} />
