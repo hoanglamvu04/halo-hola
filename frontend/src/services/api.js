@@ -20,7 +20,7 @@ function unwrap(promise) {
   return promise.then((res) => res.data).catch((error) => {
     const isNetworkError = !error.response && (error.code === 'ERR_NETWORK' || error.message === 'Network Error');
     const message = isNetworkError
-      ? 'Không kết nối được máy chủ HALO HOLA API. Hãy kiểm tra backend đang chạy ở cổng 5000.'
+      ? 'Không kết nối được máy chủ HALO HOLA API. Hãy kiểm tra backend đang chạy.'
       : (error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.');
     const wrapped = new Error(message);
     wrapped.status = error.response?.status;
@@ -130,6 +130,21 @@ export function getOriginalDownload(mediaId) {
   return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download'));
 }
 
+export function getJurySubmissions(params = {}) {
+  return unwrap(client.get('/admin/jury/submissions', { params }));
+}
+
+export function getJuryScorecard(submissionId) {
+  return unwrap(client.get('/admin/jury/submissions/' + encodeURIComponent(submissionId) + '/score'));
+}
+
+export function saveJuryScore(submissionId, payload) {
+  return unwrap(client.put('/admin/jury/submissions/' + encodeURIComponent(submissionId) + '/score', payload));
+}
+
+export function getJuryStats() {
+  return unwrap(client.get('/admin/jury/stats'));
+}
 
 export function getAdminCmsStories() {
   return unwrap(client.get('/admin/cms/stories'));
