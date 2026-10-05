@@ -47,6 +47,18 @@ router.get('/themes/:slug', async (req,res,next)=>{
   }catch(error){next(error);}
 });
 
+router.get('/colors', async (_req,res,next)=>{
+  try{
+    const {rows}=await pool.query(`
+      SELECT id,slug,name,color_value AS color,story,sort_order AS "sortOrder"
+      FROM theme_colors
+      WHERE published=TRUE
+      ORDER BY sort_order ASC,id ASC
+    `);
+    res.json(rows);
+  }catch(error){next(error);}
+});
+
 router.get('/artworks', async (req,res,next)=>{
   try{
     const values=[];
