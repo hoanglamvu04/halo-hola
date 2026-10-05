@@ -10,7 +10,7 @@ const items = [
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:''})
+  const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:'',favicon:''})
 
   useEffect(()=>{
     Promise.allSettled([getHomepageContent(),getSiteSettings()]).then(([homeResult,settingsResult])=>{
@@ -23,10 +23,22 @@ export default function Header() {
         ...(section?.content||{}),
         enabled:section?.enabled!==false,
         logoImage:section?.content?.logoImage||brand.logo||v.logoImage,
-        siteName:brand.siteName||'HALO HOLA'
+        siteName:brand.siteName||'HALO HOLA',
+        favicon:brand.favicon||''
       }))
     })
   },[])
+
+  useEffect(()=>{
+    if(!config.favicon) return
+    let link=document.querySelector("link[rel~='icon']")
+    if(!link){
+      link=document.createElement('link')
+      link.rel='icon'
+      document.head.appendChild(link)
+    }
+    link.href=config.favicon
+  },[config.favicon])
 
   useEffect(()=>{
     if(!open) return undefined
