@@ -231,6 +231,27 @@ CREATE TABLE IF NOT EXISTS site_settings (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Review Workspace V2: one scorecard per juror per submission.
+CREATE TABLE IF NOT EXISTS jury_scores (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  submission_id UUID NOT NULL REFERENCES submissions(id) ON DELETE CASCADE,
+  juror_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  quality NUMERIC(4,2) NOT NULL DEFAULT 0 CHECK (quality >= 0 AND quality <= 10),
+  representation NUMERIC(4,2) NOT NULL DEFAULT 0 CHECK (representation >= 0 AND representation <= 10),
+  story NUMERIC(4,2) NOT NULL DEFAULT 0 CHECK (story >= 0 AND story <= 10),
+  creativity NUMERIC(4,2) NOT NULL DEFAULT 0 CHECK (creativity >= 0 AND creativity <= 10),
+  weighted_total NUMERIC(5,2) NOT NULL DEFAULT 0 CHECK (weighted_total >= 0 AND weighted_total <= 100),
+  recommendation VARCHAR(30) NOT NULL DEFAULT 'NONE'
+    CHECK (recommendation IN ('NONE','SHORTLIST','TOP52','RESERVE','AWARD')),
+  conflict_of_interest BOOLEAN NOT NULL DEFAULT FALSE,
+  note TEXT,
+  submitted BOOLEAN NOT NULL DEFAULT FALSE,
+  submitted_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (submission_id, juror_id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_stories_sort ON stories(featured DESC, sort_order ASC, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_tours_sort ON tours(sort_order ASC, number ASC);
 CREATE INDEX IF NOT EXISTS idx_places_sort ON places(sort_order ASC, name ASC);
@@ -238,6 +259,9 @@ CREATE INDEX IF NOT EXISTS idx_site_assets_library ON site_assets(archived, fold
 CREATE INDEX IF NOT EXISTS idx_partners_sort ON partners(published, sort_order ASC, name ASC);
 CREATE INDEX IF NOT EXISTS idx_submissions_demo ON submissions(is_demo, status, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_tour_registrations_demo ON tour_registrations(is_demo, tour_number, status);
+CREATE INDEX IF NOT EXISTS idx_jury_scores_submission ON jury_scores(submission_id, submitted, conflict_of_interest);
+CREATE INDEX IF NOT EXISTS idx_jury_scores_juror ON jury_scores(juror_id, submitted, updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_jury_scores_total ON jury_scores(weighted_total DESC) WHERE submitted = TRUE AND conflict_of_interest = FALSE;
 
 INSERT INTO site_settings (setting_key,value) VALUES
   ('brand','{"siteName":"HALO HOLA","tagline":"52 góc nhìn · 1 Hòa Lạc"}'::jsonb),
