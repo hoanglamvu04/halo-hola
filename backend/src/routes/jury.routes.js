@@ -79,6 +79,7 @@ router.put('/submissions/:id/score', async (req,res,next)=>{
     res.json(await saveJuryScore({submissionId:req.params.id,jurorId:req.user?.id,input:req.body||{}}));
   } catch (error) {
     if (error?.message==='JUROR_ACCOUNT_REQUIRED') return next(new AppError('Jury Mode cần đăng nhập bằng tài khoản cá nhân.',400));
+    if (error?.message==='JURY_ROUND_LOCKED') return next(new AppError('Vòng chấm đã khóa. Không thể sửa hoặc chốt thêm điểm cho tới khi Admin mở lại.',423));
     next(error);
   }
 });
