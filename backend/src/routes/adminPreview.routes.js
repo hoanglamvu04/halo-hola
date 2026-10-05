@@ -25,7 +25,11 @@ router.get('/artworks', async (req, res, next) => {
     }
 
     const limit = Math.max(1, Math.min(100, Number(req.query.limit) || 52));
+    const offset = Math.max(0, Number(req.query.offset) || 0);
     values.push(limit);
+    const limitParam = values.length;
+    values.push(offset);
+    const offsetParam = values.length;
 
     const { rows } = await pool.query(`
       SELECT s.id, LOWER(s.code) AS slug, s.code, s.title,
@@ -34,7 +38,8 @@ router.get('/artworks', async (req, res, next) => {
              s.status, s.is_demo AS "isDemo", s.allow_media_use AS "allowMediaUse",
              s.created_at AS "createdAt",
              media.media_id AS "mediaId",
-             COALESCE(jury.avg_score,0)::float AS "juryScore"
+             COALESCE(jury.avg_score,0)::float AS "juryScore",
+             COUNT(*) OVER()::int AS "totalCount"
       FROM submissions s
       LEFT JOIN LATERAL (
         SELECT m.id AS media_id
@@ -62,7 +67,7 @@ router.get('/artworks', async (req, res, next) => {
         END,
         jury.avg_score DESC NULLS LAST,
         s.created_at DESC
-      LIMIT $${values.length}
+      LIMIT $${limitParam} OFFSET $${offsetParam}
     `, values);
 
     const hydrated = await Promise.all(rows.map(async (row) => {
