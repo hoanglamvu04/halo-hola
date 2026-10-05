@@ -11,6 +11,7 @@ import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.routes.js';
 import submissionsRoutes from './routes/submissions.routes.js';
 import contentRoutes from './routes/content.routes.js';
+import top52Routes from './routes/top52.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import adminPreviewRoutes from './routes/adminPreview.routes.js';
 import juryRoutes from './routes/jury.routes.js';
@@ -46,6 +47,7 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/submissions', submissionsRoutes);
   app.use('/api/tour-registrations', tourRegistrationsRoutes);
+  app.use('/api/top52', top52Routes);
   app.use('/api', siteRoutes);
   app.use('/api', contentRoutes);
   app.use('/api/jury', juryRoutes);
