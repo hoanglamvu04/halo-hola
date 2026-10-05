@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Save, Settings, Globe2, Search, PanelBottom, Palette } from 'lucide-react'
-import { getAdminCmsSettings, updateAdminCmsSetting } from '../services/api.js'
+import { Save, Settings, Search, PanelBottom, Palette, Upload, Image as ImageIcon, X } from 'lucide-react'
+import { getAdminCmsSettings, updateAdminCmsSetting, uploadAdminSiteAsset } from '../services/api.js'
 
 const sections=[
   ['brand','Thương hiệu',Palette],
@@ -8,12 +8,43 @@ const sections=[
   ['footer','Footer & liên hệ',PanelBottom]
 ]
 
+function BrandAssetField({label,field,value,accept='image/*',hint,onChange,onUpload,uploading}){
+  return <div className="settings-brand-asset">
+    <div className="settings-brand-asset-head">
+      <div><b>{label}</b>{hint&&<small>{hint}</small>}</div>
+      {value&&<button type="button" className="settings-brand-clear" onClick={()=>onChange(field,'')} title={'Bỏ '+label}><X/></button>}
+    </div>
+
+    <div className={'settings-brand-preview '+(field==='favicon'?'favicon':'')}>
+      {value?<img src={value} alt={label}/>:<div><ImageIcon/><span>Chưa có {label.toLowerCase()}</span></div>}
+    </div>
+
+    <div className="settings-brand-actions">
+      <label className={'settings-upload-btn '+(uploading?'loading':'')}>
+        <Upload/>
+        <span>{uploading?'Đang tải lên...':'Tải ảnh từ máy'}</span>
+        <input hidden type="file" accept={accept} disabled={uploading} onChange={e=>{
+          const file=e.target.files?.[0]
+          if(file) onUpload(field,file)
+          e.target.value=''
+        }}/>
+      </label>
+    </div>
+
+    <label className="settings-brand-url">
+      <span>Hoặc dùng URL</span>
+      <input value={value||''} onChange={e=>onChange(field,e.target.value)} placeholder="https://..."/>
+    </label>
+  </div>
+}
+
 export default function SiteSettingsManager(){
   const [data,setData]=useState({})
   const [active,setActive]=useState('brand')
   const [draft,setDraft]=useState({})
   const [message,setMessage]=useState('')
   const [saving,setSaving]=useState(false)
+  const [uploading,setUploading]=useState('')
 
   useEffect(()=>{
     getAdminCmsSettings().then(result=>{
@@ -25,12 +56,28 @@ export default function SiteSettingsManager(){
   useEffect(()=>setDraft(data[active]||{}),[active,data])
 
   const patch=(key,value)=>setDraft(v=>({...v,[key]:value}))
+
+  const uploadBrandAsset=async(field,file)=>{
+    if(!file) return
+    setUploading(field)
+    setMessage('')
+    try{
+      const asset=await uploadAdminSiteAsset('brand-'+field,file)
+      patch(field,asset.url)
+      setMessage(`Đã tải ${field==='logo'?'logo':'favicon'} lên Media Library. Bấm “Lưu thay đổi” để áp dụng lên website.`)
+    }catch(err){
+      setMessage(err.message)
+    }finally{
+      setUploading('')
+    }
+  }
+
   const save=async()=>{
     setSaving(true);setMessage('')
     try{
       const result=await updateAdminCmsSetting(active,draft)
       setData(v=>({...v,[active]:result.value}))
-      setMessage('Đã lưu cài đặt.')
+      setMessage('Đã lưu cài đặt và áp dụng lên website.')
     }catch(err){setMessage(err.message)}
     finally{setSaving(false)}
   }
@@ -46,11 +93,31 @@ export default function SiteSettingsManager(){
       <header><div><span className="eyebrow">{active.toUpperCase()}</span><h2>{sections.find(x=>x[0]===active)?.[1]}</h2><p>Cấu hình dùng chung toàn website.</p></div><button className="btn btn-green btn-sm" onClick={save} disabled={saving}><Save/>{saving?'Đang lưu':'Lưu thay đổi'}</button></header>
       {message&&<div className="cms-message">{message}</div>}
 
-      {active==='brand'&&<div className="settings-fields">
+      {active==='brand'&&<div className="settings-fields settings-brand-fields">
         <label>Tên website<input value={draft.siteName||''} onChange={e=>patch('siteName',e.target.value)}/></label>
         <label>Tagline<input value={draft.tagline||''} onChange={e=>patch('tagline',e.target.value)}/></label>
-        <label>Logo URL<input value={draft.logo||''} onChange={e=>patch('logo',e.target.value)}/></label>
-        <label>Favicon URL<input value={draft.favicon||''} onChange={e=>patch('favicon',e.target.value)}/></label>
+
+        <BrandAssetField
+          label="Logo"
+          field="logo"
+          value={draft.logo||''}
+          hint="Khuyên dùng PNG nền trong suốt hoặc SVG ngang."
+          accept="image/*,.svg"
+          onChange={patch}
+          onUpload={uploadBrandAsset}
+          uploading={uploading==='logo'}
+        />
+        <BrandAssetField
+          label="Favicon"
+          field="favicon"
+          value={draft.favicon||''}
+          hint="Khuyên dùng ảnh vuông 512×512, PNG hoặc ICO."
+          accept="image/*,.ico"
+          onChange={patch}
+          onUpload={uploadBrandAsset}
+          uploading={uploading==='favicon'}
+        />
+
         <label>Màu thương hiệu<input value={draft.primaryColor||'#174a38'} onChange={e=>patch('primaryColor',e.target.value)}/></label>
         <label>Màu nhấn<input value={draft.accentColor||'#c75a32'} onChange={e=>patch('accentColor',e.target.value)}/></label>
       </div>}
