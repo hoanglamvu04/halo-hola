@@ -149,6 +149,10 @@ export async function resolveSiteAsset(id) {
     return { type:'redirect', url };
   }
 
+  if(asset.storage_provider==='EXTERNAL' && /^https?:\/\//i.test(asset.object_key || '')){
+    return { type:'redirect', url:asset.object_key };
+  }
+
   return {
     type:'redirect',
     url:`${env.publicBaseUrl.replace(/\/$/,'')}/uploads/${asset.object_key}`
