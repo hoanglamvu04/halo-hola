@@ -1,57 +1,32 @@
+import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, MapPin, Users, BookOpen, Eye, Play,
   Grid2X2, Landmark, Trees, Building2, Image as ImageIcon, Heart
 } from 'lucide-react'
-import { themes, artworks } from '../data/siteData.js'
-
-const themeMeta = {
-  'net-doai': {
-    location: 'Thạch Hòa',
-    intro: 'Khám phá những dấu ấn Xứ Đoài qua những câu chuyện đời sống, làng xóm, kiến trúc, tập tục và con người Hòa Lạc – nơi quá khứ, hiện tại và tương lai cùng giao hòa.'
-  },
-  'sac-muong': {
-    location: 'Hòa Lạc',
-    intro: 'Đi sâu vào đời sống, bản sắc và những lớp văn hóa Mường còn hiện diện trong con người, ký ức và nhịp sống Hòa Lạc hôm nay.'
-  },
-  'kien-truc': {
-    location: 'Khu CNC Hòa Lạc',
-    intro: 'Quan sát cách kiến trúc, cảnh quan và không gian sống đang tạo nên diện mạo mới của Hòa Lạc mà vẫn đối thoại với thiên nhiên và con người.'
-  },
-  'hoa-lac-xanh': {
-    location: 'Tiến Xuân',
-    intro: 'Khám phá những khoảng xanh, mặt nước, triền đồi và cách con người đang gìn giữ một Hòa Lạc phát triển bền vững.'
-  },
-  'nang-hoa-lac': {
-    location: 'Phía Tây Hòa Lạc',
-    intro: 'Theo ánh sáng để kể về Hòa Lạc: nắng sớm, chiều vàng, những triền đồi và khoảnh khắc cảm xúc của vùng đất phía Tây.'
-  },
-  'cau-chuyen': {
-    location: 'Hòa Lạc',
-    intro: 'Những ký ức, lát cắt đời sống và câu chuyện nhỏ giúp Hòa Lạc hiện ra gần gũi, chân thật và nhiều chiều hơn.'
-  },
-  'uoc-mo': {
-    location: 'ĐHQG Hà Nội',
-    intro: 'Nhìn Hòa Lạc qua góc nhìn của học sinh, sinh viên và người trẻ – những người đang học tập, sáng tạo và hình dung về tương lai nơi đây.'
-  },
-  'sac-mau': {
-    location: 'Hòa Lạc',
-    intro: 'Sáu sắc màu đại diện cho thiên nhiên, vật liệu, ánh sáng, tri thức và chuyển động mới của Hòa Lạc.'
-  }
-}
+import { getTheme, getPublicArtworks } from '../services/api.js'
 
 export default function ThemePage(){
   const {slug}=useParams()
-  const theme=themes.find(t=>t.slug===slug)||themes[0]
-  const meta=themeMeta[theme.slug]||themeMeta['net-doai']
+  const [theme,setTheme]=useState(null)
+  const [related,setRelated]=useState([])
+  const [loading,setLoading]=useState(true)
+  const [error,setError]=useState('')
 
-  const related=[...artworks]
-    .sort((a,b)=>{
-      const aMatch=(a.theme||'').toLowerCase().includes(theme.title.split(' ')[0].toLowerCase())?1:0
-      const bMatch=(b.theme||'').toLowerCase().includes(theme.title.split(' ')[0].toLowerCase())?1:0
-      return bMatch-aMatch
-    })
-    .slice(0,5)
+  useEffect(()=>{
+    let alive=true
+    setLoading(true);setError('')
+    getTheme(slug).then(async data=>{
+      if(!alive)return
+      setTheme(data)
+      const works=await getPublicArtworks({theme:data.title,limit:12})
+      if(alive)setRelated(Array.isArray(works)?works:[])
+    }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
+    return()=>{alive=false}
+  },[slug])
+
+  if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
+  if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
 
   return <main className="theme-page-ref">
     <section className="theme-hero-ref">
@@ -59,10 +34,11 @@ export default function ThemePage(){
       <div className="theme-hero-leaf"/>
       <div className="theme-hero-inner">
         <div className="theme-hero-copy">
+          <Link className="story-back-link" to="/chu-de"><ArrowLeft/> 8 chủ đề</Link>
           <div className="theme-kicker"><span>CHỦ ĐỀ {String(theme.id).padStart(2,'0')}</span><i/></div>
           <h1>{theme.title}</h1>
-          <h3>{theme.desc}</h3>
-          <p>{meta.intro}</p>
+          <h3>{theme.description}</h3>
+          <p>{theme.intro}</p>
 
           <div className="theme-hero-actions">
             <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi tác phẩm <ArrowRight size={17}/></Link>
@@ -70,17 +46,16 @@ export default function ThemePage(){
           </div>
 
           <div className="theme-hero-stats">
-            <div><span><Users/></span><b>52+</b><small>Góc nhìn cộng đồng</small></div>
-            <div><span><BookOpen/></span><b>Câu chuyện</b><small>Về một Hòa Lạc rất riêng</small></div>
-            <div><span><Trees/></span><b>Di sản</b><small>Vẫn đang tiếp nối</small></div>
+            <div><span><Users/></span><b>{Number(theme.artworkCount||0)}</b><small>Tác phẩm đã công bố</small></div>
+            <div><span><BookOpen/></span><b>Câu chuyện</b><small>Góc nhìn cộng đồng</small></div>
+            <div><span><Trees/></span><b>Hòa Lạc</b><small>Thiên nhiên · con người · tương lai</small></div>
           </div>
         </div>
 
         <div className="theme-hero-visual">
-          <div className="theme-hero-image-wrap"><img src={theme.image} alt={theme.title}/></div>
-          <div className="theme-location-card"><MapPin/><div><b>{meta.location}</b><small>HÒA LẠC, HÀ NỘI</small></div></div>
+          <div className="theme-hero-image-wrap">{theme.image?<img src={theme.image} alt={theme.title}/>:<div className="theme-card-placeholder"/>}</div>
+          <div className="theme-location-card"><MapPin/><div><b>{theme.locationLabel||'Hòa Lạc'}</b><small>HÒA LẠC, HÀ NỘI</small></div></div>
           <div className="theme-hero-note">Hòa Lạc<br/>hôm nay<br/>và mai sau...<i/></div>
-          <div className="theme-postmark">XỨ ĐOÀI<br/>HÒA LẠC</div>
         </div>
       </div>
     </section>
@@ -109,14 +84,11 @@ export default function ThemePage(){
       <div className="theme-related-inner">
         <header className="theme-related-head">
           <div>
-            <div className="theme-kicker"><span>CÁC BÀI VIẾT &amp; CÂU CHUYỆN KHÁC</span><i/></div>
-            <h2>Tác phẩm liên quan</h2>
-            <p>Những góc nhìn gần với tinh thần của chủ đề này.</p>
+            <div className="theme-kicker"><span>TÁC PHẨM ĐÃ CÔNG BỐ</span><i/></div>
+            <h2>Tác phẩm thuộc {theme.title}</h2>
+            <p>Dữ liệu lấy trực tiếp từ các tác phẩm TOP52/đạt giải đã được công bố trong hệ thống.</p>
           </div>
-          <div className="theme-related-actions">
-            <Link className="theme-view-all" to="/top52">Xem tất cả <ArrowRight/></Link>
-            <div className="theme-related-nav"><button><ArrowLeft/></button><button className="active"><ArrowRight/></button></div>
-          </div>
+          <div className="theme-related-actions"><Link className="theme-view-all" to="/top52">Xem TOP52 <ArrowRight/></Link></div>
         </header>
 
         <div className="theme-filter-row">
@@ -127,21 +99,21 @@ export default function ThemePage(){
           <button><Building2/>Kiến trúc</button>
         </div>
 
-        <div className="theme-related-grid">
-          {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.slug}>
+        {related.length===0?<div className="jw-empty">Chưa có tác phẩm công khai trong chủ đề này.</div>:<div className="theme-related-grid">
+          {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.id||a.slug}>
             <div className="theme-related-media">
-              <img src={a.image} alt={a.title}/>
-              <span className="theme-top52-badge">TOP52</span>
+              {a.image?<img src={a.image} alt={a.title}/>:<div className="theme-card-placeholder"/>}
+              <span className="theme-top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span>
               <span className="theme-related-heart"><Heart/></span>
             </div>
             <div className="theme-related-body">
               <span className="theme-related-category">{a.theme} · {a.location}</span>
-              <h3>{a.title}</h3>
+              <h3>{a.title||a.code}</h3>
               <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author}</b></div>
-              <div className="theme-related-meta"><span><Eye/> {a.views}</span><i/><span><MapPin/> {a.location}</span></div>
+              <div className="theme-related-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {a.location}</span></div>
             </div>
           </Link>)}
-        </div>
+        </div>}
       </div>
     </section>
   </main>
