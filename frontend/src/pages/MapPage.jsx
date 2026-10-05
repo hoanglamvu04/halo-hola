@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, TileLayer, CircleMarker, Popup, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import {
-  MapPin, SlidersHorizontal, ArrowRight, Search, RefreshCw,
-  ExternalLink, Clock3, Phone, Star
+  MapPin, Search, RefreshCw, ExternalLink, Clock3, Phone, Star,
+  X, ChevronRight, LoaderCircle, Image as ImageIcon
 } from 'lucide-react'
-import PageHero from '../components/PageHero.jsx'
 import {
   getHolaCategories,
   getHolaPlacesInBounds,
@@ -12,6 +11,7 @@ import {
   getHolaPlaceById,
   normalizeHolaPlace
 } from '../services/holaMapsApi.js'
+import '../styles/hola-map-page.css'
 
 const DEFAULT_CENTER = [21.02, 105.51]
 const DEFAULT_BOUNDS = { north: 21.145, south: 20.885, east: 105.665, west: 105.325 }
@@ -34,6 +34,16 @@ function ViewportWatcher({ onChange }) {
   return null
 }
 
+function MapFocus({ place }) {
+  const map = useMap()
+  useEffect(() => {
+    if (!place?.position) return
+    const targetZoom = Math.max(map.getZoom(), 14)
+    map.flyTo(place.position, targetZoom, { duration: 0.55 })
+  }, [map, place?.id])
+  return null
+}
+
 export default function MapPage(){
   const [categories,setCategories]=useState([])
   const [mapPlaces,setMapPlaces]=useState([])
@@ -51,11 +61,9 @@ export default function MapPage(){
     const normalized=(items||[]).map(normalizeHolaPlace).filter(place=>place?.position)
     setMapPlaces(normalized)
     setActive(current=>{
-      if(current){
-        const refreshed=normalized.find(place=>place.id===current.id)
-        if(refreshed) return {...current,...refreshed}
-      }
-      return normalized[0]||null
+      if(!current) return null
+      const refreshed=normalized.find(place=>place.id===current.id)
+      return refreshed?{...current,...refreshed}:null
     })
   },[])
 
@@ -112,6 +120,7 @@ export default function MapPage(){
     const q=query.trim()
     if(!q){
       setFilter('all')
+      setActive(null)
       await loadBounds(currentBounds.current)
       return
     }
@@ -120,6 +129,8 @@ export default function MapPage(){
     requestController.current=controller
     setLoading(true)
     setError('')
+    setFilter('all')
+    setActive(null)
     try{
       const result=await searchHolaPlaces(q,{limit:50},{signal:controller.signal})
       applyPlaces(result.items)
@@ -128,6 +139,13 @@ export default function MapPage(){
     }finally{
       if(requestController.current===controller) setLoading(false)
     }
+  }
+
+  const resetSearch=async()=>{
+    setQuery('')
+    setFilter('all')
+    setActive(null)
+    await loadBounds(currentBounds.current)
   }
 
   const onViewportChange=useCallback((bounds)=>{
@@ -147,107 +165,147 @@ export default function MapPage(){
     return counts
   },[mapPlaces])
 
-  const heroImage=mapPlaces.find(place=>place.image)?.image||''
   const showingSearch=Boolean(query.trim())
+  const selectedImage=active?.detailImage||active?.image||active?.thumbnail||''
 
-  return <main>
-    <PageHero
-      eyebrow="BẢN ĐỒ TRẢI NGHIỆM HÒA LẠC"
-      title="HOLA"
-      accent="Map"
-      desc="Khám phá địa điểm Hòa Lạc bằng dữ liệu trực tiếp từ Hola Maps Developer API v1."
-      image={heroImage}
-    />
+  const chooseFilter=(slug)=>{
+    setFilter(slug)
+    if(active && slug!=='all' && active.categorySlug!==slug) setActive(null)
+  }
 
-    <section className="container section map-page-grid">
-      <aside className="map-sidebar">
-        <h3><SlidersHorizontal/> Khám phá bản đồ</h3>
+  return <main className="hm-page">
+    <section className="hm-shell" aria-label="HOLA Map">
+      <aside className="hm-results-panel">
+        <div className="hm-panel-head">
+          <div className="hm-panel-brand">
+            <div>
+              <div className="hm-panel-kicker"><MapPin/> HOLA MAP</div>
+              <h1 className="hm-panel-title">Khám phá Hòa Lạc</h1>
+            </div>
+            <span className="hm-panel-count">{visible.length}</span>
+          </div>
 
-        <form className="map-search" onSubmit={submitSearch}>
-          <Search size={17}/>
-          <input
-            value={query}
-            onChange={event=>setQuery(event.target.value)}
-            placeholder="Tìm địa điểm Hòa Lạc..."
-            aria-label="Tìm địa điểm trên Hola Maps"
-          />
-          <button type="submit" aria-label="Tìm kiếm"><ArrowRight size={16}/></button>
-        </form>
+          <form className="hm-search" onSubmit={submitSearch}>
+            <Search aria-hidden="true"/>
+            <input
+              value={query}
+              onChange={event=>setQuery(event.target.value)}
+              placeholder="Tìm địa điểm, cafe, homestay..."
+              aria-label="Tìm địa điểm trên Hola Maps"
+            />
+            <button type="submit" aria-label="Tìm kiếm"><Search size={16}/></button>
+          </form>
 
-        {showingSearch&&<button className="map-reset" onClick={()=>{setQuery('');setFilter('all');loadBounds(currentBounds.current)}}>
-          <RefreshCw size={16}/> Trở lại khu vực bản đồ
-        </button>}
-
-        <button className={filter==='all'?'active':''} onClick={()=>setFilter('all')}>
-          <MapPin size={18}/><span>Tất cả</span><small>{mapPlaces.length}</small>
-        </button>
-        {categories.map(category=><button
-          className={filter===category.slug?'active':''}
-          key={category.id||category.slug}
-          onClick={()=>setFilter(category.slug)}
-        >
-          <MapPin size={18}/><span>{category.name}</span><small>{categoryCounts[category.slug]||0}</small>
-        </button>)}
-
-        <hr/>
-        <h4>Nguồn dữ liệu</h4>
-        <div className="chip-wrap">
-          <span>Hola Maps API v1</span>
-          <span>OPEN</span>
-          <span>{mapPlaces.length} địa điểm</span>
+          {showingSearch&&<button className="hm-search-reset" onClick={resetSearch} type="button">
+            <RefreshCw size={14}/> Trở lại khu vực bản đồ
+          </button>}
         </div>
-        {loading&&<small className="map-api-status">Đang cập nhật dữ liệu theo khu vực bản đồ...</small>}
+
+        <div className="hm-results-meta">
+          <b>{showingSearch?'Kết quả tìm kiếm':'Địa điểm trong khu vực'}</b>
+          <small>{loading?'Đang cập nhật…':`${visible.length} địa điểm`}</small>
+        </div>
+
+        <div className="hm-result-list">
+          {!loading&&visible.length===0&&<div className="hm-empty-panel">
+            Không có địa điểm phù hợp trong khu vực hoặc bộ lọc hiện tại.
+          </div>}
+
+          {visible.map(place=><button
+            type="button"
+            className={`hm-result-row ${active?.id===place.id?'active':''}`}
+            onClick={()=>loadDetail(place)}
+            key={place.id}
+          >
+            <span className="hm-result-thumb">
+              {place.thumbnail?<img src={place.thumbnail} alt="" loading="lazy"/>:<ImageIcon size={20}/>} 
+            </span>
+            <span className="hm-result-copy">
+              <strong>{place.name}</strong>
+              <span>{place.category||'Địa điểm'}</span>
+              <small>{place.address||'Hòa Lạc'}</small>
+            </span>
+            <ChevronRight/>
+          </button>)}
+        </div>
       </aside>
 
-      <div className="leaflet-shell">
-        <MapContainer center={DEFAULT_CENTER} zoom={11} scrollWheelZoom={false} className="leaflet-map">
+      <div className="hm-map-stage">
+        <div className="hm-category-strip" aria-label="Lọc theo danh mục">
+          <button type="button" className={`hm-category-chip ${filter==='all'?'active':''}`} onClick={()=>chooseFilter('all')}>
+            <MapPin/><span>Tất cả</span><small>{mapPlaces.length}</small>
+          </button>
+          {categories.map(category=><button
+            type="button"
+            className={`hm-category-chip ${filter===category.slug?'active':''}`}
+            key={category.id||category.slug}
+            onClick={()=>chooseFilter(category.slug)}
+          >
+            <MapPin/><span>{category.name}</span><small>{categoryCounts[category.slug]||0}</small>
+          </button>)}
+        </div>
+
+        <MapContainer center={DEFAULT_CENTER} zoom={11} scrollWheelZoom className="hm-map">
           <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
           <ViewportWatcher onChange={onViewportChange}/>
-          {visible.map(place=><CircleMarker
-            key={place.id}
-            center={place.position}
-            radius={12}
-            pathOptions={{color:'#fff',weight:3,fillColor:'#c45b32',fillOpacity:1}}
-            eventHandlers={{click:()=>loadDetail(place)}}
-          >
-            <Popup><b>{place.name}</b><br/>{place.category}<br/><small>{place.address}</small></Popup>
-          </CircleMarker>)}
+          <MapFocus place={active}/>
+          {visible.map(place=>{
+            const selected=active?.id===place.id
+            return <CircleMarker
+              key={place.id}
+              center={place.position}
+              radius={selected?10:7.5}
+              pathOptions={{
+                color:'#fff',
+                weight:selected?3.5:2.5,
+                fillColor:selected?'#173d2d':'#c45b32',
+                fillOpacity:1
+              }}
+              eventHandlers={{click:()=>loadDetail(place)}}
+            >
+              <Popup className="hm-marker-popup">
+                <b>{place.name}</b>
+                {place.category}<br/>
+                <small>{place.address}</small>
+              </Popup>
+            </CircleMarker>
+          })}
         </MapContainer>
-      </div>
 
-      <aside className="map-detail">
-        {active?<>
-          {active.detailImage?<img src={active.detailImage} alt={active.name}/>:<div className="theme-card-placeholder"/>}
-          <span className="eyebrow">{active.category||'ĐỊA ĐIỂM'} · HOLA MAPS</span>
-          <h2>{active.name}</h2>
-          {active.address&&<div className="chip-wrap"><span><MapPin size={13}/> {active.address}</span></div>}
-          <p>{active.description||active.address||'Địa điểm được cung cấp bởi Hola Maps.'}</p>
-          <div className="map-place-facts">
-            {active.openingHours&&<span><Clock3 size={15}/> {active.openingHours}</span>}
-            {active.contact?.phone&&<span><Phone size={15}/> {active.contact.phone}</span>}
-            {Number(active.rating?.count||0)>0&&<span><Star size={15}/> {active.rating.average} ({active.rating.count})</span>}
+        {loading&&<div className="hm-loading-pill"><LoaderCircle/> Đang tải địa điểm trong khu vực này…</div>}
+        {error&&<div className="hm-error-pill">{error}</div>}
+
+        <div className="hm-map-source">Dữ liệu trực tiếp từ <b>Hola Maps API v1</b></div>
+
+        {active&&<aside className="hm-detail-card" aria-label={`Chi tiết ${active.name}`}>
+          <button type="button" className="hm-detail-close" onClick={()=>setActive(null)} aria-label="Đóng chi tiết">
+            <X size={17}/>
+          </button>
+
+          <div className="hm-detail-image">
+            {selectedImage?<img src={selectedImage} alt={active.name}/>:<ImageIcon size={26}/>} 
           </div>
-          {active.links?.holaMaps&&<a className="btn btn-green" href={active.links.holaMaps} target="_blank" rel="noreferrer">
-            {detailLoading?'Đang tải chi tiết...':'Xem trên Hola Maps'} <ExternalLink size={16}/>
-          </a>}
-        </>:<div className="jw-empty">Chọn một địa điểm trên bản đồ để xem thông tin.</div>}
-      </aside>
-    </section>
 
-    {error&&<div className="container"><div className="form-error">{error}</div></div>}
-    {!loading&&!error&&visible.length===0&&<div className="container"><div className="jw-empty">Không có địa điểm phù hợp trong khu vực hoặc bộ lọc hiện tại.</div></div>}
+          <div className="hm-detail-body">
+            <div className="hm-detail-eyebrow">{active.category||'Địa điểm'} · HOLA MAPS</div>
+            <h2>{active.name}</h2>
 
-    <section className="container section">
-      <h2>{showingSearch?'Kết quả tìm kiếm':'Những địa điểm trong khu vực đang xem'}</h2>
-      <div className="place-grid">
-        {visible.map(place=><button className="place-card" onClick={()=>loadDetail(place)} key={place.id}>
-          {place.thumbnail?<img src={place.thumbnail} alt={place.name}/>:<div className="theme-card-placeholder"/>}
-          <div>
-            <h3>{place.name}</h3>
-            <span>{place.category}{place.address?' · '+place.address:''}</span>
-            <p>{place.description||place.address||'Dữ liệu địa điểm từ Hola Maps.'}</p>
+            {active.address&&<div className="hm-detail-address"><MapPin/> <span>{active.address}</span></div>}
+            {active.description&&<p className="hm-detail-desc">{active.description}</p>}
+
+            <div className="hm-detail-facts">
+              {active.openingHours&&<span><Clock3/> {active.openingHours}</span>}
+              {active.contact?.phone&&<span><Phone/> {active.contact.phone}</span>}
+              {Number(active.rating?.count||0)>0&&<span><Star/> {active.rating.average} ({active.rating.count} đánh giá)</span>}
+            </div>
+
+            <div className="hm-detail-actions">
+              {active.links?.holaMaps&&<a className="btn btn-green" href={active.links.holaMaps} target="_blank" rel="noreferrer">
+                {detailLoading?'Đang tải chi tiết...':'Mở trên Hola Maps'} <ExternalLink size={16}/>
+              </a>}
+            </div>
           </div>
-        </button>)}
+        </aside>}
       </div>
     </section>
   </main>
