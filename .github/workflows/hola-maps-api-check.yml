@@ -26,10 +26,9 @@ jobs:
               --connect-timeout 10 --max-time 30 \
               -D /tmp/hola-headers.txt \
               -H 'Accept: application/json' \
-              -H "Origin: ${ORIGIN}" \
               "${BASE}${path}" \
               -o /tmp/hola-body.json
-            grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+            grep -Ei '^(HTTP/|content-type:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
             jq -c "${filter}" /tmp/hola-body.json || cat /tmp/hola-body.json
             echo
           }
@@ -47,8 +46,21 @@ jobs:
             --connect-timeout 10 --max-time 30 \
             -D /tmp/hola-headers.txt \
             -H 'Accept: application/geo+json, application/json' \
-            -H "Origin: ${ORIGIN}" \
             "${BASE}/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325" \
             -o /tmp/hola-geo.json
-          grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+          grep -Ei '^(HTTP/|content-type:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
           jq -c '{type,featureCount:(.features|length),firstFeature:.features[0]}' /tmp/hola-geo.json
+
+          echo '===== CORS GET /meta from production origin ====='
+          STATUS=$(curl --silent --show-error \
+            --connect-timeout 10 --max-time 30 \
+            -D /tmp/hola-cors-headers.txt \
+            -H 'Accept: application/json' \
+            -H "Origin: ${ORIGIN}" \
+            -o /tmp/hola-cors-body.txt \
+            -w '%{http_code}' \
+            "${BASE}/meta")
+          echo "status=${STATUS}"
+          grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-cors-headers.txt || true
+          cat /tmp/hola-cors-body.txt
+          echo
