@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { colorStories, img } from '../data/siteData.js'
-import { getCampaignStats, getHomepageContent, getThemes, getTours, getPublicArtworks } from '../services/api.js'
+import { img } from '../data/siteData.js'
+import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPlaces, getPublicArtworks } from '../services/api.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
 
 export default function HomePage() {
   const [stats,setStats]=useState({submissions:0,creators:0,locations:0,top52:0})
   const [homepage,setHomepage]=useState({})
   const [themes,setThemes]=useState([])
+  const [colors,setColors]=useState([])
   const [tours,setTours]=useState([])
+  const [places,setPlaces]=useState([])
   const [artworks,setArtworks]=useState([])
 
   useEffect(()=>{
     getCampaignStats().then(setStats).catch(()=>{})
     getHomepageContent().then(setHomepage).catch(()=>{})
     getThemes().then(data=>setThemes(Array.isArray(data)?data:[])).catch(()=>{})
+    getColors().then(data=>setColors(Array.isArray(data)?data:[])).catch(()=>{})
     getTours().then(data=>setTours((data||[]).map(normalizeTour))).catch(()=>{})
+    getPlaces().then(data=>setPlaces(Array.isArray(data)?data:[])).catch(()=>{})
     getPublicArtworks({limit:5}).then(data=>setArtworks(Array.isArray(data)?data:[])).catch(()=>{})
   },[])
 
@@ -63,6 +67,7 @@ export default function HomePage() {
   })
 
   const colorImages=[img.village,img.sunset,img.green,img.architecture,img.village,img.lake]
+  const mapPreview=places[0]||null
 
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
@@ -296,16 +301,16 @@ export default function HomePage() {
 
         <div className="color-v3-story">
           <span className="color-v3-script">Hòa Lạc</span>
-          <div className="color-v3-window color-v3-window-a"><img src={img.hills} alt="Phong cảnh Hòa Lạc"/></div>
-          <div className="color-v3-window color-v3-window-b"><img src={img.lake} alt="Không gian Hòa Lạc"/></div>
+          <div className="color-v3-window color-v3-window-a"><img src={colors[0]?.image||themes[0]?.image||img.hills} alt="Phong cảnh Hòa Lạc"/></div>
+          <div className="color-v3-window color-v3-window-b"><img src={colors[1]?.image||themes[4]?.image||img.lake} alt="Không gian Hòa Lạc"/></div>
           <div className="color-v3-note"><MapPin/><span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span><i/></div>
         </div>
       </div>
 
       <div className="color-v3-cards">
-        {colorStories.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.name}>
+        {colors.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.id||c.slug}>
           <div className="color-v3-card-head"><span className="color-v3-dot" style={{background:c.color}}/><div><b>{c.name}</b><small>{c.story}</small></div><span className="color-v3-arrow"><ArrowRight/></span></div>
-          <img src={colorImages[index]} alt={c.name}/>
+          <img src={c.image||colorImages[index%colorImages.length]} alt={c.name}/>
         </Link>)}
       </div>
     </section>}
@@ -337,7 +342,7 @@ export default function HomePage() {
     </section>}
 
     {sectionOn('map')&&<section className="map-teaser paper-bg">
-      <div className="container map-teaser-grid"><div><span className="eyebrow">{mapCopy.eyebrow}</span><h2>{mapCopy.title}</h2><p>{mapCopy.description}</p><Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link></div><div className="fake-map"><div className="map-road r1"/><div className="map-road r2"/><span className="pin p1"><MapPin/></span><span className="pin p2"><MapPin/></span><span className="pin p3"><MapPin/></span><span className="map-label l1">Hồ Đồng Mô</span><span className="map-label l2">Khu CNC Hòa Lạc</span><span className="map-label l3">ĐHQG Hà Nội</span></div><div className="place-preview"><img src={img.lake}/><h3>Hồ Đồng Mô</h3><small>Thiên nhiên · Trải nghiệm</small><p>Một khoảng xanh rộng lớn, điểm hẹn cho những hành trình khám phá Hòa Lạc.</p></div></div>
+      <div className="container map-teaser-grid"><div><span className="eyebrow">{mapCopy.eyebrow}</span><h2>{mapCopy.title}</h2><p>{mapCopy.description}</p><Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link></div><div className="fake-map"><div className="map-road r1"/><div className="map-road r2"/>{places.slice(0,3).map((p,index)=><span className={'pin p'+(index+1)} key={p.id}><MapPin/></span>)}{places.slice(0,3).map((p,index)=><span className={'map-label l'+(index+1)} key={'label-'+p.id}>{p.name}</span>)}</div>{mapPreview?<div className="place-preview">{mapPreview.image?<img src={mapPreview.image} alt={mapPreview.name}/>:<div className="theme-card-placeholder"/>}<h3>{mapPreview.name}</h3><small>{mapPreview.category}</small><p>{mapPreview.description}</p></div>:<div className="place-preview"><div className="theme-card-placeholder"/><h3>HOLA Map</h3><small>Đang cập nhật địa điểm</small><p>Dữ liệu địa điểm sẽ xuất hiện khi được xuất bản từ hệ thống.</p></div>}</div>
     </section>}
 
     {sectionOn('stories')&&<section className="top52-showcase">
@@ -351,7 +356,7 @@ export default function HomePage() {
         </header>
 
         <div className="top52-card-grid">
-          {artworks.slice(0,5).map((a,index)=><Link to={'/tac-pham/'+a.slug} className="top52-card" key={a.id||a.slug}>
+          {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="top52-card" key={a.id||a.slug}>
             <div className="top52-card-media">{a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}<span className="top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span><span className="top52-heart"><Heart/></span></div>
             <div className="top52-card-body">
               <span className="top52-category">{a.theme} · {a.location}</span>
