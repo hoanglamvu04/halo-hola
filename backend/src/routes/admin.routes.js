@@ -19,6 +19,12 @@ import {
   updateJuryNote,
   getMediaDownloadUrl
 } from '../services/submission.service.js';
+import {
+  listJurySubmissions,
+  getJuryScorecard,
+  saveJuryScore,
+  getJuryStats
+} from '../services/jury.service.js';
 
 const router = Router();
 router.use(authenticateAdmin);
@@ -225,6 +231,59 @@ router.patch('/submissions/:id/jury-note', async (req, res, next) => {
       return next(new AppError('Ghi chú không hợp lệ.', 400, error.issues));
     }
     return next(error);
+  }
+});
+
+// Review Workspace V2 -------------------------------------------------------
+router.get('/jury/stats', async (req,res,next)=>{
+  try{
+    res.json(await getJuryStats(req.user?.id));
+  }catch(error){next(error);}
+});
+
+router.get('/jury/submissions', async (req,res,next)=>{
+  try{
+    res.json(await listJurySubmissions({
+      jurorId:req.user?.id,
+      filters:{
+        q:req.query.q,
+        status:req.query.status,
+        type:req.query.type,
+        theme:req.query.theme,
+        color:req.query.color,
+        location:req.query.location,
+        review:req.query.review,
+        recommendation:req.query.recommendation,
+        rights:req.query.rights,
+        hasMedia:req.query.hasMedia,
+        minScore:req.query.minScore,
+        maxScore:req.query.maxScore,
+        sort:req.query.sort
+      }
+    }));
+  }catch(error){next(error);}
+});
+
+router.get('/jury/submissions/:id/score', async (req,res,next)=>{
+  try{
+    res.json(await getJuryScorecard(req.params.id,req.user?.id));
+  }catch(error){next(error);}
+});
+
+router.put('/jury/submissions/:id/score', async (req,res,next)=>{
+  try{
+    const fields=['quality','representation','story','creativity'];
+    for(const field of fields){
+      const value=Number(req.body?.[field]);
+      if(!Number.isFinite(value)||value<0||value>10){
+        throw new AppError(`${field} phải nằm trong khoảng 0–10.`,400);
+      }
+    }
+    const saved=await saveJuryScore({submissionId:req.params.id,jurorId:req.user?.id,input:req.body||{}});
+    res.json(saved);
+  }catch(error){
+    if(error?.message==='JUROR_ACCOUNT_REQUIRED') return next(new AppError('Jury Mode cần đăng nhập bằng tài khoản quản trị, không dùng API key.',400));
+    next(error);
   }
 });
 
