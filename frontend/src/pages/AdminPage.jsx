@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3
 } from 'lucide-react'
 import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
@@ -11,6 +11,7 @@ import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
 import JuryBoardManager from '../components/JuryBoardManager.jsx'
+import JuryResultsManager from '../components/JuryResultsManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -24,6 +25,7 @@ const nav=[
   {label:'Tác giả',icon:Users,path:'/admin/authors'},
   {label:'TOP52',icon:Images,path:'/admin/top52'},
   {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
+  {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'},
   {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
   {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
   {label:'Stories',icon:BookOpen,path:'/admin/stories'},
@@ -168,6 +170,7 @@ export default function AdminPage(){
      active==='Đối tác'?<AdminContentManager type="partners"/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Hội đồng BGK'?<JuryBoardManager/>:
+     active==='Kết quả BGK'?<JuryResultsManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
        <AdminContentManager type="tours"/>
        <div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>
