@@ -1,0 +1,42 @@
+name: Hola Maps API check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hola-maps-api-check.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public API
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://maps.dothihoalac.vn/api/public/v1'
+          for TARGET in \
+            '/meta' \
+            '/categories' \
+            '/places?limit=2' \
+            '/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325'; do
+            echo "===== ${TARGET} ====="
+            curl --fail-with-body --silent --show-error \
+              --connect-timeout 10 --max-time 30 \
+              -D /tmp/hola-headers.txt \
+              -H 'Accept: application/json' \
+              "${BASE}${TARGET}" \
+              -o /tmp/hola-body.txt
+            grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+            python - <<'PY'
+import json
+from pathlib import Path
+text=Path('/tmp/hola-body.txt').read_text(errors='replace')
+try:
+    data=json.loads(text)
+    print(json.dumps(data, ensure_ascii=False, indent=2)[:12000])
+except Exception:
+    print(text[:12000])
+PY
+          done
