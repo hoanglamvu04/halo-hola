@@ -16,24 +16,39 @@ jobs:
         run: |
           set -euo pipefail
           BASE='https://maps.dothihoalac.vn/api/public/v1'
-          for TARGET in \
-            '/meta' \
-            '/categories' \
-            '/places?limit=2' \
-            '/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325'; do
-            echo "===== ${TARGET} ====="
+          ORIGIN='https://halohola.xspace.vn'
+
+          check_json() {
+            local path="$1"
+            local filter="$2"
+            echo "===== ${path} ====="
             curl --fail-with-body --silent --show-error \
               --connect-timeout 10 --max-time 30 \
               -D /tmp/hola-headers.txt \
               -H 'Accept: application/json' \
-              "${BASE}${TARGET}" \
-              -o /tmp/hola-body.txt
-            grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
-            if command -v jq >/dev/null 2>&1; then
-              jq . /tmp/hola-body.txt | head -c 12000 || cat /tmp/hola-body.txt | head -c 12000
-              echo
-            else
-              head -c 12000 /tmp/hola-body.txt
-              echo
-            fi
-          done
+              -H "Origin: ${ORIGIN}" \
+              "${BASE}${path}" \
+              -o /tmp/hola-body.json
+            grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+            jq -c "${filter}" /tmp/hola-body.json || cat /tmp/hola-body.json
+            echo
+          }
+
+          check_json '/meta' '.data'
+          check_json '/categories' '{meta:.meta,items:.data.items[0:3]}'
+          check_json '/places?limit=2' '{meta:.meta,items:.data.items}'
+          check_json '/places/bounds?north=21.145&south=20.885&east=105.665&west=105.325&limit=2' '{meta:.meta,items:(.data.items // .data)[0:2]}'
+          check_json '/places/nearby?lat=21.0183736&lng=105.5476382&radius=5000&limit=2' '{meta:.meta,items:(.data.items // .data)[0:2]}'
+          check_json '/places/645' '.data'
+          check_json '/places/slug/lach-tach-cafe-photobooth' '.data'
+
+          echo '===== /places/geojson ====='
+          curl --fail-with-body --silent --show-error \
+            --connect-timeout 10 --max-time 30 \
+            -D /tmp/hola-headers.txt \
+            -H 'Accept: application/geo+json, application/json' \
+            -H "Origin: ${ORIGIN}" \
+            "${BASE}/places/geojson?north=21.145&south=20.885&east=105.665&west=105.325" \
+            -o /tmp/hola-geo.json
+          grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|access-control-allow-credentials:|vary:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
+          jq -c '{type,featureCount:(.features|length),firstFeature:.features[0]}' /tmp/hola-geo.json
