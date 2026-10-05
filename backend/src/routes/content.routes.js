@@ -14,6 +14,104 @@ router.get('/places', async (_req, res, next) => {
   }
 });
 
+router.get('/themes', async (_req,res,next)=>{
+  try{
+    const {rows}=await pool.query(`
+      SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
+             t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
+             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE)::int AS "artworkCount"
+      FROM themes t
+      LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
+      WHERE t.published=TRUE
+      GROUP BY t.id
+      ORDER BY t.sort_order ASC,t.id ASC
+    `);
+    res.json(rows);
+  }catch(error){next(error);}
+});
+
+router.get('/themes/:slug', async (req,res,next)=>{
+  try{
+    const {rows}=await pool.query(`
+      SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
+             t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
+             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE)::int AS "artworkCount"
+      FROM themes t
+      LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
+      WHERE t.published=TRUE AND t.slug=$1
+      GROUP BY t.id
+      LIMIT 1
+    `,[req.params.slug]);
+    if(!rows[0]) return res.status(404).json({error:'Không tìm thấy chủ đề.'});
+    res.json(rows[0]);
+  }catch(error){next(error);}
+});
+
+router.get('/artworks', async (req,res,next)=>{
+  try{
+    const values=[];
+    const conditions=["s.status IN ('TOP52','AWARDED')","s.is_demo=FALSE","s.allow_media_use=TRUE"];
+    if(req.query.theme){values.push(String(req.query.theme));conditions.push(`s.theme=$${values.length}`);}
+    if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
+    if(req.query.color){values.push(String(req.query.color));conditions.push(`s.color=$${values.length}`);}
+    const limit=Math.max(1,Math.min(100,Number(req.query.limit)||52));
+    values.push(limit);
+    const {rows}=await pool.query(`
+      SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
+             COALESCE(NULLIF(s.display_name,''),s.name) AS author,
+             s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
+             s.status,s.created_at AS "createdAt",
+             COALESCE(media.media,'[]'::json) AS media,
+             media.image,
+             COALESCE(jury.avg_score,0)::float AS "juryScore"
+      FROM submissions s
+      LEFT JOIN LATERAL (
+        SELECT json_agg(json_build_object('id',m.id,'url',m.url,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
+               (ARRAY_AGG(m.url ORDER BY m.created_at ASC))[1] AS image
+        FROM submission_media m WHERE m.submission_id=s.id
+      ) media ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
+        FROM jury_scores js
+        WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
+      ) jury ON TRUE
+      WHERE ${conditions.join(' AND ')}
+      ORDER BY CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,jury.avg_score DESC NULLS LAST,s.created_at ASC
+      LIMIT $${values.length}
+    `,values);
+    res.json(rows);
+  }catch(error){next(error);}
+});
+
+router.get('/artworks/:slug', async (req,res,next)=>{
+  try{
+    const {rows}=await pool.query(`
+      SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
+             COALESCE(NULLIF(s.display_name,''),s.name) AS author,
+             s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
+             s.status,s.created_at AS "createdAt",
+             COALESCE(media.media,'[]'::json) AS media,
+             media.image,
+             COALESCE(jury.avg_score,0)::float AS "juryScore"
+      FROM submissions s
+      LEFT JOIN LATERAL (
+        SELECT json_agg(json_build_object('id',m.id,'url',m.url,'mimeType',m.mime_type,'originalName',m.original_name) ORDER BY m.created_at ASC) AS media,
+               (ARRAY_AGG(m.url ORDER BY m.created_at ASC))[1] AS image
+        FROM submission_media m WHERE m.submission_id=s.id
+      ) media ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
+        FROM jury_scores js
+        WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
+      ) jury ON TRUE
+      WHERE LOWER(s.code)=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+      LIMIT 1
+    `,[String(req.params.slug||'').toLowerCase()]);
+    if(!rows[0]) return res.status(404).json({error:'Không tìm thấy tác phẩm công khai.'});
+    res.json(rows[0]);
+  }catch(error){next(error);}
+});
+
 router.get('/tours', async (_req, res, next) => {
   try {
     const { rows } = await pool.query(
