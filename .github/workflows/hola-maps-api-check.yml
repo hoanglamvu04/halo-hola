@@ -29,14 +29,11 @@ jobs:
               "${BASE}${TARGET}" \
               -o /tmp/hola-body.txt
             grep -Ei '^(HTTP/|content-type:|access-control-allow-origin:|x-ratelimit|retry-after:)' /tmp/hola-headers.txt || true
-            python - <<'PY'
-import json
-from pathlib import Path
-text=Path('/tmp/hola-body.txt').read_text(errors='replace')
-try:
-    data=json.loads(text)
-    print(json.dumps(data, ensure_ascii=False, indent=2)[:12000])
-except Exception:
-    print(text[:12000])
-PY
+            if command -v jq >/dev/null 2>&1; then
+              jq . /tmp/hola-body.txt | head -c 12000 || cat /tmp/hola-body.txt | head -c 12000
+              echo
+            else
+              head -c 12000 /tmp/hola-body.txt
+              echo
+            fi
           done
