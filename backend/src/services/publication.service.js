@@ -9,13 +9,19 @@ function effectivePublicSql(alias='s'){
   return `(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
 }
 function eligibility(item){
+  const isDemo=item.is_demo??item.isDemo??false;
+  const allowMediaUse=item.allow_media_use??item.allowMediaUse??false;
+  const rightsConfirmed=item.rights_confirmed??item.rightsConfirmed??false;
+  const imageConsentConfirmed=item.image_consent_confirmed??item.imageConsentConfirmed??false;
+  const isMinor=item.is_minor??item.isMinor??false;
+  const guardianConsent=item.guardian_consent??item.guardianConsent??false;
   const reasons=[];
   if(!['TOP52','AWARDED'].includes(item.status)) reasons.push('Tác phẩm chưa ở trạng thái TOP52 hoặc Đạt giải.');
-  if(item.is_demo) reasons.push('Dữ liệu mẫu không được công bố public.');
-  if(!item.allow_media_use) reasons.push('Tác giả chưa cho phép sử dụng media.');
-  if(!item.rights_confirmed) reasons.push('Chưa xác nhận quyền tác giả.');
-  if(!item.image_consent_confirmed) reasons.push('Chưa xác nhận quyền hình ảnh.');
-  if(item.is_minor&&!item.guardian_consent) reasons.push('Tác giả vị thành niên chưa có xác nhận người giám hộ.');
+  if(isDemo) reasons.push('Dữ liệu mẫu không được công bố public.');
+  if(!allowMediaUse) reasons.push('Tác giả chưa cho phép sử dụng media.');
+  if(!rightsConfirmed) reasons.push('Chưa xác nhận quyền tác giả.');
+  if(!imageConsentConfirmed) reasons.push('Chưa xác nhận quyền hình ảnh.');
+  if(isMinor&&!guardianConsent) reasons.push('Tác giả vị thành niên chưa có xác nhận người giám hộ.');
   return {eligible:reasons.length===0,reasons};
 }
 function mapRow(row){
@@ -85,11 +91,7 @@ async function applyAction(client,{submissionId,action,scheduledAt,reason,actorI
   const {rows}=await client.query(`SELECT * FROM submissions WHERE id=$1 FOR UPDATE`,[submissionId]);
   const item=rows[0];
   if(!item) throw new AppError('Không tìm thấy tác phẩm.',404);
-  const gate=eligibility({
-    status:item.status,is_demo:item.is_demo,allow_media_use:item.allow_media_use,
-    rights_confirmed:item.rights_confirmed,image_consent_confirmed:item.image_consent_confirmed,
-    is_minor:item.is_minor,guardian_consent:item.guardian_consent
-  });
+  const gate=eligibility(item);
   if(action!=='HIDE'&&!gate.eligible) throw new AppError(gate.reasons.join(' '),400);
 
   let state='HIDDEN';let schedule=null;let publishedAt=item.published_at;
