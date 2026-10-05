@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight, Search, SlidersHorizontal } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { getThemes } from '../services/api.js'
+import './ThemesPage.css'
 
 export default function ThemesPage(){
   const [themes,setThemes]=useState([])
