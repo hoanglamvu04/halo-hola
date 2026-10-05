@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2
 } from 'lucide-react'
 import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
@@ -12,6 +12,7 @@ import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
 import JuryBoardManager from '../components/JuryBoardManager.jsx'
 import JuryResultsManager from '../components/JuryResultsManager.jsx'
+import PublicationManager from '../components/PublicationManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -24,6 +25,7 @@ const nav=[
   {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
   {label:'Tác giả',icon:Users,path:'/admin/authors'},
   {label:'TOP52',icon:Images,path:'/admin/top52'},
+  {label:'Công bố',icon:Globe2,path:'/admin/publication'},
   {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
   {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'},
   {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
@@ -171,6 +173,7 @@ export default function AdminPage(){
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Hội đồng BGK'?<JuryBoardManager/>:
      active==='Kết quả BGK'?<JuryResultsManager/>:
+     active==='Công bố'?<PublicationManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
        <AdminContentManager type="tours"/>
        <div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>
@@ -188,12 +191,13 @@ export default function AdminPage(){
      </div>:
      active==='TOP52'?<div className="admin-panel">
        <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
+       <p className="admin-helper">TOP52 là trạng thái kết quả. Việc tác phẩm có xuất hiện ngoài website hay không được kiểm soát riêng tại <button className="text-button" onClick={()=>go('Công bố')}>Công bố</button>.</p>
        <div className="admin-top52-grid">
          {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Tác phẩm')}}>
            <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
            <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
          </button>)}
-         {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có tác phẩm TOP52. Đổi trạng thái tác phẩm sang TOP52 để hiển thị tại đây.</p>}
+         {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có tác phẩm TOP52. Hãy chốt danh sách từ Kết quả BGK.</p>}
        </div>
      </div>:
      active==='Tác phẩm'?<div className="admin-workspace">
@@ -217,6 +221,7 @@ export default function AdminPage(){
            <span className="eyebrow">{selected.code}</span><h2>{selected.title||'Tác phẩm chưa đặt tên'}</h2>
            <p className="admin-detail-author">{selected.display_name||selected.name} · {selected.email}</p>
            <div className="chip-wrap"><span>{selected.type}</span><span>{selected.theme}</span><span>{selected.color}</span></div>
+           {selected.publication_state&&<div className="admin-publication-summary"><Globe2/><div><b>{selected.publication_state==='PUBLISHED'?'Đã công bố':selected.publication_state==='SCHEDULED'?'Đã hẹn giờ':'Đang ẩn'}</b><small>{selected.publish_scheduled_at?`Hẹn: ${new Date(selected.publish_scheduled_at).toLocaleString('vi-VN')}`:'Quản lý tại module Công bố'}</small></div><button onClick={()=>go('Công bố')}>Mở</button></div>}
            <div className="admin-rights">
              <div className={selected.rights_confirmed?'ok':'warn'}>{selected.rights_confirmed?<CheckCircle2/>:<AlertTriangle/>}<span>Quyền tác giả</span></div>
              <div className={selected.image_consent_confirmed?'ok':'warn'}>{selected.image_consent_confirmed?<CheckCircle2/>:<AlertTriangle/>}<span>Quyền hình ảnh</span></div>
