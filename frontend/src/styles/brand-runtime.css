@@ -1,0 +1,51 @@
+:root{
+  --site-background:#fbf7ef;
+  --site-logo-width:190px;
+  --site-logo-width-mobile:145px;
+}
+
+html,
+body,
+#root,
+.site-shell{
+  min-height:100%;
+  background-color:var(--site-background);
+}
+
+body,
+body *{
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+main{
+  background-color:var(--site-background);
+}
+
+.brand-image{
+  display:flex;
+  align-items:center;
+  flex:0 0 auto;
+}
+
+.brand-image img{
+  display:block;
+  width:var(--site-logo-width)!important;
+  max-width:none!important;
+  height:auto!important;
+  max-height:52px;
+  object-fit:contain;
+}
+
+@media(max-width:900px){
+  .brand-image img{
+    width:var(--site-logo-width-mobile)!important;
+    max-height:42px;
+  }
+}
