@@ -54,7 +54,7 @@ function SiteShell() {
         <Route path="/dong-hanh" element={<PartnersPage />} />
         <Route path="/hello" element={<HelloPage />} />
         <Route path="/chu-de/:slug" element={<ThemePage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/tra-cuu" element={<LookupPage />} />
         <Route path="/jury" element={<JuryPage />} />
         <Route path="*" element={<HomePage />} />
