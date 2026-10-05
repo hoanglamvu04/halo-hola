@@ -210,7 +210,7 @@ export default function ThemePage(){
           <div className="theme-related-actions"><Link className="theme-view-all" to="/top52">Xem TOP52 <ArrowRight/></Link></div>
         </header>
 
-        {isAdminPreview&&<div className="theme-admin-preview"><Eye/><div><b>Chế độ xem trước Admin đang bật.</b><br/>Các thẻ có thể gồm dữ liệu DEMO hoặc tác phẩm chưa công bố. Nhấp thẻ xem trước sẽ mở bài tương ứng trong Jury Workspace.</div></div>}
+        {isAdminPreview&&<div className="theme-admin-preview"><Eye/><div><b>Chế độ xem trước Admin đang bật.</b><br/>Các thẻ có thể gồm dữ liệu DEMO hoặc tác phẩm chưa công bố. Nhấp thẻ để mở trang chi tiết tác phẩm ở chế độ xem trước quản trị.</div></div>}
 
         <div className="theme-gallery-toolbar">
           <div className="theme-filter-row">
@@ -229,7 +229,7 @@ export default function ThemePage(){
         {galleryLoading?<div className="theme-gallery-loading">Đang tải tác phẩm...</div>:
           related.length===0?<div className="jw-empty">{isAdminPreview?'Chưa có tác phẩm nào phù hợp bộ lọc.':'Chưa có tác phẩm công khai phù hợp bộ lọc.'}</div>:<>
             <div className="theme-related-grid theme-gallery-grid">
-              {related.map(a=><Link to={a.preview?('/jury/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
+              {related.map(a=><Link to={a.preview?('/tac-pham/xem-truoc/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
                 <div className="theme-related-media">
                   {a.image?<img loading="lazy" decoding="async" src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
                   {a.preview&&<span className={'theme-preview-status'+(a.isDemo?' demo':'')}>{a.isDemo?'MẪU · ':''}{previewStatusLabel[a.status]||a.status}</span>}
