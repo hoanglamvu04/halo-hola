@@ -58,6 +58,7 @@ export function registerTour(payload) { return unwrap(client.post('/tour-registr
 export function getPlaces() { return unwrap(client.get('/places')); }
 export function getThemes() { return unwrap(client.get('/themes')); }
 export function getTheme(slug) { return unwrap(client.get('/themes/' + encodeURIComponent(slug))); }
+export function getColors() { return unwrap(client.get('/colors')); }
 export function getPublicArtworks(params = {}) { return unwrap(client.get('/artworks', { params })); }
 export function getPublicArtwork(slug) { return unwrap(client.get('/artworks/' + encodeURIComponent(slug))); }
 export function getTours() { return unwrap(client.get('/tours')); }
