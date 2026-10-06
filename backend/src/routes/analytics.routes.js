@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { pool } from '../database/pool.js';
 import { authenticateAdmin } from '../middleware/auth.js';
+import { analyticsRateLimiter } from '../middleware/rateLimit.js';
 
 const router = Router();
 const EVENT_TYPES = new Set([
@@ -12,7 +13,18 @@ function clean(value,max=500){
   return text ? text.slice(0,max) : null;
 }
 
-router.post('/analytics/events', async (req,res,next)=>{
+function cleanMetadata(value){
+  if(!value || typeof value!=='object' || Array.isArray(value)) return {};
+  const output={};
+  for(const [key,raw] of Object.entries(value).slice(0,12)){
+    const safeKey=clean(key,64);
+    if(!safeKey) continue;
+    if(['string','number','boolean'].includes(typeof raw)) output[safeKey]=typeof raw==='string'?raw.slice(0,240):raw;
+  }
+  return output;
+}
+
+router.post('/analytics/events', analyticsRateLimiter, async (req,res,next)=>{
   try{
     const eventType=clean(req.body?.eventType,64);
     if(!eventType || !EVENT_TYPES.has(eventType)) return res.status(202).json({ok:true,ignored:true});
@@ -21,8 +33,7 @@ router.post('/analytics/events', async (req,res,next)=>{
     const target=clean(req.body?.target,500);
     const sessionId=clean(req.body?.sessionId,80);
     const referrer=clean(req.body?.referrer,500);
-    const metadata=req.body?.metadata && typeof req.body.metadata==='object' && !Array.isArray(req.body.metadata)
-      ? req.body.metadata : {};
+    const metadata=cleanMetadata(req.body?.metadata);
 
     await pool.query(`
       INSERT INTO analytics_events(event_type,path,target,session_id,referrer,metadata)
@@ -78,6 +89,7 @@ router.get('/admin/analytics/summary', authenticateAdmin, async (req,res,next)=>
       `,[Math.min(days,30)])
     ]);
 
+    res.set('Cache-Control','no-store');
     res.json({days,overview:overview.rows[0]||{},events:events.rows,paths:paths.rows,daily:daily.rows});
   }catch(error){next(error);}
 });
