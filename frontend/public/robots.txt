@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /jury
+Disallow: /tac-pham/xem-truoc/
+
+Sitemap: https://halohola.xspace.vn/sitemap.xml
