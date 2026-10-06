@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Eye, EyeOff, ImagePlus, Save, Upload, RefreshCw } from 'lucide-react'
 import {
   getAdminHomepageSections,
+  getAdminMediaLibrary,
   getAdminSiteAssets,
   updateAdminHomepageSection,
   uploadAdminSiteAsset
@@ -72,7 +73,35 @@ const definitions={
     ]
   },
   themes:{label:'8 chủ đề',defaults:{eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',title:'8 chủ đề về Hòa Lạc',description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
-  colors:{label:'Sắc màu Hòa Lạc',defaults:{eyebrow:'SẮC MÀU HÒA LẠC',title:'Hòa Lạc trong bạn có màu gì?',description:'Mỗi màu sắc là một lát cắt của Hòa Lạc.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
+  colors:{
+    label:'Sắc màu Hòa Lạc',
+    defaults:{
+      eyebrow:'SẮC MÀU HÒA LẠC',
+      title:'Hòa Lạc trong bạn có màu gì?',
+      description:'Mỗi màu sắc là một lát cắt của Hòa Lạc.',
+      storyImagePrimary:img.hills,
+      storyImageSecondary:img.lake,
+      colorImage1:img.village,
+      colorImage2:img.sunset,
+      colorImage3:img.green,
+      colorImage4:img.architecture,
+      colorImage5:img.village,
+      colorImage6:img.lake
+    },
+    fields:[
+      ['eyebrow','Eyebrow','text'],
+      ['title','Tiêu đề','text'],
+      ['description','Mô tả','textarea'],
+      ['storyImagePrimary','Ảnh visual chính phía trên','image'],
+      ['storyImageSecondary','Ảnh visual phụ phía trên','image'],
+      ['colorImage1','Ảnh Đá ong','image'],
+      ['colorImage2','Ảnh Nắng','image'],
+      ['colorImage3','Ảnh Xanh rêu','image'],
+      ['colorImage4','Ảnh Xanh non','image'],
+      ['colorImage5','Ảnh Be','image'],
+      ['colorImage6','Ảnh Sắc Hòa Lạc','image']
+    ]
+  },
   tours:{label:'HOLA Tour',defaults:{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Những hành trình khám phá Hòa Lạc qua trải nghiệm thực tế.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
   map:{label:'HOLA Map',defaults:{eyebrow:'KHÁM PHÁ MỌI HÒA LẠC',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
   stories:{label:'TOP52 / Stories',defaults:{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'52 góc nhìn, 52 câu chuyện về Hòa Lạc qua lăng kính cộng đồng.'},fields:[['eyebrow','Eyebrow','text'],['title','Tiêu đề','text'],['description','Mô tả','textarea']]},
@@ -109,16 +138,21 @@ export default function HomepageManager(){
   const [message,setMessage]=useState('')
   const [targetField,setTargetField]=useState('')
 
+  const loadAssets=async(sectionKey)=>{
+    if(sectionKey==='colors') return getAdminMediaLibrary({archived:false})
+    return getAdminSiteAssets({sectionKey})
+  }
+
   const load=async()=>{
     const data=await getAdminHomepageSections()
     setSections(data)
-    const media=await getAdminSiteAssets({sectionKey:active})
+    const media=await loadAssets(active)
     setAssets(media)
   }
 
   useEffect(()=>{load().catch(err=>setMessage(err.message))},[])
   useEffect(()=>{
-    getAdminSiteAssets({sectionKey:active}).then(setAssets).catch(()=>{})
+    loadAssets(active).then(setAssets).catch(()=>{})
     const firstImage=(definitions[active]?.fields||[]).find(field=>field[2]==='image')
     setTargetField(firstImage?.[0]||'')
   },[active])
@@ -176,18 +210,20 @@ export default function HomepageManager(){
 
       {message&&<div className="cms-message">{message}</div>}
 
+      {active==='colors'&&<div className="cms-message">Bạn có thể chọn trực tiếp các ảnh đã tải ở Media Library bên dưới. Chọn vị trí ảnh, bấm ảnh muốn dùng rồi bấm “Lưu thay đổi”.</div>}
+
       <div className="cms-fields">
         {def.fields.map(field=><Field key={field[0]} field={field} value={content[field[0]]} onChange={patchContent} onUpload={upload} uploading={uploading===field[0]}/>)}
       </div>
 
       <div className="cms-library">
         <div className="cms-library-head">
-          <div><ImagePlus/><div><b>Media Library của section</b><small>Chọn vị trí ảnh rồi bấm vào ảnh để dùng lại ngay.</small></div></div>
+          <div><ImagePlus/><div><b>{active==='colors'?'Toàn bộ Media Library':'Media Library của section'}</b><small>{active==='colors'?'Dùng lại mọi ảnh đã upload: chọn vị trí rồi bấm vào ảnh.':'Chọn vị trí ảnh rồi bấm vào ảnh để dùng lại ngay.'}</small></div></div>
           {(def.fields||[]).some(field=>field[2]==='image')&&<select value={targetField} onChange={e=>setTargetField(e.target.value)}>
             {(def.fields||[]).filter(field=>field[2]==='image').map(field=><option key={field[0]} value={field[0]}>{field[1]}</option>)}
           </select>}
         </div>
-        <div className="cms-asset-grid">{assets.length?assets.slice(0,12).map(asset=><button key={asset.id} onClick={()=>{
+        <div className="cms-asset-grid">{assets.length?assets.slice(0,30).map(asset=><button key={asset.id} onClick={()=>{
           if(targetField){
             patchContent(targetField,asset.url)
             setMessage('Đã chọn ảnh từ Media Library. Bấm "Lưu thay đổi" để áp dụng.')
@@ -195,7 +231,7 @@ export default function HomepageManager(){
             navigator.clipboard?.writeText(asset.url)
             setMessage('Đã copy URL ảnh.')
           }
-        }} title="Dùng ảnh này"><img src={asset.url} alt={asset.original_name}/><span>{asset.original_name}</span></button>):<div className="cms-empty-assets">Chưa có ảnh tải lên cho section này.</div>}</div>
+        }} title="Dùng ảnh này"><img src={asset.url} alt={asset.alt_text||asset.original_name}/><span>{asset.title||asset.original_name}</span></button>):<div className="cms-empty-assets">Chưa có ảnh phù hợp trong Media Library.</div>}</div>
       </div>
     </section>
   </div>
