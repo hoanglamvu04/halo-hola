@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import { Router } from 'express';
 import { upload } from '../middleware/upload.js';
-import { submissionRateLimiter } from '../middleware/rateLimit.js';
+import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimit.js';
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
 import { createSubmission, lookupSubmission, getPublicStats } from '../services/submission.service.js';
@@ -17,11 +17,12 @@ router.get('/stats', async (_req, res, next) => {
   }
 });
 
-router.get('/lookup', async (req, res, next) => {
+router.get('/lookup', lookupRateLimiter, async (req, res, next) => {
   try {
     const { code, email } = lookupSchema.parse(req.query);
     const item = await lookupSubmission(code, email);
     if (!item) throw new AppError('Không tìm thấy tác phẩm với mã và email này.', 404);
+    res.set('Cache-Control','no-store');
     res.json(item);
   } catch (error) {
     if (error?.name === 'ZodError') {
