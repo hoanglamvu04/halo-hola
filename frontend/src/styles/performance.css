@@ -1,0 +1,22 @@
+/* Rendering/performance guardrails loaded last. */
+main>section:not(:first-child){
+  content-visibility:auto;
+  contain-intrinsic-size:1px 620px;
+}
+img,video{height:auto}
+iframe{background:#eef1e9}
+a,button{touch-action:manipulation}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+@media(max-width:700px){
+  main>section:not(:first-child){contain-intrinsic-size:1px 460px}
+}
