@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette
 } from 'lucide-react'
 import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
+import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
+import ColorManagementManager from '../components/ColorManagementManager.jsx'
 import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
@@ -22,6 +24,8 @@ import {
 const nav=[
   {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
   {label:'Trang chủ',icon:Home,path:'/admin/homepage'},
+  {label:'Chủ đề',icon:Layers3,path:'/admin/themes'},
+  {label:'Sắc màu',icon:Palette,path:'/admin/colors'},
   {label:'Media Library',icon:FolderOpen,path:'/admin/media'},
   {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
   {label:'Tác giả',icon:Users,path:'/admin/authors'},
@@ -168,6 +172,8 @@ export default function AdminPage(){
        </div>
      </>:
      active==='Trang chủ'?<HomepageManager/>:
+     active==='Chủ đề'?<ThemeManagementManager/>:
+     active==='Sắc màu'?<ColorManagementManager/>:
      active==='Media Library'?<MediaLibrary/>:
      active==='Stories'?<AdminContentManager type="stories"/>:
      active==='HOLA Map'?<AdminContentManager type="places"/>:
