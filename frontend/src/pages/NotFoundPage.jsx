@@ -1,5 +1,6 @@
 import { ArrowLeft, Home, Search } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import './NotFoundPage.css'
 
 export default function NotFoundPage(){
   return <main className="not-found-page">
