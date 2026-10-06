@@ -1,30 +1,31 @@
-/* Slightly enlarge Hòa Lạc color-card images so the artwork has more breathing room. */
-@media (min-width: 1381px) {
-  .color-v3-card {
-    grid-template-rows: auto 146px;
+/* Hòa Lạc color cards: desktop/tablet use 2 columns = 3 rows for 6 colors. */
+@media (min-width: 721px) {
+  .color-v3-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
   }
 
   .color-v3-card > img {
     width: calc(100% - 8px);
     height: calc(100% - 6px);
     margin: 0 4px 6px;
+  }
+}
+
+@media (min-width: 1381px) {
+  .color-v3-card {
+    grid-template-rows: auto 210px;
   }
 }
 
 @media (min-width: 1081px) and (max-width: 1380px) {
   .color-v3-card {
-    grid-template-rows: auto 128px;
-  }
-
-  .color-v3-card > img {
-    width: calc(100% - 8px);
-    height: calc(100% - 6px);
-    margin: 0 4px 6px;
+    grid-template-rows: auto 190px;
   }
 }
 
 @media (min-width: 721px) and (max-width: 1080px) {
   .color-v3-card {
-    grid-template-rows: auto 153px;
+    grid-template-rows: auto 170px;
   }
 }
