@@ -4,7 +4,10 @@ import { env } from '../config/env.js';
 const { Pool } = pg;
 
 export const pool = new Pool({
-  connectionString: env.databaseUrl
+  connectionString: env.databaseUrl,
+  max: Math.max(2, Math.min(50, Number(process.env.PG_POOL_MAX) || 20)),
+  idleTimeoutMillis: 30_000,
+  connectionTimeoutMillis: 5_000
 });
 
 pool.on('error', (error) => {
