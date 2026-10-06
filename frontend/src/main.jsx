@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import './styles.css'
 import './styles/brand-runtime.css'
 import './styles/mobile-polish.css'
+import './styles/performance.css'
 import App from './App.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
