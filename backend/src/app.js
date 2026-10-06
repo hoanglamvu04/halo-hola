@@ -20,6 +20,7 @@ import juryBoardRoutes from './routes/juryBoard.routes.js';
 import juryResultsRoutes from './routes/juryResults.routes.js';
 import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
 import siteRoutes from './routes/site.routes.js';
+import analyticsRoutes from './routes/analytics.routes.js';
 
 export function createApp() {
   const app = express();
@@ -51,6 +52,7 @@ export function createApp() {
   app.use('/api/top52', top52Routes);
   app.use('/api', siteRoutes);
   app.use('/api', contentRoutes);
+  app.use('/api', analyticsRoutes);
   app.use('/api/jury', juryRoutes);
   app.use('/api/admin/jury-board', juryBoardRoutes);
   app.use('/api/admin/jury-results', juryResultsRoutes);
