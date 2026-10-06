@@ -53,28 +53,28 @@ router.get('/admin/analytics/summary', authenticateAdmin, async (req,res,next)=>
       pool.query(`
         SELECT event_type AS event,COUNT(*)::int AS count
         FROM analytics_events
-        WHERE created_at>=NOW()-($1::text||' days')::interval
+        WHERE created_at>=NOW()-make_interval(days=>$1::int)
         GROUP BY event_type ORDER BY count DESC,event_type ASC LIMIT 20
       `,[days]),
       pool.query(`
         SELECT COALESCE(NULLIF(path,''),'/') AS path,COUNT(*)::int AS views,
                COUNT(DISTINCT session_id)::int AS visitors
         FROM analytics_events
-        WHERE event_type='page_view' AND created_at>=NOW()-($1::text||' days')::interval
+        WHERE event_type='page_view' AND created_at>=NOW()-make_interval(days=>$1::int)
         GROUP BY COALESCE(NULLIF(path,''),'/') ORDER BY views DESC LIMIT 20
       `,[days]),
       pool.query(`
-        SELECT to_char(day,'YYYY-MM-DD') AS date,
+        SELECT to_char(d.day,'YYYY-MM-DD') AS date,
                COALESCE(x.pageviews,0)::int AS pageviews,
                COALESCE(x.visitors,0)::int AS visitors
-        FROM generate_series(CURRENT_DATE-($1::int-1),CURRENT_DATE,'1 day') day
+        FROM generate_series(CURRENT_DATE-($1::int-1),CURRENT_DATE,'1 day'::interval) AS d(day)
         LEFT JOIN LATERAL (
           SELECT COUNT(*) FILTER (WHERE event_type='page_view') AS pageviews,
                  COUNT(DISTINCT session_id) AS visitors
           FROM analytics_events
-          WHERE created_at>=day AND created_at<day+INTERVAL '1 day'
+          WHERE created_at>=d.day AND created_at<d.day+INTERVAL '1 day'
         ) x ON TRUE
-        ORDER BY day ASC
+        ORDER BY d.day ASC
       `,[Math.min(days,30)])
     ]);
 
