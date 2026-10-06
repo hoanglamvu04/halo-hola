@@ -13,4 +13,3 @@ backend/.env
 auto-sync.log
 dev-server.log
 .halo-auto-sync.pid
-package-lock.json
