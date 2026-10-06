@@ -15,6 +15,9 @@ cd "$ROOT"
 
 echo "==> Sync Git"
 git fetch origin "$BRANCH" --prune
+# Older deployments created untracked npm lockfiles because they were ignored.
+# Remove only those legacy untracked paths before the first pull that tracks them.
+git clean -f -- package-lock.json backend/package-lock.json frontend/package-lock.json >/dev/null 2>&1 || true
 git checkout "$BRANCH"
 git pull --ff-only origin "$BRANCH"
 
