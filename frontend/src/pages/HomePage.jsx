@@ -56,7 +56,19 @@ export default function HomePage() {
     image3:img.architecture
   })
   const themesCopy=sectionData('themes',{eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',title:'8 chủ đề về Hòa Lạc',description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc. Khám phá những câu chuyện và vẻ đẹp riêng qua 8 chủ đề.'})
-  const colorsCopy=sectionData('colors',{eyebrow:'SẮC MÀU HÒA LẠC',title:'Hòa Lạc trong bạn có màu gì?',description:'Mỗi màu sắc là một lát cắt của Hòa Lạc. Cùng khám phá và tạo nên sắc màu của riêng bạn.'})
+  const colorsCopy=sectionData('colors',{
+    eyebrow:'SẮC MÀU HÒA LẠC',
+    title:'Hòa Lạc trong bạn có màu gì?',
+    description:'Mỗi màu sắc là một lát cắt của Hòa Lạc. Cùng khám phá và tạo nên sắc màu của riêng bạn.',
+    storyImagePrimary:img.hills,
+    storyImageSecondary:img.lake,
+    colorImage1:img.village,
+    colorImage2:img.sunset,
+    colorImage3:img.green,
+    colorImage4:img.architecture,
+    colorImage5:img.village,
+    colorImage6:img.lake
+  })
   const toursCopy=sectionData('tours',{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Những hành trình khám phá Hòa Lạc qua trải nghiệm thực tế và những câu chuyện sống động.'})
   const mapCopy=sectionData('map',{eyebrow:'KHÁM PHÁ MỌI HÒA LẠC',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'})
   const storiesCopy=sectionData('stories',{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'52 góc nhìn, 52 câu chuyện về Hòa Lạc qua lăng kính cộng đồng.'})
@@ -67,7 +79,14 @@ export default function HomePage() {
     backgroundImage:img.people
   })
 
-  const colorImages=[img.village,img.sunset,img.green,img.architecture,img.village,img.lake]
+  const colorImages=[
+    colorsCopy.colorImage1,
+    colorsCopy.colorImage2,
+    colorsCopy.colorImage3,
+    colorsCopy.colorImage4,
+    colorsCopy.colorImage5,
+    colorsCopy.colorImage6
+  ]
 
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
@@ -301,8 +320,8 @@ export default function HomePage() {
 
         <div className="color-v3-story">
           <span className="color-v3-script">Hòa Lạc</span>
-          <div className="color-v3-window color-v3-window-a"><img src={colors[0]?.image||themes[0]?.image||img.hills} alt="Phong cảnh Hòa Lạc"/></div>
-          <div className="color-v3-window color-v3-window-b"><img src={colors[1]?.image||themes[4]?.image||img.lake} alt="Không gian Hòa Lạc"/></div>
+          <div className="color-v3-window color-v3-window-a"><img src={colorsCopy.storyImagePrimary||colors[0]?.image||themes[0]?.image||img.hills} alt="Phong cảnh Hòa Lạc" loading="lazy" decoding="async"/></div>
+          <div className="color-v3-window color-v3-window-b"><img src={colorsCopy.storyImageSecondary||colors[1]?.image||themes[4]?.image||img.lake} alt="Không gian Hòa Lạc" loading="lazy" decoding="async"/></div>
           <div className="color-v3-note"><MapPin/><span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span><i/></div>
         </div>
       </div>
@@ -310,7 +329,7 @@ export default function HomePage() {
       <div className="color-v3-cards">
         {colors.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.id||c.slug}>
           <div className="color-v3-card-head"><span className="color-v3-dot" style={{background:c.color}}/><div><b>{c.name}</b><small>{c.story}</small></div><span className="color-v3-arrow"><ArrowRight/></span></div>
-          <img src={c.image||colorImages[index%colorImages.length]} alt={c.name}/>
+          <img src={colorImages[index%colorImages.length]||c.image||img.lake} alt={c.name} loading="lazy" decoding="async"/>
         </Link>)}
       </div>
     </section>}
