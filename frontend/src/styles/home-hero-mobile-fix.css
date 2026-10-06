@@ -1,0 +1,51 @@
+/* Homepage hero mobile title fix — keep HELLO HÒA LẠC on one clean line. */
+@media (max-width: 760px) {
+  .home-hero-copy h1 {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+    margin: 0 0 6px !important;
+    font-size: clamp(2.35rem, 10vw, 2.8rem) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.045em !important;
+    white-space: nowrap !important;
+  }
+
+  .home-hero-copy h1 span,
+  .home-hero-copy h1 em {
+    display: inline !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    letter-spacing: inherit !important;
+    white-space: nowrap !important;
+  }
+
+  .home-hero-copy h1 em {
+    font-style: normal !important;
+  }
+
+  .hero-title-stroke {
+    margin: 7px 0 5px !important;
+  }
+
+  .home-hero-copy h3 {
+    margin: 0 0 4px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.08 !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .home-hero-copy h1 {
+    gap: 5px !important;
+    font-size: clamp(2.05rem, 9.6vw, 2.35rem) !important;
+  }
+
+  .home-hero-copy h3 {
+    font-size: .98rem !important;
+  }
+}
