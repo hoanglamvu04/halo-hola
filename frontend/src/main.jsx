@@ -6,6 +6,7 @@ import './styles.css'
 import './styles/brand-runtime.css'
 import './styles/mobile-polish.css'
 import './styles/performance.css'
+import './styles/home-hero-mobile-fix.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 
