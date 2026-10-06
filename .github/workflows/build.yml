@@ -16,4 +16,8 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npm run install:all
+      - name: Audit backend production dependencies
+        run: npm audit --prefix backend --omit=dev --audit-level=high
+      - name: Audit frontend production dependencies
+        run: npm audit --prefix frontend --omit=dev --audit-level=high
       - run: npm run build
