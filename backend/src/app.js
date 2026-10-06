@@ -24,6 +24,7 @@ import juryResultsRoutes from './routes/juryResults.routes.js';
 import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
 import siteRoutes from './routes/site.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
+import colorAdminRoutes from './routes/colorAdmin.routes.js';
 
 function isSensitivePath(pathname='') {
   return pathname.startsWith('/api/auth') ||
@@ -102,6 +103,7 @@ export function createApp() {
   app.use('/api/admin/jury-results', juryResultsRoutes);
   app.use('/api/admin/publication', publicationRoutes);
   app.use('/api/admin/public-preview', adminPreviewRoutes);
+  app.use('/api/admin/colors', colorAdminRoutes);
   app.use('/api/admin', adminRoutes);
 
   app.use(notFoundHandler);
