@@ -7,6 +7,15 @@ img,video{height:auto}
 iframe{background:#eef1e9}
 a,button{touch-action:manipulation}
 
+.app-crash-page{min-height:100vh;display:grid;place-items:center;padding:28px;background:var(--cream,#fbf7ef)}
+.app-crash-card{width:min(560px,100%);padding:34px;border:1px solid rgba(23,61,45,.14);border-radius:24px;background:#fff;box-shadow:0 18px 45px rgba(47,42,31,.10)}
+.app-crash-card>span{display:block;margin-bottom:10px;color:var(--terra,#c45b32);font-size:.72rem;font-weight:800;letter-spacing:.18em}
+.app-crash-card h1{margin:0 0 12px;color:var(--forest,#173d2d);font-size:clamp(2rem,7vw,3.4rem)}
+.app-crash-card p{color:#5f6963;line-height:1.65}
+.app-crash-card div{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.app-crash-card button,.app-crash-card a{border:1px solid var(--forest,#173d2d);border-radius:999px;padding:11px 16px;font:inherit;font-weight:750}
+.app-crash-card button{background:var(--forest,#173d2d);color:#fff}.app-crash-card a{background:#fff;color:var(--forest,#173d2d)}
+
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto!important}
   *,*::before,*::after{
@@ -19,4 +28,6 @@ a,button{touch-action:manipulation}
 
 @media(max-width:700px){
   main>section:not(:first-child){contain-intrinsic-size:1px 460px}
+  .app-crash-card{padding:24px 20px;border-radius:18px}
+  .app-crash-card div{display:grid}.app-crash-card button,.app-crash-card a{text-align:center}
 }
