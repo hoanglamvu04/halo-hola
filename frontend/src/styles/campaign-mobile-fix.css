@@ -2,6 +2,8 @@
 @media (max-width: 760px) {
   .campaign-live-grid {
     grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    row-gap: 0 !important;
   }
 
   /* The scenic collage is useful on desktop but wastes a full screen on mobile. */
@@ -9,8 +11,16 @@
     display: none !important;
   }
 
+  /* Remove the old desktop/grid spacing that was still reserving an invisible band
+     between the CTA block and Hành trình 2026 after the visual was hidden. */
+  .live-counter {
+    margin-bottom: 0 !important;
+    padding-bottom: 12px !important;
+  }
+
   .campaign-timeline {
-    padding: 20px 14px 24px !important;
+    margin-top: 0 !important;
+    padding: 12px 14px 24px !important;
     background: linear-gradient(180deg, #0f5139 0%, #0d4934 100%) !important;
     overflow: visible !important;
   }
