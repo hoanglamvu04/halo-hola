@@ -25,6 +25,7 @@ import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
 import siteRoutes from './routes/site.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import colorAdminRoutes from './routes/colorAdmin.routes.js';
+import themeAdminRoutes from './routes/themeAdmin.routes.js';
 
 function isSensitivePath(pathname='') {
   return pathname.startsWith('/api/auth') ||
@@ -104,6 +105,7 @@ export function createApp() {
   app.use('/api/admin/publication', publicationRoutes);
   app.use('/api/admin/public-preview', adminPreviewRoutes);
   app.use('/api/admin/colors', colorAdminRoutes);
+  app.use('/api/admin/themes', themeAdminRoutes);
   app.use('/api/admin', adminRoutes);
 
   app.use(notFoundHandler);
