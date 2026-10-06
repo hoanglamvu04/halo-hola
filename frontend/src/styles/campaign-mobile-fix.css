@@ -1,0 +1,107 @@
+/* Homepage campaign mobile cleanup: remove decorative image block and make the 2026 journey compact/readable. */
+@media (max-width: 760px) {
+  .campaign-live-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* The scenic collage is useful on desktop but wastes a full screen on mobile. */
+  .campaign-visual {
+    display: none !important;
+  }
+
+  .campaign-timeline {
+    padding: 20px 14px 24px !important;
+    background: linear-gradient(180deg, #0f5139 0%, #0d4934 100%) !important;
+    overflow: visible !important;
+  }
+
+  .timeline-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    margin: 0 0 13px !important;
+    color: #fff !important;
+  }
+
+  .timeline-title svg {
+    width: 20px !important;
+    height: 20px !important;
+    color: #f2c261 !important;
+  }
+
+  .timeline-title b {
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.01em !important;
+  }
+
+  .campaign-milestones {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .campaign-milestone {
+    min-width: 0 !important;
+    min-height: 58px !important;
+    padding: 10px 10px !important;
+    display: grid !important;
+    grid-template-columns: 43px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border: 1px solid rgba(255,255,255,.13) !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,.08) !important;
+    box-shadow: none !important;
+  }
+
+  .campaign-milestone:first-child {
+    border-color: rgba(242,194,97,.55) !important;
+    background: rgba(242,194,97,.12) !important;
+  }
+
+  .campaign-milestone span {
+    color: #f2b84b !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    letter-spacing: -.015em !important;
+  }
+
+  .campaign-milestone b {
+    color: #fff !important;
+    font-size: .66rem !important;
+    line-height: 1.22 !important;
+    font-weight: 750 !important;
+  }
+
+  .campaign-milestone i {
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .campaign-timeline {
+    padding-inline: 12px !important;
+  }
+
+  .campaign-milestones {
+    gap: 7px !important;
+  }
+
+  .campaign-milestone {
+    grid-template-columns: 39px minmax(0, 1fr) !important;
+    gap: 6px !important;
+    padding: 9px 8px !important;
+  }
+
+  .campaign-milestone span {
+    font-size: .68rem !important;
+  }
+
+  .campaign-milestone b {
+    font-size: .61rem !important;
+  }
+}
