@@ -30,7 +30,9 @@ export async function authenticate(req, _res, next) {
 }
 
 export async function authenticateAdmin(req, res, next) {
-  if (env.adminApiKey && req.header('x-admin-key') === env.adminApiKey) {
+  // x-admin-key is a local/dev convenience only. Production admin access must
+  // always go through an authenticated user so account status/roles are enforced.
+  if (env.nodeEnv !== 'production' && env.adminApiKey && req.header('x-admin-key') === env.adminApiKey) {
     req.user = { id: 'dev-api-key', email: 'dev@local', role: 'ADMIN' };
     return next();
   }
