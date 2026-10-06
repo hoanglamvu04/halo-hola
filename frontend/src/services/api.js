@@ -78,7 +78,9 @@ export function getHomepageContent() { return unwrap(client.get('/site/homepage'
 export function adminLogin(payload) { return unwrap(client.post('/auth/login', payload)); }
 export function getCurrentUser() { return unwrap(client.get('/auth/me')); }
 
-export function getAdminHomepageSections() { return unwrap(client.get('/admin/site/homepage')); }
+export function getAdminHomepageSections() {
+  return unwrap(client.get('/admin/site/homepage')).then(rows=>(Array.isArray(rows)?rows:[]).filter(row=>!['themes','colors'].includes(row.section_key)));
+}
 export function updateAdminHomepageSection(sectionKey, payload) { return unwrap(client.put('/admin/site/homepage/' + encodeURIComponent(sectionKey), payload)); }
 export function getAdminSiteAssets(params = {}) { return unwrap(client.get('/admin/site-assets', { params })); }
 export function uploadAdminSiteAsset(sectionKey, file) {
