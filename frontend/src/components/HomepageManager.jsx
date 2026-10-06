@@ -8,6 +8,7 @@ import {
   uploadAdminSiteAsset
 } from '../services/api.js'
 import { img } from '../data/siteData.js'
+import ColorPaletteManager from './ColorPaletteManager.jsx'
 
 const definitions={
   header:{
@@ -211,6 +212,7 @@ export default function HomepageManager(){
       {message&&<div className="cms-message">{message}</div>}
 
       {active==='colors'&&<div className="cms-message">Bạn có thể chọn trực tiếp các ảnh đã tải ở Media Library bên dưới. Chọn vị trí ảnh, bấm ảnh muốn dùng rồi bấm “Lưu thay đổi”.</div>}
+      {active==='colors'&&<ColorPaletteManager/>}
 
       <div className="cms-fields">
         {def.fields.map(field=><Field key={field[0]} field={field} value={content[field[0]]} onChange={patchContent} onUpload={upload} uploading={uploading===field[0]}/>)}
