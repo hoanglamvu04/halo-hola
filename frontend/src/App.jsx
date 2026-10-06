@@ -23,6 +23,7 @@ const ThemePage=lazy(()=>import('./pages/ThemePage.jsx'))
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
 const JurorWorkspacePage=lazy(()=>import('./pages/JurorWorkspacePage.jsx'))
+const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
 const SITE_URL='https://halohola.xspace.vn'
 const DEFAULT_DESCRIPTION='HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc. Khám phá, kể lại và lưu giữ những câu chuyện về Hòa Lạc.'
@@ -38,7 +39,8 @@ const SEO_ROUTES={
   '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Gửi tác phẩm, câu chuyện và góc nhìn của bạn về Hòa Lạc tới HALO HOLA 2026.'],
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố những dấu mốc của HALO HOLA 2026.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác đồng hành cùng HALO HOLA.'],
-  '/tra-cuu':['Tra cứu tác phẩm | HALO HOLA','Tra cứu hồ sơ và trạng thái tác phẩm đã gửi tới HALO HOLA 2026.']
+  '/tra-cuu':['Tra cứu tác phẩm | HALO HOLA','Tra cứu hồ sơ và trạng thái tác phẩm đã gửi tới HALO HOLA 2026.'],
+  '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
 
 function setMeta(key,value,attribute='name'){
@@ -52,13 +54,24 @@ function setCanonical(url){
   if(!node){node=document.createElement('link');node.rel='canonical';document.head.appendChild(node)}
   node.href=url
 }
-
+function isKnownPath(pathname){
+  return Boolean(
+    SEO_ROUTES[pathname] ||
+    pathname.startsWith('/chu-de/') ||
+    pathname.startsWith('/tac-pham/') ||
+    pathname.startsWith('/stories/') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/jury')
+  )
+}
 function routeSeo(pathname){
   if(SEO_ROUTES[pathname])return SEO_ROUTES[pathname]
   if(pathname.startsWith('/chu-de/'))return ['Chủ đề Hòa Lạc | HALO HOLA','Khám phá tác phẩm và câu chuyện thuộc chủ đề HALO HOLA 2026.']
   if(pathname.startsWith('/tac-pham/'))return ['Tác phẩm HALO HOLA 2026','Khám phá câu chuyện và góc nhìn phía sau một tác phẩm HALO HOLA 2026.']
   if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện từ cộng đồng HALO HOLA về Hòa Lạc.']
-  return ['HALO HOLA 2026 — Hello Hòa Lạc',DEFAULT_DESCRIPTION]
+  if(pathname.startsWith('/admin'))return ['Admin | HALO HOLA','Khu vực quản trị HALO HOLA.']
+  if(pathname.startsWith('/jury'))return ['Jury Mode | HALO HOLA','Khu vực Hội đồng giám khảo HALO HOLA.']
+  return ['404 — Không tìm thấy trang | HALO HOLA','Đường dẫn này không tồn tại hoặc nội dung chưa được công bố.']
 }
 
 function ScrollToTop() {
@@ -70,13 +83,15 @@ function ScrollToTop() {
 function SiteRuntime(){
   const {pathname}=useLocation()
   const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/jury')||pathname.startsWith('/tac-pham/xem-truoc/')
+  const knownPage=isKnownPath(pathname)
+  const noIndex=privatePage||!knownPage
 
   useEffect(()=>{
     const [title,description]=routeSeo(pathname)
     const canonical=SITE_URL+(pathname==='/'?'':pathname)
     document.title=title
     setMeta('description',description)
-    setMeta('robots',privatePage?'noindex,nofollow':'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')
+    setMeta('robots',noIndex?'noindex,nofollow':'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1')
     setMeta('og:title',title,'property')
     setMeta('og:description',description,'property')
     setMeta('og:url',canonical,'property')
@@ -89,7 +104,7 @@ function SiteRuntime(){
     setMeta('twitter:description',description)
     setMeta('twitter:image',DEFAULT_OG_IMAGE)
     setCanonical(canonical)
-    if(!privatePage) trackEvent('page_view',{path:pathname})
+    if(!privatePage) trackEvent('page_view',{path:pathname,metadata:{found:knownPage}})
 
     const frame=requestAnimationFrame(()=>{
       const images=[...document.querySelectorAll('main img')]
@@ -100,7 +115,7 @@ function SiteRuntime(){
       })
     })
     return()=>cancelAnimationFrame(frame)
-  },[pathname,privatePage])
+  },[pathname,privatePage,knownPage,noIndex])
 
   useEffect(()=>{
     const onClick=(event)=>{
@@ -191,7 +206,7 @@ function SiteShell() {
           <Route path="/tra-cuu" element={<LookupPage />} />
           <Route path="/jury" element={<JurorWorkspacePage />} />
           <Route path="/jury/:submissionId" element={<JurorWorkspacePage />} />
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
       {!isAdmin && <Footer />}
