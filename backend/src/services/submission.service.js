@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 import { pool, withTransaction } from '../database/pool.js';
+import { env } from '../config/env.js';
+import { AppError } from '../utils/AppError.js';
 import {
   createR2Client,
   getR2Buckets,
@@ -61,6 +63,10 @@ async function storeOriginalFiles(client, submission, files = []) {
   if (!files.length) return media;
 
   const useR2 = hasR2Config();
+  if (env.nodeEnv === 'production' && !useR2) {
+    throw new AppError('Kho lưu file gốc tạm thời chưa sẵn sàng. Vui lòng thử lại sau.', 503);
+  }
+
   const r2 = useR2 ? createR2Client() : null;
   const buckets = useR2 ? getR2Buckets() : null;
 
