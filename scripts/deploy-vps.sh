@@ -18,11 +18,11 @@ git fetch origin "$BRANCH" --prune
 git checkout "$BRANCH"
 git pull --ff-only origin "$BRANCH"
 
-echo "==> Install backend dependencies"
-npm install --prefix backend --omit=dev
+echo "==> Install backend dependencies from lockfile"
+npm ci --prefix backend --omit=dev
 
-echo "==> Install frontend dependencies"
-npm install --prefix frontend
+echo "==> Install frontend dependencies from lockfile"
+npm ci --prefix frontend
 
 echo "==> Apply database migrations"
 npm run db:migrate --prefix backend
