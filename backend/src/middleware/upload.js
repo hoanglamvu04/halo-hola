@@ -15,29 +15,41 @@ const storage = multer.diskStorage({
   }
 });
 
-const allowedMime = new Set([
-  'image/jpeg','image/png','image/webp','image/tiff',
-  'image/x-adobe-dng','image/x-canon-cr2','image/x-nikon-nef','image/x-sony-arw',
-  'video/mp4','video/quicktime',
-  'application/pdf','audio/mpeg',
-  'application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-]);
-
-const allowedExtensions = new Set([
-  '.jpg','.jpeg','.png','.webp','.tif','.tiff','.dng','.cr2','.nef','.arw',
-  '.mp4','.mov','.pdf','.doc','.docx','.mp3'
+const mimeByExtension = new Map([
+  ['.jpg', new Set(['image/jpeg'])],
+  ['.jpeg', new Set(['image/jpeg'])],
+  ['.png', new Set(['image/png'])],
+  ['.webp', new Set(['image/webp'])],
+  ['.tif', new Set(['image/tiff'])],
+  ['.tiff', new Set(['image/tiff'])],
+  ['.dng', new Set(['image/x-adobe-dng','application/octet-stream'])],
+  ['.cr2', new Set(['image/x-canon-cr2','application/octet-stream'])],
+  ['.nef', new Set(['image/x-nikon-nef','application/octet-stream'])],
+  ['.arw', new Set(['image/x-sony-arw','application/octet-stream'])],
+  ['.mp4', new Set(['video/mp4'])],
+  ['.mov', new Set(['video/quicktime'])],
+  ['.pdf', new Set(['application/pdf'])],
+  ['.doc', new Set(['application/msword'])],
+  ['.docx', new Set(['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])],
+  ['.mp3', new Set(['audio/mpeg','audio/mp3'])]
 ]);
 
 export const upload = multer({
   storage,
   limits: {
     fileSize: env.maxUploadFileSizeMb * 1024 * 1024,
-    files: env.maxUploadFileCount
+    files: env.maxUploadFileCount,
+    fields: 40,
+    fieldNameSize: 80,
+    fieldSize: 20 * 1024,
+    parts: env.maxUploadFileCount + 45,
+    headerPairs: 100
   },
   fileFilter: (_req, file, cb) => {
     const ext = path.extname(file.originalname || '').toLowerCase();
-    if (!allowedMime.has(file.mimetype) && !allowedExtensions.has(ext)) {
-      return cb(new AppError('Định dạng tệp không được hỗ trợ.', 400));
+    const acceptedMimes = mimeByExtension.get(ext);
+    if (!acceptedMimes || !acceptedMimes.has(String(file.mimetype || '').toLowerCase())) {
+      return cb(new AppError('Định dạng tệp hoặc phần mở rộng không được hỗ trợ.', 400));
     }
     cb(null, true);
   }
