@@ -53,6 +53,7 @@ fi
 
 echo "==> Build frontend"
 npm run build --prefix frontend
+test -s frontend/dist/index.html
 
 echo "==> Restart API with PM2"
 if pm2 describe halo-hola-api >/dev/null 2>&1; then
@@ -61,8 +62,27 @@ else
   pm2 start ecosystem.config.cjs
 fi
 
+API_PORT="$(sed -n 's/^[[:space:]]*PORT=//p' backend/.env 2>/dev/null | tail -n1 | tr -d '\r' | xargs || true)"
+API_PORT="${API_PORT:-5000}"
+
+echo "==> Smoke check API readiness on 127.0.0.1:${API_PORT}"
+READY=0
+for attempt in $(seq 1 15); do
+  if curl -fsS --max-time 3 "http://127.0.0.1:${API_PORT}/api/ready" >/dev/null; then
+    READY=1
+    break
+  fi
+  sleep 1
+done
+
+if [[ "$READY" != "1" ]]; then
+  echo "ERROR: API readiness check failed after deploy"
+  pm2 status halo-hola-api || true
+  exit 1
+fi
+
 pm2 save
 
 echo "==> Done"
 echo "Frontend: $ROOT/frontend/dist"
-echo "API:      check backend/.env PORT (currently expected 5104 on production VPS)"
+echo "API:      http://127.0.0.1:${API_PORT}/api/ready"
