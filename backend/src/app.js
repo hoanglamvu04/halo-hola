@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import path from 'node:path';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -50,15 +51,26 @@ export function createApp() {
     app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'));
   }
 
-  app.use('/uploads', express.static(uploadRoot, {
-    maxAge: env.nodeEnv === 'production' ? '30d' : 0,
-    etag: true,
-    dotfiles: 'deny',
-    index: false,
-    setHeaders(res){
-      res.setHeader('X-Content-Type-Options','nosniff');
-    }
-  }));
+  // Local storage is a fallback for public CMS/site assets only. Submission
+  // originals must never become guessable static files on production.
+  app.get('/uploads/:filename', async (req,res,next)=>{
+    try{
+      const filename=path.basename(String(req.params.filename||''));
+      if(!filename || filename!==req.params.filename) return res.status(404).end();
+      const { rowCount }=await pool.query(
+        `SELECT 1 FROM site_assets
+         WHERE storage_provider='LOCAL' AND object_key=$1
+         LIMIT 1`,
+        [filename]
+      );
+      if(!rowCount) return res.status(404).end();
+      res.set('Cache-Control',env.nodeEnv==='production'?'public, max-age=2592000':'no-cache');
+      res.set('X-Content-Type-Options','nosniff');
+      return res.sendFile(filename,{root:uploadRoot,dotfiles:'deny'},(error)=>{
+        if(error&&!res.headersSent) next(error);
+      });
+    }catch(error){return next(error);}
+  });
 
   app.use('/api', generalApiRateLimiter);
 
