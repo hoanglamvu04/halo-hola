@@ -12,14 +12,22 @@ function getSessionId(){
   }catch{return 'anonymous'}
 }
 
+function safeReferrer(){
+  try{
+    if(!document.referrer)return null
+    const url=new URL(document.referrer)
+    return url.origin+url.pathname
+  }catch{return null}
+}
+
 export function trackEvent(eventType,{path,target,metadata}={}){
-  if(typeof window==='undefined') return
+  if(typeof window==='undefined'||!eventType) return
   const body={
     eventType,
     path:path||window.location.pathname,
     target:target||null,
     sessionId:getSessionId(),
-    referrer:document.referrer||null,
+    referrer:safeReferrer(),
     metadata:metadata||{}
   }
   fetch(API_URL+'/analytics/events',{
@@ -32,12 +40,14 @@ export function trackEvent(eventType,{path,target,metadata}={}){
 }
 
 export function classifyClick(element){
-  const href=element?.closest?.('a')?.getAttribute?.('href')||''
+  const anchor=element?.closest?.('a')
+  const href=anchor?.getAttribute?.('href')||''
   const text=(element?.closest?.('a,button')?.textContent||'').replace(/\s+/g,' ').trim().slice(0,160)
-  if(href==='/gui-goc-nhin'||href.startsWith('/gui-goc-nhin')) return ['submit_cta',href||text]
-  if(href==='/hola-map'||href.startsWith('/hola-map')) return ['map_open',href||text]
-  if(href==='/top52'||href.startsWith('/top52')) return ['top52_open',href||text]
+  if(href==='/gui-goc-nhin'||href.startsWith('/gui-goc-nhin')||/gửi góc nhìn|gửi tác phẩm/i.test(text)) return ['submit_cta',href||text]
+  if(href==='/hola-map'||href.startsWith('/hola-map')) return ['map_open',href]
+  if(href==='/top52'||href.startsWith('/top52')) return ['top52_open',href]
   if(/chia sẻ|share/i.test(text)) return ['share_click',href||text]
   if(/^https?:\/\//i.test(href)&&!href.startsWith(window.location.origin)) return ['outbound_click',href]
-  return ['cta_click',href||text]
+  if(href&&!/^(mailto:|tel:|#)/i.test(href)) return ['cta_click',href]
+  return [null,null]
 }
