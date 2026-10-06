@@ -41,4 +41,4 @@ jobs:
             -i ~/.ssh/halo_hola_deploy \
             -p "${VPS_PORT:-22}" \
             "$VPS_USER@$VPS_HOST" \
-            'cd /var/www/halo-hola && bash scripts/deploy-vps.sh'
+            'set -euo pipefail; cd /var/www/halo-hola; git clean -f -- package-lock.json backend/package-lock.json frontend/package-lock.json >/dev/null 2>&1 || true; git fetch origin main --prune; git checkout main; git pull --ff-only origin main; bash scripts/deploy-vps.sh'
