@@ -1,0 +1,184 @@
+/* HOLA Tour registration as a real modal overlay instead of an inline page section. */
+.tour-register-modal{
+  position:fixed;
+  inset:0;
+  z-index:1900;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:rgba(11,28,21,.58);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.tour-register-panel{
+  position:relative;
+  width:min(920px,calc(100vw - 40px));
+  max-height:calc(100dvh - 48px);
+  overflow:auto;
+  padding:28px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  background:#173d2d;
+  color:#fff;
+  box-shadow:0 28px 90px rgba(0,0,0,.30);
+  scrollbar-width:thin;
+}
+
+.tour-register-modal-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:.78fr 1.22fr;
+  gap:28px;
+  align-items:start;
+}
+
+.tour-register-modal-grid h2{
+  margin:4px 0 8px;
+  font-size:2.35rem;
+  line-height:1;
+}
+
+.tour-register-modal-grid>div>p{
+  margin:0;
+  color:#cbd8d0;
+}
+
+.tour-register-modal-grid .tour-register-note{
+  margin-top:18px;
+}
+
+.tour-register-close{
+  position:absolute;
+  z-index:3;
+  top:14px;
+  right:14px;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:50%;
+  background:rgba(255,255,255,.10);
+  color:#fff;
+}
+
+.tour-register-close:hover{
+  background:rgba(255,255,255,.18);
+}
+
+.tour-register-close svg{
+  width:18px;
+  height:18px;
+}
+
+.tour-register-panel .tour-register-form{
+  margin:0;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:none;
+}
+
+.tour-register-panel .tour-register-success{
+  min-height:300px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+}
+
+@media(max-width:760px){
+  .tour-register-modal{
+    padding:12px;
+    align-items:center;
+  }
+
+  .tour-register-panel{
+    width:calc(100vw - 24px);
+    max-height:calc(100dvh - 24px);
+    padding:20px 14px 16px;
+    border-radius:20px;
+  }
+
+  .tour-register-modal-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .tour-register-modal-grid>div:first-child{
+    padding-right:42px;
+  }
+
+  .tour-register-modal-grid .eyebrow{
+    margin-bottom:5px;
+    font-size:.58rem;
+  }
+
+  .tour-register-modal-grid h2{
+    margin:0 0 5px;
+    font-size:1.65rem;
+  }
+
+  .tour-register-modal-grid>div>p{
+    margin-bottom:0;
+    font-size:.68rem;
+  }
+
+  .tour-register-modal-grid .tour-register-note{
+    margin-top:10px;
+    padding:9px 10px;
+    border-radius:10px;
+  }
+
+  .tour-register-modal-grid .tour-register-note b{
+    font-size:.64rem;
+  }
+
+  .tour-register-modal-grid .tour-register-note span{
+    font-size:.58rem;
+  }
+
+  .tour-register-close{
+    top:12px;
+    right:12px;
+    width:34px;
+    height:34px;
+  }
+
+  .tour-register-panel .tour-register-form{
+    grid-template-columns:1fr;
+    gap:9px;
+    padding:13px;
+    border-radius:14px;
+  }
+
+  .tour-register-panel .tour-register-form .full{
+    grid-column:auto;
+  }
+
+  .tour-register-panel .tour-register-form label{
+    gap:4px;
+    font-size:.66rem;
+  }
+
+  .tour-register-panel .tour-register-form input,
+  .tour-register-panel .tour-register-form select,
+  .tour-register-panel .tour-register-form textarea{
+    min-height:40px;
+    padding:9px 10px;
+    font-size:.72rem;
+  }
+
+  .tour-register-panel .tour-register-form textarea{
+    min-height:68px;
+    resize:vertical;
+  }
+
+  .tour-register-panel .tour-register-form .btn{
+    min-height:42px;
+  }
+
+  .tour-register-panel .tour-register-success{
+    min-height:230px;
+    padding:24px 14px;
+  }
+}
