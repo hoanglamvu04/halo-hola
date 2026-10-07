@@ -1,0 +1,56 @@
+/* Mobile artwork detail: make author/meta block easier to read without changing desktop. */
+@media (max-width:760px){
+  .artwork-showcase-info{padding:19px!important}
+
+  .artwork-author-card{
+    gap:12px!important;
+    margin:16px 0 14px!important;
+    padding:13px 0!important;
+  }
+  .artwork-author-card>span{
+    width:42px!important;
+    height:42px!important;
+    font-size:.82rem!important;
+  }
+  .artwork-author-card b{
+    font-size:.88rem!important;
+    line-height:1.25!important;
+  }
+  .artwork-author-card small{
+    margin-top:3px!important;
+    font-size:.69rem!important;
+    line-height:1.3!important;
+  }
+
+  .artwork-showcase-chips{
+    gap:7px!important;
+    margin-bottom:15px!important;
+  }
+  .artwork-showcase-chips span{
+    padding:7px 9px!important;
+    font-size:.64rem!important;
+  }
+
+  .artwork-facts{gap:8px!important}
+  .artwork-facts>div{
+    min-height:64px!important;
+    grid-template-columns:28px minmax(0,1fr)!important;
+    gap:8px!important;
+    padding:11px!important;
+    border-radius:13px!important;
+  }
+  .artwork-facts svg{
+    width:17px!important;
+    height:17px!important;
+    margin-top:3px!important;
+  }
+  .artwork-facts small{
+    font-size:.57rem!important;
+    line-height:1.25!important;
+  }
+  .artwork-facts b{
+    margin-top:4px!important;
+    font-size:.69rem!important;
+    line-height:1.35!important;
+  }
+}
