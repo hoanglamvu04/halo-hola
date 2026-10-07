@@ -1,0 +1,28 @@
+/* Keep the HOLA Tour wordmark balanced on mobile. */
+@media (max-width:760px){
+  .tour-page-copy h1{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:baseline!important;
+    gap:.16em!important;
+    max-width:100%!important;
+    margin:0 0 8px!important;
+    white-space:nowrap!important;
+    font-size:clamp(2.9rem,13vw,4.15rem)!important;
+    line-height:.88!important;
+    letter-spacing:-.055em!important;
+  }
+
+  .tour-page-copy h1 span,
+  .tour-page-copy h1 em{
+    display:inline!important;
+    margin:0!important;
+    font-size:1em!important;
+    line-height:1!important;
+    letter-spacing:inherit!important;
+  }
+}
+
+@media (max-width:380px){
+  .tour-page-copy h1{font-size:clamp(2.7rem,12.5vw,3.6rem)!important}
+}
