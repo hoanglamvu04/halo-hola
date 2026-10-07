@@ -68,7 +68,18 @@ export async function getPlaces() {
 export function getThemes() { return unwrap(client.get('/themes')); }
 export function getTheme(slug) { return unwrap(client.get('/themes/' + encodeURIComponent(slug))); }
 export function getColors() { return unwrap(client.get('/colors')); }
-export function getPublicArtworks(params = {}) { return unwrap(client.get('/artworks', { params })); }
+export async function getPublicArtworks(params = {}) {
+  if (getAdminToken()) {
+    try {
+      const rows=await unwrap(client.get('/admin/public-preview/artworks', { params }));
+      return (Array.isArray(rows)?rows:[]).map(item=>({
+        ...item,
+        slug:item?.preview&&item?.id?`xem-truoc/${item.id}`:item.slug
+      }));
+    } catch {}
+  }
+  return unwrap(client.get('/artworks', { params }));
+}
 export function getPublicArtwork(slug) { return unwrap(client.get('/artworks/' + encodeURIComponent(slug))); }
 export function getPublicTop52(params = {}) { return unwrap(client.get('/top52', { params })); }
 export function getTours() { return unwrap(client.get('/tours')); }
