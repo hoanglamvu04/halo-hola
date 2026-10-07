@@ -8,6 +8,7 @@ async function main(){
     await client.query('BEGIN');
     const found=await client.query("SELECT COUNT(*)::int AS count FROM submissions WHERE jury_note LIKE $1 OR code LIKE 'HH26-SHOW%'",[`${MARK}%`]);
     await client.query("DELETE FROM submissions WHERE jury_note LIKE $1 OR code LIKE 'HH26-SHOW%'",[`${MARK}%`]);
+    await client.query("DELETE FROM users WHERE email='showcase-scoring@halohola.invalid' AND account_status='SUSPENDED'");
     await client.query('COMMIT');
     console.log(`Removed ${found.rows[0]?.count||0} meeting showcase submissions and dependent media/scores/selections.`);
   }catch(error){
