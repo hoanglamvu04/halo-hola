@@ -1,0 +1,115 @@
+/* Refine HOLA Tour itinerary layout on mobile. */
+@media (max-width:760px){
+  .tour-itinerary{
+    margin:0;
+  }
+
+  .tour-itinerary>h2{
+    margin:0 0 12px!important;
+    font-size:1.72rem!important;
+    line-height:1.04!important;
+  }
+
+  .tour-itinerary-list{
+    display:grid!important;
+    gap:8px!important;
+  }
+
+  .tour-itinerary-list>div{
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:34px minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    column-gap:10px!important;
+    row-gap:3px!important;
+    padding:11px 12px!important;
+    margin:0!important;
+    border:1px solid rgba(23,74,56,.09)!important;
+    border-radius:13px!important;
+    background:rgba(255,253,248,.72)!important;
+    box-shadow:none!important;
+  }
+
+  .tour-itinerary-list>div:after{
+    display:none!important;
+    content:none!important;
+  }
+
+  .tour-time{
+    grid-column:2!important;
+    grid-row:1!important;
+    justify-self:start!important;
+    align-self:start!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    min-height:20px!important;
+    padding:3px 7px!important;
+    margin:0 0 1px!important;
+    border-radius:999px!important;
+    background:#f7eee1!important;
+    color:#b95834!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    font-weight:800!important;
+    letter-spacing:.02em!important;
+    white-space:nowrap!important;
+  }
+
+  .tour-itinerary-icon{
+    grid-column:1!important;
+    grid-row:1 / span 2!important;
+    align-self:start!important;
+    display:grid!important;
+    place-items:center!important;
+    width:32px!important;
+    height:32px!important;
+    margin:0!important;
+    border:1px solid rgba(196,91,50,.10)!important;
+    border-radius:10px!important;
+    background:#fff7ed!important;
+    color:#c45b32!important;
+  }
+
+  .tour-itinerary-icon svg{
+    width:15px!important;
+    height:15px!important;
+  }
+
+  .tour-itinerary-list>div>div{
+    grid-column:2!important;
+    grid-row:2!important;
+    min-width:0!important;
+  }
+
+  .tour-itinerary-list b{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#174a38!important;
+    font-size:.8rem!important;
+    line-height:1.25!important;
+    font-weight:800!important;
+  }
+
+  .tour-itinerary-list p{
+    margin:0!important;
+    color:#737d77!important;
+    font-size:.64rem!important;
+    line-height:1.45!important;
+  }
+}
+
+@media (max-width:390px){
+  .tour-itinerary-list>div{
+    grid-template-columns:32px minmax(0,1fr)!important;
+    padding:10px!important;
+    column-gap:9px!important;
+  }
+
+  .tour-itinerary-icon{
+    width:30px!important;
+    height:30px!important;
+  }
+
+  .tour-itinerary-list b{font-size:.76rem!important}
+  .tour-itinerary-list p{font-size:.61rem!important}
+}
