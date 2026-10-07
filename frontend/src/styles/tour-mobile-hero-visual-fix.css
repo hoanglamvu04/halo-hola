@@ -1,0 +1,148 @@
+/* Refine the HOLA Tour hero visual and tour picker on phones. */
+@media (max-width:760px){
+  .tour-page-hero-grid{
+    gap:10px!important;
+  }
+
+  .tour-page-hero-visual{
+    position:relative!important;
+    min-height:0!important;
+    height:auto!important;
+    margin-top:6px!important;
+  }
+
+  .tour-page-hero-image{
+    position:relative!important;
+    inset:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:16/9!important;
+    overflow:hidden!important;
+    border:1px solid rgba(23,61,45,.12)!important;
+    border-radius:17px!important;
+    background:#eee7da!important;
+    box-shadow:0 8px 22px rgba(49,42,30,.08)!important;
+  }
+
+  .tour-page-hero-image img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    border-radius:0!important;
+  }
+
+  .tour-page-handnote,
+  .tour-page-leaf{
+    display:none!important;
+  }
+
+  .tour-switch-band{
+    margin-top:0!important;
+    padding:10px 0 8px!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  .tour-switch-row{
+    display:block!important;
+  }
+
+  .tour-switch-list{
+    display:flex!important;
+    gap:8px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 0 4px!important;
+    scroll-snap-type:x mandatory!important;
+    scrollbar-width:none!important;
+  }
+
+  .tour-switch-list::-webkit-scrollbar{display:none!important}
+
+  .tour-switch-list button{
+    flex:0 0 86%!important;
+    min-width:0!important;
+    min-height:72px!important;
+    display:grid!important;
+    grid-template-columns:70px minmax(0,1fr) 32px!important;
+    align-items:center!important;
+    gap:9px!important;
+    padding:7px!important;
+    border:1px solid rgba(23,61,45,.11)!important;
+    border-radius:14px!important;
+    background:rgba(255,252,246,.9)!important;
+    box-shadow:none!important;
+    scroll-snap-align:start!important;
+  }
+
+  .tour-switch-list button.active{
+    border-color:rgba(196,91,50,.45)!important;
+    background:#fffaf4!important;
+  }
+
+  .tour-switch-list button>img,
+  .tour-switch-list button>.theme-card-placeholder{
+    width:70px!important;
+    height:58px!important;
+    border-radius:10px!important;
+    object-fit:cover!important;
+  }
+
+  .tour-switch-list button>div{
+    min-width:0!important;
+    text-align:left!important;
+  }
+
+  .tour-switch-list button span{
+    display:block!important;
+    margin-bottom:3px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    color:#c45b32!important;
+    font-size:.5rem!important;
+    line-height:1.2!important;
+  }
+
+  .tour-switch-list button h3{
+    margin:0 0 2px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    color:#174a38!important;
+    font-size:.82rem!important;
+    line-height:1.18!important;
+  }
+
+  .tour-switch-list button small{
+    display:block!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    color:#7b817b!important;
+    font-size:.54rem!important;
+  }
+
+  .tour-switch-list button>b{
+    width:30px!important;
+    height:30px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:50%!important;
+    background:#d7653d!important;
+    color:#fff!important;
+  }
+
+  .tour-switch-list button>b svg{
+    width:14px!important;
+    height:14px!important;
+  }
+
+  .tour-switch-nav{display:none!important}
+
+  .tour-selected-ref{
+    margin-top:2px!important;
+  }
+}
