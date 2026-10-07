@@ -228,7 +228,7 @@ export default function ThemePage(){
         {collectionError&&<div className="theme-gallery-error">{collectionError}</div>}
         {galleryLoading?<div className="theme-gallery-loading">Đang tải tác phẩm...</div>:
           related.length===0?<div className="jw-empty">{isAdminPreview?'Chưa có tác phẩm nào phù hợp bộ lọc.':'Chưa có tác phẩm công khai phù hợp bộ lọc.'}</div>:<>
-            <div className="theme-related-grid theme-gallery-grid">
+            <div className="theme-related-grid theme-gallery-grid theme-gallery-visible">
               {related.map(a=><Link to={a.preview?('/tac-pham/xem-truoc/'+a.id):('/tac-pham/'+a.slug)} className={'theme-related-card'+(a.preview?' preview-card':'')} key={a.id||a.slug}>
                 <div className="theme-related-media">
                   {a.image?<img loading="lazy" decoding="async" src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
