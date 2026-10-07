@@ -11,6 +11,7 @@ import {
   getAdminPublicPreviewArtworks
 } from '../services/api.js'
 import './ThemePagePreview.css'
+import './ThemePageMobile.css'
 
 const PAGE_SIZE=12
 
