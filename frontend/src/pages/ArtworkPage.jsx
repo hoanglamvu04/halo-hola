@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, CalendarDays, ChevronLeft, ChevronRight,
-  Eye, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles
+  Eye, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles, X
 } from 'lucide-react'
 import {
   getPublicArtwork,
@@ -12,6 +12,7 @@ import {
 } from '../services/api.js'
 import ArtworkCard from '../components/ArtworkCard.jsx'
 import './ArtworkPage.css'
+import './ArtworkViewer.css'
 
 const previewStatusLabel={
   PENDING:'CHỜ DUYỆT',
@@ -39,12 +40,13 @@ export default function ArtworkPage({preview=false}){
  const [error,setError]=useState('')
  const [shareLabel,setShareLabel]=useState('Chia sẻ')
  const [activeMediaIndex,setActiveMediaIndex]=useState(0)
+ const [viewerOpen,setViewerOpen]=useState(false)
 
  useEffect(()=>{
    let alive=true
    const key=preview?submissionId:slug
    if(!key)return()=>{alive=false}
-   setLoading(true);setError('');setActiveMediaIndex(0)
+   setLoading(true);setError('');setActiveMediaIndex(0);setViewerOpen(false)
    const detailRequest=preview?getAdminPublicPreviewArtwork(key):getPublicArtwork(key)
    detailRequest.then(async data=>{
      if(!alive)return
@@ -69,6 +71,22 @@ export default function ArtworkPage({preview=false}){
    if(mediaItems.length<2)return
    setActiveMediaIndex(current=>(current+delta+mediaItems.length)%mediaItems.length)
  }
+
+ useEffect(()=>{
+   if(!viewerOpen)return undefined
+   const previousOverflow=document.body.style.overflow
+   document.body.style.overflow='hidden'
+   const onKeyDown=(event)=>{
+     if(event.key==='Escape')setViewerOpen(false)
+     if(event.key==='ArrowLeft')moveMedia(-1)
+     if(event.key==='ArrowRight')moveMedia(1)
+   }
+   window.addEventListener('keydown',onKeyDown)
+   return()=>{
+     window.removeEventListener('keydown',onKeyDown)
+     document.body.style.overflow=previousOverflow
+   }
+ },[viewerOpen,mediaItems.length])
 
  const share=async()=>{
    try{
@@ -108,11 +126,11 @@ export default function ArtworkPage({preview=false}){
 
    <section className="container artwork-showcase-hero">
      <div className="artwork-gallery-shell">
-       <div className="artwork-main-media">
+       <div className={`artwork-main-media ${activeMedia&&!activeIsVideo?'is-image-viewable':''}`}>
          {activeMedia
            ? activeIsVideo
              ? <video key={activeMedia.url} src={activeMedia.url} controls playsInline preload="metadata" />
-             : <img key={activeMedia.url} src={activeMedia.url} alt={item.title||item.code} loading="eager" />
+             : <img key={activeMedia.url} src={activeMedia.url} alt={item.title||item.code} loading="eager" onClick={()=>setViewerOpen(true)} title="Nhấn để xem ảnh" />
            : <div className="artwork-media-empty"><ImageIcon/><span>Chưa có media hiển thị</span></div>}
 
          <div className="artwork-media-badges">
@@ -194,5 +212,37 @@ export default function ArtworkPage({preview=false}){
      <Link to={preview?'/chu-de':'/top52'} className="btn btn-outline"><ArrowLeft size={16}/> {preview?'Quay lại các chủ đề':'Xem toàn bộ TOP52'}</Link>
      <Link to="/gui-goc-nhin" className="btn btn-terra">Gửi góc nhìn của bạn <ArrowRight size={16}/></Link>
    </section>
+
+   {viewerOpen&&activeMedia&&<div className="artwork-media-viewer" role="dialog" aria-modal="true" aria-label={`Xem media ${item.title||item.code}`}>
+     <div className="artwork-viewer-topbar">
+       <div className="artwork-viewer-heading"><span>BỘ ẢNH / Ý TƯỞNG</span><strong>{item.title||item.code}</strong></div>
+       <button className="artwork-viewer-close" type="button" onClick={()=>setViewerOpen(false)} aria-label="Đóng trình xem"><X/></button>
+     </div>
+
+     <div className="artwork-viewer-stage">
+       {mediaItems.length>1&&<>
+         <button className="artwork-viewer-nav prev" type="button" onClick={()=>moveMedia(-1)} aria-label="Ảnh trước"><ChevronLeft/></button>
+         <button className="artwork-viewer-nav next" type="button" onClick={()=>moveMedia(1)} aria-label="Ảnh tiếp theo"><ChevronRight/></button>
+       </>}
+       <div className="artwork-viewer-media">
+         {activeIsVideo
+           ? <video key={activeMedia.url} src={activeMedia.url} controls playsInline autoPlay preload="metadata" />
+           : <img key={activeMedia.url} src={activeMedia.url} alt={item.title||item.code} />}
+         <button className="artwork-viewer-open" type="button" onClick={openMedia}><Maximize2/> Mở toàn màn hình</button>
+       </div>
+     </div>
+
+     <div className="artwork-viewer-bottom">
+       <div className="artwork-viewer-thumbs" aria-label="Danh sách media">
+         {mediaItems.map((media,index)=>{
+           const video=isVideoMedia(media,item)
+           return <button key={media.id||media.url} type="button" className={`artwork-viewer-thumb ${index===activeMediaIndex?'active':''}`} onClick={()=>setActiveMediaIndex(index)} aria-label={`Xem media ${index+1}`}>
+             {video?<span className="artwork-viewer-video-thumb"><Play/></span>:<img loading="lazy" decoding="async" src={media.url} alt=""/>}
+           </button>
+         })}
+       </div>
+       <span className="artwork-viewer-count">{activeMediaIndex+1}/{mediaItems.length}</span>
+     </div>
+   </div>}
  </main>
 }
