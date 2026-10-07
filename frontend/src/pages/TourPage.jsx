@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   CalendarDays, MapPin, Users, Bus, Utensils, Flag, ArrowRight, ArrowLeft,
-  CheckCircle2, Compass, Leaf, Camera, Heart, FileText
+  CheckCircle2, Compass, Leaf, Camera, Heart, FileText, X
 } from 'lucide-react'
 import { getTours, registerTour } from '../services/api.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
@@ -23,6 +23,20 @@ export default function TourPage(){
     getTours().then(data=>setTours((data||[]).map(normalizeTour))).catch(err=>setError(err.message)).finally(()=>setLoading(false))
   },[])
 
+  useEffect(()=>{
+    if(!showForm)return undefined
+    const previousOverflow=document.body.style.overflow
+    const closeOnEscape=(event)=>{
+      if(event.key==='Escape')setShowForm(false)
+    }
+    document.body.style.overflow='hidden'
+    window.addEventListener('keydown',closeOnEscape)
+    return ()=>{
+      document.body.style.overflow=previousOverflow
+      window.removeEventListener('keydown',closeOnEscape)
+    }
+  },[showForm])
+
   const tour=tours[selected]||tours[0]||null
   const currentItinerary=(tour?.itinerary||[]).map((item,index)=>[
     item.time||item[0]||'',
@@ -36,6 +50,11 @@ export default function TourPage(){
     item.description||item.desc||''
   ])
   const highlights=Array.isArray(tour?.highlights)?tour.highlights:[]
+
+  const openRegistration=()=>{
+    setError('')
+    setShowForm(true)
+  }
 
   const submit=async(e)=>{
     e.preventDefault()
@@ -57,7 +76,7 @@ export default function TourPage(){
           <h1><span>HOLA</span><em>Tour</em></h1>
           <p>Khám phá Hòa Lạc qua trải nghiệm thực tế – đi, gặp, trải nghiệm và kể lại bằng góc nhìn của bạn.</p>
           <div className="tour-page-actions">
-            <button className="btn btn-green" disabled={!tour} onClick={()=>setShowForm(true)}><Compass size={17}/> Chọn hành trình cho bạn <ArrowRight size={16}/></button>
+            <button className="btn btn-green" disabled={!tour} onClick={openRegistration}><Compass size={17}/> Chọn hành trình cho bạn <ArrowRight size={16}/></button>
             <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch tour</a>
           </div>
         </div>
@@ -71,7 +90,7 @@ export default function TourPage(){
     </section>
 
     {loading&&<div className="jw-empty">Đang tải HOLA Tour từ hệ thống...</div>}
-    {error&&<div className="form-error">{error}</div>}
+    {error&&!showForm&&<div className="form-error">{error}</div>}
     {!loading&&!error&&!tour&&<div className="jw-empty">Chưa có HOLA Tour được công bố.</div>}
 
     {tour&&<>
@@ -112,7 +131,7 @@ export default function TourPage(){
           </div>
           <p>{tour.desc}</p>
           <div className="tour-selected-actions">
-            <button className="btn btn-terra" onClick={()=>setShowForm(v=>!v)}>Đăng ký hành trình <ArrowRight size={16}/></button>
+            <button className="btn btn-terra" onClick={openRegistration}>Đăng ký hành trình <ArrowRight size={16}/></button>
             <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch tour</a>
           </div>
         </div>
@@ -124,22 +143,36 @@ export default function TourPage(){
       </div>
     </section>
 
-    {showForm&&<section className="tour-register-band">
-      <div className="container tour-register-grid">
-        <div><span className="eyebrow">ĐĂNG KÝ HOLA TOUR #{tour.no}</span><h2>{tour.title}</h2><p>{tour.dates} · {tour.audienceLabel}.</p><div className="tour-register-note"><b>Tham gia tour không tạo ưu thế khi chấm giải.</b><span>Tour là hoạt động trải nghiệm và kết nối cộng đồng.</span></div></div>
-        {result?<div className="tour-register-success"><CheckCircle2/><h3>Đăng ký thành công</h3><p>Mã đăng ký của bạn:</p><strong>{result.code}</strong><small>BTC sẽ liên hệ qua email/điện thoại để xác nhận.</small></div>:
-        <form className="tour-register-form" onSubmit={submit}>
-          <label>Họ và tên *<input required value={form.name} onChange={e=>setForm(v=>({...v,name:e.target.value}))}/></label>
-          <label>Email *<input required type="email" value={form.email} onChange={e=>setForm(v=>({...v,email:e.target.value}))}/></label>
-          <label>Số điện thoại *<input required value={form.phone} onChange={e=>setForm(v=>({...v,phone:e.target.value}))}/></label>
-          <label>Vai trò<select value={form.roleLabel} onChange={e=>setForm(v=>({...v,roleLabel:e.target.value}))}><option value="">Chọn vai trò</option><option>Creator / Nhiếp ảnh</option><option>Sinh viên</option><option>Kiến trúc / Thiết kế</option><option>Người địa phương</option><option>Khác</option></select></label>
-          <label className="full">Thiết bị sử dụng<input value={form.equipment} onChange={e=>setForm(v=>({...v,equipment:e.target.value}))} placeholder="Điện thoại, máy ảnh..."/></label>
-          <label className="full">Lưu ý sức khỏe / ăn uống<textarea value={form.note} onChange={e=>setForm(v=>({...v,note:e.target.value}))}/></label>
-          {error&&<div className="form-error full">{error}</div>}
-          <button className="btn btn-terra full" disabled={submitting}>{submitting?'Đang đăng ký...':'Xác nhận tham gia'}</button>
-        </form>}
-      </div>
-    </section>}
+    {showForm&&<div
+      className="tour-register-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Đăng ký HOLA Tour ${tour.no}`}
+      onMouseDown={event=>{if(event.target===event.currentTarget)setShowForm(false)}}
+    >
+      <section className="tour-register-panel" onMouseDown={event=>event.stopPropagation()}>
+        <button className="tour-register-close" type="button" aria-label="Đóng form đăng ký" onClick={()=>setShowForm(false)}><X/></button>
+        <div className="tour-register-modal-grid">
+          <div>
+            <span className="eyebrow">ĐĂNG KÝ HOLA TOUR #{tour.no}</span>
+            <h2>{tour.title}</h2>
+            <p>{tour.dates} · {tour.audienceLabel}.</p>
+            <div className="tour-register-note"><b>Tham gia tour không tạo ưu thế khi chấm giải.</b><span>Tour là hoạt động trải nghiệm và kết nối cộng đồng.</span></div>
+          </div>
+          {result?<div className="tour-register-success"><CheckCircle2/><h3>Đăng ký thành công</h3><p>Mã đăng ký của bạn:</p><strong>{result.code}</strong><small>BTC sẽ liên hệ qua email/điện thoại để xác nhận.</small></div>:
+          <form className="tour-register-form" onSubmit={submit}>
+            <label>Họ và tên *<input required value={form.name} onChange={e=>setForm(v=>({...v,name:e.target.value}))}/></label>
+            <label>Email *<input required type="email" value={form.email} onChange={e=>setForm(v=>({...v,email:e.target.value}))}/></label>
+            <label>Số điện thoại *<input required value={form.phone} onChange={e=>setForm(v=>({...v,phone:e.target.value}))}/></label>
+            <label>Vai trò<select value={form.roleLabel} onChange={e=>setForm(v=>({...v,roleLabel:e.target.value}))}><option value="">Chọn vai trò</option><option>Creator / Nhiếp ảnh</option><option>Sinh viên</option><option>Kiến trúc / Thiết kế</option><option>Người địa phương</option><option>Khác</option></select></label>
+            <label className="full">Thiết bị sử dụng<input value={form.equipment} onChange={e=>setForm(v=>({...v,equipment:e.target.value}))} placeholder="Điện thoại, máy ảnh..."/></label>
+            <label className="full">Lưu ý sức khỏe / ăn uống<textarea value={form.note} onChange={e=>setForm(v=>({...v,note:e.target.value}))}/></label>
+            {error&&<div className="form-error full">{error}</div>}
+            <button className="btn btn-terra full" disabled={submitting}>{submitting?'Đang đăng ký...':'Xác nhận tham gia'}</button>
+          </form>}
+        </div>
+      </section>
+    </div>}
 
     <section id="lich-trinh" className="tour-detail-ref">
       <div className="tour-page-inner tour-detail-grid">
