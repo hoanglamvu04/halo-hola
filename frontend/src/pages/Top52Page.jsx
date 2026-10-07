@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Award, BookOpen, CheckCircle2, Grid2X2, Map, Search, SlidersHorizontal, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ArtworkCard from '../components/ArtworkCard.jsx'
-import { getPublicTop52, getThemes } from '../services/api.js'
+import { client, getAdminToken, getPublicTop52, getThemes } from '../services/api.js'
 import './Top52Page.css'
 
 const PAGE_SIZE=16
@@ -10,12 +10,13 @@ const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeFor(item){
   const tags=Array.isArray(item.selectionTypes)?item.selectionTypes:[]
-  if(tags.includes('TITLE_FINALIST')) return 'CHUNG KẾT DANH HIỆU'
-  if(tags.includes('THEME_WINNER')) return 'GIẢI CHỦ ĐỀ'
-  if(tags.includes('COLOR_WINNER')) return 'GIẢI SẮC MÀU'
-  if(tags.includes('TOP3_THEME')) return 'TOP 3 CHỦ ĐỀ'
-  if(item.status==='AWARDED') return 'ĐẠT GIẢI'
-  return 'TOP52'
+  let label='TOP52'
+  if(tags.includes('TITLE_FINALIST')) label='CHUNG KẾT DANH HIỆU'
+  else if(tags.includes('THEME_WINNER')) label='GIẢI CHỦ ĐỀ'
+  else if(tags.includes('COLOR_WINNER')) label='GIẢI SẮC MÀU'
+  else if(tags.includes('TOP3_THEME')) label='TOP 3 CHỦ ĐỀ'
+  else if(item.status==='AWARDED') label='ĐẠT GIẢI'
+  return item.preview&&item.isDemo?`MẪU · ${label}`:label
 }
 
 export default function Top52Page(){
@@ -23,6 +24,7 @@ export default function Top52Page(){
   const [items,setItems]=useState([])
   const [total,setTotal]=useState(0)
   const [meta,setMeta]=useState({})
+  const [isAdminPreview,setIsAdminPreview]=useState(false)
   const [filters,setFilters]=useState({q:'',theme:'',type:'',award:false})
   const [loading,setLoading]=useState(true)
   const [loadingMore,setLoadingMore]=useState(false)
@@ -35,20 +37,40 @@ export default function Top52Page(){
     append?setLoadingMore(true):setLoading(true)
     setError('')
     try{
-      const data=await getPublicTop52({
+      const params={
         q:filters.q||undefined,
         theme:filters.theme||undefined,
         type:filters.type||undefined,
         award:filters.award?'true':undefined,
         limit:PAGE_SIZE,
         offset
-      })
+      }
+
+      let data
+      let preview=false
+      if(getAdminToken()){
+        try{
+          const response=await client.get('/admin/public-preview/top52',{params})
+          data=response.data
+          preview=true
+        }catch{
+          data=await getPublicTop52(params)
+        }
+      }else{
+        data=await getPublicTop52(params)
+      }
+
       const next=(data?.items||[]).map(item=>({...item,badgeLabel:badgeFor(item)}))
       setItems(current=>append?[...current,...next]:next)
       setTotal(Number(data?.total||0))
       setMeta(data?.meta||{})
-    }catch(err){setError(err.message)}
-    finally{append?setLoadingMore(false):setLoading(false)}
+      setIsAdminPreview(preview)
+    }catch(err){
+      setError(err.message)
+      setIsAdminPreview(false)
+    }finally{
+      append?setLoadingMore(false):setLoading(false)
+    }
   }
 
   useEffect(()=>{
@@ -60,9 +82,16 @@ export default function Top52Page(){
   const selectedCount=Number(meta?.selectedCount||0)
   const publishedCount=Number(meta?.publishedCount||0)
   const hasMore=items.length<total
-  const statusText=selectedCount
-    ? `${publishedCount}/${selectedCount} tác phẩm đã công bố`
-    : 'Danh sách đang chờ BTC chốt từ Jury Results'
+  const statusText=isAdminPreview
+    ? `${total} tác phẩm TOP52 đang xem trước`
+    : selectedCount
+      ? `${publishedCount}/${selectedCount} tác phẩm đã công bố`
+      : 'Danh sách đang chờ BTC chốt từ Jury Results'
+  const statusDetail=isAdminPreview
+    ? 'Chế độ quản trị · chưa cần công bố ra ngoài'
+    : meta?.round?.status==='LOCKED'
+      ? 'Vòng chấm đã khóa'
+      : 'Dữ liệu cập nhật theo Jury Results'
 
   const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
 
@@ -70,13 +99,13 @@ export default function Top52Page(){
     <section className="top52-live-hero">
       <div className="container top52-live-hero-grid">
         <div className="top52-live-copy">
-          <span className="top52-live-eyebrow"><Trophy/> TRIỂN LÃM CỘNG ĐỒNG · KẾT QUẢ BGK</span>
+          <span className="top52-live-eyebrow"><Trophy/> {isAdminPreview?'BẢN XEM TRƯỚC QUẢN TRỊ · TOP52':'TRIỂN LÃM CỘNG ĐỒNG · KẾT QUẢ BGK'}</span>
           <h1>TOP<span>52</span></h1>
           <h2>52 góc nhìn · 1 Hòa Lạc</h2>
-          <p>Danh sách này được đồng bộ trực tiếp từ kết quả Hội đồng BGK sau khi Ban tổ chức chốt TOP52 và công bố tác phẩm.</p>
+          <p>{isAdminPreview?'Bạn đang xem trước các tác phẩm đã được gắn trạng thái TOP52/Đạt giải. Dữ liệu demo hoặc chưa công bố vẫn chỉ hiển thị cho quản trị viên.':'Danh sách này được đồng bộ trực tiếp từ kết quả Hội đồng BGK sau khi Ban tổ chức chốt TOP52 và công bố tác phẩm.'}</p>
           <div className="top52-live-status">
             <span><CheckCircle2/></span>
-            <div><b>{statusText}</b><small>{meta?.round?.status==='LOCKED'?'Vòng chấm đã khóa':'Dữ liệu cập nhật theo Jury Results'}</small></div>
+            <div><b>{statusText}</b><small>{statusDetail}</small></div>
           </div>
           <div className="top52-live-actions">
             <a href="#gallery" className="btn btn-green"><Grid2X2/> Xem gallery</a>
@@ -86,7 +115,7 @@ export default function Top52Page(){
         </div>
         <div className="top52-live-visual">
           {heroImage?<img src={heroImage} alt="TOP52 HALO HOLA 2026"/>:<div className="top52-live-placeholder"/>}
-          <div className="top52-live-number"><b>{publishedCount||total||0}</b><span>TÁC PHẨM<br/>ĐANG CÔNG BỐ</span></div>
+          <div className="top52-live-number"><b>{isAdminPreview?total:(publishedCount||total||0)}</b><span>{isAdminPreview?'TÁC PHẨM':'TÁC PHẨM'}<br/>{isAdminPreview?'XEM TRƯỚC':'ĐANG CÔNG BỐ'}</span></div>
           <div className="top52-live-seal"><Award/><span>HALO HOLA<br/><b>2026</b></span></div>
         </div>
       </div>
@@ -94,7 +123,7 @@ export default function Top52Page(){
 
     <section className="container top52-live-gallery" id="gallery">
       <div className="top52-live-heading">
-        <div><span className="eyebrow">TOP52 GALLERY</span><h2>Những góc nhìn được chọn</h2></div>
+        <div><span className="eyebrow">{isAdminPreview?'BẢN XEM TRƯỚC QUẢN TRỊ · TOP52 GALLERY':'TOP52 GALLERY'}</span><h2>Những góc nhìn được chọn</h2></div>
         <p>{total} kết quả phù hợp · {themeTitle}</p>
       </div>
 
@@ -110,12 +139,12 @@ export default function Top52Page(){
 
       {loading&&<div className="top52-live-state"><span className="top52-spinner"/>Đang lấy TOP52 từ kết quả BGK...</div>}
       {error&&<div className="form-error">{error}</div>}
-      {!loading&&!error&&items.length===0&&<div className="top52-live-empty"><Trophy/><h3>Chưa có tác phẩm TOP52 được công bố</h3><p>BTC cần chốt danh sách trong Admin → Kết quả BGK và bấm “Đồng bộ TOP52 vào trạng thái”.</p></div>}
+      {!loading&&!error&&items.length===0&&<div className="top52-live-empty"><Trophy/><h3>{isAdminPreview?'Chưa có tác phẩm nào được gắn TOP52':'Chưa có tác phẩm TOP52 được công bố'}</h3><p>{isAdminPreview?'Hãy gắn trạng thái TOP52/Đạt giải trong quản trị để kiểm tra giao diện trước khi công bố.':'BTC cần chốt danh sách trong Admin → Kết quả BGK và bấm “Đồng bộ TOP52 vào trạng thái”.'}</p></div>}
 
       {!loading&&items.length>0&&<>
         <div className="art-grid top52-live-grid">{items.map(item=><ArtworkCard key={item.id} item={item}/>)}</div>
         <div className="top52-live-footer">
-          <span>Đang hiển thị <b>{items.length}</b> / {total} tác phẩm</span>
+          <span>Đang hiển thị <b>{items.length}</b> / {total} tác phẩm{isAdminPreview?' · xem trước quản trị':''}</span>
           {hasMore&&<button className="btn btn-outline" disabled={loadingMore} onClick={()=>load({append:true})}>{loadingMore?'Đang tải...':'Xem thêm tác phẩm'}</button>}
         </div>
       </>}
