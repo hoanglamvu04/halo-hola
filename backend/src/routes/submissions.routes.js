@@ -6,11 +6,37 @@ import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
 import { createSubmission, lookupSubmission, getPublicStats } from '../services/submission.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
+import { verifyToken } from '../utils/jwt.js';
+import { pool } from '../database/pool.js';
 
 const router = Router();
 
-router.get('/stats', async (_req, res, next) => {
+function hasAdminPreview(req) {
+  const header=String(req.headers.authorization||'');
+  if(!header.startsWith('Bearer ')) return false;
   try {
+    const user=verifyToken(header.slice(7));
+    return ['ADMIN','MODERATOR'].includes(user?.role);
+  } catch {
+    return false;
+  }
+}
+
+router.get('/stats', async (req, res, next) => {
+  try {
+    if (hasAdminPreview(req)) {
+      const { rows }=await pool.query(`
+        SELECT
+          COUNT(*)::int AS submissions,
+          COUNT(DISTINCT email)::int AS creators,
+          COUNT(DISTINCT NULLIF(location,''))::int AS locations,
+          COUNT(*) FILTER (WHERE status IN ('TOP52','AWARDED'))::int AS top52
+        FROM submissions
+        WHERE code LIKE 'HH26-SHOW%'
+      `);
+      const preview=rows[0];
+      if (preview?.submissions) return res.json({ ...preview, preview: true });
+    }
     res.json(await getPublicStats());
   } catch (error) {
     next(error);
