@@ -26,40 +26,39 @@
   }
 
   .theme-index-search{
-    position:relative;
     width:100%;
     max-width:none!important;
-    min-height:46px;
-    gap:9px;
-    padding:4px 13px 4px 6px!important;
-    border:1px solid rgba(25,71,49,.11)!important;
-    border-radius:999px!important;
-    background:rgba(255,255,255,.94)!important;
-    box-shadow:0 7px 22px rgba(38,53,44,.07),0 1px 0 rgba(255,255,255,.85) inset!important;
-    transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+    min-height:40px;
+    gap:8px;
+    padding:0 11px!important;
+    border:1px solid rgba(23,61,45,.16)!important;
+    border-radius:9px!important;
+    background:#fff!important;
+    box-shadow:none!important;
+    transition:border-color .15s ease,background .15s ease;
   }
   .theme-index-search:focus-within{
-    border-color:rgba(23,77,51,.34)!important;
+    border-color:rgba(23,61,45,.42)!important;
     background:#fff!important;
-    box-shadow:0 8px 24px rgba(38,53,44,.10),0 0 0 3px rgba(34,92,63,.07)!important;
+    box-shadow:none!important;
   }
   .theme-index-search svg{
-    width:32px!important;
-    height:32px!important;
-    padding:8px;
-    border-radius:50%;
-    color:#1f5a3d!important;
-    background:#eef4ed;
-    stroke-width:2;
-    flex:0 0 32px!important;
+    width:15px!important;
+    height:15px!important;
+    padding:0!important;
+    border-radius:0!important;
+    color:#496355!important;
+    background:transparent!important;
+    stroke-width:1.8;
+    flex:0 0 15px!important;
   }
   .theme-index-search input{
-    height:36px!important;
+    height:38px!important;
     padding:0!important;
-    font-size:.78rem!important;
-    font-weight:560!important;
+    font-size:.76rem!important;
+    font-weight:500!important;
     color:#173d2d!important;
-    letter-spacing:.005em;
+    letter-spacing:0;
   }
   .theme-index-search input::placeholder{color:#9a9f9b;opacity:1}
 
@@ -79,18 +78,21 @@
   .theme-index-chips::-webkit-scrollbar{display:none}
   .theme-index-chips button{
     flex:0 0 auto!important;
-    min-height:31px!important;
-    padding:6px 10px!important;
+    min-height:29px!important;
+    padding:5px 9px!important;
+    border:1px solid rgba(23,61,45,.14)!important;
     border-radius:999px!important;
-    font-size:.62rem!important;
+    background:transparent!important;
+    color:#476052!important;
+    font-size:.61rem!important;
     line-height:1.05!important;
     white-space:nowrap!important;
     scroll-snap-align:start;
     box-shadow:none!important;
   }
   .theme-index-chips button.active{
-    background:#214a35!important;
-    border-color:#214a35!important;
+    background:#173d2d!important;
+    border-color:#173d2d!important;
     color:#fff!important;
   }
 }
