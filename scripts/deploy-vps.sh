@@ -56,13 +56,14 @@ fi
 if [[ ! -f "$SHOWCASE_SEED_MARKER" ]]; then
   echo "==> Seed 52-item meeting showcase dataset (one time)"
   npm run db:seed:showcase --prefix backend
-  npm run db:seed:showcase:scores --prefix backend
   touch "$SHOWCASE_SEED_MARKER"
 else
   echo "==> Meeting showcase seed already applied"
 fi
 
-# Harmless on every deploy; keeps showcase capture dates within the pre-meeting window.
+# Idempotent showcase enrichments. Keep these outside the one-time marker so an older
+# meeting seed can be upgraded safely without recreating participant-style records.
+npm run db:seed:showcase:scores --prefix backend
 npm run db:seed:showcase:dates --prefix backend
 
 echo "==> Build frontend"
