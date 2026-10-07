@@ -1,0 +1,43 @@
+/* Improve readability of the tour information card on mobile. */
+@media (max-width:760px){
+  .tour-info-ref{
+    padding:15px 16px!important;
+    gap:10px!important;
+    border-radius:14px!important;
+  }
+
+  .tour-info-title{
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    padding:0 0 10px!important;
+    margin-bottom:1px!important;
+  }
+
+  .tour-info-title svg{
+    width:20px!important;
+    height:20px!important;
+    flex:0 0 auto!important;
+  }
+
+  .tour-info-title b{
+    font-size:1.12rem!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+  }
+
+  .tour-info-ref p{
+    margin:0 0 4px!important;
+    font-size:.69rem!important;
+    line-height:1.42!important;
+    letter-spacing:-.005em!important;
+  }
+
+  .tour-info-ref p:last-child{margin-bottom:0!important}
+  .tour-info-ref p b{font-weight:800!important}
+}
+
+@media (max-width:380px){
+  .tour-info-title b{font-size:1.08rem!important}
+  .tour-info-ref p{font-size:.67rem!important}
+}
