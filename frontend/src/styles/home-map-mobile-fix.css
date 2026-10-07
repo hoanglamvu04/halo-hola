@@ -1,0 +1,108 @@
+/* Mobile HOLA Map: compact spacing and a clean map-only viewport.
+   The official embed keeps its controls, so on the homepage preview we crop the
+   middle of a taller iframe. This leaves search/layer/basemap toolbars outside
+   the visible frame while preserving the real live map. */
+@media (max-width: 760px) {
+  .home-map-live-section {
+    padding: 22px 0 20px !important;
+  }
+
+  .home-map-live-grid {
+    width: calc(100% - 20px) !important;
+    display: block !important;
+    margin-inline: auto !important;
+  }
+
+  .home-map-live-copy {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+  }
+
+  .home-map-live-copy .eyebrow {
+    margin-bottom: 6px !important;
+  }
+
+  .home-map-live-copy h2 {
+    margin: 0 0 5px !important;
+    font-size: 2.02rem !important;
+    line-height: .98 !important;
+    letter-spacing: -.035em !important;
+  }
+
+  .home-map-live-copy > p {
+    margin: 0 0 9px !important;
+    font-size: .74rem !important;
+    line-height: 1.42 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* The little data/source row adds noise on mobile. */
+  .home-map-live-meta {
+    display: none !important;
+  }
+
+  .home-map-live-copy .btn {
+    width: 100% !important;
+    min-height: 39px !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    font-size: .69rem !important;
+  }
+
+  /* Clean map-only crop: hide the embed's search/layer/basemap UI above and below. */
+  .home-map-live-frame {
+    position: relative !important;
+    width: 100% !important;
+    height: 228px !important;
+    min-height: 228px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    background: #dfe9e2 !important;
+  }
+
+  .home-map-live-frame iframe {
+    position: absolute !important;
+    left: 0 !important;
+    top: -148px !important;
+    width: 100% !important;
+    height: 520px !important;
+    min-height: 520px !important;
+    border: 0 !important;
+  }
+
+  .home-map-live-badge,
+  .home-map-live-loading {
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .home-map-live-section {
+    padding: 19px 0 18px !important;
+  }
+
+  .home-map-live-grid {
+    width: calc(100% - 18px) !important;
+  }
+
+  .home-map-live-copy {
+    margin-bottom: 8px !important;
+  }
+
+  .home-map-live-frame {
+    height: 216px !important;
+    min-height: 216px !important;
+  }
+
+  .home-map-live-frame iframe {
+    top: -152px !important;
+    height: 520px !important;
+    min-height: 520px !important;
+  }
+}
