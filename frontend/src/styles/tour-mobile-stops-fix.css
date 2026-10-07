@@ -1,0 +1,106 @@
+/* Refine HOLA Tour featured stops on mobile. */
+@media (max-width:760px){
+  .tour-stops{
+    margin-top:2px!important;
+  }
+
+  .tour-stops-head{
+    margin-bottom:9px!important;
+  }
+
+  .tour-stops-head h2{
+    margin:0!important;
+    font-size:1.72rem!important;
+    line-height:1.04!important;
+  }
+
+  .tour-stop-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+
+  .tour-stop-card{
+    display:grid!important;
+    grid-template-columns:96px minmax(0,1fr)!important;
+    align-items:stretch!important;
+    min-height:0!important;
+    padding:6px!important;
+    overflow:hidden!important;
+    border:1px solid rgba(23,74,56,.09)!important;
+    border-radius:14px!important;
+    background:rgba(255,253,248,.78)!important;
+    box-shadow:none!important;
+  }
+
+  .tour-stop-card>img{
+    width:96px!important;
+    height:92px!important;
+    min-height:0!important;
+    border-radius:10px!important;
+    object-fit:cover!important;
+  }
+
+  .tour-stop-card>div{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-width:0!important;
+    padding:8px 36px 8px 10px!important;
+  }
+
+  .tour-stop-card h3{
+    margin:0 0 4px!important;
+    color:#174a38!important;
+    font-size:.86rem!important;
+    line-height:1.2!important;
+    font-weight:800!important;
+  }
+
+  .tour-stop-card p{
+    margin:0!important;
+    color:#707a74!important;
+    font-size:.64rem!important;
+    line-height:1.42!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+  }
+
+  .tour-stop-card span{
+    position:absolute!important;
+    right:7px!important;
+    top:50%!important;
+    bottom:auto!important;
+    transform:translateY(-50%)!important;
+    display:grid!important;
+    place-items:center!important;
+    width:26px!important;
+    height:26px!important;
+    border:1px solid rgba(23,74,56,.08)!important;
+    border-radius:50%!important;
+    background:#f2f0e8!important;
+    color:#174a38!important;
+  }
+
+  .tour-stop-card span svg{
+    width:12px!important;
+    height:12px!important;
+  }
+}
+
+@media (max-width:390px){
+  .tour-stop-card{
+    grid-template-columns:88px minmax(0,1fr)!important;
+  }
+
+  .tour-stop-card>img{
+    width:88px!important;
+    height:88px!important;
+  }
+
+  .tour-stop-card h3{font-size:.82rem!important}
+  .tour-stop-card p{font-size:.61rem!important}
+}
