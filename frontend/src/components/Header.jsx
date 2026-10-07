@@ -1,6 +1,6 @@
 import { Menu, Search, X, ArrowRight, Leaf } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getHomepageContent, getSiteSettings } from '../services/api.js'
 
 const items = [
@@ -11,6 +11,11 @@ const items = [
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:'',favicon:''})
+  const [mobileFloating,setMobileFloating]=useState(false)
+  const [mobileHeaderVisible,setMobileHeaderVisible]=useState(true)
+  const openRef=useRef(open)
+
+  useEffect(()=>{ openRef.current=open },[open])
 
   useEffect(()=>{
     Promise.allSettled([getHomepageContent(),getSiteSettings()]).then(([homeResult,settingsResult])=>{
@@ -52,9 +57,81 @@ export default function Header() {
     }
   },[open])
 
+  useEffect(()=>{
+    let lastY=Math.max(0,window.scrollY||0)
+    let accumulated=0
+    let ticking=false
+
+    const update=()=>{
+      ticking=false
+      const y=Math.max(0,window.scrollY||0)
+      const mobile=window.matchMedia('(max-width: 760px)').matches
+
+      if(!mobile){
+        setMobileFloating(false)
+        setMobileHeaderVisible(true)
+        lastY=y
+        accumulated=0
+        return
+      }
+
+      const floating=y>110
+      setMobileFloating(floating)
+
+      if(!floating){
+        setMobileHeaderVisible(true)
+        accumulated=0
+        lastY=y
+        return
+      }
+
+      if(openRef.current){
+        setMobileHeaderVisible(true)
+        accumulated=0
+        lastY=y
+        return
+      }
+
+      const diff=y-lastY
+      if((diff>0&&accumulated<0)||(diff<0&&accumulated>0)) accumulated=0
+      accumulated+=diff
+
+      // Hide while moving down, reveal only after a deliberate short upward swipe.
+      if(accumulated>20){
+        setMobileHeaderVisible(false)
+        accumulated=0
+      } else if(accumulated<-14){
+        setMobileHeaderVisible(true)
+        accumulated=0
+      }
+
+      lastY=y
+    }
+
+    const requestUpdate=()=>{
+      if(ticking) return
+      ticking=true
+      window.requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll',requestUpdate,{passive:true})
+    window.addEventListener('resize',requestUpdate)
+    return ()=>{
+      window.removeEventListener('scroll',requestUpdate)
+      window.removeEventListener('resize',requestUpdate)
+    }
+  },[])
+
   if(!config.enabled) return null
 
-  return <header className="site-header">
+  const headerClass=[
+    'site-header',
+    mobileFloating?'mobile-header-floating':'',
+    mobileHeaderVisible||open?'mobile-header-visible':'mobile-header-hidden'
+  ].filter(Boolean).join(' ')
+
+  return <header className={headerClass}>
     <div className="container header-inner">
       <Link className={'brand '+(config.logoImage?'brand-image':'brand-lockup')} to="/">
         {config.logoImage?<img src={config.logoImage} alt={config.siteName||"HALO HOLA"}/>:<>
