@@ -62,6 +62,9 @@ else
   echo "==> Meeting showcase seed already applied"
 fi
 
+# Harmless on every deploy; keeps showcase capture dates within the pre-meeting window.
+npm run db:seed:showcase:dates --prefix backend
+
 echo "==> Build frontend"
 npm run build --prefix frontend
 test -s frontend/dist/index.html
