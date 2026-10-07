@@ -1,0 +1,15 @@
+/* Mobile-only simplification for theme detail pages. */
+@media(max-width:760px){
+  .theme-page-ref .theme-hero-inner{
+    grid-template-columns:1fr!important;
+    gap:0!important;
+  }
+
+  .theme-page-ref .theme-hero-visual{
+    display:none!important;
+  }
+
+  .theme-page-ref .theme-hero-ref{
+    padding-bottom:14px!important;
+  }
+}
