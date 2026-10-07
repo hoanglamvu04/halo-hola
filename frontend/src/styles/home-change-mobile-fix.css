@@ -2,7 +2,7 @@
    Match the campaign block's vertical rhythm and keep the three eras as a compact 3-card row. */
 @media (max-width: 760px) {
   .change-band-reference {
-    padding: 28px 0 20px !important;
+    padding: 18px 0 10px !important;
     overflow: hidden !important;
     background: #fbf7ef !important;
   }
@@ -21,7 +21,7 @@
     grid-column: 1 / -1 !important;
     width: 100% !important;
     min-width: 0 !important;
-    padding: 0 2px 10px !important;
+    padding: 0 2px 8px !important;
     margin: 0 !important;
   }
 
@@ -64,7 +64,7 @@
   .change-band-reference .change-cta {
     width: 100% !important;
     min-height: 44px !important;
-    margin: 13px 0 2px !important;
+    margin: 11px 0 0 !important;
     padding: 10px 14px !important;
     border-radius: 999px !important;
     justify-content: center !important;
@@ -134,11 +134,16 @@
   .change-band-reference .change-decor {
     display: none !important;
   }
+
+  /* Keep the hand-off into the next homepage section compact on mobile. */
+  .change-band-reference + .themes-showcase {
+    padding-top: 22px !important;
+  }
 }
 
 @media (max-width: 390px) {
   .change-band-reference {
-    padding: 26px 0 18px !important;
+    padding: 16px 0 8px !important;
   }
 
   .change-band-reference .change-grid {
@@ -157,5 +162,9 @@
 
   .change-band-reference .era-content b {
     font-size: .85rem !important;
+  }
+
+  .change-band-reference + .themes-showcase {
+    padding-top: 18px !important;
   }
 }
