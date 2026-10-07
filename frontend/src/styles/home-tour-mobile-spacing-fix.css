@@ -1,0 +1,59 @@
+/* Mobile HOLA Tour spacing: keep the horizontal swipe interaction, only tighten rhythm. */
+@media (max-width: 760px) {
+  .home-tour-section {
+    padding: 22px 0 20px !important;
+  }
+
+  .home-tour-inner {
+    width: calc(100% - 28px) !important;
+  }
+
+  .home-tour-head {
+    display: block !important;
+    margin-bottom: 11px !important;
+  }
+
+  .home-tour-title .eyebrow {
+    margin-bottom: 5px !important;
+  }
+
+  .home-tour-title h2 {
+    margin-bottom: 0 !important;
+  }
+
+  .home-tour-stroke {
+    margin-top: 5px !important;
+  }
+
+  .home-tour-desc {
+    margin-top: 5px !important;
+    padding: 0 !important;
+    gap: 6px !important;
+  }
+
+  .home-tour-desc p {
+    margin: 0 !important;
+  }
+
+  /* Preserve the swipe rail on mobile. */
+  .home-tour-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0 0 4px !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .home-tour-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .home-tour-card {
+    flex: 0 0 min(84vw, 340px) !important;
+    scroll-snap-align: start !important;
+  }
+}
