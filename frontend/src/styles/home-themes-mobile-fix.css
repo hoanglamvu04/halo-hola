@@ -118,7 +118,7 @@
     position: relative !important;
     min-height: 0 !important;
     height: auto !important;
-    padding: 9px 34px 11px 9px !important;
+    padding: 9px 38px 11px 9px !important;
   }
 
   .theme-card-reference .theme-card-number {
@@ -153,11 +153,17 @@
     overflow: hidden !important;
   }
 
+  /* Keep the arrow in its own reserved top-right slot inside the card body.
+     Explicitly reset left/bottom from older card rules so it can never overlap the title. */
   .theme-card-reference .theme-card-arrow {
+    position: absolute !important;
     width: 26px !important;
     height: 26px !important;
-    right: 7px !important;
-    bottom: 8px !important;
+    top: 8px !important;
+    right: 8px !important;
+    bottom: auto !important;
+    left: auto !important;
+    margin: 0 !important;
   }
 
   .theme-card-reference .theme-card-arrow svg {
@@ -193,7 +199,12 @@
   .theme-card-reference .theme-card-body {
     min-height: 0 !important;
     height: auto !important;
-    padding: 8px 32px 10px 8px !important;
+    padding: 8px 36px 10px 8px !important;
+  }
+
+  .theme-card-reference .theme-card-arrow {
+    top: 7px !important;
+    right: 7px !important;
   }
 
   .theme-card-reference h3 {
