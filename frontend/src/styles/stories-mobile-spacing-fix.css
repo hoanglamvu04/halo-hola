@@ -1,0 +1,95 @@
+/* Compact Stories page spacing on mobile without changing desktop layout. */
+@media (max-width:760px){
+  .stories-intro-ref{
+    padding:20px 0 12px!important;
+  }
+
+  .stories-intro-inner{
+    gap:8px!important;
+  }
+
+  .stories-kicker{
+    margin-bottom:4px!important;
+  }
+
+  .stories-intro-inner h1{
+    margin:0!important;
+  }
+
+  .stories-intro-inner h2{
+    margin:4px 0 0!important;
+  }
+
+  .stories-intro-side>p{
+    margin:4px 0 0!important;
+    line-height:1.45!important;
+  }
+
+  .stories-intro-stats{
+    margin-top:8px!important;
+    gap:5px!important;
+  }
+
+  .stories-intro-stats span{
+    padding:6px 8px!important;
+  }
+
+  .stories-feature-ref{
+    padding:10px 0 24px!important;
+  }
+
+  .stories-feature-inner{
+    gap:12px!important;
+  }
+
+  .stories-feature-image{
+    border-radius:16px!important;
+  }
+
+  .stories-feature-copy .eyebrow{
+    margin:0 0 6px!important;
+  }
+
+  .stories-feature-copy h2{
+    margin:0!important;
+    line-height:1!important;
+  }
+
+  .stories-feature-lead{
+    margin:9px 0 0!important;
+    line-height:1.5!important;
+  }
+
+  .stories-feature-meta{
+    margin-top:9px!important;
+  }
+
+  .stories-feature-author{
+    margin:7px 0 0!important;
+  }
+
+  .stories-read-link{
+    margin-top:9px!important;
+  }
+
+  .stories-list-ref{
+    padding:28px 0 38px!important;
+  }
+
+  .stories-list-head{
+    gap:8px!important;
+    margin-bottom:14px!important;
+  }
+}
+
+@media (max-width:390px){
+  .stories-intro-ref{
+    padding-top:17px!important;
+    padding-bottom:10px!important;
+  }
+
+  .stories-feature-ref{
+    padding-top:8px!important;
+    padding-bottom:20px!important;
+  }
+}
