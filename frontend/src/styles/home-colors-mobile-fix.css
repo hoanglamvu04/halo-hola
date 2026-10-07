@@ -1,0 +1,243 @@
+/* Mobile refinement for the homepage “Sắc màu Hòa Lạc” section.
+   Make the visual story compact and present all six colors as a balanced 2-column gallery. */
+@media (max-width: 760px) {
+  .color-section-v3 {
+    padding: 20px 0 22px !important;
+    overflow: hidden !important;
+  }
+
+  .color-section-v3 .color-v3-blur {
+    display: none !important;
+  }
+
+  .color-v3-top {
+    display: block !important;
+    width: calc(100% - 20px) !important;
+    margin: 0 auto !important;
+  }
+
+  .color-copy {
+    margin: 0 !important;
+  }
+
+  .colors-eyebrow-row {
+    margin: 0 0 6px !important;
+    gap: 8px !important;
+  }
+
+  .colors-eyebrow-row .eyebrow {
+    margin: 0 !important;
+    font-size: .64rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: .14em !important;
+  }
+
+  .color-copy h2 {
+    margin: 0 0 8px !important;
+    font-size: 2.08rem !important;
+    line-height: .95 !important;
+    letter-spacing: -.045em !important;
+  }
+
+  .color-copy h2 span,
+  .color-copy h2 em {
+    display: block !important;
+  }
+
+  .color-copy p {
+    margin: 0 !important;
+    font-size: .75rem !important;
+    line-height: 1.44 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* One compact visual instead of a tall decorative composition. */
+  .color-v3-story {
+    position: relative !important;
+    height: 188px !important;
+    min-height: 188px !important;
+    margin: 13px 0 0 !important;
+    border-radius: 17px !important;
+    overflow: hidden !important;
+  }
+
+  .color-v3-script,
+  .color-v3-note {
+    display: none !important;
+  }
+
+  .color-v3-window {
+    position: absolute !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    border: 4px solid rgba(255,255,255,.94) !important;
+    box-shadow: 0 8px 22px rgba(35,48,40,.12) !important;
+  }
+
+  .color-v3-window-a {
+    left: 0 !important;
+    top: 0 !important;
+    width: 75% !important;
+    height: 100% !important;
+    border-radius: 22px 22px 22px 10px !important;
+    transform: none !important;
+  }
+
+  .color-v3-window-b {
+    right: 0 !important;
+    left: auto !important;
+    top: 27px !important;
+    bottom: auto !important;
+    width: 48% !important;
+    height: 126px !important;
+    border-radius: 17px !important;
+    transform: none !important;
+  }
+
+  .color-v3-window img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Six colors: 2 columns × 3 rows, no sideways carousel. */
+  .color-v3-cards {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: calc(100% - 20px) !important;
+    margin: 12px auto 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    scroll-snap-type: none !important;
+  }
+
+  .color-v3-card {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    border-radius: 13px !important;
+    overflow: hidden !important;
+    scroll-snap-align: none !important;
+    background: rgba(255,255,255,.72) !important;
+    box-shadow: 0 6px 16px rgba(34,49,40,.055) !important;
+  }
+
+  .color-v3-card > img {
+    order: 1 !important;
+    width: 100% !important;
+    height: 116px !important;
+    min-height: 116px !important;
+    object-fit: cover !important;
+  }
+
+  .color-v3-card-head {
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: 28px minmax(0,1fr) 24px !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 58px !important;
+    padding: 8px !important;
+  }
+
+  .color-v3-dot {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    border-radius: 50% !important;
+  }
+
+  .color-v3-card-head > div {
+    min-width: 0 !important;
+  }
+
+  .color-v3-card-head b {
+    display: block !important;
+    margin: 0 !important;
+    font-size: .78rem !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .color-v3-card-head small {
+    display: block !important;
+    margin-top: 2px !important;
+    font-size: .55rem !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .color-v3-arrow {
+    position: static !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+  }
+
+  .color-v3-arrow svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .color-section-v3 {
+    padding: 18px 0 20px !important;
+  }
+
+  .color-v3-top,
+  .color-v3-cards {
+    width: calc(100% - 18px) !important;
+  }
+
+  .color-v3-story {
+    height: 176px !important;
+    min-height: 176px !important;
+  }
+
+  .color-v3-window-b {
+    top: 25px !important;
+    height: 116px !important;
+  }
+
+  .color-v3-cards {
+    gap: 7px !important;
+  }
+
+  .color-v3-card > img {
+    height: 108px !important;
+    min-height: 108px !important;
+  }
+
+  .color-v3-card-head {
+    grid-template-columns: 26px minmax(0,1fr) 22px !important;
+    gap: 6px !important;
+    min-height: 55px !important;
+    padding: 7px !important;
+  }
+
+  .color-v3-dot {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+  }
+
+  .color-v3-card-head b {
+    font-size: .74rem !important;
+  }
+}
