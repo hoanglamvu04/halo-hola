@@ -10,6 +10,8 @@
     "db:seed": "node src/database/seed.js",
     "db:seed:demo": "node src/database/seedDemo.js",
     "db:seed:media-demo": "node src/database/seedMediaDemo.js",
+    "db:seed:showcase": "node src/database/seedShowcase.js",
+    "db:seed:showcase:clean": "node src/database/cleanupShowcase.js",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "r2:test": "node src/storage/testR2.js"
   },
@@ -17,7 +19,7 @@
     "@aws-sdk/client-s3": "^3.901.0",
     "@aws-sdk/s3-request-presigner": "^3.901.0",
     "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
+    "cors": "^4.21.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-rate-limit": "^7.4.1",
