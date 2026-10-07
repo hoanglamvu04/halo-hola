@@ -16,8 +16,6 @@ cd "$ROOT"
 
 echo "==> Sync Git"
 git fetch origin "$BRANCH" --prune
-# Older deployments created untracked npm lockfiles because they were ignored.
-# Remove only those legacy untracked paths before the first pull that tracks them.
 git clean -f -- package-lock.json backend/package-lock.json frontend/package-lock.json >/dev/null 2>&1 || true
 git checkout "$BRANCH"
 git pull --ff-only origin "$BRANCH"
@@ -58,6 +56,7 @@ fi
 if [[ ! -f "$SHOWCASE_SEED_MARKER" ]]; then
   echo "==> Seed 52-item meeting showcase dataset (one time)"
   npm run db:seed:showcase --prefix backend
+  npm run db:seed:showcase:scores --prefix backend
   touch "$SHOWCASE_SEED_MARKER"
 else
   echo "==> Meeting showcase seed already applied"
