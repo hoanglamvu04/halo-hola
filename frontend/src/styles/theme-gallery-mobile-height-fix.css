@@ -1,0 +1,42 @@
+/* Mobile theme gallery: content-driven card height.
+   This intentionally neutralizes older min-height rules that were stacking and
+   leaving a large empty area under short artwork cards. */
+@media (max-width:760px){
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible{
+    align-items:start!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible > .theme-related-card{
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    grid-template-rows:145px auto!important;
+    align-self:start!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible .theme-related-body{
+    min-height:0!important;
+    height:auto!important;
+    padding:10px!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible .theme-related-author{
+    margin-top:8px!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible .theme-related-meta{
+    margin-top:7px!important;
+    padding-top:7px!important;
+  }
+}
+
+@media (max-width:390px){
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible > .theme-related-card{
+    min-height:0!important;
+    grid-template-rows:128px auto!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-related-grid.theme-gallery-visible .theme-related-body{
+    padding:9px 8px!important;
+  }
+}
