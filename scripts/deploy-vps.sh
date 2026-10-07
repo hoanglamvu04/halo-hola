@@ -6,6 +6,7 @@ BRANCH="${HALO_HOLA_BRANCH:-main}"
 CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
+SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -52,6 +53,14 @@ if [[ ! -f "$MEDIA_DEMO_SEED_MARKER" ]]; then
   touch "$MEDIA_DEMO_SEED_MARKER"
 else
   echo "==> Demo Media Library already applied"
+fi
+
+if [[ ! -f "$SHOWCASE_SEED_MARKER" ]]; then
+  echo "==> Seed 52-item meeting showcase dataset (one time)"
+  npm run db:seed:showcase --prefix backend
+  touch "$SHOWCASE_SEED_MARKER"
+else
+  echo "==> Meeting showcase seed already applied"
 fi
 
 echo "==> Build frontend"
