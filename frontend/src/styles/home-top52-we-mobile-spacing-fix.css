@@ -1,0 +1,97 @@
+/* Mobile homepage spacing pass for TOP52 / Stories and WE HOLA.
+   Keep the current content and visual direction, only tighten vertical rhythm. */
+@media (max-width: 760px) {
+  /* TOP52 / Stories */
+  .top52-showcase {
+    padding: 22px 0 20px !important;
+  }
+
+  .top52-inner {
+    width: calc(100% - 28px) !important;
+  }
+
+  .top52-head {
+    display: block !important;
+    margin: 0 0 9px !important;
+  }
+
+  .top52-eyebrow-row {
+    margin-bottom: 5px !important;
+  }
+
+  .top52-title-block h2 {
+    margin: 0 0 5px !important;
+  }
+
+  .top52-title-block > p,
+  .top52-head-side > p {
+    margin: 0 0 6px !important;
+    line-height: 1.38 !important;
+  }
+
+  .top52-head-side {
+    margin-top: 4px !important;
+  }
+
+  .top52-all-link {
+    margin-top: 1px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .top52-card-grid {
+    margin-top: 10px !important;
+  }
+
+  /* When there are no public cards yet, avoid leaving an empty visual block. */
+  .top52-card-grid:empty {
+    display: none !important;
+    margin: 0 !important;
+  }
+
+  /* WE HOLA */
+  .we-banner {
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+
+  .we-overlay {
+    padding: 16px 14px 18px !important;
+    align-items: center !important;
+  }
+
+  .we-overlay .eyebrow {
+    margin-bottom: 5px !important;
+  }
+
+  .we-overlay h2 {
+    margin: 0 0 6px !important;
+    line-height: .98 !important;
+  }
+
+  .we-overlay p {
+    margin: 0 0 9px !important;
+    line-height: 1.4 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .we-overlay .btn {
+    min-height: 39px !important;
+    padding-block: 8px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .top52-showcase {
+    padding: 19px 0 18px !important;
+  }
+
+  .we-banner {
+    height: 208px !important;
+    min-height: 208px !important;
+  }
+
+  .we-overlay {
+    padding-top: 14px !important;
+    padding-bottom: 16px !important;
+  }
+}
