@@ -11,6 +11,7 @@
     "db:seed:demo": "node src/database/seedDemo.js",
     "db:seed:media-demo": "node src/database/seedMediaDemo.js",
     "db:seed:showcase": "node src/database/seedShowcase.js",
+    "db:seed:showcase:scores": "node src/database/seedShowcaseScores.js",
     "db:seed:showcase:clean": "node src/database/cleanupShowcase.js",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "r2:test": "node src/storage/testR2.js"
