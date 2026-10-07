@@ -1,8 +1,8 @@
 /* Mobile refinement for the “Hòa Lạc đang thay đổi” section.
-   Keep the intro full-width, then show the three eras as a compact 3-card row. */
+   Match the campaign block's vertical rhythm and keep the three eras as a compact 3-card row. */
 @media (max-width: 760px) {
   .change-band-reference {
-    padding: 28px 0 30px !important;
+    padding: 28px 0 20px !important;
     overflow: hidden !important;
     background: #fbf7ef !important;
   }
@@ -32,7 +32,7 @@
 
   .change-band-reference .change-eyebrow-row .eyebrow {
     margin: 0 !important;
-    font-size: .52rem !important;
+    font-size: .65rem !important;
     line-height: 1.35 !important;
     letter-spacing: .14em !important;
   }
@@ -44,7 +44,7 @@
   .change-band-reference .change-copy h2 {
     max-width: 330px !important;
     margin: 0 0 8px !important;
-    font-size: 2.05rem !important;
+    font-size: 2.18rem !important;
     line-height: .98 !important;
     letter-spacing: -.045em !important;
   }
@@ -52,7 +52,7 @@
   .change-band-reference .change-copy p {
     max-width: 350px !important;
     margin: 0 !important;
-    font-size: .70rem !important;
+    font-size: .83rem !important;
     line-height: 1.48 !important;
     color: #69736c !important;
     display: -webkit-box !important;
@@ -63,12 +63,12 @@
 
   .change-band-reference .change-cta {
     width: 100% !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
     margin: 13px 0 2px !important;
     padding: 10px 14px !important;
     border-radius: 999px !important;
     justify-content: center !important;
-    font-size: .66rem !important;
+    font-size: .79rem !important;
     box-shadow: none !important;
   }
 
@@ -104,7 +104,7 @@
   .change-band-reference .era-content b {
     display: block !important;
     margin: 0 !important;
-    font-size: .78rem !important;
+    font-size: .91rem !important;
     line-height: 1.12 !important;
     letter-spacing: -.015em !important;
     color: #fff !important;
@@ -137,6 +137,10 @@
 }
 
 @media (max-width: 390px) {
+  .change-band-reference {
+    padding: 26px 0 18px !important;
+  }
+
   .change-band-reference .change-grid {
     gap: 7px !important;
     padding-inline: 12px !important;
@@ -148,10 +152,10 @@
   }
 
   .change-band-reference .change-copy h2 {
-    font-size: 1.92rem !important;
+    font-size: 2.05rem !important;
   }
 
   .change-band-reference .era-content b {
-    font-size: .72rem !important;
+    font-size: .85rem !important;
   }
 }
