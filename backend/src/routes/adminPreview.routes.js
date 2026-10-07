@@ -5,11 +5,12 @@ import { getMediaDownloadUrl } from '../services/submission.service.js';
 
 const router = Router();
 router.use(authenticateAdmin);
+const showcaseFirst=`(s.code LIKE 'HH26-SHOW%' OR NOT EXISTS (SELECT 1 FROM submissions sx WHERE sx.code LIKE 'HH26-SHOW%'))`;
 
 router.get('/artworks', async (req, res, next) => {
   try {
     const values = [];
-    const conditions = ["s.status <> 'REJECTED'"];
+    const conditions = ["s.status <> 'REJECTED'",showcaseFirst];
 
     if (req.query.theme) {
       values.push(String(req.query.theme));
@@ -88,13 +89,10 @@ router.get('/artworks', async (req, res, next) => {
   }
 });
 
-// Admin-only mirror of the public TOP52 gallery. This intentionally includes demo and
-// unpublished TOP52/AWARDED submissions so the team can QA the final gallery safely
-// without weakening the public publication gates in /api/top52.
 router.get('/top52', async (req, res, next) => {
   try {
     const values = [];
-    const conditions = ["s.status IN ('TOP52','AWARDED')"];
+    const conditions = ["s.status IN ('TOP52','AWARDED')",showcaseFirst];
 
     const q = String(req.query.q || '').trim();
     if (q) {
