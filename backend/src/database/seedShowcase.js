@@ -1,4 +1,33 @@
+import crypto from 'node:crypto';
 import { pool } from './pool.js';
 
-console.log('HALO HOLA public showcase seed');
-await pool.end();
+const MARK='[SHOWCASE_MEETING_V1]';
+const IMAGES=[
+ 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=88',
+ 'https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1600&q=88'
+];
+const AUTHORS=['Cộng đồng Hạ Bằng','Nhóm kể chuyện Thạch Hòa','HOLA Photo Walk','Nhóm sinh viên Hòa Lạc','Nhóm Sắc Mường','Cộng đồng Yên Xuân','Nhóm Kiến trúc trẻ','HOLA Tour #01','HOLA Tour #02','HOLA Tour #03','Nhóm Hòa Lạc xanh','Nhóm Nắng phía Tây','Nhóm kể chuyện ĐHQG','Cộng đồng Phú Cát','Nhóm văn hóa Xứ Đoài','Nhóm Urban Sketch Hòa Lạc','Nhóm Media Hòa Lạc','Nhóm Sáng tạo cộng đồng','Nhóm Story Lab','Nhóm Campus Hòa Lạc','Nhóm Ký ức làng','Nhóm Đi và Kể','Nhóm HOLA Design','Nhóm Hòa Lạc hôm nay','Nhóm Người trẻ Hòa Lạc','Cộng đồng HALO HOLA'];
+const TYPES=['Photo','Story & Creative','Video','Art & Design'];
+const GROUPS=[
+ ['Nét Đoài tại Hòa Lạc',['Đá ong','Be','Nắng'],['Hạ Bằng','Thạch Thất','Tây Phương','Phú Cát'],['Mái ngói sau hàng cau','Con ngõ giữ màu đá ong','Chiều qua hiên nhà Hạ Bằng','Tiếng chổi trên sân đình','Bờ tường kể chuyện làng','Nếp nhà dưới chân núi','Một phiên chợ nhỏ phía Tây']],
+ ['Sắc Mường Hòa Lạc',['Sắc Hòa Lạc','Đá ong','Nắng'],['Tiến Xuân','Hòa Lạc','Thạch Thất','Yên Xuân'],['Nhịp cồng trong chiều muộn','Sắc áo bên triền đồi','Bếp lửa và câu chuyện cũ','Một vòng tay Mường','Chợ phiên sắc Mường','Dấu thổ cẩm trong ngày mới','Lời kể từ bản nhỏ']],
+ ['Không gian Kiến trúc Hòa Lạc',['Be','Xanh non','Sắc Hòa Lạc'],['Khu Công nghệ cao Hòa Lạc','ĐHQG Hà Nội tại Hòa Lạc','Thạch Hòa','Hòa Lạc'],['Khoảng thở giữa những khối nhà','Mặt đứng đón nắng phía Tây','Sân trong cho một ngày dài','Đường nối giữa cũ và mới','Hiên nhà mở ra triền cây','Công trình thấp dưới tán xanh','Những ô cửa nhìn về Ba Vì']],
+ ['Hòa Lạc xanh',['Xanh rêu','Xanh non','Be'],['Hồ Đồng Mô','Yên Xuân','Khu Công nghệ cao Hòa Lạc','Hòa Lạc'],['Màu xanh sau cơn mưa','Mặt hồ giữ trời','Một lối đi dưới tán rừng','Khoảng xanh giữa công nghệ','Buổi sớm bên hồ','Dải cây ven đường mới','Gió qua triền cỏ']],
+ ['Nắng Hòa Lạc',['Nắng','Be','Đá ong'],['Phía Tây Hòa Lạc','Hồ Đồng Mô','Hạ Bằng','Thạch Thất'],['Nắng nghiêng qua mái ngói','Giờ vàng trên đường Hòa Lạc','Chiều chạm Ba Vì','Bóng dài cuối ngày','Màu mật ong trên tường cũ','Sớm phía Tây']],
+ ['Câu chuyện Hòa Lạc',['Be','Đá ong','Sắc Hòa Lạc'],['Thạch Hòa','Hạ Bằng','Phú Cát','Hòa Lạc'],['Quán nước ở ngã ba','Người sửa xe nhớ đường cũ','Một ngày chuyển nhà','Bữa cơm sau buổi làm','Con đường mẹ vẫn đi','Tiệm nhỏ mở cửa lúc sáu giờ']],
+ ['Ước mơ Hòa Lạc',['Xanh non','Nắng','Sắc Hòa Lạc'],['ĐHQG Hà Nội tại Hòa Lạc','Khu Công nghệ cao Hòa Lạc','Hòa Lạc'],['Ngày đầu ở Hòa Lạc','Từ giảng đường nhìn ra tương lai','Phòng lab bật sáng lúc tối','Chuyến xe buýt của tuổi hai mươi','Góc học tập nhìn ra đồi','Ở lại Hòa Lạc']],
+ ['Sắc màu Hòa Lạc',['Sắc Hòa Lạc','Đá ong','Nắng','Xanh rêu','Xanh non','Be'],['Hòa Lạc','Hạ Bằng','Yên Xuân','Thạch Hòa'],['Sáu màu trong một ngày','Đá ong và xanh non','Be của những chiều yên','Xanh rêu sau mưa','Nắng trên lớp kính mới','Hòa Lạc nhiều sắc']]
+];
+
+function rows(){let n=0;const out=[];for(const [theme,colors,locations,titles] of GROUPS){for(let i=0;i<titles.length;i++){const a=n%AUTHORS.length;out.push({n,code:`HH26-SHOW${String(n+1).padStart(2,'0')}`,author:AUTHORS[a],email:`showcase-${String(a+1).padStart(2,'0')}@halohola.invalid`,title:titles[i],theme,color:colors[i%colors.length],location:locations[i%locations.length],type:TYPES[(n+i)%TYPES.length],story:`${titles[i]} là một lát cắt được ghi lại tại ${locations[i%locations.length]}. Tác phẩm kể về con người, không gian và những thay đổi đang diễn ra ở Hòa Lạc bằng một góc nhìn gần gũi.`,status:n%13===0?'AWARDED':'TOP52'});n++;}}if(out.length!==52)throw new Error(`Expected 52 showcase items, got ${out.length}`);return out;}
+
+async function mediaPool(client){const {rows}=await client.query("SELECT id,original_name,mime_type,size_bytes FROM site_assets WHERE archived=FALSE AND mime_type LIKE 'image/%' ORDER BY created_at DESC LIMIT 36");return [...rows.map(x=>({url:`/api/site-assets/${x.id}`,name:x.original_name,type:x.mime_type,size:Number(x.size_bytes)||1200000})),...IMAGES.map((url,i)=>({url,name:`showcase-${i+1}.jpg`,type:'image/jpeg',size:1300000+i*20000}))];}
+
+async function main(){const client=await pool.connect();try{await client.query('BEGIN');const items=rows();const media=await mediaPool(client);for(const item of items){const {rows:inserted}=await client.query(`INSERT INTO submissions(code,name,display_name,email,bio,title,captured_at,rights_confirmed,image_consent_confirmed,is_minor,guardian_consent,type,theme,color,location,story,status,allow_media_use,allow_newsletter,jury_note,is_demo,created_at,updated_at) VALUES($1,$2,$2,$3,$4,$5,CURRENT_DATE,TRUE,TRUE,FALSE,FALSE,$6,$7,$8,$9,$10,$11,TRUE,FALSE,$12,TRUE,NOW()-($13::int||' minutes')::interval,NOW()) ON CONFLICT(code) DO UPDATE SET name=EXCLUDED.name,display_name=EXCLUDED.display_name,email=EXCLUDED.email,title=EXCLUDED.title,type=EXCLUDED.type,theme=EXCLUDED.theme,color=EXCLUDED.color,location=EXCLUDED.location,story=EXCLUDED.story,status=EXCLUDED.status,jury_note=EXCLUDED.jury_note,is_demo=TRUE,updated_at=NOW() RETURNING id`,[item.code,item.author,item.email,'Dữ liệu trình diễn cho cuộc họp và QA giao diện.',item.title,item.type,item.theme,item.color,item.location,item.story,item.status,`${MARK} Xóa bằng script cleanup showcase`,52-item.n]);const id=inserted[0].id;await client.query("DELETE FROM submission_media WHERE submission_id=$1 AND storage_provider='SHOWCASE'",[id]);const count=item.n%10===0?3:item.n%4===0?2:1;for(let m=0;m<count;m++){const f=media[(item.n*2+m)%media.length];await client.query(`INSERT INTO submission_media(submission_id,url,original_name,mime_type,size_bytes,storage_provider,sha256,revision) VALUES($1,$2,$3,$4,$5,'SHOWCASE',$6,1)`,[id,f.url,f.name,f.type,f.size,crypto.createHash('sha256').update(`${item.code}:${m}:${f.url}`).digest('hex')]);}}await client.query('COMMIT');console.log(`Meeting showcase seed complete: ${items.length} artworks, ${new Set(items.map(x=>x.email)).size} creators, ${new Set(items.map(x=>x.location)).size} locations.`);}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();await pool.end();}}
+main().catch(e=>{console.error(e);process.exit(1);});
