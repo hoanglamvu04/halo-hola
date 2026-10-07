@@ -88,6 +88,105 @@ router.get('/artworks', async (req, res, next) => {
   }
 });
 
+// Admin-only mirror of the public TOP52 gallery. This intentionally includes demo and
+// unpublished TOP52/AWARDED submissions so the team can QA the final gallery safely
+// without weakening the public publication gates in /api/top52.
+router.get('/top52', async (req, res, next) => {
+  try {
+    const values = [];
+    const conditions = ["s.status IN ('TOP52','AWARDED')"];
+
+    const q = String(req.query.q || '').trim();
+    if (q) {
+      values.push(`%${q}%`);
+      const p = `$${values.length}`;
+      conditions.push(`(s.code ILIKE ${p} OR COALESCE(s.title,'') ILIKE ${p} OR s.name ILIKE ${p} OR COALESCE(s.display_name,'') ILIKE ${p} OR COALESCE(s.location,'') ILIKE ${p})`);
+    }
+    if (req.query.theme) {
+      values.push(String(req.query.theme));
+      conditions.push(`s.theme = $${values.length}`);
+    }
+    if (req.query.type) {
+      values.push(String(req.query.type));
+      conditions.push(`s.type = $${values.length}`);
+    }
+    if (req.query.award === 'true') conditions.push(`s.status = 'AWARDED'`);
+
+    const limit = Math.max(1, Math.min(52, Number(req.query.limit) || 16));
+    const offset = Math.max(0, Number(req.query.offset) || 0);
+    values.push(limit);
+    const limitParam = values.length;
+    values.push(offset);
+    const offsetParam = values.length;
+
+    const { rows } = await pool.query(`
+      SELECT s.id, LOWER(s.code) AS slug, s.code, s.title,
+             COALESCE(NULLIF(s.display_name,''), s.name) AS author,
+             s.type, s.theme, s.color, s.location, s.story,
+             s.captured_at AS "capturedAt", s.status,
+             s.is_demo AS "isDemo", s.allow_media_use AS "allowMediaUse",
+             s.created_at AS "createdAt", s.published_at AS "publishedAt",
+             media.media_id AS "mediaId",
+             COALESCE(jury.avg_score,0)::float AS "juryScore",
+             COALESCE(awards.types,'[]'::json) AS "selectionTypes",
+             COUNT(*) OVER()::int AS "totalCount"
+      FROM submissions s
+      LEFT JOIN LATERAL (
+        SELECT m.id AS media_id
+        FROM submission_media m
+        WHERE m.submission_id = s.id
+        ORDER BY m.created_at ASC
+        LIMIT 1
+      ) media ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
+        FROM jury_scores js
+        WHERE js.submission_id = s.id
+          AND js.submitted = TRUE
+          AND js.conflict_of_interest = FALSE
+      ) jury ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(json_agg(DISTINCT sel.selection_type),'[]'::json) AS types
+        FROM jury_selections sel
+        WHERE sel.submission_id = s.id
+          AND sel.selection_type IN ('TOP3_THEME','THEME_WINNER','COLOR_WINNER','TITLE_FINALIST')
+      ) awards ON TRUE
+      WHERE ${conditions.join(' AND ')}
+      ORDER BY CASE WHEN s.status = 'AWARDED' THEN 0 ELSE 1 END,
+               jury.avg_score DESC NULLS LAST,
+               s.created_at DESC,
+               s.code ASC
+      LIMIT $${limitParam} OFFSET $${offsetParam}
+    `, values);
+
+    const hydrated = await Promise.all(rows.map(async (row) => {
+      let image = '';
+      if (row.mediaId) {
+        try {
+          const media = await getMediaDownloadUrl(row.mediaId);
+          image = media?.url || '';
+        } catch {}
+      }
+      const { mediaId, totalCount, ...item } = row;
+      return { ...item, image, preview: true };
+    }));
+
+    const total = rows[0]?.totalCount || 0;
+    res.json({
+      items: hydrated,
+      total,
+      meta: {
+        preview: true,
+        selectedCount: total,
+        publishedCount: 0,
+        round: null
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/artworks/:id', async (req, res, next) => {
   try {
     const { rows } = await pool.query(`
