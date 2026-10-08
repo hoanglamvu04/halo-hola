@@ -1,25 +1,90 @@
+@media (max-width:900px){
+  /* Hard reset old responsive min-height rules that keep this strip too tall. */
+  .home-hero-reference .hero-pillar-band,
+  .home-hero-reference .hero-pillar-item,
+  .home-hero-reference .hero-pillar-item > div,
+  .home-hero-reference .hero-pillar-item b,
+  .home-hero-reference .hero-pillar-item small{
+    min-height:0!important;
+  }
+}
+
 @media (max-width:760px){
   .home-hero-reference .home-hero-art{
-    padding-bottom:5px!important;
+    padding-bottom:0!important;
+  }
+
+  .home-hero-reference .hero-collage.has-mobile-slider{
+    margin-bottom:0!important;
+  }
+
+  .home-hero-reference .mobile-hero-runtime-host{
+    margin-bottom:0!important;
+  }
+
+  .home-hero-reference .mobile-hero-slider{
+    padding-bottom:3px!important;
+  }
+
+  .home-hero-reference .mobile-hero-swipe-hint{
+    min-height:0!important;
+    margin:0!important;
+    padding:0 14px!important;
+    line-height:1!important;
   }
 
   .home-hero-reference .hero-pillar-band{
     min-height:0!important;
-    margin-top:4px!important;
-    margin-bottom:0!important;
-    padding:3px 4px!important;
+    height:auto!important;
+    margin:0 -6px!important;
+    padding:2px 4px!important;
     gap:6px!important;
-    align-items:stretch!important;
+    align-items:center!important;
+    align-content:center!important;
   }
 
   .home-hero-reference .hero-pillar-item{
     min-height:0!important;
-    padding:6px 8px!important;
+    height:44px!important;
+    padding:4px 7px!important;
+    grid-template-columns:28px minmax(0,1fr)!important;
+    gap:6px!important;
     align-items:center!important;
+    align-content:center!important;
   }
 
-  .home-hero-reference .mobile-hero-swipe-hint{
-    padding-top:0!important;
-    margin-bottom:1px!important;
+  .home-hero-reference .pillar-icon{
+    width:27px!important;
+    height:27px!important;
+    min-height:0!important;
+  }
+
+  .home-hero-reference .pillar-icon svg{
+    width:14px!important;
+    height:14px!important;
+  }
+
+  .home-hero-reference .hero-pillar-item > div{
+    min-height:0!important;
+    line-height:1!important;
+  }
+
+  .home-hero-reference .hero-pillar-item b{
+    min-height:0!important;
+    font-size:.64rem!important;
+    line-height:1.05!important;
+  }
+
+  .home-hero-reference .hero-pillar-item small{
+    min-height:0!important;
+    margin-top:2px!important;
+    font-size:.47rem!important;
+    line-height:1.05!important;
+  }
+}
+
+@media (max-width:390px){
+  .home-hero-reference .hero-pillar-item{
+    height:42px!important;
   }
 }
