@@ -1,0 +1,25 @@
+@media (max-width:760px){
+  .home-hero-reference .home-hero-art{
+    padding-bottom:5px!important;
+  }
+
+  .home-hero-reference .hero-pillar-band{
+    min-height:0!important;
+    margin-top:4px!important;
+    margin-bottom:0!important;
+    padding:3px 4px!important;
+    gap:6px!important;
+    align-items:stretch!important;
+  }
+
+  .home-hero-reference .hero-pillar-item{
+    min-height:0!important;
+    padding:6px 8px!important;
+    align-items:center!important;
+  }
+
+  .home-hero-reference .mobile-hero-swipe-hint{
+    padding-top:0!important;
+    margin-bottom:1px!important;
+  }
+}
