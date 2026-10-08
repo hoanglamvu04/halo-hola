@@ -10,11 +10,11 @@ import '../styles/rules-awards-page.css'
 export const DEFAULT_AWARDS = [
   {
     code:'SPECIAL',
-    label:'Giải đặc biệt',
-    name:'Danh hiệu HALO HOLA 2026',
-    amount:'10.000.000đ + cúp',
+    label:'Giải Nhất',
+    name:'Giải Nhất HALO HOLA 2026',
+    amount:'5.000.000đ + quà',
     quantity:'01 giải',
-    description:'Chọn từ 07 tác phẩm đoạt giải chủ đề 01–07. Kết quả vòng Danh hiệu gồm 70% Hội đồng và 30% bình chọn cộng đồng.',
+    description:'Giải cao nhất của HALO HOLA 2026. Giá trị tiền mặt 5.000.000đ kèm quà tặng; kết quả theo cơ chế Hội đồng và bình chọn cộng đồng của chương trình.',
     tone:'forest',
     featured:true,
     enabled:true
@@ -23,39 +23,39 @@ export const DEFAULT_AWARDS = [
     code:'THEME_01_07',
     label:'Giải chủ đề',
     name:'07 giải chủ đề 01–07',
-    amount:'5.000.000đ / giải',
+    amount:'2.000.000đ + quà / giải',
     quantity:'07 giải',
-    description:'Mỗi chủ đề từ 01 đến 07 có 01 giải chính. Các tác phẩm thắng 07 chủ đề cùng đi tiếp vào vòng Danh hiệu HALO HOLA 2026.',
+    description:'Mỗi chủ đề từ 01 đến 07 có 01 giải. Mỗi giải gồm 2.000.000đ tiền mặt và quà tặng.',
     tone:'terra',
     enabled:true
   },
   {
     code:'COLOR',
-    label:'Chủ đề 08',
-    name:'Sắc màu Hòa Lạc',
-    amount:'1.000.000đ / chủ nhân',
-    quantity:'06 chủ nhân',
-    description:'06 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Mọi tác phẩm hợp lệ ở cả 8 chủ đề đều được xét.',
+    label:'Giải màu',
+    name:'05 giải màu Hòa Lạc',
+    amount:'1.000.000đ / giải',
+    quantity:'05 giải',
+    description:'05 giải thuộc nhóm Sắc màu Hòa Lạc, mỗi giải trị giá 1.000.000đ tiền mặt.',
     tone:'sun',
     enabled:true
   },
   {
     code:'FAVORITE',
-    label:'Giải phụ',
+    label:'Giải online',
     name:'Góc nhìn được yêu thích',
-    amount:'3.000.000đ',
+    amount:'1.000.000đ + quà',
     quantity:'01 giải',
-    description:'Dành cho tác phẩm có lượt cảm xúc cao nhất trên bài đăng gốc theo quy định bình chọn của chương trình.',
+    description:'Giải online dành cho tác phẩm được cộng đồng yêu thích theo quy định bình chọn; gồm 1.000.000đ tiền mặt và quà tặng.',
     tone:'green',
     enabled:true
   },
   {
     code:'SPREAD',
-    label:'Giải phụ',
+    label:'Giải online',
     name:'Giải Lan tỏa',
-    amount:'2.000.000đ',
+    amount:'1.000.000đ + quà',
     quantity:'01 giải',
-    description:'Ghi nhận khả năng lan tỏa tự nhiên của tác phẩm theo cách quy đổi được Ban Tổ chức công bố.',
+    description:'Giải online ghi nhận khả năng lan tỏa của tác phẩm; gồm 1.000.000đ tiền mặt và quà tặng.',
     tone:'beige',
     enabled:true
   }
@@ -114,9 +114,11 @@ export default function RulesAwardsPage(){
   },[])
 
   const awards=useMemo(()=>mergeAwards(config.awards).filter(item=>item?.enabled!==false),[config.awards])
-  const totalPrize=config.totalPrize||'56.000.000đ'
+  const totalPrize=config.totalPrize||'26.000.000đ'
+  const totalAwards=Number(config.totalAwards)||15
+  const prizeSummary=config.prizeSummary||'7 giải chủ đề · 5 giải màu · 2 giải online · 1 giải Nhất'
   const pageTitle=config.title||'Thể lệ & Giải thưởng HALO HOLA 2026'
-  const intro=config.intro||'Một trang để bạn xem nhanh điều kiện tham gia, cách gửi tác phẩm, các mốc quan trọng và toàn bộ cơ cấu 11 giải của HALO HOLA 2026.'
+  const intro=config.intro||'Một trang để bạn xem nhanh điều kiện tham gia, cách gửi tác phẩm, các mốc quan trọng và toàn bộ cơ cấu 15 giải của HALO HOLA 2026.'
 
   return <main className="rules-awards-page">
     <section className="rules-awards-hero">
@@ -133,7 +135,7 @@ export default function RulesAwardsPage(){
         <div className="rules-awards-hero-card">
           <span>Tổng giải thưởng tiền mặt</span>
           <strong>{totalPrize}</strong>
-          <div><Trophy/><b>11 giải</b><small>8 giải chủ đề · 2 giải phụ · 1 giải đặc biệt</small></div>
+          <div><Trophy/><b>{totalAwards} giải</b><small>{prizeSummary}</small></div>
           <div><Clock3/><b>10.11 · 23:59</b><small>Hạn nhận tác phẩm</small></div>
         </div>
       </div>
@@ -192,7 +194,7 @@ export default function RulesAwardsPage(){
     <section id="giai-thuong" className="rules-section rules-awards-block">
       <div className="container">
         <div className="rules-section-heading awards-heading">
-          <div><span className="eyebrow">03 · GIẢI THƯỞNG</span><h2>11 giải · tổng {totalPrize}</h2></div>
+          <div><span className="eyebrow">03 · GIẢI THƯỞNG</span><h2>{totalAwards} giải · tổng {totalPrize}</h2></div>
           <div className="rules-awards-total"><Trophy/><span>Tổng tiền mặt</span><strong>{totalPrize}</strong></div>
         </div>
 
@@ -210,8 +212,8 @@ export default function RulesAwardsPage(){
         </div>
 
         <div className="rules-award-notes">
-          <div><b>Vòng Danh hiệu</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
-          <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải Sắc màu, giải phụ và Danh hiệu nếu đáp ứng điều kiện.</span></div>
+          <div><b>Cách chọn Giải Nhất</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
+          <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải màu, giải online và Giải Nhất nếu đáp ứng điều kiện.</span></div>
           <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
         </div>
       </div>
@@ -235,7 +237,7 @@ export default function RulesAwardsPage(){
         <div className="rules-section-heading compact">
           <span className="eyebrow">05 · MỐC THỜI GIAN</span>
           <h2>Từ phát động đến HOLA DAY</h2>
-          <p>HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố Danh hiệu HALO HOLA 2026.</p>
+          <p>HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố kết quả HALO HOLA 2026.</p>
         </div>
         <div className="rules-timeline">
           {TIMELINE.map(([date,title],index)=><div key={date}><span>{String(index+1).padStart(2,'0')}</span><b>{date}</b><p>{title}</p></div>)}
