@@ -18,6 +18,7 @@
     "db:seed:admin": "node src/database/seedAdmin.js",
     "db:content:tour03-langnghe": "node src/database/updateTour03LangNghe.js",
     "db:content:awards-2026-values": "node src/database/updateAwards2026Values.js",
+    "db:content:awards-2026-structure-v2": "node src/database/updateAwards2026StructureV2.js",
     "r2:test": "node src/storage/testR2.js"
   },
   "dependencies": {
