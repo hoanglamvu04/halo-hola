@@ -12,6 +12,7 @@ const exploreLinks=[
 ]
 
 const supportLinks=[
+  ['Thể lệ & Giải thưởng','/the-le-giai-thuong'],
   ['Gửi góc nhìn','/gui-goc-nhin'],
   ['Tra cứu tác phẩm','/tra-cuu'],
   ['WE HOLA','/we-hola'],
