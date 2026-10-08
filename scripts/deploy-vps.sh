@@ -7,6 +7,7 @@ CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
+TOUR03_LANG_NGHE_MARKER="$ROOT/.tour03-lang-nghe-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -66,6 +67,16 @@ fi
 npm run db:seed:showcase:scores --prefix backend
 npm run db:seed:showcase:dates --prefix backend
 npm run db:seed:showcase:public --prefix backend
+
+# One-time official content correction: Tour #03 changed from Nắng Hòa Lạc to Làng nghề Hòa Lạc.
+# The marker prevents future deploys from overwriting edits made later in Admin CMS.
+if [[ ! -f "$TOUR03_LANG_NGHE_MARKER" ]]; then
+  echo "==> Update HOLA Tour #03 to Làng nghề Hòa Lạc"
+  npm run db:content:tour03-langnghe --prefix backend
+  touch "$TOUR03_LANG_NGHE_MARKER"
+else
+  echo "==> Tour #03 craft-village content already applied; keeping CMS edits intact"
+fi
 
 echo "==> Build frontend"
 npm run build --prefix frontend
