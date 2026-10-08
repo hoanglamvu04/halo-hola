@@ -1,0 +1,81 @@
+/* Final mobile readability pass for the campaign block.
+   Typography only; palette remains controlled by CampaignRuntimeCustomizer/Admin. */
+@media (max-width: 760px) {
+  .campaign-live .live-counter h2 {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 700 !important;
+    font-size: 2.26rem !important;
+    line-height: .96 !important;
+    letter-spacing: -.045em !important;
+    text-wrap: balance !important;
+  }
+
+  .campaign-live .campaign-desc,
+  .campaign-live .live-stat b,
+  .campaign-live .live-stat small,
+  .campaign-live .campaign-cta,
+  .campaign-live .campaign-milestone span,
+  .campaign-live .campaign-milestone b {
+    font-family: 'DM Sans', system-ui, sans-serif !important;
+  }
+
+  .campaign-live .campaign-desc {
+    font-weight: 450 !important;
+  }
+
+  .campaign-live .live-stat b {
+    font-weight: 800 !important;
+    letter-spacing: -.035em !important;
+  }
+
+  .campaign-live .live-stat small {
+    font-weight: 550 !important;
+  }
+
+  .campaign-live .timeline-title b {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -.025em !important;
+    text-shadow: none !important;
+  }
+
+  .campaign-live .campaign-milestone span {
+    font-size: .88rem !important;
+    font-weight: 850 !important;
+    letter-spacing: -.02em !important;
+  }
+
+  .campaign-live .campaign-milestone b {
+    font-size: .75rem !important;
+    font-weight: 750 !important;
+    letter-spacing: -.012em !important;
+  }
+
+  /* Keep the light editorial image treatment visible even when a solid CMS base color is present. */
+  .campaign-live .live-counter {
+    background-image:
+      linear-gradient(180deg, rgba(251,247,239,.86) 0%, rgba(251,247,239,.93) 58%, rgba(251,247,239,.99) 100%),
+      var(--campaign-background-image, none) !important;
+    background-size: cover !important;
+    background-position: center 38% !important;
+  }
+
+  .campaign-live .campaign-kicker .eyebrow {
+    font-family: 'DM Sans', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .campaign-live .live-counter h2 {
+    font-size: 2.04rem !important;
+  }
+
+  .campaign-live .campaign-milestone span {
+    font-size: .82rem !important;
+  }
+
+  .campaign-live .campaign-milestone b {
+    font-size: .69rem !important;
+  }
+}
