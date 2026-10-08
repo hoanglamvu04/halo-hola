@@ -10,11 +10,13 @@ const DEFAULT_NAV_LINKS = [
   {label:'HOLA Map',href:'/hola-map'},
   {label:'Stories',href:'/stories'},
   {label:'TOP52',href:'/top52'},
+  {label:'Thể lệ & Giải thưởng',href:'/the-le-giai-thuong'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
 const MOBILE_QUICK_LINKS = [
   {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
+  {label:'Thể lệ & Giải thưởng',href:'/the-le-giai-thuong'},
   {label:'Tra cứu tác phẩm',href:'/tra-cuu'},
   {label:'WE HOLA',href:'/we-hola'},
   {label:'Đồng hành',href:'/dong-hanh'},
