@@ -1,0 +1,104 @@
+/* Runtime theme hooks for the homepage campaign block.
+   Values are supplied from Homepage CMS through CampaignRuntimeCustomizer. */
+
+.campaign-live{
+  background:var(--campaign-main-bg,#0d4934)!important;
+}
+.campaign-live .live-counter{
+  background:var(--campaign-main-bg,#0d4934)!important;
+}
+.campaign-live .campaign-kicker .eyebrow,
+.campaign-live .eyebrow{
+  color:var(--campaign-eyebrow-color,#f1ba73)!important;
+}
+.campaign-live .live-counter h2{
+  color:var(--campaign-title-color,#fff)!important;
+}
+.campaign-live .campaign-desc,
+.campaign-live .campaign-signature{
+  color:var(--campaign-text-color,#fff)!important;
+}
+.campaign-live .live-stats>div,
+.campaign-live .live-stat{
+  background:var(--campaign-stat-bg,#184f3d)!important;
+  border-color:var(--campaign-stat-border,#3a6a59)!important;
+}
+.campaign-live .live-stat b{
+  color:var(--campaign-stat-number,#fff)!important;
+}
+.campaign-live .live-stat small{
+  color:var(--campaign-stat-label,#d6e1db)!important;
+}
+.campaign-live .live-stat svg{
+  color:var(--campaign-stat-icon,#f2b84b)!important;
+}
+.campaign-live .campaign-cta{
+  background:var(--campaign-cta-bg,#d8582f)!important;
+  border-color:var(--campaign-cta-bg,#d8582f)!important;
+  color:var(--campaign-cta-text,#fff)!important;
+}
+.campaign-live .campaign-timeline{
+  background:var(--campaign-timeline-bg,#0f5139)!important;
+}
+.campaign-live .timeline-title,
+.campaign-live .timeline-title b{
+  color:var(--campaign-timeline-title,#fff)!important;
+}
+.campaign-live .timeline-title svg{
+  color:var(--campaign-timeline-icon,#f2c261)!important;
+}
+.campaign-live .campaign-milestone span{
+  color:var(--campaign-milestone-date,#f2b84b)!important;
+}
+.campaign-live .campaign-milestone b{
+  color:var(--campaign-milestone-text,#fff)!important;
+}
+.campaign-live .campaign-milestone i.active{
+  background:var(--campaign-active-date,#ffd05b)!important;
+}
+
+@media(max-width:760px){
+  .campaign-live .campaign-milestone{
+    background:var(--campaign-milestone-bg,#24624d)!important;
+    border-color:var(--campaign-milestone-border,#3b735f)!important;
+  }
+  .campaign-live .campaign-milestone:first-child,
+  .campaign-live .campaign-milestone:has(i.active){
+    background:var(--campaign-active-bg,#3f6944)!important;
+    border-color:var(--campaign-active-border,#9a8d35)!important;
+  }
+  .campaign-live .campaign-milestone:first-child span,
+  .campaign-live .campaign-milestone:has(i.active) span{
+    color:var(--campaign-active-date,#ffd05b)!important;
+  }
+}
+
+/* Homepage CMS color controls */
+.cms-field-heading{
+  margin-top:8px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#f3f6f2;
+  border:1px solid rgba(23,61,45,.09);
+  color:var(--forest,#173d2d);
+  letter-spacing:.08em;
+  font-size:.72rem;
+}
+.cms-color-input{
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+}
+.cms-color-input input[type="color"]{
+  width:48px;
+  height:42px;
+  padding:3px;
+  border:1px solid #dbe0da;
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+}
+.cms-color-input input:not([type="color"]){
+  min-width:0;
+}
