@@ -65,6 +65,7 @@ fi
 # meeting seed can be upgraded safely without recreating participant-style records.
 npm run db:seed:showcase:scores --prefix backend
 npm run db:seed:showcase:dates --prefix backend
+npm run db:seed:showcase:public --prefix backend
 
 echo "==> Build frontend"
 npm run build --prefix frontend
