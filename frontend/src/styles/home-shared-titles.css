@@ -1,0 +1,100 @@
+/*
+ * HALO HOLA — shared homepage title system
+ *
+ * Change these variables once to update ALL major homepage titles together.
+ * The titles prefer a single line and only wrap naturally when the available
+ * width is no longer enough.
+ */
+:root {
+  --home-title-font-family: Inter, 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --home-title-font-size: clamp(2.45rem, 4vw, 4.5rem);
+  --home-title-font-size-mobile: clamp(1.78rem, 7.1vw, 2.25rem);
+  --home-title-font-weight: 800;
+  --home-title-line-height: 1.02;
+  --home-title-letter-spacing: -0.045em;
+}
+
+/* One source of truth for every main title on Home. */
+.home-hero-copy h1,
+.campaign-live .live-counter h2,
+.change-band .change-copy h2,
+.themes-showcase .themes-showcase-title h2,
+.color-section .color-copy h2,
+.home-tour-section .home-tour-title h2,
+.home-map-live-copy h2,
+.top52-showcase .top52-title-block h2,
+.we-banner .we-overlay h2 {
+  display: block !important;
+  width: auto !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  font-family: var(--home-title-font-family) !important;
+  font-size: var(--home-title-font-size) !important;
+  font-weight: var(--home-title-font-weight) !important;
+  line-height: var(--home-title-line-height) !important;
+  letter-spacing: var(--home-title-letter-spacing) !important;
+  font-style: normal !important;
+
+  /* Prefer one line; wrap only when the container truly runs out of room. */
+  white-space: normal !important;
+  text-wrap: wrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+/* Existing accent spans/em keep their colors, but share the same typography
+   and no longer force an artificial line break. */
+.home-hero-copy h1 > span,
+.home-hero-copy h1 > em,
+.themes-showcase .themes-showcase-title h2 > span,
+.themes-showcase .themes-showcase-title h2 > em,
+.color-section .color-copy h2 > span,
+.color-section .color-copy h2 > em,
+.top52-showcase .top52-title-block h2 > span {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  white-space: normal !important;
+}
+
+.home-hero-copy h1 > em,
+.themes-showcase .themes-showcase-title h2 > em,
+.color-section .color-copy h2 > em {
+  font-style: normal !important;
+}
+
+/* JSX has adjacent span/em nodes without a literal space. Add a collapsible
+   space so the title reads naturally and can still wrap at that boundary. */
+.home-hero-copy h1 > em::before,
+.themes-showcase .themes-showcase-title h2 > em::before,
+.color-section .color-copy h2 > em::before {
+  content: ' ';
+}
+
+@media (max-width: 760px) {
+  .home-hero-copy h1,
+  .campaign-live .live-counter h2,
+  .change-band .change-copy h2,
+  .themes-showcase .themes-showcase-title h2,
+  .color-section .color-copy h2,
+  .home-tour-section .home-tour-title h2,
+  .home-map-live-copy h2,
+  .top52-showcase .top52-title-block h2,
+  .we-banner .we-overlay h2 {
+    font-size: var(--home-title-font-size-mobile) !important;
+    line-height: 1.04 !important;
+    letter-spacing: -0.04em !important;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --home-title-font-size-mobile: clamp(1.68rem, 7vw, 2.05rem);
+  }
+}
