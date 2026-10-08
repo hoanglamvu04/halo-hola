@@ -40,24 +40,27 @@ export default function CampaignRuntimeCustomizer(){
         if(cancelled) return
         const campaign={...defaults,...(homepage?.campaign?.content||{})}
 
+        const setText=(node,value)=>{
+          if(node&&value&&node.textContent!==value) node.textContent=value
+        }
+
         const apply=()=>{
           const root=document.querySelector('.campaign-live')
           if(!root) return
 
           Object.entries(cssVars).forEach(([key,variable])=>{
-            if(campaign[key]) root.style.setProperty(variable,campaign[key])
+            if(campaign[key]&&root.style.getPropertyValue(variable)!==campaign[key]){
+              root.style.setProperty(variable,campaign[key])
+            }
           })
 
-          const title=root.querySelector('.timeline-title b')
-          if(title&&campaign.journeyTitle) title.textContent=campaign.journeyTitle
+          setText(root.querySelector('.timeline-title b'),campaign.journeyTitle)
 
           const milestones=root.querySelectorAll('.campaign-milestone')
           milestones.forEach((item,index)=>{
             const n=index+1
-            const date=item.querySelector('span')
-            const label=item.querySelector('b')
-            if(date&&campaign[`milestone${n}Date`]) date.textContent=campaign[`milestone${n}Date`]
-            if(label&&campaign[`milestone${n}Label`]) label.textContent=campaign[`milestone${n}Label`]
+            setText(item.querySelector('span'),campaign[`milestone${n}Date`])
+            setText(item.querySelector('b'),campaign[`milestone${n}Label`])
           })
         }
 
