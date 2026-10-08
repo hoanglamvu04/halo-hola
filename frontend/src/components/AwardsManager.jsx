@@ -7,7 +7,8 @@ import './AwardsManager.css'
 const DEFAULT_CONFIG={
   enabled:true,
   title:'Thể lệ & Giải thưởng HALO HOLA 2026',
-  intro:'Một trang để bạn xem nhanh điều kiện tham gia, cách gửi tác phẩm, các mốc quan trọng và toàn bộ cơ cấu 15 giải của HALO HOLA 2026.',
+  intro:'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng của HALO HOLA 2026.',
+  officialPdfUrl:'',
   totalPrize:'26.000.000đ',
   totalAwards:15,
   prizeSummary:'7 giải chủ đề · 5 giải màu · 2 giải online · 1 giải Nhất',
@@ -91,6 +92,7 @@ export default function AwardsManager(){
       <label className="awards-switch"><input type="checkbox" checked={draft.enabled!==false} onChange={e=>patch('enabled',e.target.checked)}/><span><b>Hiển thị khối giải thưởng</b><small>Có thể tạm ẩn toàn bộ giải thưởng trên trang public.</small></span></label>
       <label><span>Tiêu đề trang</span><input value={draft.title||''} onChange={e=>patch('title',e.target.value)}/></label>
       <label className="wide"><span>Mô tả đầu trang</span><textarea rows="3" value={draft.intro||''} onChange={e=>patch('intro',e.target.value)}/></label>
+      <label className="wide"><span>URL bản thể lệ PDF</span><input value={draft.officialPdfUrl||''} onChange={e=>patch('officialPdfUrl',e.target.value)} placeholder="https://.../the-le-halo-hola-2026.pdf"/><small>Để trống nếu chưa có file chính thức. Khi có URL, trang public sẽ tự hiện nút “Bản PDF”.</small></label>
       <label><span>Tổng tiền thưởng</span><input value={draft.totalPrize||''} onChange={e=>patch('totalPrize',e.target.value)} placeholder="26.000.000đ"/></label>
       <label><span>Tổng số giải</span><input type="number" min="0" value={draft.totalAwards??15} onChange={e=>patch('totalAwards',Number(e.target.value))}/></label>
       <label className="wide"><span>Tóm tắt cơ cấu</span><input value={draft.prizeSummary||''} onChange={e=>patch('prizeSummary',e.target.value)} placeholder="7 giải chủ đề · 5 giải màu · 2 giải online · 1 giải Nhất"/></label>
@@ -120,7 +122,7 @@ export default function AwardsManager(){
           <label className="award-admin-description"><span>Mô tả / điều kiện</span><textarea rows="3" value={award.description||''} onChange={e=>patchAward(index,'description',e.target.value)}/></label>
           <div className="award-admin-toggles">
             <label><input type="checkbox" checked={award.enabled!==false} onChange={e=>patchAward(index,'enabled',e.target.checked)}/><span>{award.enabled!==false?<><Eye/> Đang hiển thị</>:<><EyeOff/> Đang ẩn</>}</span></label>
-            <label><input type="checkbox" checked={Boolean(award.featured)} onChange={e=>patchAward(index,'featured',e.target.checked)}/><span>Nổi bật card lớn</span></label>
+            <label><input type="checkbox" checked={Boolean(award.featured)} onChange={e=>patchAward(index,'featured',e.target.checked)}/><span>Nổi bật dòng giải</span></label>
           </div>
         </div>
         <div className="award-admin-actions">
