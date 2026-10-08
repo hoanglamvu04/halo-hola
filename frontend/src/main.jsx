@@ -28,9 +28,11 @@ import './styles/tour-register-modal.css'
 import './styles/stories-mobile-spacing-fix.css'
 import './styles/submit-page-modern.css'
 import './styles/home-hero-mobile-spacing-tight.css'
+import './styles/campaign-admin-runtime.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
+import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -38,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <App />
         <MobileHeroExperience />
+        <CampaignRuntimeCustomizer />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
