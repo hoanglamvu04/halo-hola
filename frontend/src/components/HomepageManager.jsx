@@ -46,13 +46,60 @@ const definitions={
       title:'Mỗi ngày thêm một góc nhìn mới.',
       description:'Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.',
       ctaText:'Gửi góc nhìn',
-      backgroundImage:img.sunset,discoverImage:img.hills,keepImage:img.architecture,shareImage:img.student
+      backgroundImage:img.sunset,discoverImage:img.hills,keepImage:img.architecture,shareImage:img.student,
+      mainBg:'#0d4934',titleColor:'#ffffff',textColor:'#ffffff',eyebrowColor:'#f1ba73',
+      statCardBg:'#184f3d',statCardBorder:'#3a6a59',statNumberColor:'#ffffff',statLabelColor:'#d6e1db',statIconColor:'#f2b84b',
+      ctaBg:'#d8582f',ctaTextColor:'#ffffff',
+      timelineBg:'#0f5139',timelineTitleColor:'#ffffff',timelineIconColor:'#f2c261',
+      milestoneBg:'#24624d',milestoneBorder:'#3b735f',milestoneDateColor:'#f2b84b',milestoneTextColor:'#ffffff',
+      activeMilestoneBg:'#3f6944',activeMilestoneBorder:'#9a8d35',activeMilestoneDateColor:'#ffd05b',
+      journeyTitle:'Hành trình 2026',
+      milestone1Date:'10.10',milestone1Label:'Mở nhận tác phẩm',
+      milestone2Date:'17.10',milestone2Label:'HOLA Tour #01',
+      milestone3Date:'24.10',milestone3Label:'HOLA Tour #02',
+      milestone4Date:'31.10',milestone4Label:'HOLA Tour #03',
+      milestone5Date:'10.11',milestone5Label:'Đóng nhận tác phẩm',
+      milestone6Date:'18.11',milestone6Label:'Công bố TOP52',
+      milestone7Date:'28.11',milestone7Label:'HOLA DAY'
     },
     fields:[
       ['eyebrow','Eyebrow','text'],
       ['title','Tiêu đề','text'],
       ['description','Mô tả','textarea'],
       ['ctaText','Tên nút','text'],
+      ['__campaignColors','MÀU KHỐI THỐNG KÊ','heading'],
+      ['mainBg','Nền khối chính','color'],
+      ['titleColor','Màu tiêu đề / số liệu chính','color'],
+      ['textColor','Màu mô tả','color'],
+      ['eyebrowColor','Màu HALO HOLA 2026','color'],
+      ['statCardBg','Nền card thống kê','color'],
+      ['statCardBorder','Viền card thống kê','color'],
+      ['statNumberColor','Màu số thống kê','color'],
+      ['statLabelColor','Màu nhãn thống kê','color'],
+      ['statIconColor','Màu icon thống kê','color'],
+      ['ctaBg','Nền nút Gửi góc nhìn','color'],
+      ['ctaTextColor','Chữ nút Gửi góc nhìn','color'],
+      ['__journeyColors','MÀU HÀNH TRÌNH 2026','heading'],
+      ['timelineBg','Nền khối Hành trình','color'],
+      ['timelineTitleColor','Màu tiêu đề Hành trình','color'],
+      ['timelineIconColor','Màu icon lịch','color'],
+      ['milestoneBg','Nền mốc thường','color'],
+      ['milestoneBorder','Viền mốc thường','color'],
+      ['milestoneDateColor','Màu ngày','color'],
+      ['milestoneTextColor','Màu tên mốc','color'],
+      ['activeMilestoneBg','Nền mốc đang active','color'],
+      ['activeMilestoneBorder','Viền mốc đang active','color'],
+      ['activeMilestoneDateColor','Màu ngày active','color'],
+      ['__journeyContent','NỘI DUNG HÀNH TRÌNH','heading'],
+      ['journeyTitle','Tiêu đề hành trình','text'],
+      ['milestone1Date','Mốc 1 · Ngày','text'],['milestone1Label','Mốc 1 · Nội dung','text'],
+      ['milestone2Date','Mốc 2 · Ngày','text'],['milestone2Label','Mốc 2 · Nội dung','text'],
+      ['milestone3Date','Mốc 3 · Ngày','text'],['milestone3Label','Mốc 3 · Nội dung','text'],
+      ['milestone4Date','Mốc 4 · Ngày','text'],['milestone4Label','Mốc 4 · Nội dung','text'],
+      ['milestone5Date','Mốc 5 · Ngày','text'],['milestone5Label','Mốc 5 · Nội dung','text'],
+      ['milestone6Date','Mốc 6 · Ngày','text'],['milestone6Label','Mốc 6 · Nội dung','text'],
+      ['milestone7Date','Mốc 7 · Ngày','text'],['milestone7Label','Mốc 7 · Nội dung','text'],
+      ['__campaignImages','ẢNH TRANG TRÍ DESKTOP','heading'],
       ['backgroundImage','Ảnh nền bên phải','image'],
       ['discoverImage','Ảnh Khám phá','image'],
       ['keepImage','Ảnh Lưu giữ','image'],
@@ -119,7 +166,12 @@ const definitions={
 
 function Field({field,value,onChange,onUpload,uploading}){
   const [key,label,type]=field
+  if(type==='heading') return <div className="cms-field cms-field-full cms-field-heading"><b>{label}</b></div>
   if(type==='textarea') return <label className="cms-field cms-field-full"><span>{label}</span><textarea rows="4" value={value||''} onChange={e=>onChange(key,e.target.value)}/></label>
+  if(type==='color'){
+    const safeColor=/^#[0-9a-f]{6}$/i.test(value||'')?value:'#000000'
+    return <label className="cms-field cms-color-field"><span>{label}</span><div className="cms-color-input"><input type="color" value={safeColor} onChange={e=>onChange(key,e.target.value)}/><input value={value||''} onChange={e=>onChange(key,e.target.value)} placeholder="#173d2d"/></div></label>
+  }
   if(type==='image') return <div className="cms-field cms-image-field">
     <span>{label}</span>
     <div className="cms-image-input">
@@ -203,7 +255,7 @@ export default function HomepageManager(){
 
     <section className="cms-editor">
       <header className="cms-editor-head">
-        <div><span className="eyebrow">CHỈNH NỘI DUNG</span><h2>{def.label}</h2><p>Đổi chữ, bật/tắt section và thay ảnh mà không cần sửa code.</p></div>
+        <div><span className="eyebrow">CHỈNH NỘI DUNG</span><h2>{def.label}</h2><p>Đổi chữ, bật/tắt section, chỉnh màu và thay ảnh mà không cần sửa code.</p></div>
         <div className="cms-actions">
           <button className={section?.enabled?'cms-visibility on':'cms-visibility'} onClick={toggle}>{section?.enabled?<><Eye size={16}/> Đang hiển thị</>:<><EyeOff size={16}/> Đang ẩn</>}</button>
           <button className="btn btn-green btn-sm" onClick={save} disabled={saving}><Save size={16}/>{saving?'Đang lưu...':'Lưu thay đổi'}</button>
@@ -211,7 +263,7 @@ export default function HomepageManager(){
       </header>
 
       {message&&<div className="cms-message">{message}</div>}
-
+      {active==='campaign'&&<div className="cms-message">Màu thống kê, nút CTA và Hành trình 2026 bên dưới áp dụng trực tiếp lên Trang chủ. Bạn cũng có thể sửa ngày và tên từng mốc.</div>}
       {active==='colors'&&<div className="cms-message">Bạn có thể chọn trực tiếp các ảnh đã tải ở Media Library bên dưới. Chọn vị trí ảnh, bấm ảnh muốn dùng rồi bấm “Lưu thay đổi”.</div>}
       {active==='colors'&&<ColorPaletteManager/>}
       {active==='themes'&&<div className="cms-message">Phần dưới quản lý 8 chủ đề thật của hệ thống. Tên, mô tả, ảnh, màu và nội dung giới thiệu dùng chung cho Trang chủ, trang danh sách Chủ đề và trang chi tiết từng chủ đề.</div>}
