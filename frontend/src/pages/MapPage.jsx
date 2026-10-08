@@ -1,70 +1,40 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ExternalLink, LoaderCircle, MapPin } from 'lucide-react'
-import { getHolaMapConfig } from '../services/holaMapsApi.js'
+import { useState } from 'react'
+import { ExternalLink, LoaderCircle } from 'lucide-react'
 import '../styles/hola-map-page.css'
 
-const DEFAULT_EMBED_URL = 'https://maps.dothihoalac.vn/embed'
-const DEFAULT_MAP_URL = 'https://maps.dothihoalac.vn/map'
+const HOLA_MAPS_URL = 'https://maps.dothihoalac.vn/'
+const HOLA_MAPS_EMBED_URL = 'https://maps.dothihoalac.vn/embed'
 
 export default function MapPage(){
-  const [config,setConfig]=useState(null)
-  const [loading,setLoading]=useState(true)
   const [frameLoading,setFrameLoading]=useState(true)
-  const [error,setError]=useState('')
-
-  useEffect(()=>{
-    const controller=new AbortController()
-    getHolaMapConfig({signal:controller.signal})
-      .then(value=>{
-        if(value) setConfig(value)
-      })
-      .catch(err=>{
-        if(err?.name!=='AbortError') {
-          setError('Không tải được cấu hình SDK Hola Maps. Đang dùng địa chỉ embed mặc định.')
-        }
-      })
-      .finally(()=>setLoading(false))
-    return ()=>controller.abort()
-  },[])
-
-  const embedUrl=useMemo(()=>config?.embedUrl||DEFAULT_EMBED_URL,[config])
-  const fullMapUrl=useMemo(()=>{
-    try {
-      const url=new URL(embedUrl)
-      url.pathname='/map'
-      url.search=''
-      return url.toString()
-    } catch {
-      return DEFAULT_MAP_URL
-    }
-  },[embedUrl])
 
   return <main className="hm-page hm-official-page">
-    <section className="hm-official-shell" aria-label="HOLA Map">
-      <iframe
-        className="hm-official-frame"
-        src={embedUrl}
-        title="Hola Maps — Bản đồ Hòa Lạc"
-        loading="eager"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allow="geolocation; fullscreen"
-        onLoad={()=>setFrameLoading(false)}
-      />
-
-      {(loading||frameLoading)&&<div className="hm-official-loading">
-        <LoaderCircle/> <span>Đang mở bản đồ Hola Maps…</span>
-      </div>}
-
-      <div className="hm-official-brand">
-        <MapPin/>
-        <span><b>HOLA Map</b><small>Official Hola Maps SDK · vùng Hòa Lạc</small></span>
+    <section className="hm-official-shell" aria-label="HOLA Maps">
+      <div className="hm-map-crop">
+        <iframe
+          className="hm-official-frame"
+          src={HOLA_MAPS_EMBED_URL}
+          title="HOLA Maps — Bản đồ Hòa Lạc"
+          loading="eager"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allow="geolocation; fullscreen"
+          onLoad={()=>setFrameLoading(false)}
+        />
       </div>
 
-      <a className="hm-official-open" href={fullMapUrl} target="_blank" rel="noreferrer">
-        Mở toàn màn hình <ExternalLink/>
-      </a>
+      {frameLoading&&<div className="hm-official-loading">
+        <LoaderCircle/> <span>Đang mở bản đồ HOLA Maps…</span>
+      </div>}
 
-      {error&&<div className="hm-official-warning">{error}</div>}
+      <a
+        className="hm-official-open"
+        href={HOLA_MAPS_URL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Truy cập HOLA Maps"
+      >
+        Truy cập HOLA Maps <ExternalLink/>
+      </a>
     </section>
   </main>
 }
