@@ -1,0 +1,88 @@
+/* HALO HOLA — shared PUBLIC PAGE title system
+   One source of truth for the primary H1 on non-home pages.
+   Edit only the variables below when you want to change page-title typography site-wide. */
+
+:root{
+  --page-title-font-family:Inter,'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --page-title-font-size:clamp(2.75rem,5vw,5.25rem);
+  --page-title-font-size-mobile:clamp(2rem,9vw,2.55rem);
+  --page-title-font-weight:800;
+  --page-title-line-height:.98;
+  --page-title-letter-spacing:-.045em;
+}
+
+/* Main public-page titles. Keep page-specific colors; unify typography only. */
+.page-hero-copy h1,
+.tour-page-copy h1,
+.stories-intro-inner > div:first-child > h1,
+.top52-live-copy h1,
+.theme-hero-copy h1,
+.story-detail-copy h1,
+.artwork-showcase-info h1,
+.hello-card h1{
+  font-family:var(--page-title-font-family) !important;
+  font-size:var(--page-title-font-size) !important;
+  font-weight:var(--page-title-font-weight) !important;
+  line-height:var(--page-title-line-height) !important;
+  letter-spacing:var(--page-title-letter-spacing) !important;
+  font-style:normal !important;
+
+  /* Prefer one natural line. Wrap only when the available width runs out. */
+  white-space:normal !important;
+  text-wrap:wrap !important;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+  hyphens:none !important;
+}
+
+/* Accent pieces remain colored by each page, but no longer force their own line
+   or carry a different font/size from the main title. */
+.page-hero-copy h1 > span,
+.page-hero-copy h1 > em,
+.tour-page-copy h1 > span,
+.tour-page-copy h1 > em,
+.top52-live-copy h1 > span,
+.hello-card h1 > span,
+.hello-card h1 > em{
+  display:inline !important;
+  margin:0 !important;
+  padding:0 !important;
+  font:inherit !important;
+  line-height:inherit !important;
+  letter-spacing:inherit !important;
+  font-style:normal !important;
+  white-space:normal !important;
+}
+
+/* These JSX titles have adjacent nodes without a literal whitespace. */
+.tour-page-copy h1 > em::before,
+.hello-card h1 > em::before{
+  content:' ';
+}
+
+/* HELLO page previously hard-coded a BR between title and accent. Let normal
+   wrapping decide instead, consistent with the rest of the site. */
+.hello-card h1 > br{
+  display:none !important;
+}
+
+@media(max-width:760px){
+  .page-hero-copy h1,
+  .tour-page-copy h1,
+  .stories-intro-inner > div:first-child > h1,
+  .top52-live-copy h1,
+  .theme-hero-copy h1,
+  .story-detail-copy h1,
+  .artwork-showcase-info h1,
+  .hello-card h1{
+    font-size:var(--page-title-font-size-mobile) !important;
+    line-height:1.01 !important;
+    letter-spacing:-.04em !important;
+  }
+}
+
+@media(max-width:390px){
+  :root{
+    --page-title-font-size-mobile:clamp(1.9rem,8.7vw,2.35rem);
+  }
+}
