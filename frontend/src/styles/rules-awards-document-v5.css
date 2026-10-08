@@ -1,0 +1,577 @@
+/* HALO HOLA 2026 — official-regulation reading mode
+   v5 deliberately removes the compressed desktop-table feeling on phones.
+   Desktop keeps the document canvas; mobile becomes a single-column regulation. */
+
+.rules4-page{
+  overflow-x:hidden;
+  background:#f4f1ea;
+}
+
+.rules4-paper,
+.rules4-paper *{
+  min-width:0;
+  max-width:100%;
+}
+
+/* Slightly calmer desktop document rhythm. */
+@media (min-width: 769px){
+  .rules4-paper{
+    max-width:920px;
+  }
+
+  .rules4-section h3{
+    font-size:clamp(1.65rem,2.1vw,2.15rem);
+    line-height:1.16;
+  }
+
+  .rules4-lead{
+    max-width:760px;
+    font-size:1rem;
+    line-height:1.78;
+  }
+}
+
+@media (max-width: 768px){
+  /* ===== Page / hero ===== */
+  .rules4-page{
+    --rules-mobile-text:#161916;
+    --rules-mobile-muted:#5f6863;
+    --rules-mobile-line:#deded9;
+    background:#efefec;
+    color:var(--rules-mobile-text);
+    overflow-x:hidden;
+  }
+
+  .rules4-page .container{
+    width:100%;
+    max-width:none;
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .rules4-hero{
+    min-height:0;
+    padding:20px 22px 18px;
+    background:#fff;
+    border-bottom:1px solid #deded9;
+  }
+
+  .rules4-hero-inner{
+    display:block;
+  }
+
+  .rules4-kicker{
+    margin-bottom:8px;
+    color:#8e513e;
+    font-size:.68rem;
+    letter-spacing:.12em;
+  }
+
+  .rules4-hero h1{
+    margin:0;
+    font-size:1.8rem;
+    line-height:1.12;
+    letter-spacing:-.03em;
+  }
+
+  .rules4-hero p{
+    margin:10px 0 0;
+    font-size:.98rem;
+    line-height:1.62;
+    color:#5a625e;
+  }
+
+  .rules4-hero-actions{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .rules4-hero-actions::-webkit-scrollbar{display:none}
+
+  .rules4-hero-actions .btn{
+    flex:0 0 auto;
+    min-height:40px;
+    padding:0 14px;
+    border-radius:6px;
+    font-size:.82rem;
+  }
+
+  .rules4-hero-meta{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin-top:16px;
+    border:1px solid #e1e1dc;
+    background:#fafaf8;
+  }
+
+  .rules4-hero-meta>div{
+    padding:10px 8px;
+    border:0;
+    border-right:1px solid #e1e1dc;
+    text-align:center;
+  }
+  .rules4-hero-meta>div:last-child{border-right:0}
+  .rules4-hero-meta span{
+    display:block;
+    margin-bottom:4px;
+    font-size:.61rem;
+    line-height:1.2;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#777f7a;
+  }
+  .rules4-hero-meta b{
+    display:block;
+    font-size:.77rem;
+    line-height:1.3;
+    color:#1d342c;
+  }
+
+  /* ===== Remove desktop sidebar completely on phones ===== */
+  .rules4-wrap{
+    padding:0;
+    background:#efefec;
+  }
+
+  .rules4-layout{
+    display:block;
+    width:100%;
+    margin:0;
+    padding:0;
+  }
+
+  .rules4-sidebar{
+    display:none !important;
+  }
+
+  /* ===== One continuous paper, like a regulation document ===== */
+  .rules4-paper{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0 28px calc(122px + env(safe-area-inset-bottom));
+    border:0;
+    border-left:1px solid #deded9;
+    border-right:1px solid #deded9;
+    border-radius:0;
+    box-shadow:none;
+    background:#fff;
+    overflow:visible;
+  }
+
+  /* Replace dashboard-like paper header with a formal chapter heading. */
+  .rules4-paper-head{
+    display:block;
+    position:relative;
+    min-height:210px;
+    margin:0;
+    padding:54px 0 34px;
+    border-bottom:1px solid var(--rules-mobile-line);
+    text-align:center;
+  }
+  .rules4-paper-head>div{
+    display:none !important;
+  }
+  .rules4-paper-head::before{
+    content:"CHƯƠNG I\A QUY ĐỊNH CHUNG";
+    white-space:pre-line;
+    display:block;
+    color:#111;
+    font-size:1.55rem;
+    line-height:2.45;
+    font-weight:850;
+    letter-spacing:-.02em;
+  }
+  .rules4-paper-head::after{
+    content:"-----";
+    display:block;
+    margin-top:4px;
+    color:#111;
+    font-size:1rem;
+    letter-spacing:.08em;
+  }
+
+  /* ===== Sections read as Điều 1, Điều 2... ===== */
+  .rules4-section{
+    display:block;
+    width:100%;
+    padding:34px 0;
+    border-top:0;
+    border-bottom:1px solid var(--rules-mobile-line);
+    scroll-margin-top:74px;
+  }
+
+  .rules4-section:last-of-type{
+    border-bottom:0;
+  }
+
+  .rules4-roman,
+  .rules4-section-kicker{
+    display:none !important;
+  }
+
+  .rules4-section h3{
+    margin:0 0 20px;
+    color:#101210;
+    font-family:Inter,'DM Sans',system-ui,sans-serif;
+    font-size:1.34rem;
+    line-height:1.38;
+    font-weight:820;
+    letter-spacing:-.018em;
+  }
+
+  #tham-gia h3::before{content:"Điều 1. ";}
+  #loai-hinh h3::before{content:"Điều 2. ";}
+  #chu-de h3::before{content:"Điều 3. ";}
+  #giai-thuong h3::before{content:"Điều 4. ";}
+  #cach-tham-gia h3::before{content:"Điều 5. ";}
+  #moc-thoi-gian h3::before{content:"Điều 6. ";}
+  #luu-y h3::before{content:"Điều 7. ";}
+
+  .rules4-lead,
+  .rules4-section p,
+  .rules4-fact dd,
+  .rules4-note,
+  .rules4-award-desc,
+  .rules4-checks li,
+  .rules4-steps p{
+    color:var(--rules-mobile-text);
+    font-size:1.08rem;
+    line-height:1.85;
+    letter-spacing:-.008em;
+  }
+
+  .rules4-lead{
+    margin:0 0 24px;
+  }
+
+  /* ===== Participant facts: plain paragraphs, no desktop grid ===== */
+  .rules4-facts{
+    margin:0;
+    border-top:0;
+  }
+
+  .rules4-fact{
+    display:block;
+    padding:16px 0;
+    border-bottom:1px solid #e5e5e1;
+  }
+  .rules4-fact:last-child{border-bottom:0}
+  .rules4-fact svg{display:none}
+  .rules4-fact dt{
+    display:block;
+    margin:0 0 5px;
+    color:#111;
+    font-size:1.05rem;
+    font-weight:800;
+  }
+  .rules4-fact dd{
+    display:block;
+    margin:0;
+  }
+
+  /* ===== Desktop tables become formal stacked clauses ===== */
+  .rules4-table,
+  .rules4-table tbody,
+  .rules4-table tr,
+  .rules4-table td{
+    display:block;
+    width:100%;
+  }
+
+  .rules4-table{
+    margin:4px 0 0;
+    border:0;
+    border-top:1px solid #d9dad6;
+    table-layout:auto;
+  }
+
+  .rules4-table thead{
+    display:none !important;
+  }
+
+  .rules4-table tr{
+    padding:20px 0;
+    border:0;
+    border-bottom:1px solid #dedfdb;
+    background:transparent !important;
+  }
+  .rules4-table tr:last-child{border-bottom:0}
+
+  .rules4-table td{
+    padding:0 !important;
+    border:0 !important;
+    color:var(--rules-mobile-text);
+    font-size:1.04rem;
+    line-height:1.7;
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+
+  .rules4-table td+td{
+    margin-top:8px;
+  }
+
+  .rules4-format-name{
+    display:block;
+    margin:0 0 8px;
+  }
+  .rules4-format-name span{display:none}
+  .rules4-format-name strong{
+    display:block;
+    color:#123f32;
+    font-size:1.08rem;
+    font-weight:850;
+  }
+
+  /* Format table gets readable labels rather than columns. */
+  .rules4-table:not(.rules4-awards-table) td:nth-child(2)::before{
+    content:"Nội dung: ";
+    font-weight:800;
+  }
+  .rules4-table:not(.rules4-awards-table) td:nth-child(3)::before{
+    content:"Thông số: ";
+    font-weight:800;
+  }
+
+  /* ===== Themes: numbered legal-style list ===== */
+  .rules4-theme-grid{
+    display:block;
+    margin:2px 0 0;
+    border-top:1px solid #d9dad6;
+  }
+  .rules4-theme{
+    display:grid;
+    grid-template-columns:34px minmax(0,1fr);
+    gap:9px;
+    align-items:start;
+    min-height:0;
+    padding:14px 0;
+    border:0;
+    border-bottom:1px solid #e1e2de;
+    border-radius:0;
+    background:transparent;
+  }
+  .rules4-theme .num{
+    color:#8e513e;
+    font-size:.9rem;
+    font-weight:850;
+  }
+  .rules4-theme b{
+    color:#151715;
+    font-size:1.04rem;
+    line-height:1.55;
+  }
+  .rules4-theme small{
+    grid-column:2;
+    justify-self:start;
+    margin-top:2px;
+    padding:0;
+    background:transparent;
+    color:#707873;
+    font-size:.85rem;
+  }
+
+  .rules4-note{
+    margin:20px 0 0;
+    padding:16px 0 16px 16px;
+    border:0;
+    border-left:3px solid #8e513e;
+    border-radius:0;
+    background:transparent;
+  }
+
+  /* ===== Awards: stacked, no horizontal table ===== */
+  .rules4-award-total{
+    display:block;
+    margin:0 0 14px;
+    padding:16px 0;
+    border-top:1px solid #d9dad6;
+    border-bottom:1px solid #d9dad6;
+    background:transparent;
+  }
+  .rules4-award-total strong{
+    display:block;
+    margin-bottom:4px;
+    color:#143e32;
+    font-size:1.55rem;
+  }
+  .rules4-award-total span{
+    display:block;
+    color:#5d6661;
+    font-size:.93rem;
+    line-height:1.55;
+  }
+
+  .rules4-awards-table td:nth-child(1){margin-bottom:8px}
+  .rules4-awards-table td:nth-child(2)::before{content:"Số lượng: ";font-weight:800}
+  .rules4-awards-table td:nth-child(3)::before{content:"Giá trị: ";font-weight:800}
+  .rules4-awards-table td:nth-child(4)::before{content:"Ghi chú: ";font-weight:800}
+
+  .rules4-awards-table .rules4-award-name b{
+    display:block;
+    color:#123f32;
+    font-size:1.1rem;
+    line-height:1.45;
+  }
+  .rules4-awards-table .rules4-award-name small{
+    display:block;
+    margin-top:3px;
+    color:#8e513e;
+    font-size:.78rem;
+    font-weight:800;
+    text-transform:uppercase;
+  }
+
+  .rules4-award-policy{
+    display:block;
+    margin-top:22px;
+    border-top:1px solid #d9dad6;
+    border-bottom:1px solid #d9dad6;
+  }
+  .rules4-award-policy>div{
+    display:block;
+    padding:15px 0 !important;
+    border:0 !important;
+    border-bottom:1px solid #e4e4e0 !important;
+  }
+  .rules4-award-policy>div:last-child{border-bottom:0 !important}
+  .rules4-award-policy b{
+    display:block;
+    margin-bottom:5px;
+    font-size:1rem;
+  }
+  .rules4-award-policy span{
+    color:var(--rules-mobile-text);
+    font-size:1rem;
+    line-height:1.72;
+  }
+
+  /* ===== Steps / timeline: paragraph rhythm ===== */
+  .rules4-steps{
+    margin:0;
+    padding:0;
+    border-top:1px solid #d9dad6;
+    list-style:none;
+  }
+  .rules4-steps li{
+    display:block;
+    padding:18px 0;
+    border-bottom:1px solid #e0e1dd;
+  }
+  .rules4-steps .num{
+    display:block;
+    margin-bottom:6px;
+    color:#8e513e;
+    font-size:.87rem;
+    font-weight:850;
+  }
+  .rules4-steps b{
+    display:block;
+    margin-bottom:5px;
+    font-size:1.08rem;
+  }
+  .rules4-steps p{margin:0}
+
+  .rules4-timeline{
+    margin:0;
+    border-top:1px solid #d9dad6;
+  }
+  .rules4-time-row{
+    display:block;
+    padding:16px 0;
+    border-bottom:1px solid #e0e1dd;
+    background:transparent !important;
+  }
+  .rules4-time-row time{
+    display:block;
+    margin-bottom:5px;
+    color:#8e513e;
+    font-size:.91rem;
+    font-weight:850;
+  }
+  .rules4-time-row b{
+    display:block;
+    color:#161916;
+    font-size:1.05rem;
+    line-height:1.55;
+  }
+  .rules4-time-row.is-final{
+    padding-left:14px;
+    border-left:3px solid #143e32;
+  }
+
+  /* ===== Rules: clean numbered-looking paragraphs ===== */
+  .rules4-checks{
+    margin:0;
+    padding:0;
+    list-style:none;
+    counter-reset:rule-note;
+  }
+  .rules4-checks li{
+    counter-increment:rule-note;
+    display:grid;
+    grid-template-columns:28px minmax(0,1fr);
+    gap:8px;
+    padding:12px 0;
+    border-bottom:0;
+  }
+  .rules4-checks li::before{
+    content:counter(rule-note) ".";
+    color:#111;
+    font-size:1.08rem;
+    font-weight:500;
+    line-height:1.85;
+  }
+  .rules4-checks li svg{display:none}
+  .rules4-checks li span{
+    color:#161916;
+    font-size:1.08rem;
+    line-height:1.85;
+  }
+
+  /* ===== End CTA: no floating marketing card ===== */
+  .rules4-footer-action{
+    display:block;
+    margin:0;
+    padding:28px 0 12px;
+    border-top:1px solid #d9dad6;
+    background:#fff;
+  }
+  .rules4-footer-action>div>span{
+    display:block;
+    margin-bottom:6px;
+    color:#8e513e;
+    font-size:.7rem;
+    font-weight:850;
+    letter-spacing:.1em;
+  }
+  .rules4-footer-action h3{
+    margin:0;
+    font-size:1.32rem;
+    line-height:1.4;
+  }
+  .rules4-footer-action .btn{
+    width:100%;
+    justify-content:center;
+    margin-top:16px;
+    border-radius:6px;
+  }
+}
+
+/* Extra narrow devices: keep comfortable document margins, never create horizontal scroll. */
+@media (max-width: 390px){
+  .rules4-paper{padding-left:22px;padding-right:22px}
+  .rules4-hero{padding-left:18px;padding-right:18px}
+  .rules4-hero h1{font-size:1.65rem}
+  .rules4-section h3{font-size:1.25rem}
+  .rules4-lead,
+  .rules4-section p,
+  .rules4-fact dd,
+  .rules4-table td,
+  .rules4-checks li span{font-size:1.02rem}
+}
