@@ -64,14 +64,10 @@ else
   echo "==> Meeting showcase seed already applied"
 fi
 
-# Idempotent showcase enrichments. Keep these outside the one-time marker so an older
-# meeting seed can be upgraded safely without recreating participant-style records.
 npm run db:seed:showcase:scores --prefix backend
 npm run db:seed:showcase:dates --prefix backend
 npm run db:seed:showcase:public --prefix backend
 
-# One-time official content correction: Tour #03 changed from Nắng Hòa Lạc to Làng nghề Hòa Lạc.
-# The marker prevents future deploys from overwriting edits made later in Admin CMS.
 if [[ ! -f "$TOUR03_LANG_NGHE_MARKER" ]]; then
   echo "==> Update HOLA Tour #03 to Làng nghề Hòa Lạc"
   npm run db:content:tour03-langnghe --prefix backend
@@ -80,7 +76,6 @@ else
   echo "==> Tour #03 craft-village content already applied; keeping CMS edits intact"
 fi
 
-# One-time prize-value correction kept for servers that have not applied the previous release yet.
 if [[ ! -f "$AWARDS_2026_VALUES_MARKER" ]]; then
   echo "==> Update HALO HOLA 2026 prize values"
   npm run db:content:awards-2026-values --prefix backend
@@ -89,11 +84,9 @@ else
   echo "==> Previous HALO HOLA 2026 prize values already applied"
 fi
 
-# Revised official structure: 1 first prize, 7 theme prizes, 5 color prizes and 2 online prizes.
-# This runs only once so later Admin edits remain untouched.
 if [[ ! -f "$AWARDS_2026_STRUCTURE_V2_MARKER" ]]; then
   echo "==> Apply revised HALO HOLA 2026 prize structure (26m cash)"
-  node backend/src/database/updateAwards2026StructureV2.js
+  npm run db:content:awards-2026-structure-v2 --prefix backend
   touch "$AWARDS_2026_STRUCTURE_V2_MARKER"
 else
   echo "==> Revised HALO HOLA 2026 prize structure already applied; keeping Admin edits intact"
