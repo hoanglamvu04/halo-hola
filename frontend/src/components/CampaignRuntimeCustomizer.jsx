@@ -49,6 +49,13 @@ const cssVars={
   activeMilestoneBg:'--campaign-active-bg',activeMilestoneBorder:'--campaign-active-border',activeMilestoneDateColor:'--campaign-active-date'
 }
 
+const statLinks=[
+  ['.stat-camera','/top52','Xem các góc nhìn đã gửi'],
+  ['.stat-people','/stories','Xem các câu chuyện cộng đồng'],
+  ['.stat-place','/hola-map','Khám phá địa điểm trên HOLA Map'],
+  ['.stat-top52','/top52','Xem tác phẩm TOP52']
+]
+
 function normalizePalette(content){
   const campaign={...defaults,...content}
   Object.entries(legacyPalette).forEach(([key,[oldValue,newValue]])=>{
@@ -66,6 +73,43 @@ export default function CampaignRuntimeCustomizer(){
     if(location.pathname!=='/') return undefined
     let cancelled=false
     let observer
+    let boundRoot=null
+
+    const getStatPath=(target)=>target?.closest?.('.live-stat[data-stat-link]')?.dataset?.statLink||''
+    const goToStatPath=(path)=>{
+      if(!path) return
+      window.location.assign(path)
+    }
+    const onStatClick=(event)=>{
+      const path=getStatPath(event.target)
+      if(path) goToStatPath(path)
+    }
+    const onStatKeyDown=(event)=>{
+      if(event.key!=='Enter'&&event.key!==' ') return
+      const path=getStatPath(event.target)
+      if(!path) return
+      event.preventDefault()
+      goToStatPath(path)
+    }
+
+    const bindStatLinks=(root)=>{
+      statLinks.forEach(([selector,path,label])=>{
+        const card=root.querySelector(selector)
+        if(!card) return
+        card.dataset.statLink=path
+        card.setAttribute('role','link')
+        card.setAttribute('tabindex','0')
+        card.setAttribute('aria-label',label)
+      })
+
+      if(boundRoot!==root){
+        boundRoot?.removeEventListener('click',onStatClick)
+        boundRoot?.removeEventListener('keydown',onStatKeyDown)
+        root.addEventListener('click',onStatClick)
+        root.addEventListener('keydown',onStatKeyDown)
+        boundRoot=root
+      }
+    }
 
     const boot=async()=>{
       try{
@@ -104,6 +148,8 @@ export default function CampaignRuntimeCustomizer(){
             setText(item.querySelector('span'),campaign[`milestone${n}Date`])
             setText(item.querySelector('b'),campaign[`milestone${n}Label`])
           })
+
+          bindStatLinks(root)
         }
 
         apply()
@@ -118,6 +164,8 @@ export default function CampaignRuntimeCustomizer(){
     return ()=>{
       cancelled=true
       observer?.disconnect()
+      boundRoot?.removeEventListener('click',onStatClick)
+      boundRoot?.removeEventListener('keydown',onStatKeyDown)
     }
   },[location.pathname])
 
