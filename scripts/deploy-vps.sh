@@ -8,6 +8,7 @@ DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
 TOUR03_LANG_NGHE_MARKER="$ROOT/.tour03-lang-nghe-v1"
+AWARDS_2026_VALUES_MARKER="$ROOT/.awards-2026-values-v1"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -76,6 +77,16 @@ if [[ ! -f "$TOUR03_LANG_NGHE_MARKER" ]]; then
   touch "$TOUR03_LANG_NGHE_MARKER"
 else
   echo "==> Tour #03 craft-village content already applied; keeping CMS edits intact"
+fi
+
+# One-time official prize-value correction requested for HALO HOLA 2026.
+# Future Admin edits remain untouched after this marker is created.
+if [[ ! -f "$AWARDS_2026_VALUES_MARKER" ]]; then
+  echo "==> Update HALO HOLA 2026 prize values"
+  npm run db:content:awards-2026-values --prefix backend
+  touch "$AWARDS_2026_VALUES_MARKER"
+else
+  echo "==> HALO HOLA 2026 prize values already applied; keeping Admin edits intact"
 fi
 
 echo "==> Build frontend"
