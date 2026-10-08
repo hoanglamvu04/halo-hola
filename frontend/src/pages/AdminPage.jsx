@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette, Trophy
 } from 'lucide-react'
 import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
@@ -12,6 +12,7 @@ import ColorManagementManager from '../components/ColorManagementManager.jsx'
 import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
+import AwardsManager from '../components/AwardsManager.jsx'
 import JuryBoardManager from '../components/JuryBoardManager.jsx'
 import JuryResultsManager from '../components/JuryResultsManager.jsx'
 import PublicationManager from '../components/PublicationManager.jsx'
@@ -30,6 +31,7 @@ const nav=[
   {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
   {label:'Tác giả',icon:Users,path:'/admin/authors'},
   {label:'TOP52',icon:Images,path:'/admin/top52'},
+  {label:'Giải thưởng',icon:Trophy,path:'/admin/awards'},
   {label:'Công bố',icon:Globe2,path:'/admin/publication'},
   {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
   {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'},
@@ -178,6 +180,7 @@ export default function AdminPage(){
      active==='Stories'?<AdminContentManager type="stories"/>:
      active==='HOLA Map'?<AdminContentManager type="places"/>:
      active==='Đối tác'?<AdminContentManager type="partners"/>:
+     active==='Giải thưởng'?<AwardsManager/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Hội đồng BGK'?<JuryBoardManager/>:
      active==='Kết quả BGK'?<JuryResultsManager/>:
