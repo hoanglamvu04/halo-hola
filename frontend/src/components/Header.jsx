@@ -13,6 +13,14 @@ const DEFAULT_NAV_LINKS = [
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
+const MOBILE_QUICK_LINKS = [
+  {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
+  {label:'Tra cứu tác phẩm',href:'/tra-cuu'},
+  {label:'WE HOLA',href:'/we-hola'},
+  {label:'Đồng hành',href:'/dong-hanh'},
+  {label:'HOLA DAY',href:'/hola-day'}
+]
+
 const isInternalHref=(href='')=>href.startsWith('/')&&!href.startsWith('//')
 
 function HeaderNavLink({item,onClick}){
@@ -40,7 +48,9 @@ export default function Header() {
     searchLabel:'Tra cứu tác phẩm',
     navLinks:DEFAULT_NAV_LINKS,
     logoImage:'',
-    favicon:''
+    favicon:'',
+    footerEmail:'',
+    footerPhone:''
   })
   const [mobileFloating,setMobileFloating]=useState(false)
   const [mobileHeaderVisible,setMobileHeaderVisible]=useState(true)
@@ -56,6 +66,7 @@ export default function Header() {
       const legacy=section?.content||{}
       const header=settings?.header||{}
       const brand=settings?.brand||{}
+      const footer=settings?.footer||{}
       setConfig(v=>({
         ...v,
         ...legacy,
@@ -64,7 +75,9 @@ export default function Header() {
         navLinks:Array.isArray(header.navLinks)?header.navLinks:DEFAULT_NAV_LINKS,
         logoImage:legacy.logoImage||brand.logo||v.logoImage,
         siteName:brand.siteName||'HALO HOLA',
-        favicon:brand.favicon||''
+        favicon:brand.favicon||'',
+        footerEmail:footer.email||'',
+        footerPhone:footer.phone||''
       }))
     })
   },[])
@@ -184,10 +197,31 @@ export default function Header() {
           <span>{config.menuTitle||'Khám phá HALO HOLA'}</span>
           <button onClick={closeMenu} aria-label="Đóng menu"><X/></button>
         </div>
-        {navLinks.filter(item=>item?.label&&item?.href).map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
+
+        <div className="mobile-nav-primary-label">Khám phá</div>
+        <div className="mobile-nav-primary-list">
+          {navLinks.filter(item=>item?.label&&item?.href).map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
+        </div>
+
         <div className="mobile-nav-actions">
           {config.showSearch!==false&&<HeaderActionLink href={searchUrl} onClick={closeMenu}><Search/> {searchLabel}</HeaderActionLink>}
           <HeaderActionLink className="mobile-nav-cta" href={ctaUrl} newTab={Boolean(config.ctaNewTab)} onClick={closeMenu}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></HeaderActionLink>
+        </div>
+
+        <div className="mobile-nav-quick">
+          <div className="mobile-nav-quick-head">
+            <span>Tiện ích & cộng đồng</span>
+            <small>Đi nhanh đến các nội dung quan trọng</small>
+          </div>
+          <div className="mobile-nav-quick-grid">
+            {MOBILE_QUICK_LINKS.map(item=><HeaderActionLink key={item.href} href={item.href} onClick={closeMenu}>
+              <span>{item.label}</span><b>→</b>
+            </HeaderActionLink>)}
+          </div>
+          {(config.footerEmail||config.footerPhone)&&<div className="mobile-nav-contact">
+            {config.footerEmail&&<a href={'mailto:'+config.footerEmail}>{config.footerEmail}</a>}
+            {config.footerPhone&&<a href={'tel:'+config.footerPhone}>{config.footerPhone}</a>}
+          </div>}
         </div>
       </nav>
       <div className="header-actions">
