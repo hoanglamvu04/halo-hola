@@ -20,6 +20,7 @@ const PartnersPage=lazy(()=>import('./pages/PartnersPage.jsx'))
 const HelloPage=lazy(()=>import('./pages/HelloPage.jsx'))
 const ThemesPage=lazy(()=>import('./pages/ThemesPage.jsx'))
 const ThemePage=lazy(()=>import('./pages/ThemePage.jsx'))
+const RulesAwardsPage=lazy(()=>import('./pages/RulesAwardsPage.jsx'))
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
 const JurorWorkspacePage=lazy(()=>import('./pages/JurorWorkspacePage.jsx'))
@@ -39,6 +40,7 @@ const SEO_ROUTES={
   '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Gửi tác phẩm, câu chuyện và góc nhìn của bạn về Hòa Lạc tới HALO HOLA 2026.'],
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố những dấu mốc của HALO HOLA 2026.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác đồng hành cùng HALO HOLA.'],
+  '/the-le-giai-thuong':['Thể lệ & Giải thưởng HALO HOLA 2026','Điều kiện tham gia, 4 loại hình, 8 chủ đề, mốc thời gian và cơ cấu 11 giải trị giá 56 triệu đồng của HALO HOLA 2026.'],
   '/tra-cuu':['Tra cứu tác phẩm | HALO HOLA','Tra cứu hồ sơ và trạng thái tác phẩm đã gửi tới HALO HOLA 2026.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
@@ -199,6 +201,7 @@ function SiteShell() {
           <Route path="/stories/:slug" element={<StoryDetailPage />} />
           <Route path="/we-hola" element={<WeHolaPage />} />
           <Route path="/dong-hanh" element={<PartnersPage />} />
+          <Route path="/the-le-giai-thuong" element={<RulesAwardsPage />} />
           <Route path="/hello" element={<HelloPage />} />
           <Route path="/chu-de" element={<ThemesPage />} />
           <Route path="/chu-de/:slug" element={<ThemePage />} />
