@@ -3,14 +3,45 @@ import { NavLink, Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { getHomepageContent, getSiteSettings } from '../services/api.js'
 
-const items = [
-  ['Khám phá', '/'], ['Chủ đề', '/chu-de'], ['HOLA Tour', '/hola-tour'],
-  ['HOLA Map', '/hola-map'], ['Stories', '/stories'], ['TOP52', '/top52'], ['WE HOLA', '/we-hola']
+const DEFAULT_NAV_LINKS = [
+  {label:'Khám phá',href:'/'},
+  {label:'Chủ đề',href:'/chu-de'},
+  {label:'HOLA Tour',href:'/hola-tour'},
+  {label:'HOLA Map',href:'/hola-map'},
+  {label:'Stories',href:'/stories'},
+  {label:'TOP52',href:'/top52'},
+  {label:'WE HOLA',href:'/we-hola'}
 ]
+
+const isInternalHref=(href='')=>href.startsWith('/')&&!href.startsWith('//')
+
+function HeaderNavLink({item,onClick}){
+  const href=item?.href||'#'
+  const label=item?.label||href
+  if(isInternalHref(href)){
+    return <NavLink to={href} end={href==='/'} onClick={onClick}>{label}</NavLink>
+  }
+  return <a href={href} target={item?.newTab?'_blank':undefined} rel={item?.newTab?'noreferrer':undefined} onClick={onClick}>{label}</a>
+}
+
+function HeaderActionLink({href,className,onClick,children,ariaLabel,title,newTab=false}){
+  if(isInternalHref(href)) return <Link className={className} to={href} onClick={onClick} aria-label={ariaLabel} title={title}>{children}</Link>
+  return <a className={className} href={href||'#'} target={newTab?'_blank':undefined} rel={newTab?'noreferrer':undefined} onClick={onClick} aria-label={ariaLabel} title={title}>{children}</a>
+}
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const [config,setConfig]=useState({enabled:true,ctaText:'GỬI GÓC NHÌN',logoImage:'',favicon:''})
+  const [config,setConfig]=useState({
+    enabled:true,
+    ctaText:'GỬI GÓC NHÌN',
+    ctaUrl:'/gui-goc-nhin',
+    showSearch:true,
+    searchUrl:'/tra-cuu',
+    searchLabel:'Tra cứu tác phẩm',
+    navLinks:DEFAULT_NAV_LINKS,
+    logoImage:'',
+    favicon:''
+  })
   const [mobileFloating,setMobileFloating]=useState(false)
   const [mobileHeaderVisible,setMobileHeaderVisible]=useState(true)
   const openRef=useRef(open)
@@ -22,12 +53,16 @@ export default function Header() {
       const data=homeResult.status==='fulfilled'?homeResult.value:null
       const settings=settingsResult.status==='fulfilled'?settingsResult.value:{}
       const section=data?.header
+      const legacy=section?.content||{}
+      const header=settings?.header||{}
       const brand=settings?.brand||{}
       setConfig(v=>({
         ...v,
-        ...(section?.content||{}),
-        enabled:section?.enabled!==false,
-        logoImage:section?.content?.logoImage||brand.logo||v.logoImage,
+        ...legacy,
+        ...header,
+        enabled:typeof header.enabled==='boolean'?header.enabled:section?.enabled!==false,
+        navLinks:Array.isArray(header.navLinks)?header.navLinks:DEFAULT_NAV_LINKS,
+        logoImage:legacy.logoImage||brand.logo||v.logoImage,
         siteName:brand.siteName||'HALO HOLA',
         favicon:brand.favicon||''
       }))
@@ -96,7 +131,6 @@ export default function Header() {
       if((diff>0&&accumulated<0)||(diff<0&&accumulated>0)) accumulated=0
       accumulated+=diff
 
-      // Hide while moving down, reveal only after a deliberate short upward swipe.
       if(accumulated>20){
         setMobileHeaderVisible(false)
         accumulated=0
@@ -131,6 +165,12 @@ export default function Header() {
     mobileHeaderVisible||open?'mobile-header-visible':'mobile-header-hidden'
   ].filter(Boolean).join(' ')
 
+  const navLinks=Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS
+  const closeMenu=()=>setOpen(false)
+  const searchUrl=config.searchUrl||'/tra-cuu'
+  const searchLabel=config.searchLabel||'Tra cứu tác phẩm'
+  const ctaUrl=config.ctaUrl||'/gui-goc-nhin'
+
   return <header className={headerClass}>
     <div className="container header-inner">
       <Link className={'brand '+(config.logoImage?'brand-image':'brand-lockup')} to="/">
@@ -141,18 +181,18 @@ export default function Header() {
       </Link>
       <nav className={'main-nav '+(open ? 'open' : '')}>
         <div className="mobile-nav-head">
-          <span>Khám phá HALO HOLA</span>
-          <button onClick={()=>setOpen(false)} aria-label="Đóng menu"><X/></button>
+          <span>{config.menuTitle||'Khám phá HALO HOLA'}</span>
+          <button onClick={closeMenu} aria-label="Đóng menu"><X/></button>
         </div>
-        {items.map(([label, href]) => <NavLink key={href} to={href} end={href==='/'} onClick={() => setOpen(false)}>{label}</NavLink>)}
+        {navLinks.filter(item=>item?.label&&item?.href).map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
         <div className="mobile-nav-actions">
-          <Link to="/tra-cuu" onClick={()=>setOpen(false)}><Search/> Tra cứu tác phẩm</Link>
-          <Link className="mobile-nav-cta" to="/gui-goc-nhin" onClick={()=>setOpen(false)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></Link>
+          {config.showSearch!==false&&<HeaderActionLink href={searchUrl} onClick={closeMenu}><Search/> {searchLabel}</HeaderActionLink>}
+          <HeaderActionLink className="mobile-nav-cta" href={ctaUrl} newTab={Boolean(config.ctaNewTab)} onClick={closeMenu}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></HeaderActionLink>
         </div>
       </nav>
       <div className="header-actions">
-        <Link className="icon-btn search-btn" to="/tra-cuu" aria-label="Tra cứu tác phẩm" title="Tra cứu tác phẩm"><Search size={18}/></Link>
-        <Link className="btn btn-terra btn-sm" to="/gui-goc-nhin">{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight size={16}/></Link>
+        {config.showSearch!==false&&<HeaderActionLink className="icon-btn search-btn" href={searchUrl} ariaLabel={searchLabel} title={searchLabel}><Search size={18}/></HeaderActionLink>}
+        <HeaderActionLink className="btn btn-terra btn-sm" href={ctaUrl} newTab={Boolean(config.ctaNewTab)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight size={16}/></HeaderActionLink>
         <button className="menu-btn" onClick={() => setOpen(v => !v)} aria-label="Menu">{open ? <X/> : <Menu/>}</button>
       </div>
     </div>
