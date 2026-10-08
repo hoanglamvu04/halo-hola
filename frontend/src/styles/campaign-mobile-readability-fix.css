@@ -76,6 +76,29 @@
     font-family: 'DM Sans', system-ui, sans-serif !important;
     font-weight: 800 !important;
   }
+
+  /* The four stat cards are navigation cards, not static counters. */
+  .campaign-live .live-stat[data-stat-link] {
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
+  }
+
+  .campaign-live .live-stat[data-stat-link]:active {
+    transform: scale(.985) !important;
+  }
+
+  .campaign-live .live-stat[data-stat-link]:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--campaign-stat-icon, #0f6a4a) 28%, transparent) !important;
+    outline-offset: 2px !important;
+  }
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .campaign-live .live-stat[data-stat-link]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 30px rgba(68,56,37,.11) !important;
+  }
 }
 
 @media (max-width: 390px) {
