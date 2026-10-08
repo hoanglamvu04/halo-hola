@@ -1,0 +1,371 @@
+/* HALO HOLA home hero — mobile reference v2
+   Uses the supplied Hòa Lạc valley artwork while keeping text in a safe,
+   readable column so headline/CTA never collide on small screens. */
+
+@media (max-width: 760px) {
+  .home-hero-reference {
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 0 16px !important;
+    border-bottom: 1px solid rgba(23,61,45,.08) !important;
+    background:
+      linear-gradient(90deg,
+        rgba(252,249,241,.99) 0%,
+        rgba(252,249,241,.96) 34%,
+        rgba(252,249,241,.80) 54%,
+        rgba(252,249,241,.24) 79%,
+        rgba(252,249,241,.03) 100%) top left / 100% 475px no-repeat,
+      linear-gradient(180deg,
+        rgba(251,247,239,0) 0%,
+        rgba(251,247,239,.08) 64%,
+        rgba(251,247,239,.92) 91%,
+        #fbf7ef 100%) top left / 100% 475px no-repeat,
+      url('https://halohola.xspace.vn/api/site-assets/fcb6d30a-5e70-4e92-bc7a-9079a3ca57a9') center 28% / cover no-repeat,
+      #fbf7ef !important;
+  }
+
+  .home-hero-reference::before,
+  .home-hero-reference::after {
+    display: none !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 24px 12px 14px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 0 !important;
+  }
+
+  .home-hero-reference .home-hero-copy {
+    position: relative !important;
+    z-index: 4 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 440px !important;
+    padding: 22px 10px 12px !important;
+    align-self: start !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row {
+    width: min(82%, 300px) !important;
+    max-width: none !important;
+    margin: 0 0 12px !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row .eyebrow {
+    margin: 0 !important;
+    max-width: 235px !important;
+    color: #c85b33 !important;
+    font-size: .62rem !important;
+    line-height: 1.35 !important;
+    letter-spacing: .19em !important;
+    white-space: normal !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row i {
+    min-width: 32px !important;
+    max-width: 48px !important;
+    background: linear-gradient(90deg,#c8734e,rgba(200,115,78,.08)) !important;
+  }
+
+  /* Intentionally stack the two title lines. This removes the old one-line
+     constraint that could make HÒA LẠC collide on narrow phones. */
+  .home-hero-reference .home-hero-copy h1 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 0 !important;
+    width: min(100%, 360px) !important;
+    margin: 0 0 8px !important;
+    font-size: clamp(3.05rem, 15.2vw, 4.25rem) !important;
+    line-height: .82 !important;
+    letter-spacing: -.058em !important;
+    white-space: normal !important;
+    text-wrap: balance !important;
+  }
+
+  .home-hero-reference .home-hero-copy h1 span,
+  .home-hero-reference .home-hero-copy h1 em {
+    display: block !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    letter-spacing: inherit !important;
+    white-space: nowrap !important;
+  }
+
+  .home-hero-reference .home-hero-copy h1 span {
+    color: #0b563b !important;
+  }
+
+  .home-hero-reference .home-hero-copy h1 em {
+    margin-top: .13em !important;
+    color: #dd5627 !important;
+    font-style: normal !important;
+  }
+
+  .home-hero-reference .hero-title-stroke {
+    width: 72px !important;
+    height: 3px !important;
+    margin: 10px 0 9px !important;
+    background: linear-gradient(90deg,#c86139 0 76%,transparent 76%) !important;
+  }
+
+  .home-hero-reference .home-hero-copy h3 {
+    width: fit-content !important;
+    max-width: 88% !important;
+    margin: 0 0 5px !important;
+    color: #0c553c !important;
+    font-family: 'DM Sans',system-ui,sans-serif !important;
+    font-size: clamp(1.15rem,5.2vw,1.42rem) !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -.03em !important;
+    white-space: normal !important;
+  }
+
+  .home-hero-reference .home-hero-copy > p {
+    width: min(76%, 285px) !important;
+    max-width: none !important;
+    margin: 0 !important;
+    color: #65736c !important;
+    font-size: .82rem !important;
+    line-height: 1.5 !important;
+    text-wrap: pretty !important;
+  }
+
+  .home-hero-reference .hero-actions {
+    width: 100% !important;
+    margin-top: 17px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
+  }
+
+  .home-hero-reference .hero-actions .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 52px !important;
+    padding: 12px 18px !important;
+    border-radius: 999px !important;
+    font-size: .86rem !important;
+    font-weight: 850 !important;
+    justify-content: center !important;
+  }
+
+  .home-hero-reference .hero-actions .btn-green {
+    background: linear-gradient(135deg,#0a593d,#0c6b49) !important;
+    box-shadow: 0 12px 26px rgba(10,75,52,.22) !important;
+  }
+
+  .home-hero-reference .hero-actions .btn-outline {
+    background: rgba(255,253,248,.92) !important;
+    border-color: rgba(23,61,45,.18) !important;
+    color: #0d563c !important;
+    box-shadow: 0 8px 20px rgba(40,55,46,.06) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  /* Keep the runtime carousel directly below the valley hero, like the sample. */
+  .home-hero-reference .hero-collage.has-mobile-slider {
+    z-index: 5 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 8px 0 0 !important;
+    overflow: visible !important;
+  }
+
+  .home-hero-reference .mobile-hero-runtime-host {
+    width: calc(100% + 2px) !important;
+    margin-right: -2px !important;
+  }
+
+  .home-hero-reference .mobile-hero-slider {
+    gap: 10px !important;
+    padding: 0 26px 8px 0 !important;
+  }
+
+  .home-hero-reference .mobile-hero-slide {
+    flex-basis: 84% !important;
+    aspect-ratio: 1.48 / 1 !important;
+    border: 5px solid rgba(255,255,255,.96) !important;
+    border-radius: 19px !important;
+    box-shadow: 0 12px 27px rgba(24,51,40,.15) !important;
+  }
+
+  .home-hero-reference .mobile-hero-slide-count {
+    left: 10px !important;
+    top: 10px !important;
+    padding: 6px 9px !important;
+    font-size: .58rem !important;
+  }
+
+  .home-hero-reference .mobile-hero-slide-title {
+    left: 12px !important;
+    right: 44px !important;
+    bottom: 12px !important;
+    font-size: .76rem !important;
+  }
+
+  .home-hero-reference .mobile-hero-swipe-hint {
+    padding-top: 2px !important;
+    font-size: .54rem !important;
+  }
+
+  /* Two premium feature cards per viewport with horizontal continuation. */
+  .home-hero-reference .hero-pillar-band {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 15px 0 0 !important;
+    padding: 0 0 5px !important;
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain !important;
+    scroll-snap-type: x proximity !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    scrollbar-width: none !important;
+  }
+
+  .home-hero-reference .hero-pillar-band::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    position: relative !important;
+    flex: 0 0 calc(50% - 5px) !important;
+    min-width: 0 !important;
+    min-height: 96px !important;
+    padding: 13px 12px !important;
+    display: grid !important;
+    grid-template-columns: 42px minmax(0,1fr) !important;
+    align-items: start !important;
+    gap: 9px !important;
+    overflow: hidden !important;
+    scroll-snap-align: start !important;
+    border: 1px solid rgba(23,61,45,.08) !important;
+    border-radius: 18px !important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.98),rgba(251,247,239,.94)),
+      #fff !important;
+    box-shadow: 0 10px 24px rgba(45,55,47,.07) !important;
+  }
+
+  .home-hero-reference .hero-pillar-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34px;
+    opacity: .28;
+    background:
+      radial-gradient(ellipse at 20% 100%,rgba(90,134,103,.22),transparent 54%),
+      linear-gradient(160deg,transparent 0 42%,rgba(71,115,84,.12) 43% 48%,transparent 49% 100%);
+    pointer-events: none;
+  }
+
+  .home-hero-reference .pillar-icon {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .home-hero-reference .pillar-icon svg {
+    width: 21px !important;
+    height: 21px !important;
+  }
+
+  .home-hero-reference .hero-pillar-item > div {
+    position: relative !important;
+    z-index: 2 !important;
+    min-width: 0 !important;
+  }
+
+  .home-hero-reference .hero-pillar-item b {
+    color: #0e5038 !important;
+    font-size: .86rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .home-hero-reference .hero-pillar-item small {
+    margin-top: 4px !important;
+    color: #6f7d75 !important;
+    font-size: .62rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .home-hero-reference .mobile-pillar-arrow {
+    position: absolute !important;
+    z-index: 3 !important;
+    right: 10px !important;
+    top: 15px !important;
+    width: 16px !important;
+    height: 16px !important;
+    color: #486054 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .home-hero-reference {
+    background:
+      linear-gradient(90deg,
+        rgba(252,249,241,.99) 0%,
+        rgba(252,249,241,.96) 38%,
+        rgba(252,249,241,.78) 60%,
+        rgba(252,249,241,.16) 88%,
+        rgba(252,249,241,.02) 100%) top left / 100% 455px no-repeat,
+      linear-gradient(180deg,rgba(251,247,239,0) 0%,rgba(251,247,239,.08) 62%,rgba(251,247,239,.94) 92%,#fbf7ef 100%) top left / 100% 455px no-repeat,
+      url('https://halohola.xspace.vn/api/site-assets/fcb6d30a-5e70-4e92-bc7a-9079a3ca57a9') 56% 30% / cover no-repeat,
+      #fbf7ef !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    padding-inline: 10px !important;
+  }
+
+  .home-hero-reference .home-hero-copy {
+    min-height: 420px !important;
+    padding-inline: 8px !important;
+  }
+
+  .home-hero-reference .home-hero-copy h1 {
+    font-size: clamp(2.85rem, 15vw, 3.65rem) !important;
+  }
+
+  .home-hero-reference .home-hero-copy > p {
+    width: 79% !important;
+    font-size: .78rem !important;
+  }
+
+  .home-hero-reference .hero-actions .btn {
+    min-height: 49px !important;
+    font-size: .8rem !important;
+  }
+
+  .home-hero-reference .mobile-hero-slide {
+    flex-basis: 87% !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    flex-basis: 53% !important;
+  }
+}
