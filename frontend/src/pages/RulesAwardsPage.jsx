@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { getSiteSettings } from '../services/api.js'
 import '../styles/rules-awards-document-v4.css'
+import '../styles/rules-awards-document-v5.css'
 
 export const DEFAULT_AWARDS = [
   {
@@ -221,11 +222,13 @@ export default function RulesAwardsPage(){
               <table className="rules4-table rules4-awards-table">
                 <thead><tr><th>Nhóm giải</th><th>Số lượng</th><th>Giá trị</th><th>Ghi chú</th></tr></thead>
                 <tbody>{awards.map((award,index)=><tr key={award.code||award.name||index} className={award.featured?'is-featured':''}>
-                  <td><strong>{award.name}</strong><span className="rules4-award-label">{award.label||'Giải thưởng'}</span></td>
-                  <td>{award.quantity||'—'}</td><td><strong>{award.amount||'—'}</strong></td><td>{award.description}</td>
+                  <td><div className="rules4-award-name"><b>{award.name}</b><small>{award.label||'Giải thưởng'}</small></div></td>
+                  <td>{award.quantity||'—'}</td>
+                  <td>{award.amount||'—'}</td>
+                  <td className="rules4-award-desc">{award.description}</td>
                 </tr>)}</tbody>
               </table>
-              <div className="rules4-policy">
+              <div className="rules4-award-policy">
                 <div><b>Cách chọn Giải Nhất</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
                 <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải màu, giải online và Giải Nhất nếu đáp ứng điều kiện.</span></div>
                 <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
