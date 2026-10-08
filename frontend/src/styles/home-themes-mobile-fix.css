@@ -1,5 +1,5 @@
 /* Mobile refinement for the homepage 8-theme section.
-   Keep a 2-column grid, but make the imagery dominant and remove the large empty card body. */
+   Keep a 2-column grid, make each card feel fuller and closer to the supplied reference. */
 @media (max-width: 760px) {
   .themes-showcase {
     padding: 20px 0 22px !important;
@@ -7,13 +7,14 @@
   }
 
   .themes-showcase-inner {
-    width: calc(100% - 20px) !important;
+    width: calc(100% - 10px) !important;
     margin-inline: auto !important;
   }
 
   .themes-showcase-head {
     display: block !important;
     margin: 0 0 12px !important;
+    padding-inline: 5px !important;
   }
 
   .themes-eyebrow-row {
@@ -76,7 +77,7 @@
   .themes-card-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
+    gap: 7px !important;
     width: 100% !important;
     padding: 0 !important;
     overflow: visible !important;
@@ -93,16 +94,17 @@
     min-height: 0 !important;
     height: auto !important;
     margin: 0 !important;
-    border-radius: 13px !important;
+    border-radius: 15px !important;
     overflow: hidden !important;
     scroll-snap-align: none !important;
-    box-shadow: 0 6px 16px rgba(34, 49, 40, .055) !important;
+    background: rgba(255, 253, 248, .96) !important;
+    box-shadow: 0 7px 18px rgba(34, 49, 40, .07) !important;
   }
 
   .theme-card-reference .theme-card-media {
-    height: 124px !important;
-    min-height: 124px !important;
-    max-height: 124px !important;
+    height: 128px !important;
+    min-height: 128px !important;
+    max-height: 128px !important;
     overflow: hidden !important;
   }
 
@@ -118,7 +120,7 @@
     position: relative !important;
     min-height: 0 !important;
     height: auto !important;
-    padding: 9px 38px 11px 9px !important;
+    padding: 10px 39px 12px 10px !important;
   }
 
   .theme-card-reference .theme-card-number {
@@ -126,13 +128,13 @@
   }
 
   .theme-card-reference .theme-card-number b {
-    font-size: .64rem !important;
+    font-size: .65rem !important;
   }
 
   .theme-card-reference h3 {
     margin: 0 0 3px !important;
     min-height: 0 !important;
-    font-size: .86rem !important;
+    font-size: .88rem !important;
     line-height: 1.14 !important;
     letter-spacing: -.015em !important;
     display: -webkit-box !important;
@@ -153,14 +155,12 @@
     overflow: hidden !important;
   }
 
-  /* Keep the arrow in its own reserved top-right slot inside the card body.
-     Explicitly reset left/bottom from older card rules so it can never overlap the title. */
   .theme-card-reference .theme-card-arrow {
     position: absolute !important;
-    width: 26px !important;
-    height: 26px !important;
-    top: 8px !important;
-    right: 8px !important;
+    width: 27px !important;
+    height: 27px !important;
+    top: 9px !important;
+    right: 9px !important;
     bottom: auto !important;
     left: auto !important;
     margin: 0 !important;
@@ -183,35 +183,39 @@
   }
 
   .themes-showcase-inner {
-    width: calc(100% - 18px) !important;
+    width: calc(100% - 8px) !important;
+  }
+
+  .themes-showcase-head {
+    padding-inline: 4px !important;
   }
 
   .themes-card-grid {
-    gap: 7px !important;
+    gap: 6px !important;
   }
 
   .theme-card-reference .theme-card-media {
-    height: 116px !important;
-    min-height: 116px !important;
-    max-height: 116px !important;
+    height: 122px !important;
+    min-height: 122px !important;
+    max-height: 122px !important;
   }
 
   .theme-card-reference .theme-card-body {
     min-height: 0 !important;
     height: auto !important;
-    padding: 8px 36px 10px 8px !important;
+    padding: 9px 37px 11px 9px !important;
   }
 
   .theme-card-reference .theme-card-arrow {
-    top: 7px !important;
-    right: 7px !important;
+    top: 8px !important;
+    right: 8px !important;
   }
 
   .theme-card-reference h3 {
-    font-size: .82rem !important;
+    font-size: .84rem !important;
   }
 
   .theme-card-reference p {
-    font-size: .58rem !important;
+    font-size: .59rem !important;
   }
 }
