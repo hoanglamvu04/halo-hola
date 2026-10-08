@@ -8,6 +8,7 @@ const defaults={
   ctaBg:'#e95f25',ctaTextColor:'#ffffff',timelineBg:'#074c37',timelineTitleColor:'#ffffff',timelineIconColor:'#f2b84b',
   milestoneBg:'#145e49',milestoneBorder:'#4f826f',milestoneDateColor:'#ff9c45',milestoneTextColor:'#ffffff',
   activeMilestoneBg:'#1b684f',activeMilestoneBorder:'#e2b34f',activeMilestoneDateColor:'#ffd15c',
+  backgroundImage:'',
   journeyTitle:'Hành trình 2026',
   milestone1Date:'10.10',milestone1Label:'Mở nhận tác phẩm',
   milestone2Date:'17.10',milestone2Label:'HOLA Tour #01',
@@ -18,12 +19,44 @@ const defaults={
   milestone7Date:'28.11',milestone7Label:'HOLA DAY'
 }
 
+/* Auto-upgrade only the exact old defaults that were saved before the mobile redesign.
+   Any genuinely custom color selected in Admin is left untouched. */
+const legacyPalette={
+  mainBg:['#0d4934','#fbf7ef'],
+  titleColor:['#ffffff','#103f31'],
+  textColor:['#ffffff','#52675e'],
+  eyebrowColor:['#f1ba73','#e55329'],
+  statCardBg:['#184f3d','#fffdf7'],
+  statCardBorder:['#3a6a59','#eadfcd'],
+  statNumberColor:['#ffffff','#103f31'],
+  statLabelColor:['#d6e1db','#40564d'],
+  statIconColor:['#f2b84b','#0f6a4a'],
+  ctaBg:['#d8582f','#e95f25'],
+  timelineBg:['#0f5139','#074c37'],
+  milestoneBg:['#24624d','#145e49'],
+  milestoneBorder:['#3b735f','#4f826f'],
+  milestoneDateColor:['#f2b84b','#ff9c45'],
+  activeMilestoneBg:['#3f6944','#1b684f'],
+  activeMilestoneBorder:['#9a8d35','#e2b34f'],
+  activeMilestoneDateColor:['#ffd05b','#ffd15c']
+}
+
 const cssVars={
   mainBg:'--campaign-main-bg',titleColor:'--campaign-title-color',textColor:'--campaign-text-color',eyebrowColor:'--campaign-eyebrow-color',
   statCardBg:'--campaign-stat-bg',statCardBorder:'--campaign-stat-border',statNumberColor:'--campaign-stat-number',statLabelColor:'--campaign-stat-label',statIconColor:'--campaign-stat-icon',
   ctaBg:'--campaign-cta-bg',ctaTextColor:'--campaign-cta-text',timelineBg:'--campaign-timeline-bg',timelineTitleColor:'--campaign-timeline-title',timelineIconColor:'--campaign-timeline-icon',
   milestoneBg:'--campaign-milestone-bg',milestoneBorder:'--campaign-milestone-border',milestoneDateColor:'--campaign-milestone-date',milestoneTextColor:'--campaign-milestone-text',
   activeMilestoneBg:'--campaign-active-bg',activeMilestoneBorder:'--campaign-active-border',activeMilestoneDateColor:'--campaign-active-date'
+}
+
+function normalizePalette(content){
+  const campaign={...defaults,...content}
+  Object.entries(legacyPalette).forEach(([key,[oldValue,newValue]])=>{
+    if(String(campaign[key]||'').trim().toLowerCase()===oldValue){
+      campaign[key]=newValue
+    }
+  })
+  return campaign
 }
 
 export default function CampaignRuntimeCustomizer(){
@@ -38,7 +71,7 @@ export default function CampaignRuntimeCustomizer(){
       try{
         const homepage=await getHomepageContent()
         if(cancelled) return
-        const campaign={...defaults,...(homepage?.campaign?.content||{})}
+        const campaign=normalizePalette(homepage?.campaign?.content||{})
 
         const setText=(node,value)=>{
           if(node&&value&&node.textContent!==value) node.textContent=value
@@ -55,10 +88,12 @@ export default function CampaignRuntimeCustomizer(){
           })
 
           if(campaign.backgroundImage){
-            const backgroundValue=`url("${String(campaign.backgroundImage).replace(/"/g,'\\"')}")`
+            const backgroundValue=`url(${JSON.stringify(String(campaign.backgroundImage))})`
             if(root.style.getPropertyValue('--campaign-background-image')!==backgroundValue){
               root.style.setProperty('--campaign-background-image',backgroundValue)
             }
+          }else{
+            root.style.removeProperty('--campaign-background-image')
           }
 
           setText(root.querySelector('.timeline-title b'),campaign.journeyTitle)
