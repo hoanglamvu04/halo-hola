@@ -1,0 +1,160 @@
+/* HALO HOLA — footer scale-up pass
+   Keeps the approved layout, only makes it feel fuller and easier to read. */
+
+.site-footer .footer-shell{
+  padding:34px 36px 22px !important;
+  gap:40px 64px !important;
+}
+
+.site-footer .footer-logo-card{
+  min-height:78px !important;
+  padding:13px 19px !important;
+}
+
+.site-footer .footer-logo-card.has-image{
+  min-width:190px !important;
+}
+
+.site-footer .footer-logo-card img{
+  max-width:215px !important;
+  max-height:62px !important;
+}
+
+.site-footer .footer-wordmark{
+  font-size:1.62rem !important;
+}
+
+.site-footer .footer-intro>p{
+  font-size:.9rem !important;
+  line-height:1.66 !important;
+}
+
+.site-footer .footer-address{
+  font-size:.76rem !important;
+}
+
+.site-footer .footer-socials a{
+  width:40px !important;
+  height:40px !important;
+}
+
+.site-footer .footer-socials svg{
+  width:17px !important;
+  height:17px !important;
+}
+
+.site-footer .footer-link-group h4{
+  font-size:.83rem !important;
+  margin-bottom:17px !important;
+}
+
+.site-footer .footer-link-group>a{
+  margin-bottom:10px !important;
+  font-size:.82rem !important;
+}
+
+.site-footer .footer-link-group .footer-contact-link{
+  font-size:.76rem !important;
+}
+
+.site-footer .footer-bottom{
+  padding-top:19px !important;
+  font-size:.69rem !important;
+}
+
+@media(max-width:760px){
+  .site-footer{
+    padding:14px 10px calc(96px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .site-footer .footer-shell{
+    padding:24px 20px 17px !important;
+    gap:23px !important;
+    border-radius:24px !important;
+  }
+
+  .site-footer .footer-logo-card{
+    min-height:72px !important;
+    margin-bottom:14px !important;
+    padding:11px 15px !important;
+  }
+
+  .site-footer .footer-logo-card.has-image{
+    min-width:168px !important;
+  }
+
+  .site-footer .footer-logo-card img{
+    max-width:184px !important;
+    max-height:54px !important;
+  }
+
+  .site-footer .footer-wordmark{
+    font-size:1.38rem !important;
+  }
+
+  .site-footer .footer-intro>p{
+    font-size:.77rem !important;
+    line-height:1.6 !important;
+  }
+
+  .site-footer .footer-address{
+    margin-top:8px !important;
+    font-size:.66rem !important;
+    line-height:1.55 !important;
+  }
+
+  .site-footer .footer-socials{
+    margin-top:15px !important;
+    gap:9px !important;
+  }
+
+  .site-footer .footer-socials a{
+    width:38px !important;
+    height:38px !important;
+  }
+
+  .site-footer .footer-socials svg{
+    width:16px !important;
+    height:16px !important;
+  }
+
+  .site-footer .footer-link-groups{
+    gap:24px !important;
+  }
+
+  .site-footer .footer-link-group h4{
+    margin-bottom:13px !important;
+    padding-bottom:8px !important;
+    font-size:.73rem !important;
+  }
+
+  .site-footer .footer-link-group>a{
+    margin-bottom:8px !important;
+    font-size:.70rem !important;
+    line-height:1.48 !important;
+  }
+
+  .site-footer .footer-link-group .footer-contact-link{
+    font-size:.65rem !important;
+  }
+
+  .site-footer .footer-bottom{
+    gap:5px !important;
+    padding-top:14px !important;
+    font-size:.60rem !important;
+  }
+}
+
+@media(max-width:390px){
+  .site-footer .footer-shell{
+    padding:22px 17px 16px !important;
+  }
+
+  .site-footer .footer-link-groups{
+    gap:18px !important;
+  }
+
+  .site-footer .footer-intro>p{
+    font-size:.75rem !important;
+  }
+}
