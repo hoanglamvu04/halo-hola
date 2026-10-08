@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { getSiteSettings } from '../services/api.js'
 import '../styles/rules-awards-page.css'
+import '../styles/rules-awards-reference-v2.css'
 
 export const DEFAULT_AWARDS = [
   {
