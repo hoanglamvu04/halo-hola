@@ -1,0 +1,215 @@
+/* Modern mobile treatment for the Hành trình 2026 block.
+   Keeps palette configurable from Admin via campaign CSS variables. */
+@media (max-width: 760px) {
+  .campaign-live .campaign-timeline {
+    position: relative !important;
+    margin: 0 12px 18px !important;
+    padding: 14px !important;
+    border: 1px solid color-mix(in srgb, var(--campaign-timeline-title, #fff) 12%, transparent) !important;
+    border-radius: 20px !important;
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--campaign-timeline-bg, #074c37) 96%, #ffffff 4%) 0%,
+        var(--campaign-timeline-bg, #074c37) 100%) !important;
+    box-shadow: 0 12px 28px rgba(5,49,36,.12) !important;
+    overflow: hidden !important;
+  }
+
+  /* Remove the older ornamental motifs. */
+  .campaign-live .campaign-timeline:before,
+  .campaign-live .timeline-title:after,
+  .campaign-live .campaign-milestone:before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .campaign-live .timeline-title {
+    position: relative !important;
+    z-index: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 12px !important;
+    padding: 0 2px !important;
+    color: var(--campaign-timeline-title, #fff) !important;
+  }
+
+  .campaign-live .timeline-title svg {
+    width: 18px !important;
+    height: 18px !important;
+    padding: 0 !important;
+    color: var(--campaign-timeline-icon, #f2b84b) !important;
+    opacity: .95 !important;
+  }
+
+  .campaign-live .timeline-title b {
+    margin: 0 !important;
+    font-family: Inter, 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  .campaign-live .timeline-title::after {
+    content: '07 MỐC' !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: auto !important;
+    width: auto !important;
+    height: 24px !important;
+    padding: 0 9px !important;
+    border: 1px solid rgba(255,255,255,.14) !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.07) !important;
+    color: color-mix(in srgb, var(--campaign-timeline-title, #fff) 88%, transparent) !important;
+    font-family: Inter, 'DM Sans', system-ui, sans-serif !important;
+    font-size: .56rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .10em !important;
+    white-space: nowrap !important;
+  }
+
+  .campaign-live .campaign-milestones {
+    position: relative !important;
+    z-index: 1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .campaign-live .campaign-milestone {
+    position: relative !important;
+    min-width: 0 !important;
+    min-height: 70px !important;
+    padding: 10px 30px 10px 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    border: 1px solid color-mix(in srgb, var(--campaign-milestone-border, #4f826f) 78%, transparent) !important;
+    border-radius: 14px !important;
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--campaign-milestone-bg, #145e49) 94%, #ffffff 6%) 0%,
+        var(--campaign-milestone-bg, #145e49) 100%) !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+  }
+
+  .campaign-live .campaign-milestone:first-child {
+    border-color: color-mix(in srgb, var(--campaign-active-border, #e2b34f) 88%, transparent) !important;
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--campaign-active-bg, #1b684f) 94%, #ffffff 6%) 0%,
+        var(--campaign-active-bg, #1b684f) 100%) !important;
+  }
+
+  .campaign-live .campaign-milestone span {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 22px !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    border-radius: 999px !important;
+    background: color-mix(in srgb, var(--campaign-milestone-date, #ff9c45) 14%, transparent) !important;
+    color: var(--campaign-milestone-date, #ff9c45) !important;
+    font-family: Inter, 'DM Sans', system-ui, sans-serif !important;
+    font-size: .67rem !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+    letter-spacing: -.01em !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  .campaign-live .campaign-milestone:first-child span {
+    background: color-mix(in srgb, var(--campaign-active-date, #ffd15c) 15%, transparent) !important;
+    color: var(--campaign-active-date, #ffd15c) !important;
+  }
+
+  .campaign-live .campaign-milestone b {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--campaign-milestone-text, #fff) !important;
+    font-family: Inter, 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-size: .70rem !important;
+    line-height: 1.26 !important;
+    font-weight: 700 !important;
+    letter-spacing: -.012em !important;
+  }
+
+  .campaign-live .campaign-milestone:after {
+    content: '→' !important;
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: var(--campaign-milestone-text, #fff) !important;
+    opacity: .76 !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .9rem !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+  }
+
+  .campaign-live .campaign-milestone i {
+    display: none !important;
+  }
+
+  /* The seventh card sits alone, so center it deliberately. */
+  .campaign-live .campaign-milestone:last-child:nth-child(odd) {
+    grid-column: 1 / -1 !important;
+    width: calc(50% - 4px) !important;
+    justify-self: center !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .campaign-live .campaign-timeline {
+    margin-inline: 9px !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .campaign-live .timeline-title {
+    margin-bottom: 10px !important;
+  }
+
+  .campaign-live .timeline-title b {
+    font-size: .95rem !important;
+  }
+
+  .campaign-live .timeline-title::after {
+    min-height: 22px !important;
+    padding-inline: 8px !important;
+    font-size: .52rem !important;
+  }
+
+  .campaign-live .campaign-milestones {
+    gap: 7px !important;
+  }
+
+  .campaign-live .campaign-milestone {
+    min-height: 66px !important;
+    padding: 9px 27px 9px 9px !important;
+    border-radius: 13px !important;
+  }
+
+  .campaign-live .campaign-milestone span {
+    min-height: 20px !important;
+    padding-inline: 7px !important;
+    font-size: .63rem !important;
+  }
+
+  .campaign-live .campaign-milestone b {
+    font-size: .66rem !important;
+  }
+
+  .campaign-live .campaign-milestone:last-child:nth-child(odd) {
+    width: calc(50% - 3.5px) !important;
+  }
+}
