@@ -9,6 +9,7 @@ MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
 TOUR03_LANG_NGHE_MARKER="$ROOT/.tour03-lang-nghe-v1"
 AWARDS_2026_VALUES_MARKER="$ROOT/.awards-2026-values-v1"
+AWARDS_2026_STRUCTURE_V2_MARKER="$ROOT/.awards-2026-structure-v2"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -79,14 +80,23 @@ else
   echo "==> Tour #03 craft-village content already applied; keeping CMS edits intact"
 fi
 
-# One-time official prize-value correction requested for HALO HOLA 2026.
-# Future Admin edits remain untouched after this marker is created.
+# One-time prize-value correction kept for servers that have not applied the previous release yet.
 if [[ ! -f "$AWARDS_2026_VALUES_MARKER" ]]; then
   echo "==> Update HALO HOLA 2026 prize values"
   npm run db:content:awards-2026-values --prefix backend
   touch "$AWARDS_2026_VALUES_MARKER"
 else
-  echo "==> HALO HOLA 2026 prize values already applied; keeping Admin edits intact"
+  echo "==> Previous HALO HOLA 2026 prize values already applied"
+fi
+
+# Revised official structure: 1 first prize, 7 theme prizes, 5 color prizes and 2 online prizes.
+# This runs only once so later Admin edits remain untouched.
+if [[ ! -f "$AWARDS_2026_STRUCTURE_V2_MARKER" ]]; then
+  echo "==> Apply revised HALO HOLA 2026 prize structure (26m cash)"
+  node backend/src/database/updateAwards2026StructureV2.js
+  touch "$AWARDS_2026_STRUCTURE_V2_MARKER"
+else
+  echo "==> Revised HALO HOLA 2026 prize structure already applied; keeping Admin edits intact"
 fi
 
 echo "==> Build frontend"
