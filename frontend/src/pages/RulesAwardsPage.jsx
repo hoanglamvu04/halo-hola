@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowRight, Brush, Camera, Check, Clock3, ExternalLink, FileText,
+  ArrowRight, Brush, Camera, Check, ExternalLink, FileText,
   MapPin, PenTool, ShieldCheck, Trophy, Users, Video
 } from 'lucide-react'
 import { getSiteSettings } from '../services/api.js'
-import '../styles/rules-awards-document-v3.css'
+import '../styles/rules-awards-document-v4.css'
 
 export const DEFAULT_AWARDS = [
   {
@@ -100,6 +100,12 @@ const RULE_NOTES = [
   'Thành viên Ban Tổ chức, Hội đồng giám khảo và người thân trực tiếp không tham gia dự thi.'
 ]
 
+const NAV = [
+  ['I.','Đối tượng','tham-gia'],['II.','Loại hình','loai-hinh'],['III.','Chủ đề','chu-de'],
+  ['IV.','Giải thưởng','giai-thuong'],['V.','Cách tham gia','cach-tham-gia'],
+  ['VI.','Mốc thời gian','moc-thoi-gian'],['VII.','Quy định','luu-y']
+]
+
 const mergeAwards=(value)=>Array.isArray(value)&&value.length?value:DEFAULT_AWARDS
 
 export default function RulesAwardsPage(){
@@ -121,182 +127,155 @@ export default function RulesAwardsPage(){
   const intro=config.intro||'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng của HALO HOLA 2026.'
   const officialPdfUrl=(config.officialPdfUrl||'').trim()
 
-  return <main className="rules-doc-page">
-    <section className="rules-doc-hero">
-      <div className="container rules-doc-hero-grid">
-        <div className="rules-doc-hero-copy">
-          <span className="rules-doc-kicker">THỂ LỆ CHÍNH THỨC · HALO HOLA 2026</span>
+  return <main className="rules4-page">
+    <section className="rules4-hero">
+      <div className="container rules4-hero-inner">
+        <div>
+          <span className="rules4-kicker">THỂ LỆ CHÍNH THỨC · HALO HOLA 2026</span>
           <h1>{pageTitle}</h1>
           <p>{intro}</p>
-          <div className="rules-doc-actions">
+          <div className="rules4-hero-actions">
             <a className="btn btn-green" href="#tham-gia">Đọc thể lệ <ArrowRight/></a>
             <Link className="btn btn-outline" to="/gui-goc-nhin">Gửi góc nhìn</Link>
-            {officialPdfUrl&&<a className="btn btn-outline" href={officialPdfUrl} target="_blank" rel="noreferrer"><FileText/> Bản PDF <ExternalLink/></a>}
+            {officialPdfUrl&&<a className="btn btn-outline" href={officialPdfUrl} target="_blank" rel="noreferrer"><FileText/> PDF chính thức <ExternalLink/></a>}
           </div>
         </div>
-
-        <aside className="rules-doc-summary" aria-label="Thông tin nhanh">
-          <div className="rules-doc-summary-head">
-            <span>Tổng tiền thưởng</span>
-            <strong>{totalPrize}</strong>
-          </div>
-          <div className="rules-doc-summary-row">
-            <Trophy/><b>{totalAwards} giải</b><small>{prizeSummary}</small>
-          </div>
-          <div className="rules-doc-summary-row">
-            <Clock3/><b>10.11 · 23:59</b><small>Hạn nhận tác phẩm</small>
-          </div>
-        </aside>
+        <div className="rules4-hero-meta" aria-label="Thông tin nhanh">
+          <div><span>Tổng số giải</span><b>{totalAwards} giải</b></div>
+          <div><span>Tổng tiền mặt</span><b>{totalPrize}</b></div>
+          <div><span>Hạn nhận bài</span><b>10.11 · 23:59</b></div>
+        </div>
       </div>
     </section>
 
-    <div className="rules-doc-toc-wrap">
-      <nav className="container rules-doc-toc" aria-label="Mục lục thể lệ">
-        <span>Mục lục</span>
-        <a href="#tham-gia">I. Đối tượng</a>
-        <a href="#loai-hinh">II. Loại hình</a>
-        <a href="#chu-de">III. Chủ đề</a>
-        <a href="#giai-thuong">IV. Giải thưởng</a>
-        <a href="#cach-tham-gia">V. Cách tham gia</a>
-        <a href="#moc-thoi-gian">VI. Thời gian</a>
-        <a href="#luu-y">VII. Quy định</a>
-      </nav>
-    </div>
-
-    <div className="container rules-doc-shell">
-      <article className="rules-doc-article">
-        <section id="tham-gia" className="rules-doc-section">
-          <div className="rules-doc-section-index">I.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Đối tượng tham gia</span>
-              <h2>Ai có thể tham gia</h2>
-            </header>
-            <p className="rules-doc-lead">Người dân, sinh viên, KTS, photographer, filmmaker, designer, creator — chuyên hay không chuyên; dùng máy ảnh hay điện thoại đều có thể gửi góc nhìn về Hòa Lạc.</p>
-
-            <dl className="rules-doc-facts">
-              <div className="rules-doc-fact"><Users/><dt>Đối tượng</dt><dd>Cá nhân hoặc nhóm; tham gia miễn phí.</dd></div>
-              <div className="rules-doc-fact"><MapPin/><dt>Địa bàn</dt><dd>{COMMUNES.join(' · ')}</dd></div>
-              <div className="rules-doc-fact"><ShieldCheck/><dt>Dưới 18 tuổi</dt><dd>Cần có sự đồng ý của phụ huynh hoặc người giám hộ.</dd></div>
-            </dl>
-          </div>
-        </section>
-
-        <section id="loai-hinh" className="rules-doc-section">
-          <div className="rules-doc-section-index">II.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Loại hình tác phẩm</span>
-              <h2>Bốn cách để gửi một góc nhìn</h2>
-            </header>
-            <p className="rules-doc-lead">Tác phẩm có thể được thể hiện bằng hình ảnh, video, câu chuyện hoặc sáng tạo thị giác. Mỗi loại hình có yêu cầu kỹ thuật riêng.</p>
-
-            <div className="rules-doc-table rules-doc-table-formats">
-              <div className="rules-doc-table-head"><span>Loại hình</span><span>Nội dung</span><span>Thông số</span></div>
-              {FORMATS.map(({icon:I,title,detail,spec})=><div className="rules-doc-table-row" key={title}>
-                <div className="rules-doc-format-name"><span><I/></span><strong>{title}</strong></div>
-                <p>{detail}</p>
-                <small>{spec}</small>
-              </div>)}
+    <div className="rules4-wrap">
+      <div className="container rules4-layout">
+        <aside className="rules4-sidebar" aria-label="Mục lục thể lệ">
+          <div className="rules4-sidebar-card">
+            <div className="rules4-sidebar-head"><span>Mục lục</span><b>Thể lệ HALO HOLA 2026</b></div>
+            <nav className="rules4-nav">
+              {NAV.map(([roman,label,id])=><a key={id} href={'#'+id}><span>{roman}</span>{label}</a>)}
+            </nav>
+            <div className="rules4-sidebar-foot">
+              {prizeSummary}
+              {officialPdfUrl&&<a href={officialPdfUrl} target="_blank" rel="noreferrer"><FileText/> Xem bản PDF <ExternalLink/></a>}
             </div>
           </div>
-        </section>
+        </aside>
 
-        <section id="chu-de" className="rules-doc-section">
-          <div className="rules-doc-section-index">III.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Chủ đề</span>
-              <h2>8 chủ đề về Hòa Lạc</h2>
-            </header>
-            <p className="rules-doc-lead">Người tham gia lựa chọn một trong tám chủ đề để kể câu chuyện của mình, từ văn hóa bản địa đến thiên nhiên, kiến trúc và con người Hòa Lạc.</p>
+        <article className="rules4-paper">
+          <header className="rules4-paper-head">
+            <div><span>HALO HOLA 2026</span><h2>Thể lệ cuộc thi sáng tạo cộng đồng</h2></div>
+            <div className="rules4-paper-stamp"><strong>{totalAwards} giải</strong><small>Tổng {totalPrize}</small></div>
+          </header>
 
-            <ol className="rules-doc-theme-list">
-              {THEMES.map(([number,title,badge])=><li key={number}><span className="num">{number}</span><b>{title}</b>{badge&&<small>{badge}</small>}</li>)}
-            </ol>
-            <div className="rules-doc-note">Chủ đề 08 “Sắc màu Hòa Lạc” gồm 6 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Mọi tác phẩm hợp lệ ở cả 8 chủ đề đều được xét giải Sắc màu.</div>
-          </div>
-        </section>
-
-        <section id="giai-thuong" className="rules-doc-section">
-          <div className="rules-doc-section-index">IV.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Cơ cấu giải thưởng</span>
-              <h2>{totalAwards} giải thưởng HALO HOLA 2026</h2>
-            </header>
-
-            <div className="rules-doc-awards-summary">
-              <strong>{totalPrize}</strong>
-              <span>Tổng tiền mặt · {prizeSummary}</span>
+          <section id="tham-gia" className="rules4-section">
+            <div className="rules4-roman">I.</div>
+            <div>
+              <span className="rules4-section-kicker">Đối tượng tham gia</span>
+              <h3>Ai có thể tham gia</h3>
+              <p className="rules4-lead">Người dân, sinh viên, KTS, photographer, filmmaker, designer, creator — chuyên hay không chuyên; dùng máy ảnh hay điện thoại đều có thể gửi góc nhìn về Hòa Lạc.</p>
+              <dl className="rules4-facts">
+                <div className="rules4-fact"><Users/><dt>Đối tượng</dt><dd>Cá nhân hoặc nhóm; tham gia miễn phí.</dd></div>
+                <div className="rules4-fact"><MapPin/><dt>Địa bàn</dt><dd>{COMMUNES.join(' · ')}</dd></div>
+                <div className="rules4-fact"><ShieldCheck/><dt>Dưới 18 tuổi</dt><dd>Cần có sự đồng ý của phụ huynh hoặc người giám hộ.</dd></div>
+              </dl>
             </div>
+          </section>
 
-            <div className="rules-doc-table rules-doc-awards-table">
-              <div className="rules-doc-table-head"><span>Nhóm giải</span><span>Số lượng</span><span>Giá trị</span><span>Mô tả</span></div>
-              {awards.map((award,index)=><div key={award.code||award.name||index} className={'rules-doc-table-row '+(award.featured?'is-featured':'')}>
-                <div className="rules-doc-award-name"><b>{award.name}</b><small>{award.label||'Giải thưởng'}</small></div>
-                <div className="rules-doc-award-qty">{award.quantity||'—'}</div>
-                <div className="rules-doc-award-money">{award.amount||'—'}</div>
-                <div className="rules-doc-award-desc">{award.description}</div>
-              </div>)}
+          <section id="loai-hinh" className="rules4-section">
+            <div className="rules4-roman">II.</div>
+            <div>
+              <span className="rules4-section-kicker">Loại hình tác phẩm</span>
+              <h3>Bốn cách để gửi một góc nhìn</h3>
+              <p className="rules4-lead">Tác phẩm có thể được thể hiện bằng hình ảnh, video, câu chuyện hoặc sáng tạo thị giác. Mỗi loại hình có yêu cầu kỹ thuật riêng.</p>
+              <table className="rules4-table">
+                <thead><tr><th>Loại hình</th><th>Nội dung</th><th>Thông số</th></tr></thead>
+                <tbody>{FORMATS.map(({icon:I,title,detail,spec})=><tr key={title}>
+                  <td><div className="rules4-format-name"><span><I/></span><strong>{title}</strong></div></td>
+                  <td>{detail}</td><td>{spec}</td>
+                </tr>)}</tbody>
+              </table>
             </div>
+          </section>
 
-            <div className="rules-doc-award-policy">
-              <div><b>Cách chọn Giải Nhất</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
-              <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải màu, giải online và Giải Nhất nếu đáp ứng điều kiện.</span></div>
-              <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
+          <section id="chu-de" className="rules4-section">
+            <div className="rules4-roman">III.</div>
+            <div>
+              <span className="rules4-section-kicker">Chủ đề</span>
+              <h3>8 chủ đề về Hòa Lạc</h3>
+              <p className="rules4-lead">Người tham gia lựa chọn một trong tám chủ đề để kể câu chuyện của mình, từ văn hóa bản địa đến thiên nhiên, kiến trúc và con người Hòa Lạc.</p>
+              <div className="rules4-theme-grid">
+                {THEMES.map(([number,title,badge])=><div className="rules4-theme" key={number}><span className="num">{number}</span><b>{title}</b>{badge&&<small>{badge}</small>}</div>)}
+              </div>
+              <div className="rules4-note">Chủ đề 08 “Sắc màu Hòa Lạc” gồm 6 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Mọi tác phẩm hợp lệ ở cả 8 chủ đề đều được xét giải Sắc màu.</div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section id="cach-tham-gia" className="rules-doc-section">
-          <div className="rules-doc-section-index">V.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Cách tham gia</span>
-              <h2>Tham gia trong 4 bước</h2>
-            </header>
-            <ol className="rules-doc-steps">
-              <li><span className="num">01</span><b>Đến Hòa Lạc</b><p>Sáng tạo theo 1 trong 8 chủ đề của chương trình.</p></li>
-              <li><span className="num">02</span><b>Nộp tác phẩm</b><p>Gửi qua form tại halohola.vn, kèm tên, chủ đề, địa điểm, thời gian và câu chuyện 50–150 chữ.</p></li>
-              <li><span className="num">03</span><b>Tối đa 05 tác phẩm</b><p>Mỗi người được gửi tối đa 05 tác phẩm; có thể tham gia cá nhân hoặc theo nhóm.</p></li>
-              <li><span className="num">04</span><b>Chia sẻ câu chuyện</b><p>Chia sẻ lên trang cá nhân hoặc Group CHECK IN HOALAC kèm hashtag #HaloHola.</p></li>
-            </ol>
-          </div>
-        </section>
-
-        <section id="moc-thoi-gian" className="rules-doc-section">
-          <div className="rules-doc-section-index">VI.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Mốc thời gian</span>
-              <h2>Từ phát động đến HOLA DAY</h2>
-            </header>
-            <p className="rules-doc-lead">HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố kết quả HALO HOLA 2026.</p>
-            <div className="rules-doc-timeline">
-              {TIMELINE.map(([date,title],index)=><div key={date} className={'rules-doc-timeline-row '+(index===TIMELINE.length-1?'is-final':'')}><time>{date}</time><b>{title}</b></div>)}
+          <section id="giai-thuong" className="rules4-section">
+            <div className="rules4-roman">IV.</div>
+            <div>
+              <span className="rules4-section-kicker">Cơ cấu giải thưởng</span>
+              <h3>{totalAwards} giải thưởng HALO HOLA 2026</h3>
+              <div className="rules4-award-total"><strong>{totalPrize}</strong><span>Tổng tiền mặt · {prizeSummary}</span></div>
+              <table className="rules4-table rules4-awards-table">
+                <thead><tr><th>Nhóm giải</th><th>Số lượng</th><th>Giá trị</th><th>Ghi chú</th></tr></thead>
+                <tbody>{awards.map((award,index)=><tr key={award.code||award.name||index} className={award.featured?'is-featured':''}>
+                  <td><strong>{award.name}</strong><span className="rules4-award-label">{award.label||'Giải thưởng'}</span></td>
+                  <td>{award.quantity||'—'}</td><td><strong>{award.amount||'—'}</strong></td><td>{award.description}</td>
+                </tr>)}</tbody>
+              </table>
+              <div className="rules4-policy">
+                <div><b>Cách chọn Giải Nhất</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
+                <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải màu, giải online và Giải Nhất nếu đáp ứng điều kiện.</span></div>
+                <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section id="luu-y" className="rules-doc-section">
-          <div className="rules-doc-section-index">VII.</div>
-          <div>
-            <header className="rules-doc-section-header">
-              <span className="rules-doc-section-label">Quy định quan trọng</span>
-              <h2>Bản quyền, tính trung thực và quyền hình ảnh</h2>
-            </header>
-            <ul className="rules-doc-checklist">
-              {RULE_NOTES.map(note=><li key={note}><Check/><span>{note}</span></li>)}
-            </ul>
-          </div>
-        </section>
+          <section id="cach-tham-gia" className="rules4-section">
+            <div className="rules4-roman">V.</div>
+            <div>
+              <span className="rules4-section-kicker">Cách tham gia</span>
+              <h3>Tham gia trong 4 bước</h3>
+              <ol className="rules4-steps">
+                <li><span className="num">01</span><b>Đến Hòa Lạc</b><p>Sáng tạo theo 1 trong 8 chủ đề của chương trình.</p></li>
+                <li><span className="num">02</span><b>Nộp tác phẩm</b><p>Gửi qua form tại halohola.vn, kèm tên, chủ đề, địa điểm, thời gian và câu chuyện 50–150 chữ.</p></li>
+                <li><span className="num">03</span><b>Tối đa 05 tác phẩm</b><p>Mỗi người được gửi tối đa 05 tác phẩm; có thể tham gia cá nhân hoặc theo nhóm.</p></li>
+                <li><span className="num">04</span><b>Chia sẻ câu chuyện</b><p>Chia sẻ lên trang cá nhân hoặc Group CHECK IN HOALAC kèm hashtag #HaloHola.</p></li>
+              </ol>
+            </div>
+          </section>
 
-        <div className="rules-doc-cta">
-          <div><span>HALO HOLA 2026</span><h2>Mỗi góc nhìn là một phần câu chuyện Hòa Lạc.</h2></div>
-          <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi góc nhìn <ArrowRight/></Link>
-        </div>
-      </article>
+          <section id="moc-thoi-gian" className="rules4-section">
+            <div className="rules4-roman">VI.</div>
+            <div>
+              <span className="rules4-section-kicker">Mốc thời gian</span>
+              <h3>Từ phát động đến HOLA DAY</h3>
+              <p className="rules4-lead">HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố kết quả HALO HOLA 2026.</p>
+              <div className="rules4-timeline">
+                {TIMELINE.map(([date,title],index)=><div key={date} className={'rules4-time-row '+(index===TIMELINE.length-1?'is-final':'')}><time>{date}</time><b>{title}</b></div>)}
+              </div>
+            </div>
+          </section>
+
+          <section id="luu-y" className="rules4-section">
+            <div className="rules4-roman">VII.</div>
+            <div>
+              <span className="rules4-section-kicker">Quy định quan trọng</span>
+              <h3>Bản quyền, tính trung thực và quyền hình ảnh</h3>
+              <ul className="rules4-checks">
+                {RULE_NOTES.map(note=><li key={note}><Check/><span>{note}</span></li>)}
+              </ul>
+            </div>
+          </section>
+
+          <footer className="rules4-footer-action">
+            <div><span>HALO HOLA 2026</span><h3>Mỗi góc nhìn là một phần câu chuyện Hòa Lạc.</h3></div>
+            <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi góc nhìn <ArrowRight/></Link>
+          </footer>
+        </article>
+      </div>
     </div>
   </main>
 }
