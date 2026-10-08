@@ -3,11 +3,11 @@ import { useLocation } from 'react-router-dom'
 import { getHomepageContent } from '../services/api.js'
 
 const defaults={
-  mainBg:'#0d4934',titleColor:'#ffffff',textColor:'#ffffff',eyebrowColor:'#f1ba73',
-  statCardBg:'#184f3d',statCardBorder:'#3a6a59',statNumberColor:'#ffffff',statLabelColor:'#d6e1db',statIconColor:'#f2b84b',
-  ctaBg:'#d8582f',ctaTextColor:'#ffffff',timelineBg:'#0f5139',timelineTitleColor:'#ffffff',timelineIconColor:'#f2c261',
-  milestoneBg:'#24624d',milestoneBorder:'#3b735f',milestoneDateColor:'#f2b84b',milestoneTextColor:'#ffffff',
-  activeMilestoneBg:'#3f6944',activeMilestoneBorder:'#9a8d35',activeMilestoneDateColor:'#ffd05b',
+  mainBg:'#fbf7ef',titleColor:'#103f31',textColor:'#52675e',eyebrowColor:'#e55329',
+  statCardBg:'#fffdf7',statCardBorder:'#eadfcd',statNumberColor:'#103f31',statLabelColor:'#40564d',statIconColor:'#0f6a4a',
+  ctaBg:'#e95f25',ctaTextColor:'#ffffff',timelineBg:'#074c37',timelineTitleColor:'#ffffff',timelineIconColor:'#f2b84b',
+  milestoneBg:'#145e49',milestoneBorder:'#4f826f',milestoneDateColor:'#ff9c45',milestoneTextColor:'#ffffff',
+  activeMilestoneBg:'#1b684f',activeMilestoneBorder:'#e2b34f',activeMilestoneDateColor:'#ffd15c',
   journeyTitle:'Hành trình 2026',
   milestone1Date:'10.10',milestone1Label:'Mở nhận tác phẩm',
   milestone2Date:'17.10',milestone2Label:'HOLA Tour #01',
@@ -53,6 +53,13 @@ export default function CampaignRuntimeCustomizer(){
               root.style.setProperty(variable,campaign[key])
             }
           })
+
+          if(campaign.backgroundImage){
+            const backgroundValue=`url("${String(campaign.backgroundImage).replace(/"/g,'\\"')}")`
+            if(root.style.getPropertyValue('--campaign-background-image')!==backgroundValue){
+              root.style.setProperty('--campaign-background-image',backgroundValue)
+            }
+          }
 
           setText(root.querySelector('.timeline-title b'),campaign.journeyTitle)
 
