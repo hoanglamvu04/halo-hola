@@ -17,6 +17,7 @@
     "db:seed:showcase:clean": "node src/database/cleanupShowcase.js",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "db:content:tour03-langnghe": "node src/database/updateTour03LangNghe.js",
+    "db:content:awards-2026-values": "node src/database/updateAwards2026Values.js",
     "r2:test": "node src/storage/testR2.js"
   },
   "dependencies": {
