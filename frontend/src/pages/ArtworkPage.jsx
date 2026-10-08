@@ -14,14 +14,6 @@ import ArtworkCard from '../components/ArtworkCard.jsx'
 import './ArtworkPage.css'
 import './ArtworkViewer.css'
 
-const previewStatusLabel={
-  PENDING:'CHỜ DUYỆT',
-  VALID:'HỢP LỆ',
-  SHORTLIST:'SHORTLIST',
-  TOP52:'TOP52',
-  AWARDED:'ĐẠT GIẢI'
-}
-
 function isVideoMedia(media,item){
   return String(media?.mimeType||'').startsWith('video/') || (!media?.mimeType && item?.type==='Video')
 }
@@ -105,24 +97,18 @@ export default function ArtworkPage({preview=false}){
  }
 
  if(loading)return <main className="artwork-showcase"><div className="artwork-showcase-state">Đang tải tác phẩm từ hệ thống...</div></main>
- if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy tác phẩm.'}</div><Link className="btn btn-outline" to={preview?'/chu-de':'/top52'}><ArrowLeft/> {preview?'Quay lại chủ đề':'Quay lại TOP52'}</Link></div></main>
+ if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy tác phẩm.'}</div><Link className="btn btn-outline" to="/top52"><ArrowLeft/> Quay lại TOP52</Link></div></main>
 
- const badge=preview
-   ? `${item.isDemo?'MẪU · ':''}${previewStatusLabel[item.status]||item.status}`
-   : (item.status==='AWARDED'?'ĐẠT GIẢI':'TOP52')
+ const badge=item.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'
  const story=String(item.story||'').trim()||'Tác phẩm được công bố trong hành trình HALO HOLA 2026.'
  const lead=story.split(/\n+/)[0]
  const score=Number(item.juryScore||0)
 
  return <main className="artwork-showcase">
    <div className="artwork-showcase-top container">
-     <Link to={preview?'/chu-de':'/top52'}><ArrowLeft/> {preview?'Quay lại chủ đề':'TOP52'}</Link>
+     <Link to="/top52"><ArrowLeft/> TOP52</Link>
      <span>{item.code} · {item.type}</span>
    </div>
-
-   {preview&&<div className="container artwork-preview-notice">
-     <Eye/><div><b>Đang xem trước với quyền quản trị</b><small>Tác phẩm này có thể chưa được công bố ngoài website.</small></div>
-   </div>}
 
    <section className="container artwork-showcase-hero">
      <div className="artwork-gallery-shell">
@@ -159,7 +145,7 @@ export default function ArtworkPage({preview=false}){
      </div>
 
      <aside className="artwork-showcase-info">
-       <span className="artwork-showcase-kicker">{preview?'XEM TRƯỚC QUẢN TRỊ · ':''}{item.code}</span>
+       <span className="artwork-showcase-kicker">{item.code}</span>
        <h1>{item.title||item.code}</h1>
        <p className="artwork-showcase-lead">{lead}</p>
 
@@ -209,7 +195,7 @@ export default function ArtworkPage({preview=false}){
    </section>}
 
    <section className="container artwork-showcase-bottom">
-     <Link to={preview?'/chu-de':'/top52'} className="btn btn-outline"><ArrowLeft size={16}/> {preview?'Quay lại các chủ đề':'Xem toàn bộ TOP52'}</Link>
+     <Link to="/top52" className="btn btn-outline"><ArrowLeft size={16}/> Xem toàn bộ TOP52</Link>
      <Link to="/gui-goc-nhin" className="btn btn-terra">Gửi góc nhìn của bạn <ArrowRight size={16}/></Link>
    </section>
 
