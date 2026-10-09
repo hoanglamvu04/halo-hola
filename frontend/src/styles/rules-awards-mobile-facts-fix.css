@@ -1,0 +1,28 @@
+/* HALO HOLA — mobile regulation fact alignment fix */
+@media (max-width: 768px){
+  /* The under-18 rule reads like a formal clause: label on its own line,
+     body starts from the document margin instead of hanging under the label. */
+  #tham-gia .rules4-fact:nth-child(3){
+    display:block;
+    padding:14px 0 16px;
+  }
+
+  #tham-gia .rules4-fact:nth-child(3) dt{
+    display:block;
+    width:100%;
+    margin:0 0 5px;
+    white-space:normal;
+    line-height:1.5;
+  }
+
+  #tham-gia .rules4-fact:nth-child(3) dd{
+    display:block;
+    width:100%;
+    margin:0;
+    padding:0;
+    text-align:left;
+    text-indent:0;
+    line-height:1.72;
+    text-wrap:pretty;
+  }
+}
