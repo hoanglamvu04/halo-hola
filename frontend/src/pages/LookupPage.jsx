@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Search, CheckCircle2, Clock3, FileCheck2, Star, Trophy, AlertCircle } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+import { Search, CheckCircle2, Clock3, FileCheck2, AlertCircle } from 'lucide-react'
 import PageHero from '../components/PageHero.jsx'
 import { lookupSubmission } from '../services/api.js'
 import { img } from '../data/siteData.js'
@@ -15,7 +16,8 @@ const labels={
 }
 
 export default function LookupPage(){
-  const [form,setForm]=useState({code:'',email:''})
+  const [searchParams]=useSearchParams()
+  const [form,setForm]=useState({code:(searchParams.get('code')||'').trim().toUpperCase(),email:''})
   const [item,setItem]=useState(null)
   const [loading,setLoading]=useState(false)
   const [error,setError]=useState('')
@@ -36,6 +38,7 @@ export default function LookupPage(){
       <form className="lookup-card" onSubmit={submit}>
         <span className="eyebrow">MÃ TÁC PHẨM</span>
         <h2>Tra cứu trạng thái</h2>
+        {form.code&&<p>Mã tác phẩm đã được điền sẵn từ liên kết bạn lưu. Chỉ cần nhập đúng email đã dùng khi gửi.</p>}
         <label>Mã tác phẩm<input value={form.code} onChange={e=>setForm(v=>({...v,code:e.target.value.toUpperCase()}))} placeholder="HH26-00428"/></label>
         <label>Email<input type="email" value={form.email} onChange={e=>setForm(v=>({...v,email:e.target.value}))} placeholder="email@example.com"/></label>
         {error&&<div className="form-error">{error}</div>}
