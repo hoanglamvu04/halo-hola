@@ -5,27 +5,37 @@
     gap: 16px;
   }
 
+  /* Keep the full landscape visible instead of cropping it inside a fixed-height slot. */
+  .color-v3-card {
+    grid-template-rows: auto auto;
+  }
+
   .color-v3-card > img {
+    display: block;
     width: calc(100% - 8px);
-    height: calc(100% - 6px);
+    height: auto;
+    aspect-ratio: 16 / 9;
     margin: 0 4px 6px;
+    object-fit: contain;
+    object-position: center;
+    background: #f1ecdf;
   }
 }
 
 @media (min-width: 1381px) {
-  .color-v3-card {
-    grid-template-rows: auto 190px;
+  .color-v3-card > img {
+    min-height: 250px;
   }
 }
 
 @media (min-width: 1081px) and (max-width: 1380px) {
-  .color-v3-card {
-    grid-template-rows: auto 170px;
+  .color-v3-card > img {
+    min-height: 220px;
   }
 }
 
 @media (min-width: 721px) and (max-width: 1080px) {
-  .color-v3-card {
-    grid-template-rows: auto 150px;
+  .color-v3-card > img {
+    min-height: 185px;
   }
 }
