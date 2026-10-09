@@ -1,21 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
-  ArrowLeft, ArrowRight, Camera, Video, FileText, Palette, Upload, MapPin,
+  ArrowLeft, ArrowRight, Camera, Video, FileText, Palette, Upload,
   Check, Copy, Image as ImageIcon, Loader2, Save, ShieldCheck
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
+import HolaLocationPicker from '../components/HolaLocationPicker.jsx'
 import { getColors, getThemes, submitArtwork } from '../services/api.js'
 import '../styles/submit-success-receipt.css'
 
-const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Câu chuyện','Quyền sử dụng','Xác nhận']
+const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
 
 const initialForm = {
   name:'', display:'', email:'', phone:'', bio:'',
   title:'', capturedAt:'', externalLink:'', previousAward:false, previousAwardNote:'',
   type:'Photo', theme:'', color:'',
-  location:'', story:'',
+  location:'', locationPlaceId:'', locationPlaceSlug:'', locationLat:'', locationLng:'', locationAddress:'', locationSource:'TEXT', story:'',
   rightsConfirmed:false, imageConsentConfirmed:false,
   isMinor:false, guardianName:'', guardianConsent:false,
   allowMediaUse:true, allowNewsletter:false
@@ -27,6 +28,7 @@ const isValidUrl=value=>{
   if(!clean(value)) return true
   try { new URL(clean(value)); return true } catch { return false }
 }
+const hasCoordinate=value=>value!==''&&value!==null&&value!==undefined&&Number.isFinite(Number(value))
 
 export default function SubmitPage(){
   const [step,setStep]=useState(1)
@@ -90,6 +92,11 @@ export default function SubmitPage(){
     setForm(s=>({...s,[k]:v}))
   }
 
+  const updateLocation=patch=>{
+    setError('')
+    setForm(s=>({...s,...patch}))
+  }
+
   const copyValue=async(value,key)=>{
     if(!value) return
     try{
@@ -111,6 +118,7 @@ export default function SubmitPage(){
     if(!files.length&&!clean(form.externalLink)) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
     if(!clean(form.theme)) issues.push({step:4,key:'theme',label:'Chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
+    if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
     if(clean(form.story).length<20) issues.push({step:5,key:'story',label:'Câu chuyện (tối thiểu 20 ký tự)'})
     if(!form.rightsConfirmed) issues.push({step:6,key:'rightsConfirmed',label:'Xác nhận quyền tác giả'})
     if(form.isMinor&&clean(form.guardianName).length<2) issues.push({step:6,key:'guardianName',label:'Họ tên người giám hộ'})
@@ -183,6 +191,10 @@ export default function SubmitPage(){
           externalLink:clean(form.externalLink),
           theme:clean(form.theme),
           location:clean(form.location),
+          locationPlaceId:clean(form.locationPlaceId),
+          locationPlaceSlug:clean(form.locationPlaceSlug),
+          locationAddress:clean(form.locationAddress),
+          locationSource:clean(form.locationSource)||'TEXT',
           story:clean(form.story),
           guardianName:clean(form.guardianName)
         },
@@ -202,6 +214,7 @@ export default function SubmitPage(){
 
   const heroImage=themes.find(t=>t.title===form.theme)?.image||themes[0]?.image||''
   const storyLength=clean(form.story).length
+  const hasPinnedLocation=hasCoordinate(form.locationLat)&&hasCoordinate(form.locationLng)
 
   return <main>
     <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Gửi tác phẩm gốc, câu chuyện và thông tin bản quyền trong một luồng an toàn. File original được giữ nguyên chất lượng." image={heroImage}>
@@ -262,13 +275,24 @@ export default function SubmitPage(){
 
           {step===5&&<div>
             <h2>Địa điểm & câu chuyện</h2>
-            <div className="form-grid">
-              <label className="full">Địa điểm *<div className="input-icon"><MapPin size={17}/><input value={form.location} onChange={e=>upd('location',e.target.value)} placeholder="Nhập địa điểm thực hiện tác phẩm"/></div></label>
+            <p>Chọn đúng nơi tác phẩm được thực hiện để BTC đối chiếu địa bàn và có thể gắn tác phẩm lên HOLA Map.</p>
+            <HolaLocationPicker
+              value={{
+                location:form.location,
+                locationPlaceId:form.locationPlaceId,
+                locationPlaceSlug:form.locationPlaceSlug,
+                locationLat:form.locationLat,
+                locationLng:form.locationLng,
+                locationAddress:form.locationAddress,
+                locationSource:form.locationSource
+              }}
+              onChange={updateLocation}
+            />
+            <div className="form-grid location-story-grid">
               <label className="full">Câu chuyện 50–150 chữ *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Kể câu chuyện đằng sau tác phẩm..."/><small>{storyLength} ký tự · cần tối thiểu 20 ký tự để gửi</small></label>
               <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Tác phẩm này từng tham gia/đạt giải ở chương trình khác</label>
               {form.previousAward&&<label className="full">Thông tin giải/chương trình<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, giải thưởng..."/></label>}
             </div>
-            <div className="mini-map"><span><MapPin/> {form.location||'Chưa nhập địa điểm'}</span></div>
           </div>}
 
           {step===6&&<div>
@@ -325,6 +349,8 @@ export default function SubmitPage(){
                 <div><small>Chủ đề</small><b>{clean(form.theme)||'Chưa chọn'}</b></div>
                 <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':'Chưa có'}</b></div>
                 <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
+                <div><small>HOLA Map</small><b>{clean(form.locationPlaceId)?'Đã liên kết địa điểm':hasPinnedLocation?'Đã ghim tọa độ':'Nhập thủ công'}</b></div>
+                <div><small>Tọa độ</small><b>{hasPinnedLocation?`${Number(form.locationLat).toFixed(6)}, ${Number(form.locationLng).toFixed(6)}`:'Chưa có'}</b></div>
                 <div><small>Câu chuyện</small><b>{storyLength>=20?`Đã nhập · ${storyLength} ký tự`:'Chưa đủ nội dung'}</b></div>
                 <div><small>Quyền tác giả</small><b>{form.rightsConfirmed?'Đã xác nhận':'Chưa xác nhận'}</b></div>
               </div>
