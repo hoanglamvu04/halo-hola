@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
 const boolish = z.union([z.boolean(), z.string()]).optional();
+const optionalCoordinate = (min, max) => z.preprocess(
+  value => value === undefined || value === null || value === '' ? undefined : Number(value),
+  z.number().finite().min(min).max(max).optional()
+);
 
 export const submissionSchema = z.object({
   name: z.string().trim().min(2).max(160),
@@ -22,6 +26,12 @@ export const submissionSchema = z.object({
   theme: z.string().trim().min(1).max(180),
   color: z.string().trim().max(120).optional().or(z.literal('')),
   location: z.string().trim().min(2).max(255),
+  locationPlaceId: z.string().trim().max(160).optional().or(z.literal('')),
+  locationPlaceSlug: z.string().trim().max(180).optional().or(z.literal('')),
+  locationLat: optionalCoordinate(-90, 90),
+  locationLng: optionalCoordinate(-180, 180),
+  locationAddress: z.string().trim().max(1000).optional().or(z.literal('')),
+  locationSource: z.enum(['TEXT','HOLA_MAPS','GPS','PIN']).optional().default('TEXT'),
   story: z.string().trim().min(20).max(5000),
   allowMediaUse: boolish,
   allowNewsletter: boolish
@@ -34,6 +44,16 @@ export const submissionSchema = z.object({
 
   if (truthy(value.isMinor) && (!value.guardianName || !truthy(value.guardianConsent))) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['guardianConsent'], message: 'Người dưới 18 tuổi cần xác nhận của người giám hộ.' });
+  }
+
+  const hasLat = value.locationLat !== undefined;
+  const hasLng = value.locationLng !== undefined;
+  if (hasLat !== hasLng) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['locationLat'],
+      message: 'Tọa độ địa điểm cần đủ vĩ độ và kinh độ.'
+    });
   }
 });
 
