@@ -1,21 +1,21 @@
-/* HALO HOLA — desktop-only campaign composition v3.
+/* HALO HOLA — desktop-only campaign composition v4.
    Keep the approved mobile UI untouched. */
 @media (min-width:1081px){
   .campaign-live-grid{
-    grid-template-columns:minmax(0,45%) minmax(0,55%) !important;
-    grid-template-rows:minmax(540px,auto) !important;
-    min-height:540px !important;
+    grid-template-columns:minmax(0,43%) minmax(0,57%) !important;
+    grid-template-rows:minmax(560px,auto) !important;
+    min-height:560px !important;
   }
 
   .campaign-live .live-counter{
     grid-column:1 !important;
     grid-row:1 !important;
-    padding:46px clamp(38px,3.5vw,68px) 42px !important;
+    padding:46px clamp(36px,3.2vw,64px) 42px !important;
   }
 
   .campaign-live .live-counter h2{
     max-width:660px !important;
-    font-size:clamp(3.25rem,3.7vw,4.8rem) !important;
+    font-size:clamp(3.15rem,3.6vw,4.7rem) !important;
     line-height:.96 !important;
   }
 
@@ -44,7 +44,7 @@
   .campaign-live .campaign-visual{
     grid-column:2 !important;
     grid-row:1 !important;
-    min-height:540px !important;
+    min-height:560px !important;
     height:100% !important;
   }
 
@@ -59,20 +59,20 @@
       linear-gradient(180deg,rgba(10,47,34,.03) 0%,rgba(5,35,25,.34) 100%) !important;
   }
 
-  /* Keep one editorial photo on the left to avoid a blank scenic field. */
+  /* Keep one editorial photo, but make it secondary to the journey panel. */
   .campaign-live .campaign-photo-main{
     display:block !important;
     top:30px !important;
-    left:30px !important;
-    width:min(250px,31%) !important;
-    padding:10px 10px 39px !important;
+    left:28px !important;
+    width:min(230px,25%) !important;
+    padding:9px 9px 36px !important;
     transform:rotate(-4deg) !important;
     box-shadow:0 20px 42px rgba(22,23,18,.28) !important;
   }
 
   .campaign-live .campaign-photo-main span{
-    bottom:8px !important;
-    font-size:1.15rem !important;
+    bottom:7px !important;
+    font-size:1.08rem !important;
   }
 
   .campaign-live .campaign-photo-secondary,
@@ -83,46 +83,66 @@
   .campaign-live .campaign-place-sign{
     top:auto !important;
     right:auto !important;
-    left:34px !important;
-    bottom:30px !important;
+    left:30px !important;
+    bottom:28px !important;
     padding:10px 14px !important;
   }
 
-  /* Journey: large vertical card on the RIGHT, as requested. */
+  /* Journey: deliberately oversized vertical card on the right. */
   .campaign-live .campaign-timeline{
     grid-column:2 !important;
     grid-row:1 !important;
     z-index:12 !important;
     align-self:center !important;
     justify-self:end !important;
-    width:min(430px,46%) !important;
-    margin:0 28px 0 0 !important;
-    padding:26px 24px 24px !important;
-    border:1px solid rgba(255,255,255,.17) !important;
-    border-radius:24px !important;
-    background:color-mix(in srgb,var(--campaign-timeline-bg,#074c37) 94%,transparent) !important;
-    backdrop-filter:blur(16px) saturate(1.08) !important;
-    box-shadow:0 26px 60px rgba(2,28,20,.34) !important;
+    width:min(540px,58%) !important;
+    min-height:500px !important;
+    margin:0 26px 0 0 !important;
+    padding:30px 30px 26px !important;
+    border:1px solid rgba(255,255,255,.18) !important;
+    border-radius:30px !important;
+    background:color-mix(in srgb,var(--campaign-timeline-bg,#074c37) 95%,transparent) !important;
+    backdrop-filter:blur(17px) saturate(1.08) !important;
+    box-shadow:0 28px 66px rgba(2,28,20,.36) !important;
   }
 
   .campaign-live .timeline-title{
     display:flex !important;
     align-items:center !important;
-    gap:10px !important;
-    margin:0 0 18px !important;
-    padding:0 0 14px !important;
-    border-bottom:1px solid rgba(255,255,255,.12) !important;
+    gap:12px !important;
+    margin:0 0 20px !important;
+    padding:0 0 17px !important;
+    border-bottom:1px solid rgba(255,255,255,.14) !important;
   }
 
   .campaign-live .timeline-title svg{
-    width:23px !important;
-    height:23px !important;
+    width:27px !important;
+    height:27px !important;
+    flex:0 0 auto !important;
   }
 
   .campaign-live .timeline-title b{
-    font-size:1.28rem !important;
+    font-size:1.5rem !important;
     line-height:1.1 !important;
     font-weight:850 !important;
+    letter-spacing:-.025em !important;
+  }
+
+  .campaign-live .timeline-title::after{
+    content:'07 MỐC' !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    margin-left:auto !important;
+    min-height:28px !important;
+    padding:0 12px !important;
+    border:1px solid rgba(255,255,255,.14) !important;
+    border-radius:999px !important;
+    color:rgba(255,255,255,.76) !important;
+    font-size:.62rem !important;
+    font-weight:850 !important;
+    letter-spacing:.10em !important;
+    white-space:nowrap !important;
   }
 
   .campaign-live .campaign-milestones{
@@ -134,14 +154,14 @@
   .campaign-live .campaign-milestone,
   .campaign-live .campaign-milestone:last-child:nth-child(odd){
     display:grid !important;
-    grid-template-columns:74px 1fr !important;
+    grid-template-columns:92px minmax(0,1fr) !important;
     align-items:center !important;
-    gap:12px !important;
+    gap:18px !important;
     width:100% !important;
-    min-height:48px !important;
-    padding:10px 2px !important;
+    min-height:58px !important;
+    padding:12px 2px !important;
     border:0 !important;
-    border-bottom:1px solid rgba(255,255,255,.095) !important;
+    border-bottom:1px solid rgba(255,255,255,.10) !important;
     border-radius:0 !important;
     background:transparent !important;
   }
@@ -152,27 +172,30 @@
 
   .campaign-live .campaign-milestone:first-child{
     margin-top:0 !important;
-    background:linear-gradient(90deg,rgba(255,255,255,.07),transparent) !important;
+    background:linear-gradient(90deg,rgba(255,255,255,.075),transparent) !important;
   }
 
   .campaign-live .campaign-milestone span{
     display:inline-flex !important;
     align-items:center !important;
     justify-content:flex-start !important;
-    min-height:28px !important;
+    min-height:30px !important;
     margin:0 !important;
     padding:0 !important;
     background:none !important;
-    font-size:.84rem !important;
+    font-size:1rem !important;
     line-height:1 !important;
     font-weight:850 !important;
     white-space:nowrap !important;
+    font-variant-numeric:tabular-nums !important;
   }
 
   .campaign-live .campaign-milestone b{
-    font-size:.92rem !important;
+    min-width:0 !important;
+    font-size:1.02rem !important;
     line-height:1.25 !important;
-    font-weight:750 !important;
+    font-weight:760 !important;
+    letter-spacing:-.012em !important;
   }
 
   .campaign-live .campaign-milestone i,
@@ -183,51 +206,70 @@
 
 @media (min-width:1081px) and (max-width:1320px){
   .campaign-live-grid{
-    grid-template-columns:46% 54% !important;
-    grid-template-rows:minmax(520px,auto) !important;
-    min-height:520px !important;
+    grid-template-columns:44% 56% !important;
+    grid-template-rows:minmax(540px,auto) !important;
+    min-height:540px !important;
   }
 
   .campaign-live .live-counter{
-    padding:38px 32px 36px !important;
+    padding:38px 30px 36px !important;
   }
 
   .campaign-live .live-counter h2{
-    font-size:clamp(2.85rem,4.3vw,3.9rem) !important;
+    font-size:clamp(2.8rem,4.1vw,3.8rem) !important;
   }
 
   .campaign-live .campaign-visual{
-    min-height:520px !important;
+    min-height:540px !important;
   }
 
   .campaign-live .campaign-photo-main{
-    width:min(205px,29%) !important;
-    left:22px !important;
-    top:24px !important;
+    width:min(190px,24%) !important;
+    left:20px !important;
+    top:22px !important;
   }
 
   .campaign-live .campaign-timeline{
-    width:min(370px,48%) !important;
-    margin-right:20px !important;
-    padding:22px 20px 20px !important;
+    width:min(470px,61%) !important;
+    min-height:470px !important;
+    margin-right:18px !important;
+    padding:24px 23px 22px !important;
+    border-radius:26px !important;
+  }
+
+  .campaign-live .timeline-title{
+    margin-bottom:16px !important;
+    padding-bottom:14px !important;
+  }
+
+  .campaign-live .timeline-title svg{
+    width:23px !important;
+    height:23px !important;
   }
 
   .campaign-live .timeline-title b{
-    font-size:1.12rem !important;
+    font-size:1.28rem !important;
+  }
+
+  .campaign-live .timeline-title::after{
+    min-height:25px !important;
+    padding-inline:10px !important;
+    font-size:.56rem !important;
   }
 
   .campaign-live .campaign-milestone,
   .campaign-live .campaign-milestone:last-child:nth-child(odd){
-    grid-template-columns:66px 1fr !important;
-    min-height:44px !important;
-    padding:8px 2px !important;
+    grid-template-columns:80px minmax(0,1fr) !important;
+    min-height:52px !important;
+    gap:14px !important;
+    padding:10px 2px !important;
   }
 
   .campaign-live .campaign-milestone span{
-    font-size:.74rem !important;
+    font-size:.86rem !important;
   }
 
   .campaign-live .campaign-milestone b{
-    font-size:.80rem !important;
+    font-size:.90rem !important;
   }
 }
