@@ -25,4 +25,25 @@
     line-height:1.72;
     text-wrap:pretty;
   }
+
+  /* Commune names read as a normal Vietnamese list on mobile. */
+  #tham-gia .rules4-fact:nth-child(2) dd{
+    font-size:0;
+    line-height:1.72;
+  }
+
+  #tham-gia .rules4-fact:nth-child(2) dd::before{
+    content:"Yên Xuân, Hòa Lạc, Yên Bài, Đoài Phương, Thạch Thất, Hạ Bằng, Tây Phương, Kiều Phú, Phú Cát";
+    display:block;
+    color:#26312c;
+    font-size:.96rem;
+    line-height:1.72;
+    word-spacing:normal;
+  }
+}
+
+@media (max-width: 390px){
+  #tham-gia .rules4-fact:nth-child(2) dd::before{
+    font-size:.93rem;
+  }
 }
