@@ -1,0 +1,64 @@
+/* Mobile bottom-nav clearance + final homepage theme-card balance.
+   Keeps the fixed navigation from hiding the end of content on iOS/Android. */
+@media (max-width: 760px) {
+  :root {
+    --mobile-bottom-nav-clearance: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html {
+    scroll-padding-bottom: var(--mobile-bottom-nav-clearance);
+  }
+
+  .site-shell.has-mobile-bottom-nav {
+    padding-bottom: var(--mobile-bottom-nav-clearance) !important;
+  }
+
+  /* The 8-theme block is often browsed card-by-card on mobile. Give the
+     final row enough breathing room so it can sit fully above the fixed nav. */
+  .themes-showcase .themes-card-grid {
+    padding-bottom: var(--mobile-bottom-nav-clearance) !important;
+  }
+
+  /* Keep paired cards visually level even when one title wraps to 2 lines. */
+  .themes-showcase .theme-card-reference {
+    height: 100% !important;
+  }
+
+  .themes-showcase .theme-card-reference .theme-card-body {
+    min-height: 92px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+
+  .themes-showcase .theme-card-reference h3 {
+    min-height: 2.28em !important;
+  }
+
+  .themes-showcase .theme-card-reference p {
+    margin-top: auto !important;
+  }
+
+  /* Keep arrow styling consistent on touch/focus/hover states. */
+  .themes-showcase .theme-card-reference .theme-card-arrow,
+  .themes-showcase .theme-card-reference:hover .theme-card-arrow,
+  .themes-showcase .theme-card-reference:focus .theme-card-arrow,
+  .themes-showcase .theme-card-reference:focus-visible .theme-card-arrow,
+  .themes-showcase .theme-card-reference:active .theme-card-arrow {
+    background: rgba(255, 252, 246, .94) !important;
+    border: 1px solid rgba(196, 91, 50, .34) !important;
+    color: var(--terra, #c45b32) !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --mobile-bottom-nav-clearance: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .themes-showcase .theme-card-reference .theme-card-body {
+    min-height: 88px !important;
+  }
+}
