@@ -87,6 +87,34 @@
     margin:4px 0 0;
     padding:0;
   }
+
+  /* Timeline follows the same document rhythm: date + milestone on one row.
+     If the title is long, only the title wraps inside its own column. */
+  #moc-thoi-gian .rules4-time-row{
+    display:grid;
+    grid-template-columns:max-content minmax(0,1fr);
+    align-items:baseline;
+    column-gap:10px;
+    padding:15px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row time{
+    display:block;
+    margin:0;
+    white-space:nowrap;
+    line-height:1.45;
+  }
+
+  #moc-thoi-gian .rules4-time-row b{
+    display:block;
+    margin:0;
+    line-height:1.45;
+    min-width:0;
+  }
+
+  #moc-thoi-gian .rules4-time-row.is-final{
+    padding-left:12px;
+  }
 }
 
 @media (max-width: 390px){
@@ -97,5 +125,18 @@
   #cach-tham-gia .rules4-steps li{
     column-gap:7px;
     padding:14px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row{
+    column-gap:8px;
+    padding:14px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row time{
+    font-size:.86rem;
+  }
+
+  #moc-thoi-gian .rules4-time-row b{
+    font-size:1rem;
   }
 }
