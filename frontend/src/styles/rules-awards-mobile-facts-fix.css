@@ -1,5 +1,19 @@
 /* HALO HOLA — mobile regulation fact alignment fix */
 @media (max-width: 768px){
+  /* Remove the decorative CHƯƠNG I / QUY ĐỊNH CHUNG block on mobile.
+     The page should continue directly from the summary into Điều 1. */
+  .rules4-paper-head{
+    display:none !important;
+  }
+
+  .rules4-paper{
+    padding-top:0;
+  }
+
+  #tham-gia.rules4-section{
+    padding-top:26px;
+  }
+
   /* The under-18 rule reads like a formal clause: label on its own line,
      body starts from the document margin instead of hanging under the label. */
   #tham-gia .rules4-fact:nth-child(3){
