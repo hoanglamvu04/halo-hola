@@ -222,6 +222,7 @@
     line-height:1.38;
     font-weight:820;
     letter-spacing:-.018em;
+    text-wrap:pretty;
   }
 
   #tham-gia h3::before{content:"Điều 1. ";}
@@ -247,31 +248,69 @@
 
   .rules4-lead{
     margin:0 0 24px;
+    text-wrap:pretty;
   }
 
-  /* ===== Participant facts: plain paragraphs, no desktop grid ===== */
+  /* ===== Participant facts: compact rows + a clearer area block ===== */
   .rules4-facts{
     margin:0;
-    border-top:0;
+    border-top:1px solid #ecece8;
   }
 
   .rules4-fact{
-    display:block;
-    padding:16px 0;
+    display:grid;
+    grid-template-columns:max-content minmax(0,1fr);
+    column-gap:10px;
+    align-items:baseline;
+    padding:14px 0;
     border-bottom:1px solid #e5e5e1;
   }
   .rules4-fact:last-child{border-bottom:0}
   .rules4-fact svg{display:none}
   .rules4-fact dt{
     display:block;
-    margin:0 0 5px;
+    margin:0;
     color:#111;
-    font-size:1.05rem;
+    font-size:.95rem;
+    line-height:1.65;
     font-weight:800;
+    white-space:nowrap;
+  }
+  .rules4-fact:not(:nth-child(2)) dt::after{
+    content:":";
   }
   .rules4-fact dd{
     display:block;
     margin:0;
+    font-size:.98rem;
+    line-height:1.65;
+    color:#303732;
+    text-wrap:pretty;
+  }
+
+  /* Địa bàn contains many names, so give it its own quiet document panel
+     instead of a long dot-separated paragraph between two labels. */
+  .rules4-fact:nth-child(2){
+    display:block;
+    margin:8px 0;
+    padding:14px 15px 15px;
+    border:1px solid #e4e0d6;
+    border-radius:10px;
+    background:#f8f6f0;
+  }
+  .rules4-fact:nth-child(2) dt{
+    margin:0 0 7px;
+    color:#123f32;
+    font-size:.88rem;
+    line-height:1.2;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .rules4-fact:nth-child(2) dd{
+    color:#26312c;
+    font-size:.96rem;
+    line-height:1.72;
+    word-spacing:.06em;
   }
 
   /* ===== Desktop tables become formal stacked clauses ===== */
@@ -574,4 +613,12 @@
   .rules4-fact dd,
   .rules4-table td,
   .rules4-checks li span{font-size:1.02rem}
+
+  .rules4-fact{
+    grid-template-columns:max-content minmax(0,1fr);
+    column-gap:8px;
+  }
+  .rules4-fact dt{font-size:.9rem}
+  .rules4-fact dd{font-size:.94rem}
+  .rules4-fact:nth-child(2) dd{font-size:.93rem}
 }
