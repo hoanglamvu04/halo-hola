@@ -129,8 +129,9 @@ export async function createSubmission(data, files = []) {
       `INSERT INTO submissions
        (code,name,display_name,email,phone,bio,title,captured_at,external_link,previous_award,previous_award_note,
         rights_confirmed,image_consent_confirmed,is_minor,guardian_name,guardian_consent,
-        type,theme,color,location,story,allow_media_use,allow_newsletter)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)
+        type,theme,color,location,hola_map_place_id,hola_map_place_slug,location_lat,location_lng,location_address,location_source,
+        story,allow_media_use,allow_newsletter)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29)
        RETURNING *`,
       [
         code,
@@ -153,6 +154,12 @@ export async function createSubmission(data, files = []) {
         data.theme,
         data.color || null,
         data.location,
+        data.locationPlaceId || null,
+        data.locationPlaceSlug || null,
+        data.locationLat ?? null,
+        data.locationLng ?? null,
+        data.locationAddress || null,
+        data.locationSource || 'TEXT',
         data.story,
         truthy(data.allowMediaUse, true),
         truthy(data.allowNewsletter, false)
@@ -167,7 +174,9 @@ export async function createSubmission(data, files = []) {
 
 export async function lookupSubmission(code, email) {
   const { rows } = await pool.query(
-    `SELECT s.id,s.code,s.title,s.type,s.theme,s.color,s.location,s.status,s.created_at,s.updated_at,
+    `SELECT s.id,s.code,s.title,s.type,s.theme,s.color,s.location,
+       s.hola_map_place_id,s.hola_map_place_slug,s.location_lat,s.location_lng,s.location_address,s.location_source,
+       s.status,s.created_at,s.updated_at,
        COUNT(m.id)::int AS media_count,
        COALESCE(SUM(m.size_bytes),0)::bigint AS total_bytes
      FROM submissions s
