@@ -1,11 +1,10 @@
-/* Hòa Lạc color cards: desktop/tablet use 3 columns = 2 rows for 6 colors. */
+/* Hòa Lạc color cards: keep the full image visible, but make the desktop block more compact. */
 @media (min-width: 721px) {
   .color-v3-cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
 
-  /* Keep the full landscape visible instead of cropping it inside a fixed-height slot. */
   .color-v3-card {
     grid-template-rows: auto auto;
   }
@@ -13,8 +12,6 @@
   .color-v3-card > img {
     display: block;
     width: calc(100% - 8px);
-    height: auto;
-    aspect-ratio: 16 / 9;
     margin: 0 4px 6px;
     object-fit: contain;
     object-position: center;
@@ -22,20 +19,54 @@
   }
 }
 
+/* Desktop: reduce the overall footprint of the 6-card block without cropping images. */
 @media (min-width: 1381px) {
+  .color-v3-cards {
+    width: min(1480px, calc(100% - 96px));
+    gap: 14px;
+  }
+
+  .color-v3-card-head {
+    min-height: 72px;
+    padding: 12px 14px;
+    grid-template-columns: 42px 1fr 32px;
+    gap: 10px;
+  }
+
+  .color-v3-dot {
+    width: 40px;
+    height: 40px;
+  }
+
   .color-v3-card > img {
-    min-height: 250px;
+    height: 220px;
+    min-height: 0;
+    aspect-ratio: auto;
   }
 }
 
 @media (min-width: 1081px) and (max-width: 1380px) {
+  .color-v3-cards {
+    width: min(1240px, calc(100% - 56px));
+    gap: 14px;
+  }
+
+  .color-v3-card-head {
+    min-height: 70px;
+    padding: 11px 12px;
+  }
+
   .color-v3-card > img {
-    min-height: 220px;
+    height: 200px;
+    min-height: 0;
+    aspect-ratio: auto;
   }
 }
 
 @media (min-width: 721px) and (max-width: 1080px) {
   .color-v3-card > img {
-    min-height: 185px;
+    height: 170px;
+    min-height: 0;
+    aspect-ratio: auto;
   }
 }
