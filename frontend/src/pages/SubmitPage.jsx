@@ -6,6 +6,7 @@ import {
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
 import { getColors, getThemes, submitArtwork } from '../services/api.js'
+import '../styles/submit-success-receipt.css'
 
 const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
@@ -45,10 +46,13 @@ export default function SubmitPage(){
   const [result,setResult]=useState(null)
   const [error,setError]=useState('')
   const [savedAt,setSavedAt]=useState(null)
+  const [copiedAction,setCopiedAction]=useState('')
   const inputRef=useRef(null)
   const saveTimer=useRef(null)
   const code=useMemo(()=>result?.code || 'HH26-XXXXX',[result])
   const types=[['Photo','Ảnh đơn, bộ ảnh, photo story',Camera],['Video','Reel, short video, phim ngắn, timelapse',Video],['Story & Creative','Câu chuyện, tản văn, ký ức, audio story',FileText],['Art & Design','Tranh, ký họa, illustration, digital art, poster',Palette]]
+  const lookupPath=result?.code?`/tra-cuu?code=${encodeURIComponent(result.code)}`:'/tra-cuu'
+  const lookupLink=result?.code&&typeof window!=='undefined'?`${window.location.origin}${lookupPath}`:''
 
   useEffect(()=>{
     Promise.all([getThemes(),getColors()]).then(([themeRows,colorRows])=>{
@@ -84,6 +88,18 @@ export default function SubmitPage(){
   const upd=(k,v)=>{
     setError('')
     setForm(s=>({...s,[k]:v}))
+  }
+
+  const copyValue=async(value,key)=>{
+    if(!value) return
+    try{
+      await navigator.clipboard.writeText(value)
+      setCopiedAction(key)
+      window.setTimeout(()=>setCopiedAction(current=>current===key?'':current),1800)
+    }catch{
+      setCopiedAction('error')
+      window.setTimeout(()=>setCopiedAction(''),1800)
+    }
   }
 
   const getValidationIssues=()=>{
@@ -142,6 +158,7 @@ export default function SubmitPage(){
     setStep(1)
     setResult(null)
     setError('')
+    setCopiedAction('')
   }
 
   const submit = async () => {
@@ -272,8 +289,33 @@ export default function SubmitPage(){
           {step===7&&<div>
             <h2>{result?'Gửi tác phẩm thành công':'Kiểm tra lần cuối'}</h2>
             {result?<div className="success-stack">
-              <div className="success-preview"><Check/><div><b>Mã tác phẩm: {result.code}</b><p>BTC đã nhận hồ sơ và file của bạn.</p></div></div>
-              <div className="success-actions"><Link to="/tra-cuu" className="btn btn-green">Tra cứu trạng thái</Link><button className="btn btn-outline" onClick={resetDraft}>Gửi tác phẩm khác</button></div>
+              <div className="submit-success-receipt">
+                <div className="submit-success-icon"><Check/></div>
+                <span className="submit-success-kicker">GỬI TÁC PHẨM THÀNH CÔNG</span>
+                <h3>Hãy lưu mã tác phẩm để tra cứu sau này</h3>
+                <p>BTC đã nhận hồ sơ và file của bạn. Mã dưới đây là thông tin quan trọng để theo dõi trạng thái tác phẩm.</p>
+
+                <div className="submit-success-code">
+                  <small>Mã tác phẩm</small>
+                  <strong>{result.code}</strong>
+                  <button type="button" onClick={()=>copyValue(result.code,'code')}><Copy size={17}/>{copiedAction==='code'?'Đã sao chép':'Sao chép mã'}</button>
+                </div>
+
+                <div className="submit-success-link">
+                  <div><small>Liên kết tra cứu</small><code>{lookupLink}</code></div>
+                  <button type="button" onClick={()=>copyValue(lookupLink,'link')}><Copy size={17}/>{copiedAction==='link'?'Đã sao chép':'Sao chép liên kết'}</button>
+                </div>
+
+                <div className="submit-success-reminder">
+                  <b>Khi tra cứu:</b> dùng mã <strong>{result.code}</strong> và email đã gửi là <strong>{clean(form.email)}</strong>.
+                  {copiedAction==='error'&&<span> Trình duyệt không cho phép sao chép tự động, hãy giữ và sao chép thủ công.</span>}
+                </div>
+              </div>
+
+              <div className="success-actions">
+                <Link to={lookupPath} className="btn btn-green">Tra cứu tác phẩm ngay</Link>
+                <button className="btn btn-outline" onClick={resetDraft}>Gửi tác phẩm khác</button>
+              </div>
               {result.media?.length>0&&<div className="vault-result"><b>Original Vault</b>{result.media.map(m=><div key={m.id}><span>{m.originalName}</span><small>{m.provider} · SHA256 {m.sha256?.slice(0,12)}…</small></div>)}</div>}
             </div>:<>
               <div className="review-grid">
@@ -301,9 +343,9 @@ export default function SubmitPage(){
         <aside className="submission-preview">
           <span className="eyebrow">XEM TRƯỚC TÁC PHẨM</span>
           <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước tác phẩm"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span><span>{form.theme||'Chưa chọn chủ đề'}</span></div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{form.color&&<span>{form.color}</span>}</div></div></div>
-          <div className="submission-code"><small>{result?'Mã tác phẩm':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>navigator.clipboard?.writeText(code)}><Copy size={16}/></button>}</div>
+          <div className="submission-code"><small>{result?'Mã tác phẩm':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>copyValue(code,'sidebar-code')}><Copy size={16}/>{copiedAction==='sidebar-code'&&<span>Đã sao chép</span>}</button>}</div>
           <blockquote>“Mỗi góc nhìn của bạn đều góp phần tạo nên một bức tranh Hòa Lạc đa sắc màu.”</blockquote>
-          <Link className="text-link" to="/tra-cuu">Đã gửi trước đó? Tra cứu tác phẩm →</Link>
+          <Link className="text-link" to={result?lookupPath:'/tra-cuu'}>{result?'Tra cứu tác phẩm này →':'Đã gửi trước đó? Tra cứu tác phẩm →'}</Link>
         </aside>
       </div>
     </section>
