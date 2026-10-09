@@ -54,10 +54,48 @@
     line-height:1.72;
     word-spacing:normal;
   }
+
+  /* Participation steps: number + title share one baseline.
+     The description always starts on the next line from the document margin. */
+  #cach-tham-gia .rules4-steps li{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    column-gap:8px;
+    row-gap:4px;
+    padding:16px 0;
+  }
+
+  #cach-tham-gia .rules4-steps .num{
+    display:inline-flex;
+    flex:0 0 auto;
+    margin:0;
+    min-width:24px;
+    line-height:1.3;
+  }
+
+  #cach-tham-gia .rules4-steps b{
+    display:inline;
+    flex:0 1 auto;
+    margin:0;
+    line-height:1.35;
+  }
+
+  #cach-tham-gia .rules4-steps p{
+    flex:0 0 100%;
+    width:100%;
+    margin:4px 0 0;
+    padding:0;
+  }
 }
 
 @media (max-width: 390px){
   #tham-gia .rules4-fact:nth-child(2) dd::before{
     font-size:.93rem;
+  }
+
+  #cach-tham-gia .rules4-steps li{
+    column-gap:7px;
+    padding:14px 0;
   }
 }
