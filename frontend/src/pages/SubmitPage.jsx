@@ -20,6 +20,13 @@ const initialForm = {
   allowMediaUse:true, allowNewsletter:false
 }
 
+const clean=value=>String(value??'').trim()
+const isValidEmail=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean(value))
+const isValidUrl=value=>{
+  if(!clean(value)) return true
+  try { new URL(clean(value)); return true } catch { return false }
+}
+
 export default function SubmitPage(){
   const [step,setStep]=useState(1)
   const [form,setForm]=useState(()=>{
@@ -74,9 +81,59 @@ export default function SubmitPage(){
     return ()=>window.clearTimeout(saveTimer.current)
   },[form,result])
 
-  const upd=(k,v)=>setForm(s=>({...s,[k]:v}))
-  const next=()=>{ setError(''); setStep(v=>Math.min(7,v+1)) }
+  const upd=(k,v)=>{
+    setError('')
+    setForm(s=>({...s,[k]:v}))
+  }
+
+  const getValidationIssues=()=>{
+    const issues=[]
+    if(clean(form.name).length<2) issues.push({step:1,key:'name',label:'Họ và tên'})
+    if(!isValidEmail(form.email)) issues.push({step:1,key:'email',label:'Email hợp lệ'})
+    if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên tác phẩm'})
+    if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link tác phẩm hợp lệ'})
+    if(!files.length&&!clean(form.externalLink)) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
+    if(!clean(form.theme)) issues.push({step:4,key:'theme',label:'Chủ đề'})
+    if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
+    if(clean(form.story).length<20) issues.push({step:5,key:'story',label:'Câu chuyện (tối thiểu 20 ký tự)'})
+    if(!form.rightsConfirmed) issues.push({step:6,key:'rightsConfirmed',label:'Xác nhận quyền tác giả'})
+    if(form.isMinor&&clean(form.guardianName).length<2) issues.push({step:6,key:'guardianName',label:'Họ tên người giám hộ'})
+    if(form.isMinor&&!form.guardianConsent) issues.push({step:6,key:'guardianConsent',label:'Xác nhận của người giám hộ'})
+    return issues
+  }
+
+  const stepIssues=target=>getValidationIssues().filter(item=>item.step===target)
+  const isStepComplete=target=>target===7?getValidationIssues().length===0:stepIssues(target).length===0
+  const formatIssues=issues=>{
+    const labels=[...new Set(issues.map(item=>item.label))]
+    return labels.length?`Còn thiếu: ${labels.join(', ')}.`:''
+  }
+
+  const next=()=>{
+    setError('')
+    const issues=stepIssues(step)
+    if(issues.length){
+      setError(formatIssues(issues))
+      return
+    }
+    setStep(v=>Math.min(7,v+1))
+  }
+
   const prev=()=>{ setError(''); setStep(v=>Math.max(1,v-1)) }
+
+  const goToStep=target=>{
+    setError('')
+    if(target<=step){setStep(target);return}
+    const blocking=getValidationIssues().filter(item=>item.step<target)
+    if(blocking.length){
+      const firstStep=Math.min(...blocking.map(item=>item.step))
+      const firstStepIssues=blocking.filter(item=>item.step===firstStep)
+      setStep(firstStep)
+      setError(`Hoàn thiện bước ${firstStep} trước khi tiếp tục. ${formatIssues(firstStepIssues)}`)
+      return
+    }
+    setStep(target)
+  }
 
   const resetDraft=()=>{
     localStorage.removeItem(DRAFT_KEY)
@@ -84,24 +141,15 @@ export default function SubmitPage(){
     setFiles([])
     setStep(1)
     setResult(null)
+    setError('')
   }
 
   const submit = async () => {
     setError('')
-    if (!form.name || !form.email || !form.title || !form.theme || !form.story || !form.location) {
-      setError('Vui lòng điền đủ họ tên, email, tên tác phẩm, chủ đề, địa điểm và câu chuyện.')
-      return
-    }
-    if (!form.rightsConfirmed) {
-      setError('Bạn cần xác nhận quyền tác giả trước khi gửi.')
-      return
-    }
-    if (form.isMinor && (!form.guardianName || !form.guardianConsent)) {
-      setError('Người dưới 18 tuổi cần thông tin và xác nhận của người giám hộ.')
-      return
-    }
-    if (!files.length && !form.externalLink) {
-      setError('Hãy tải ít nhất một file gốc hoặc nhập link tác phẩm.')
+    const issues=getValidationIssues()
+    if(issues.length){
+      const firstStep=Math.min(...issues.map(item=>item.step))
+      setError(`${formatIssues(issues)} Vui lòng quay lại bước ${firstStep} để bổ sung.`)
       return
     }
 
@@ -110,20 +158,33 @@ export default function SubmitPage(){
       const data = await submitArtwork({
         fields: {
           ...form,
-          displayName: form.display
+          name:clean(form.name),
+          display:clean(form.display),
+          displayName: clean(form.display),
+          email:clean(form.email),
+          title:clean(form.title),
+          externalLink:clean(form.externalLink),
+          theme:clean(form.theme),
+          location:clean(form.location),
+          story:clean(form.story),
+          guardianName:clean(form.guardianName)
         },
         files
       })
       localStorage.removeItem(DRAFT_KEY)
       setResult(data)
     } catch (err) {
-      setError(err.message || 'Có lỗi xảy ra khi gửi tác phẩm')
+      const detail=Array.isArray(err.details)&&err.details.length
+        ? ' ' + err.details.map(item=>item?.message).filter(Boolean).join(' · ')
+        : ''
+      setError((err.message || 'Có lỗi xảy ra khi gửi tác phẩm') + detail)
     } finally {
       setSubmitting(false)
     }
   }
 
   const heroImage=themes.find(t=>t.title===form.theme)?.image||themes[0]?.image||''
+  const storyLength=clean(form.story).length
 
   return <main>
     <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Gửi tác phẩm gốc, câu chuyện và thông tin bản quyền trong một luồng an toàn. File original được giữ nguyên chất lượng." image={heroImage}>
@@ -131,7 +192,11 @@ export default function SubmitPage(){
     </PageHero>
 
     <section className="submit-page container section">
-      <div className="stepper">{steps.map((s,i)=><button key={s} className={step===i+1?'active':step>i+1?'done':''} onClick={()=>setStep(i+1)}><span>{step>i+1?<Check size={15}/>:i+1}</span><b>{s}</b></button>)}</div>
+      <div className="stepper">{steps.map((s,i)=>{
+        const target=i+1
+        const done=target<7&&isStepComplete(target)
+        return <button key={s} className={step===target?'active':done?'done':''} onClick={()=>goToStep(target)}><span>{done?<Check size={15}/>:target}</span><b>{s}</b></button>
+      })}</div>
 
       <div className="submit-layout">
         <div className="wizard-card">
@@ -166,9 +231,9 @@ export default function SubmitPage(){
               <Upload size={34}/><b>Kéo thả tệp vào đây hoặc</b>
               <button type="button" className="btn btn-terra">Chọn tệp từ thiết bị</button>
               <small>JPG, PNG, WEBP, MP4, MOV, PDF, DOC/DOCX, MP3 · tối đa theo cấu hình server.</small>
-              <input ref={inputRef} hidden multiple type="file" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" onChange={e=>setFiles(Array.from(e.target.files || []).slice(0,10))}/>
+              <input ref={inputRef} hidden multiple type="file" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" onChange={e=>{setError('');setFiles(Array.from(e.target.files || []).slice(0,10))}}/>
             </div>
-            <div className="upload-thumbs">{files.length?files.map((file,i)=><div className="file-chip" key={file.name + '-' + i}><ImageIcon/><span title={file.name}>{file.name}<small>{(file.size/1024/1024).toFixed(2)} MB</small></span><button onClick={(e)=>{e.stopPropagation();setFiles(v=>v.filter((_,idx)=>idx!==i))}}>×</button></div>):<button onClick={()=>inputRef.current?.click()}><ImageIcon/> Chưa có tệp · Thêm tệp</button>}</div>
+            <div className="upload-thumbs">{files.length?files.map((file,i)=><div className="file-chip" key={file.name + '-' + i}><ImageIcon/><span title={file.name}>{file.name}<small>{(file.size/1024/1024).toFixed(2)} MB</small></span><button onClick={(e)=>{e.stopPropagation();setError('');setFiles(v=>v.filter((_,idx)=>idx!==i))}}>×</button></div>):<button onClick={()=>inputRef.current?.click()}><ImageIcon/> Chưa có tệp · Thêm tệp</button>}</div>
           </div>}
 
           {step===4&&<div>
@@ -182,7 +247,7 @@ export default function SubmitPage(){
             <h2>Địa điểm & câu chuyện</h2>
             <div className="form-grid">
               <label className="full">Địa điểm *<div className="input-icon"><MapPin size={17}/><input value={form.location} onChange={e=>upd('location',e.target.value)} placeholder="Nhập địa điểm thực hiện tác phẩm"/></div></label>
-              <label className="full">Câu chuyện 50–150 chữ *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Kể câu chuyện đằng sau tác phẩm..."/></label>
+              <label className="full">Câu chuyện 50–150 chữ *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Kể câu chuyện đằng sau tác phẩm..."/><small>{storyLength} ký tự · cần tối thiểu 20 ký tự để gửi</small></label>
               <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Tác phẩm này từng tham gia/đạt giải ở chương trình khác</label>
               {form.previousAward&&<label className="full">Thông tin giải/chương trình<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, giải thưởng..."/></label>}
             </div>
@@ -212,16 +277,20 @@ export default function SubmitPage(){
               {result.media?.length>0&&<div className="vault-result"><b>Original Vault</b>{result.media.map(m=><div key={m.id}><span>{m.originalName}</span><small>{m.provider} · SHA256 {m.sha256?.slice(0,12)}…</small></div>)}</div>}
             </div>:<>
               <div className="review-grid">
-                <div><small>Tác phẩm</small><b>{form.title||'Chưa nhập'}</b></div>
-                <div><small>Tác giả</small><b>{form.display||form.name||'Chưa nhập'}</b></div>
-                <div><small>Chủ đề</small><b>{form.theme||'Chưa chọn'}</b></div>
-                <div><small>File gốc</small><b>{files.length} file</b></div>
-                <div><small>Địa điểm</small><b>{form.location||'Chưa nhập'}</b></div>
+                <div><small>Tác phẩm</small><b>{clean(form.title)||'Chưa nhập'}</b></div>
+                <div><small>Họ tên tác giả</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
+                <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
+                <div><small>Chủ đề</small><b>{clean(form.theme)||'Chưa chọn'}</b></div>
+                <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':'Chưa có'}</b></div>
+                <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
+                <div><small>Câu chuyện</small><b>{storyLength>=20?`Đã nhập · ${storyLength} ký tự`:'Chưa đủ nội dung'}</b></div>
                 <div><small>Quyền tác giả</small><b>{form.rightsConfirmed?'Đã xác nhận':'Chưa xác nhận'}</b></div>
               </div>
               {error&&<div className="form-error">{error}</div>}
             </>}
           </div>}
+
+          {error&&step<7&&<div className="form-error">{error}</div>}
 
           {!result&&<div className="wizard-actions">
             <button className="btn btn-outline" onClick={prev} disabled={step===1}><ArrowLeft size={16}/> Quay lại</button>
