@@ -7,6 +7,7 @@ import {
 import { getSiteSettings } from '../services/api.js'
 import '../styles/rules-awards-document-v4.css'
 import '../styles/rules-awards-document-v5.css'
+import '../styles/rules-awards-desktop-reading.css'
 
 export const DEFAULT_AWARDS = [
   {
@@ -178,7 +179,7 @@ export default function RulesAwardsPage(){
               <p className="rules4-lead">Người dân, sinh viên, KTS, photographer, filmmaker, designer, creator — chuyên hay không chuyên; dùng máy ảnh hay điện thoại đều có thể gửi góc nhìn về Hòa Lạc.</p>
               <dl className="rules4-facts">
                 <div className="rules4-fact"><Users/><dt>Đối tượng</dt><dd>Cá nhân hoặc nhóm; tham gia miễn phí.</dd></div>
-                <div className="rules4-fact"><MapPin/><dt>Địa bàn</dt><dd>{COMMUNES.join(' · ')}</dd></div>
+                <div className="rules4-fact"><MapPin/><dt>Địa bàn</dt><dd>{COMMUNES.join(', ')}</dd></div>
                 <div className="rules4-fact"><ShieldCheck/><dt>Dưới 18 tuổi</dt><dd>Cần có sự đồng ý của phụ huynh hoặc người giám hộ.</dd></div>
               </dl>
             </div>
