@@ -1,0 +1,97 @@
+/* HALO HOLA — desktop-only fix for the "Hòa Lạc đang thay đổi" cards.
+   Keeps mobile untouched and separates the CTA arrow from card copy. */
+@media (min-width:981px){
+  .change-band-reference .era-card-reference{
+    position:relative !important;
+    min-height:420px !important;
+    overflow:hidden !important;
+  }
+
+  .change-band-reference .era-card-reference > img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+  }
+
+  .change-band-reference .era-card-reference .era-shade{
+    position:absolute !important;
+    inset:0 !important;
+    z-index:1 !important;
+    background:linear-gradient(180deg,rgba(7,34,25,.02) 38%,rgba(7,34,25,.76) 100%) !important;
+    pointer-events:none !important;
+  }
+
+  .change-band-reference .era-card-reference .era-content{
+    position:absolute !important;
+    z-index:3 !important;
+    left:28px !important;
+    right:28px !important;
+    bottom:28px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:8px !important;
+    min-width:0 !important;
+    padding:0 66px 0 0 !important;
+    color:#fff !important;
+  }
+
+  .change-band-reference .era-card-reference .era-content b{
+    display:block !important;
+    margin:0 !important;
+    font-family:Inter,'DM Sans',system-ui,sans-serif !important;
+    font-size:clamp(1.65rem,1.8vw,2.15rem) !important;
+    line-height:1.05 !important;
+    font-weight:800 !important;
+    letter-spacing:-.035em !important;
+    color:#fff !important;
+  }
+
+  .change-band-reference .era-card-reference .era-content i{
+    display:block !important;
+    width:38px !important;
+    height:2px !important;
+    margin:1px 0 0 !important;
+    background:rgba(255,255,255,.72) !important;
+    border-radius:999px !important;
+  }
+
+  .change-band-reference .era-card-reference .era-content small{
+    display:block !important;
+    margin:0 !important;
+    max-width:100% !important;
+    font-size:.78rem !important;
+    line-height:1.45 !important;
+    font-weight:600 !important;
+    color:rgba(255,255,255,.86) !important;
+    white-space:normal !important;
+  }
+
+  .change-band-reference .era-card-reference .era-arrow{
+    position:absolute !important;
+    z-index:4 !important;
+    left:auto !important;
+    right:24px !important;
+    bottom:24px !important;
+    width:48px !important;
+    height:48px !important;
+    display:grid !important;
+    place-items:center !important;
+    border:1px solid rgba(255,255,255,.62) !important;
+    border-radius:50% !important;
+    background:rgba(10,43,31,.34) !important;
+    backdrop-filter:blur(8px) !important;
+    color:#fff !important;
+    transition:transform .2s ease,background .2s ease !important;
+  }
+
+  .change-band-reference .era-card-reference .era-arrow svg{
+    width:20px !important;
+    height:20px !important;
+  }
+
+  .change-band-reference .era-card-reference:hover .era-arrow{
+    transform:translateX(3px) !important;
+    background:rgba(255,255,255,.16) !important;
+  }
+}
