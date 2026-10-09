@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import BottomNav from './components/BottomNav.jsx'
@@ -77,8 +77,41 @@ function routeSeo(pathname){
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  const { pathname, search, hash } = useLocation()
+
+  useEffect(() => {
+    if (!('scrollRestoration' in window.history)) return undefined
+    const previous = window.history.scrollRestoration
+    window.history.scrollRestoration = 'manual'
+    return () => { window.history.scrollRestoration = previous }
+  }, [])
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [pathname, search, hash])
+
+  useEffect(() => {
+    if (!hash) return undefined
+    const targetId = decodeURIComponent(hash.slice(1))
+    let attempts = 0
+    let timer
+
+    const scrollToHash = () => {
+      const target = document.getElementById(targetId)
+      if (target) {
+        target.scrollIntoView({ block: 'start', behavior: 'auto' })
+        return
+      }
+      attempts += 1
+      if (attempts < 8) timer = window.setTimeout(scrollToHash, 60)
+    }
+
+    scrollToHash()
+    return () => window.clearTimeout(timer)
+  }, [pathname, search, hash])
+
   return null
 }
 
