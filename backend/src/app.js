@@ -13,6 +13,7 @@ import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 
 import authRoutes from './routes/auth.routes.js';
 import submissionsRoutes from './routes/submissions.routes.js';
+import submissionOperationsRoutes from './routes/submissionOperations.routes.js';
 import contentRoutes from './routes/content.routes.js';
 import top52Routes from './routes/top52.routes.js';
 import adminRoutes from './routes/admin.routes.js';
@@ -33,7 +34,8 @@ function isSensitivePath(pathname='') {
   return pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/admin') ||
     pathname.startsWith('/api/jury') ||
-    pathname.startsWith('/api/submissions/lookup');
+    pathname.startsWith('/api/submissions/lookup') ||
+    pathname.startsWith('/api/submission-operations/state');
 }
 
 export function createApp() {
@@ -96,6 +98,7 @@ export function createApp() {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/submissions', submissionsRoutes);
+  app.use('/api/submission-operations', submissionOperationsRoutes);
   app.use('/api/tour-registrations', tourRegistrationsRoutes);
   app.use('/api/community-registrations', communityRegistrationsRoutes);
   app.use('/api/top52', top52Routes);
