@@ -9,9 +9,9 @@ const DEFAULT_CONFIG={
   title:'Thể lệ & Giải thưởng HALO HOLA 2026',
   intro:'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng chính thức của HALO HOLA 2026.',
   officialPdfUrl:'',
-  totalPrize:'56.000.000đ',
+  totalPrize:'29.000.000đ',
   totalAwards:11,
-  prizeSummary:'8 giải chủ đề · 2 giải phụ · 1 giải đặc biệt',
+  prizeSummary:'8 chủ đề · 11 giải',
   juryWeight:70,
   communityWeight:30,
   awards:DEFAULT_AWARDS
@@ -93,9 +93,9 @@ export default function AwardsManager(){
       <label><span>Tiêu đề trang</span><input value={draft.title||''} onChange={e=>patch('title',e.target.value)}/></label>
       <label className="wide"><span>Mô tả đầu trang</span><textarea rows="3" value={draft.intro||''} onChange={e=>patch('intro',e.target.value)}/></label>
       <label className="wide"><span>URL bản thể lệ PDF</span><input value={draft.officialPdfUrl||''} onChange={e=>patch('officialPdfUrl',e.target.value)} placeholder="https://.../the-le-halo-hola-2026.pdf"/><small>Để trống nếu chưa có file chính thức. Khi có URL, trang public sẽ tự hiện nút “Bản PDF”.</small></label>
-      <label><span>Tổng tiền thưởng</span><input value={draft.totalPrize||''} onChange={e=>patch('totalPrize',e.target.value)} placeholder="56.000.000đ"/></label>
+      <label><span>Tổng tiền thưởng</span><input value={draft.totalPrize||''} onChange={e=>patch('totalPrize',e.target.value)} placeholder="29.000.000đ"/></label>
       <label><span>Tổng số giải</span><input type="number" min="0" value={draft.totalAwards??11} onChange={e=>patch('totalAwards',Number(e.target.value))}/></label>
-      <label className="wide"><span>Tóm tắt cơ cấu</span><input value={draft.prizeSummary||''} onChange={e=>patch('prizeSummary',e.target.value)} placeholder="8 giải chủ đề · 2 giải phụ · 1 giải đặc biệt"/></label>
+      <label className="wide"><span>Tóm tắt cơ cấu</span><input value={draft.prizeSummary||''} onChange={e=>patch('prizeSummary',e.target.value)} placeholder="8 chủ đề · 11 giải"/></label>
       <label><span>Tỷ trọng Hội đồng (%)</span><input type="number" min="0" max="100" value={draft.juryWeight??70} onChange={e=>patch('juryWeight',Number(e.target.value))}/></label>
       <label><span>Tỷ trọng cộng đồng (%)</span><input type="number" min="0" max="100" value={draft.communityWeight??30} onChange={e=>patch('communityWeight',Number(e.target.value))}/></label>
     </div>
@@ -115,7 +115,7 @@ export default function AwardsManager(){
             <label><span>Mã nội bộ</span><input value={award.code||''} onChange={e=>patchAward(index,'code',e.target.value)} placeholder="SPECIAL"/></label>
           </div>
           <div className="award-admin-row three">
-            <label><span>Giá trị</span><input value={award.amount||''} onChange={e=>patchAward(index,'amount',e.target.value)} placeholder="10.000.000đ + cúp + chứng nhận"/></label>
+            <label><span>Giá trị</span><input value={award.amount||''} onChange={e=>patchAward(index,'amount',e.target.value)} placeholder="5.000.000đ + cúp + quà"/></label>
             <label><span>Số lượng</span><input value={award.quantity||''} onChange={e=>patchAward(index,'quantity',e.target.value)} placeholder="01 giải"/></label>
             <label><span>Phong cách màu</span><select value={award.tone||'forest'} onChange={e=>patchAward(index,'tone',e.target.value)}><option value="forest">Xanh đậm</option><option value="terra">Cam đất</option><option value="sun">Vàng nắng</option><option value="green">Xanh non</option><option value="beige">Be</option></select></label>
           </div>
@@ -134,7 +134,7 @@ export default function AwardsManager(){
     </div>
 
     <div className="awards-admin-footer">
-      <p><b>Cơ cấu chính thức:</b> 07 giải chủ đề 01–07 × 5 triệu; chủ đề 08 có 06 chủ nhân × 1 triệu; Góc nhìn được yêu thích 3 triệu; Giải Lan tỏa 2 triệu; Danh hiệu HALO HOLA 2026 là 10 triệu + cúp. Tổng tiền mặt 56.000.000đ.</p>
+      <p><b>Cơ cấu chính thức:</b> Danh hiệu HALO HOLA 2026: 5 triệu + cúp + quà; 07 giải chủ đề 01–07: 2 triệu/giải + quà; 06 giải Sắc màu (01 là giải chủ đề 08): 1 triệu/giải + quà; Góc nhìn được yêu thích: 2 triệu + quà; Giải Lan tỏa: 2 triệu + quà. Tổng tiền mặt 29.000.000đ.</p>
       <button className="btn btn-green" onClick={save} disabled={saving}><Save/>{saving?'Đang lưu…':'Lưu thay đổi'}</button>
     </div>
   </div>
