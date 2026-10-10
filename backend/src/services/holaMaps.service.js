@@ -18,6 +18,10 @@ function isImageMime(value) {
   return String(value || '').toLowerCase().startsWith('image/');
 }
 
+function hasCoordinate(value) {
+  return value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+}
+
 function authorId(email = '') {
   return crypto.createHash('sha256').update(String(email).trim().toLowerCase()).digest('hex').slice(0, 32);
 }
@@ -70,9 +74,9 @@ export function buildHolaMapsPayload(submission, media = []) {
   if (!submission) return null;
   const images = media.filter(item => isImageMime(item.mime_type));
   const hasPlace = Boolean(safeText(submission.hola_map_place_id, 160));
-  const lat = Number(submission.location_lat);
-  const lng = Number(submission.location_lng);
-  const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
+  const hasCoords = hasCoordinate(submission.location_lat) && hasCoordinate(submission.location_lng);
+  const lat = hasCoords ? Number(submission.location_lat) : null;
+  const lng = hasCoords ? Number(submission.location_lng) : null;
   if (!images.length || (!hasPlace && !hasCoords)) return null;
 
   const siteUrl = trimSlash(env.haloHolaSiteUrl || env.corsOrigins?.[0] || 'https://halohola.xspace.vn');
