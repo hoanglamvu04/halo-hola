@@ -13,7 +13,6 @@ const HOLA_MAPS_ORIGIN = (() => {
 const HOLA_MAPS_URL = `${HOLA_MAPS_ORIGIN}/`
 
 const clean = value => String(value ?? '').trim()
-const finite = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value))
 const validCoordinates = (lat, lng) => {
   const y = Number(lat)
   const x = Number(lng)
@@ -65,6 +64,13 @@ export default function HolaLocationPicker({ value, onChange }) {
   }, [value.locationPlaceId, value.locationLat, value.locationLng])
 
   useEffect(() => {
+    if (!pickerOpen) return undefined
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previousOverflow }
+  }, [pickerOpen])
+
+  useEffect(() => {
     const q = clean(query)
     if (q.length < 2 || q === clean(value.location)) {
       setResults([])
@@ -97,8 +103,6 @@ export default function HolaLocationPicker({ value, onChange }) {
 
   useEffect(() => {
     const receiveLocation = event => {
-      // Do not trust arbitrary postMessage senders. Only the configured Hola Maps
-      // origin is allowed to select a location for this form.
       if (event.origin !== HOLA_MAPS_ORIGIN) return
       if (event.data?.type !== 'HOLA_MAP_LOCATION_SELECTED') return
 
@@ -129,6 +133,15 @@ export default function HolaLocationPicker({ value, onChange }) {
     window.addEventListener('message', receiveLocation)
     return () => window.removeEventListener('message', receiveLocation)
   }, [onChange])
+
+  useEffect(() => {
+    if (!pickerOpen) return undefined
+    const closeOnEscape = event => {
+      if (event.key === 'Escape') setPickerOpen(false)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [pickerOpen])
 
   const update = patch => {
     onChange({
@@ -252,7 +265,7 @@ export default function HolaLocationPicker({ value, onChange }) {
     <div className="hola-location-heading">
       <div>
         <b>Gắn vị trí trên HOLA Maps *</b>
-        <span>Tìm địa điểm có sẵn hoặc ghim đúng nơi bạn chụp. Mã địa điểm được giữ nguyên nếu bạn chọn một place có sẵn.</span>
+        <span>Tìm địa điểm, tên đường hoặc ghim đúng nơi bạn chụp. Nếu chọn địa điểm có sẵn, mã place sẽ được giữ nguyên.</span>
       </div>
       <a href={HOLA_MAPS_URL} target="_blank" rel="noreferrer">Mở HOLA Maps <ExternalLink size={15}/></a>
     </div>
@@ -263,7 +276,7 @@ export default function HolaLocationPicker({ value, onChange }) {
         <input
           value={query}
           onChange={event => handleText(event.target.value)}
-          placeholder="Tìm hồ, làng, trường, công trình..."
+          placeholder="Tìm địa điểm, tên đường, quán cafe..."
           autoComplete="off"
         />
         {searching && <Loader2 className="spin" size={18}/>} 
@@ -282,7 +295,7 @@ export default function HolaLocationPicker({ value, onChange }) {
           {locating ? 'Đang lấy vị trí...' : 'Dùng vị trí hiện tại'}
         </button>
         <button type="button" className="map-primary" onClick={() => setPickerOpen(true)}>
-          <MapPin size={17}/> Chọn / ghim trên HOLA Maps
+          <MapPin size={17}/> Mở bản đồ để chọn vị trí
         </button>
       </div>
     </>}
@@ -307,7 +320,7 @@ export default function HolaLocationPicker({ value, onChange }) {
     {pickerOpen && <div className="hola-map-picker-modal" role="dialog" aria-modal="true" aria-label="Chọn vị trí trên HOLA Maps">
       <div className="hola-map-picker-panel">
         <header>
-          <div><span>HOLA MAPS</span><b>Ghim vị trí thực hiện tác phẩm</b></div>
+          <div><span>HOLA MAPS</span><b>Chọn vị trí thực hiện tác phẩm</b></div>
           <button type="button" onClick={() => setPickerOpen(false)} aria-label="Đóng HOLA Maps"><X size={20}/></button>
         </header>
         <iframe
@@ -316,7 +329,6 @@ export default function HolaLocationPicker({ value, onChange }) {
           allow="geolocation; fullscreen"
           referrerPolicy="strict-origin-when-cross-origin"
         />
-        <footer>Di chuyển bản đồ đến đúng điểm rồi bấm <b>“Dùng vị trí này”</b>. Vị trí sẽ tự động trả về form HALO HOLA.</footer>
       </div>
     </div>}
   </div>
