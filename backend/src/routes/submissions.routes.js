@@ -5,6 +5,7 @@ import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimi
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
 import { createSubmission, lookupSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
+import { confirmFacebookSubmission } from '../services/facebookCompletion.service.js';
 import { queueSubmissionSync } from '../services/holaMaps.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
 import { verifyToken } from '../utils/jwt.js';
@@ -59,6 +60,30 @@ router.get('/lookup', lookupRateLimiter, async (req, res, next) => {
   }
 });
 
+router.post('/facebook-complete', lookupRateLimiter, async (req, res, next) => {
+  try {
+    const code = String(req.body?.code || '').trim();
+    const email = String(req.body?.email || '').trim();
+
+    if (!/^HH26-[A-Z0-9-]{3,}$/i.test(code) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new AppError('Mã tác phẩm hoặc email chưa hợp lệ.', 400);
+    }
+
+    const confirmed = await confirmFacebookSubmission({ code, email });
+    if (!confirmed) throw new AppError('Không tìm thấy tác phẩm để xác nhận bước Facebook.', 404);
+
+    res.set('Cache-Control','no-store');
+    res.json({
+      ok: true,
+      code: confirmed.code,
+      facebookCompletionStatus: confirmed.facebookCompletionStatus,
+      facebookCompletedAt: confirmed.facebookCompletedAt
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Stable public HALO media URL. For private R2 originals this endpoint issues a
 // fresh, short-lived redirect so Hola Maps never stores a temporary signed URL.
 router.get('/media/:mediaId/halo', async (req, res, next) => {
@@ -99,6 +124,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       code: created.code,
       title: created.title,
       status: created.status,
+      facebookCompletionStatus: created.facebook_completion_status || 'PENDING',
       createdAt: created.created_at,
       holaMapsSyncStatus: 'PENDING',
       media: created.media.map((m) => ({
