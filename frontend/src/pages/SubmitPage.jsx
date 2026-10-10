@@ -1,12 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft, ArrowRight, Camera, Video, FileText, Palette, Upload,
-  Check, Copy, Image as ImageIcon, Loader2, Save, ShieldCheck
+  Check, Copy, Image as ImageIcon, Loader2, Save, ShieldCheck,
+  ExternalLink, Share2
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
 import HolaLocationPicker from '../components/HolaLocationPicker.jsx'
-import { getColors, getThemes, submitArtwork } from '../services/api.js'
+import { getColors, getSiteSettings, getThemes, submitArtwork } from '../services/api.js'
+import {
+  buildSubmissionFacebookCaption,
+  CHECKIN_GROUP_SEARCH_URL,
+  primeCaptionClipboard,
+  resolveCheckinGroupUrl,
+  shareSubmission
+} from '../utils/facebookShare.js'
 import '../styles/submit-success-receipt.css'
 
 const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
@@ -42,6 +50,7 @@ export default function SubmitPage(){
   })
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
+  const [siteSettings,setSiteSettings]=useState({})
   const [files,setFiles]=useState([])
   const [previewUrl,setPreviewUrl]=useState('')
   const [submitting,setSubmitting]=useState(false)
@@ -49,12 +58,15 @@ export default function SubmitPage(){
   const [error,setError]=useState('')
   const [savedAt,setSavedAt]=useState(null)
   const [copiedAction,setCopiedAction]=useState('')
+  const [shareNotice,setShareNotice]=useState('')
   const inputRef=useRef(null)
   const saveTimer=useRef(null)
   const code=useMemo(()=>result?.code || 'HH26-XXXXX',[result])
   const types=[['Photo','Ảnh đơn, bộ ảnh, photo story',Camera],['Video','Reel, short video, phim ngắn, timelapse',Video],['Story & Creative','Câu chuyện, tản văn, ký ức, audio story',FileText],['Art & Design','Tranh, ký họa, illustration, digital art, poster',Palette]]
   const lookupPath=result?.code?`/tra-cuu?code=${encodeURIComponent(result.code)}`:'/tra-cuu'
   const lookupLink=result?.code&&typeof window!=='undefined'?`${window.location.origin}${lookupPath}`:''
+  const checkinGroupUrl=useMemo(()=>resolveCheckinGroupUrl(siteSettings),[siteSettings])
+  const facebookCaption=useMemo(()=>result?buildSubmissionFacebookCaption({form,code:result.code}):'',[form,result])
 
   useEffect(()=>{
     Promise.all([getThemes(),getColors()]).then(([themeRows,colorRows])=>{
@@ -67,6 +79,10 @@ export default function SubmitPage(){
         color:current.color||nextColors[0]?.name||''
       }))
     }).catch(err=>setError(err.message))
+  },[])
+
+  useEffect(()=>{
+    getSiteSettings().then(settings=>setSiteSettings(settings||{})).catch(()=>{})
   },[])
 
   useEffect(()=>{
@@ -106,6 +122,48 @@ export default function SubmitPage(){
     }catch{
       setCopiedAction('error')
       window.setTimeout(()=>setCopiedAction(''),1800)
+    }
+  }
+
+  const showCopiedCaptionState=()=>{
+    setCopiedAction('facebook-caption')
+    window.setTimeout(()=>setCopiedAction(current=>current==='facebook-caption'?'':current),2200)
+  }
+
+  const openCheckinGroup=()=>{
+    if(!facebookCaption) return
+    primeCaptionClipboard(facebookCaption)
+    showCopiedCaptionState()
+    const target=checkinGroupUrl || CHECKIN_GROUP_SEARCH_URL
+    window.open(target,'_blank','noopener,noreferrer')
+    setShareNotice(checkinGroupUrl
+      ? 'Đã sao chép sẵn nội dung và mở CHECK IN HOALAC. Nếu Facebook chưa giữ phần chữ, chỉ cần Dán rồi bấm Đăng.'
+      : 'Đã sao chép sẵn nội dung. Chưa có link Group chính thức trong cấu hình nên Facebook đang mở trang tìm CHECK IN HOALAC.')
+  }
+
+  const shareOnFacebook=async()=>{
+    if(!facebookCaption) return
+    setShareNotice('')
+
+    if(typeof navigator==='undefined'||typeof navigator.share!=='function'){
+      openCheckinGroup()
+      return
+    }
+
+    try{
+      const status=await shareSubmission({caption:facebookCaption,url:lookupLink,files})
+      showCopiedCaptionState()
+      setShareNotice(status.filesIncluded
+        ? 'Đã mở bảng chia sẻ với ảnh/video. Nội dung cũng đã được sao chép sẵn để bạn Dán nếu Facebook không giữ caption.'
+        : 'Đã mở bảng chia sẻ và sao chép sẵn caption. Nếu Facebook không nhận file từ trình duyệt này, hãy dùng nút mở Group và chọn lại ảnh trên thiết bị.')
+    }catch(err){
+      if(err?.name==='AbortError'){
+        setShareNotice('Bạn đã đóng bảng chia sẻ. Nội dung vẫn được giữ sẵn để chia sẻ lại khi cần.')
+        return
+      }
+      primeCaptionClipboard(facebookCaption)
+      showCopiedCaptionState()
+      setShareNotice('Thiết bị chưa mở được bảng chia sẻ. Nội dung đã được sao chép; dùng nút “Mở CHECK IN HOALAC” để tiếp tục.')
     }
   }
 
@@ -167,6 +225,7 @@ export default function SubmitPage(){
     setResult(null)
     setError('')
     setCopiedAction('')
+    setShareNotice('')
   }
 
   const submit = async () => {
@@ -334,6 +393,32 @@ export default function SubmitPage(){
                   <b>Khi tra cứu:</b> dùng mã <strong>{result.code}</strong> và email đã gửi là <strong>{clean(form.email)}</strong>.
                   {copiedAction==='error'&&<span> Trình duyệt không cho phép sao chép tự động, hãy giữ và sao chép thủ công.</span>}
                 </div>
+              </div>
+
+              <div className="submit-facebook-share">
+                <div className="submit-facebook-share-head">
+                  <span>CHIA SẺ GÓC NHÌN</span>
+                  <h3>Đăng tiếp lên CHECK IN HOALAC</h3>
+                  <p>Ảnh/video và nội dung được chuẩn bị từ chính tác phẩm vừa gửi. Bạn vẫn là người kiểm tra và bấm Đăng trên Facebook.</p>
+                </div>
+
+                <div className="submit-facebook-caption">
+                  <div className="submit-facebook-caption-head">
+                    <div><small>Nội dung Facebook đã chuẩn bị</small><b>Có thể sao chép, chỉnh lại trước khi đăng</b></div>
+                    <button type="button" onClick={()=>copyValue(facebookCaption,'facebook-caption')}><Copy size={17}/>{copiedAction==='facebook-caption'?'Đã sao chép':'Sao chép'}</button>
+                  </div>
+                  <pre>{facebookCaption}</pre>
+                </div>
+
+                <div className="submit-facebook-actions">
+                  <button type="button" className="btn submit-facebook-primary" onClick={shareOnFacebook}><Share2 size={18}/> Đăng bài lên Facebook</button>
+                  <button type="button" className="btn btn-outline" onClick={openCheckinGroup}><ExternalLink size={18}/> {checkinGroupUrl?'Mở CHECK IN HOALAC':'Tìm CHECK IN HOALAC'}</button>
+                </div>
+
+                <div className="submit-facebook-tip">
+                  <b>Đã có phương án dự phòng:</b> trước khi mở Facebook, caption được sao chép sẵn. Nếu app Facebook không giữ phần chữ, chỉ cần nhấn Dán rồi Đăng.
+                </div>
+                {shareNotice&&<div className="submit-facebook-notice">{shareNotice}</div>}
               </div>
 
               <div className="success-actions">
