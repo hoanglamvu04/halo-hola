@@ -1,0 +1,16 @@
+/* HALO HOLA — iPhone/iPad submission polish
+   Keep editable controls at >=16px so iOS Safari does not auto-zoom on focus. */
+
+@media (max-width: 900px) {
+  .submit-page input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  .submit-page textarea,
+  .submit-page select {
+    font-size: 16px !important;
+  }
+
+  .submit-page input,
+  .submit-page textarea,
+  .submit-page select {
+    -webkit-text-size-adjust: 100%;
+  }
+}
