@@ -6,7 +6,11 @@ import { client, getSiteSettings, getThemes } from '../services/api.js'
 import { CHECKIN_GROUP_SEARCH_URL, primeCaptionClipboard, resolveCheckinGroupUrl } from '../utils/facebookShare.js'
 
 const TYPES=['Photo','Video','Story & Creative','Art & Design']
-const emptyForm={name:'',displayName:'',email:'',phone:'',title:'',type:'Photo',theme:'',color:'',location:'',story:'',rightsConfirmed:false,allowMediaUse:true,allowNewsletter:false}
+const emptyForm={
+  name:'',displayName:'',email:'',phone:'',title:'',type:'Photo',theme:'',color:'',location:'',story:'',
+  rightsConfirmed:false,imageConsentConfirmed:false,isMinor:false,guardianName:'',guardianConsent:false,
+  allowMediaUse:true,allowNewsletter:false
+}
 
 function clean(value){return String(value??'').trim()}
 function isIOS(){
@@ -94,8 +98,10 @@ export default function SubmissionQuickMode(){
   const createQuick=async(event)=>{
     event.preventDefault()
     setError('')
-    if(clean(form.name).length<2||!/^\S+@\S+\.\S+$/.test(clean(form.email))||clean(form.phone).length<7||clean(form.title).length<2||!clean(form.theme)||clean(form.location).length<2||!form.rightsConfirmed){
-      setError('Vui lòng điền đủ họ tên, email, số điện thoại, tên tác phẩm, chủ đề, địa điểm và xác nhận quyền tác giả.')
+    const missingCore=clean(form.name).length<2||!/^\S+@\S+\.\S+$/.test(clean(form.email))||clean(form.phone).length<7||clean(form.title).length<2||!clean(form.theme)||clean(form.location).length<2
+    const missingConsent=!form.rightsConfirmed||!form.imageConsentConfirmed||(form.isMinor&&(clean(form.guardianName).length<2||!form.guardianConsent))
+    if(missingCore||missingConsent){
+      setError('Vui lòng điền đủ thông tin bắt buộc, xác nhận quyền tác giả/quyền hình ảnh và thông tin người giám hộ nếu bạn dưới 18 tuổi.')
       return
     }
     setBusy(true)
@@ -167,6 +173,9 @@ export default function SubmissionQuickMode(){
           <label className="wide">Câu chuyện ngắn <textarea rows="4" value={form.story} onChange={e=>update('story',e.target.value)} placeholder="Có thể bổ sung sau; nếu có hãy kể vài dòng về góc nhìn này..."/></label>
         </div>
         <label className="quick-check"><input type="checkbox" checked={form.rightsConfirmed} onChange={e=>update('rightsConfirmed',e.target.checked)}/><span><b>Tôi xác nhận mình có quyền dự thi với tác phẩm này.</b><small>BTC có thể yêu cầu file gốc nếu tác phẩm vào vòng tuyển chọn.</small></span></label>
+        <label className="quick-check"><input type="checkbox" checked={form.imageConsentConfirmed} onChange={e=>update('imageConsentConfirmed',e.target.checked)}/><span><b>Tôi đã có sự đồng ý phù hợp về quyền hình ảnh (nếu tác phẩm có người có thể nhận diện).</b><small>Xác nhận này giúp bài đủ điều kiện để BTC xem xét công khai trên HALO HOLA Explore.</small></span></label>
+        <label className="quick-check"><input type="checkbox" checked={form.isMinor} onChange={e=>update('isMinor',e.target.checked)}/><span><b>Tôi chưa đủ 18 tuổi.</b><small>Nếu chọn, cần thông tin và xác nhận của người giám hộ.</small></span></label>
+        {form.isMinor&&<div className="quick-guardian"><label>Họ tên người giám hộ *<input value={form.guardianName} onChange={e=>update('guardianName',e.target.value)} placeholder="Họ và tên người giám hộ"/></label><label className="quick-check"><input type="checkbox" checked={form.guardianConsent} onChange={e=>update('guardianConsent',e.target.checked)}/><span><b>Người giám hộ đồng ý cho tôi tham gia HALO HOLA 2026.</b></span></label></div>}
         {error&&<div className="quick-error">{error}</div>}
         <button className="quick-primary" disabled={busy}>{busy?<><Loader2 className="spin"/>Đang tạo Mã dự thi...</>:<>Tạo Mã dự thi · Sang bước Facebook</>}</button>
       </form>:done?<div className="quick-complete">
