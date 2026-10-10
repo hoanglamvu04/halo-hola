@@ -176,7 +176,7 @@ export async function lookupSubmission(code, email) {
   const { rows } = await pool.query(
     `SELECT s.id,s.code,s.title,s.type,s.theme,s.color,s.location,
        s.hola_map_place_id,s.hola_map_place_slug,s.location_lat,s.location_lng,s.location_address,s.location_source,
-       s.status,s.created_at,s.updated_at,
+       s.status,s.hola_maps_sync_status,s.hola_maps_last_sync_error,s.hola_maps_last_synced_at,s.created_at,s.updated_at,
        COUNT(m.id)::int AS media_count,
        COALESCE(SUM(m.size_bytes),0)::bigint AS total_bytes
      FROM submissions s
@@ -271,6 +271,53 @@ export async function updateJuryNote(id, note) {
   return rows[0] || null;
 }
 
+export async function updateSubmissionContent(id, input = {}) {
+  const { rows: currentRows } = await pool.query('SELECT * FROM submissions WHERE id=$1 LIMIT 1', [id]);
+  const current = currentRows[0];
+  if (!current) return null;
+  const value = (key, currentKey = key) => Object.prototype.hasOwnProperty.call(input, key) ? input[key] : current[currentKey];
+  const { rows } = await pool.query(
+    `UPDATE submissions SET
+       title=$2, story=$3, location=$4, hola_map_place_id=$5, hola_map_place_slug=$6,
+       location_lat=$7, location_lng=$8, location_address=$9, location_source=$10,
+       hola_maps_sync_status='PENDING', hola_maps_last_sync_error=NULL, updated_at=NOW()
+     WHERE id=$1 RETURNING *`,
+    [
+      id,
+      value('title'),
+      value('story'),
+      value('location'),
+      value('locationPlaceId', 'hola_map_place_id') || null,
+      value('locationPlaceSlug', 'hola_map_place_slug') || null,
+      value('locationLat', 'location_lat') === '' ? null : value('locationLat', 'location_lat'),
+      value('locationLng', 'location_lng') === '' ? null : value('locationLng', 'location_lng'),
+      value('locationAddress', 'location_address') || null,
+      value('locationSource', 'location_source') || 'TEXT'
+    ]
+  );
+  return rows[0] || null;
+}
+
+export async function replaceSubmissionFiles(id, files = []) {
+  return withTransaction(async (client) => {
+    const { rows } = await client.query('SELECT * FROM submissions WHERE id=$1 FOR UPDATE', [id]);
+    const submission = rows[0];
+    if (!submission) return null;
+    await client.query('DELETE FROM submission_media WHERE submission_id=$1', [id]);
+    const media = await storeOriginalFiles(client, submission, files);
+    await client.query(
+      `UPDATE submissions SET hola_maps_sync_status='PENDING',hola_maps_last_sync_error=NULL,updated_at=NOW() WHERE id=$1`,
+      [id]
+    );
+    return { ...submission, media };
+  });
+}
+
+export async function deleteSubmission(id) {
+  const { rows } = await pool.query('DELETE FROM submissions WHERE id=$1 RETURNING id,code', [id]);
+  return rows[0] || null;
+}
+
 export async function getMediaDownloadUrl(mediaId) {
   const { rows } = await pool.query(
     `SELECT id,url,original_name,storage_provider,bucket,object_key
@@ -293,5 +340,35 @@ export async function getMediaDownloadUrl(mediaId) {
   }
 
   const base = (process.env.PUBLIC_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+  return { filename: media.original_name, url: media.url?.startsWith('/') ? base + media.url : media.url };
+}
+
+export async function getHaloPublicMediaUrl(mediaId) {
+  const { rows } = await pool.query(
+    `SELECT m.id,m.url,m.original_name,m.mime_type,m.storage_provider,m.bucket,m.object_key,
+            s.allow_media_use,s.hola_map_place_id,s.location_lat,s.location_lng
+     FROM submission_media m
+     JOIN submissions s ON s.id=m.submission_id
+     WHERE m.id=$1 LIMIT 1`,
+    [mediaId]
+  );
+  const media = rows[0];
+  if (!media || !media.allow_media_use || !String(media.mime_type || '').toLowerCase().startsWith('image/')) return null;
+  const hasPlace = Boolean(media.hola_map_place_id);
+  const hasCoords = Number.isFinite(Number(media.location_lat)) && Number.isFinite(Number(media.location_lng));
+  if (!hasPlace && !hasCoords) return null;
+
+  if (media.storage_provider === 'R2' && media.bucket && media.object_key) {
+    return {
+      filename: media.original_name,
+      url: await createDownloadUrl({
+        client: createR2Client(),
+        bucket: media.bucket,
+        key: media.object_key,
+        expiresIn: 300
+      })
+    };
+  }
+  const base = env.publicBaseUrl.replace(/\/$/, '');
   return { filename: media.original_name, url: media.url?.startsWith('/') ? base + media.url : media.url };
 }
