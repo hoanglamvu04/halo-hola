@@ -29,6 +29,7 @@ import './styles/tour-register-modal.css'
 import './styles/stories-mobile-spacing-fix.css'
 import './styles/submit-page-modern.css'
 import './styles/submit-hola-location-picker.css'
+import './styles/submission-facebook-required.css'
 import './styles/home-hero-mobile-spacing-tight.css'
 import './styles/campaign-admin-runtime.css'
 import './styles/campaign-mobile-readability-fix.css'
@@ -49,6 +50,7 @@ import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
 import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
+import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -57,6 +59,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
         <MobileHeroExperience />
         <CampaignRuntimeCustomizer />
+        <SubmissionFacebookGate />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
