@@ -49,12 +49,12 @@ router.get('/lookup', lookupRateLimiter, async (req, res, next) => {
   try {
     const { code, email } = lookupSchema.parse(req.query);
     const item = await lookupSubmission(code, email);
-    if (!item) throw new AppError('Không tìm thấy tác phẩm với mã và email này.', 404);
+    if (!item) throw new AppError('Không tìm thấy bài dự thi với mã và email này.', 404);
     res.set('Cache-Control','no-store');
     res.json(item);
   } catch (error) {
     if (error?.name === 'ZodError') {
-      return next(new AppError('Mã tác phẩm hoặc email chưa hợp lệ.', 400, error.issues));
+      return next(new AppError('Mã dự thi hoặc email chưa hợp lệ.', 400, error.issues));
     }
     return next(error);
   }
@@ -64,18 +64,21 @@ router.post('/facebook-complete', lookupRateLimiter, async (req, res, next) => {
   try {
     const code = String(req.body?.code || '').trim();
     const email = String(req.body?.email || '').trim();
+    const facebookPostUrl = String(req.body?.facebookPostUrl || '').trim();
 
     if (!/^HH26-[A-Z0-9-]{3,}$/i.test(code) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw new AppError('Mã tác phẩm hoặc email chưa hợp lệ.', 400);
+      throw new AppError('Mã dự thi hoặc email chưa hợp lệ.', 400);
     }
+    if (!facebookPostUrl) throw new AppError('Cần dán link bài Facebook để hoàn tất bài dự thi.', 400);
 
-    const confirmed = await confirmFacebookSubmission({ code, email });
-    if (!confirmed) throw new AppError('Không tìm thấy tác phẩm để xác nhận bước Facebook.', 404);
+    const confirmed = await confirmFacebookSubmission({ code, email, facebookPostUrl });
+    if (!confirmed) throw new AppError('Không thể xác nhận. Hãy kiểm tra mã, email và link bài Facebook.', 400);
 
     res.set('Cache-Control','no-store');
     res.json({
       ok: true,
       code: confirmed.code,
+      facebookPostUrl: confirmed.facebookPostUrl,
       facebookCompletionStatus: confirmed.facebookCompletionStatus,
       facebookCompletedAt: confirmed.facebookCompletedAt
     });
@@ -124,6 +127,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       code: created.code,
       title: created.title,
       status: created.status,
+      source: created.submission_source || 'WEB',
       facebookCompletionStatus: created.facebook_completion_status || 'PENDING',
       createdAt: created.created_at,
       holaMapsSyncStatus: 'PENDING',
