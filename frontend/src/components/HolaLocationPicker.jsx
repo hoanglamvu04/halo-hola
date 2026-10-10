@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CheckCircle2, Crosshair, ExternalLink, Loader2, MapPin, Search, X } from 'lucide-react'
 import {
   getHolaNearbyPlaces,
@@ -65,9 +66,14 @@ export default function HolaLocationPicker({ value, onChange }) {
 
   useEffect(() => {
     if (!pickerOpen) return undefined
-    const previousOverflow = document.body.style.overflow
+    const previousBodyOverflow = document.body.style.overflow
+    const previousHtmlOverflow = document.documentElement.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = previousOverflow }
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousBodyOverflow
+      document.documentElement.style.overflow = previousHtmlOverflow
+    }
   }, [pickerOpen])
 
   useEffect(() => {
@@ -261,75 +267,83 @@ export default function HolaLocationPicker({ value, onChange }) {
   const primaryLabel = clean(value.location) || (position ? 'Vị trí đã ghim' : '')
   const secondaryLabel = clean(value.locationAddress) || (position ? `${position[0].toFixed(6)}, ${position[1].toFixed(6)}` : '')
 
-  return <div className="hola-location-picker">
-    <div className="hola-location-heading">
-      <div>
-        <b>Gắn vị trí trên HOLA Maps *</b>
-        <span>Tìm địa điểm, tên đường hoặc ghim đúng nơi bạn chụp. Nếu chọn địa điểm có sẵn, mã place sẽ được giữ nguyên.</span>
-      </div>
-      <a href={HOLA_MAPS_URL} target="_blank" rel="noreferrer">Mở HOLA Maps <ExternalLink size={15}/></a>
-    </div>
+  const pickerModal = pickerOpen && typeof document !== 'undefined'
+    ? createPortal(
+      <div className="hola-map-picker-modal" role="dialog" aria-modal="true" aria-label="Chọn vị trí trên HOLA Maps">
+        <div className="hola-map-picker-panel">
+          <header>
+            <div><span>HOLA MAPS</span><b>Chọn vị trí thực hiện tác phẩm</b></div>
+            <button type="button" onClick={() => setPickerOpen(false)} aria-label="Đóng HOLA Maps"><X size={20}/></button>
+          </header>
+          <iframe
+            src={pickerUrl}
+            title="HOLA Maps — chọn vị trí tác phẩm"
+            allow="geolocation; fullscreen"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+      </div>,
+      document.body
+    )
+    : null
 
-    {!hasStructuredLocation && <>
-      <div className="hola-location-search">
-        <Search size={18}/>
-        <input
-          value={query}
-          onChange={event => handleText(event.target.value)}
-          placeholder="Tìm địa điểm, tên đường, quán cafe..."
-          autoComplete="off"
-        />
-        {searching && <Loader2 className="spin" size={18}/>} 
+  return <>
+    <div className="hola-location-picker">
+      <div className="hola-location-heading">
+        <div>
+          <b>Gắn vị trí trên HOLA Maps *</b>
+          <span>Tìm địa điểm, tên đường hoặc ghim đúng nơi bạn chụp. Nếu chọn địa điểm có sẵn, mã place sẽ được giữ nguyên.</span>
+        </div>
+        <a href={HOLA_MAPS_URL} target="_blank" rel="noreferrer">Mở HOLA Maps <ExternalLink size={15}/></a>
       </div>
 
-      {results.length > 0 && <div className="hola-location-results">
-        {results.map(place => <button type="button" key={place.id || place.slug || place.name} onClick={() => selectPlace(place)}>
-          <MapPin size={17}/>
-          <span><b>{place.name}</b><small>{place.address || place.category || 'Hòa Lạc'}</small></span>
-        </button>)}
+      {!hasStructuredLocation && <>
+        <div className="hola-location-search">
+          <Search size={18}/>
+          <input
+            value={query}
+            onChange={event => handleText(event.target.value)}
+            placeholder="Tìm địa điểm, tên đường, quán cafe..."
+            autoComplete="off"
+          />
+          {searching && <Loader2 className="spin" size={18}/>} 
+        </div>
+
+        {results.length > 0 && <div className="hola-location-results">
+          {results.map(place => <button type="button" key={place.id || place.slug || place.name} onClick={() => selectPlace(place)}>
+            <MapPin size={17}/>
+            <span><b>{place.name}</b><small>{place.address || place.category || 'Hòa Lạc'}</small></span>
+          </button>)}
+        </div>}
+
+        <div className="hola-location-actions">
+          <button type="button" onClick={useCurrentLocation} disabled={locating}>
+            {locating ? <Loader2 className="spin" size={17}/> : <Crosshair size={17}/>} 
+            {locating ? 'Đang lấy vị trí...' : 'Dùng vị trí hiện tại'}
+          </button>
+          <button type="button" className="map-primary" onClick={() => setPickerOpen(true)}>
+            <MapPin size={17}/> Mở bản đồ để chọn vị trí
+          </button>
+        </div>
+      </>}
+
+      {hasStructuredLocation && <div className="hola-location-selected hola-location-selected-compact">
+        <CheckCircle2 size={19}/>
+        <div className="hola-location-selected-copy">
+          <b><MapPin size={15}/>{primaryLabel || 'Vị trí đã ghim'}</b>
+          {secondaryLabel && <span>{secondaryLabel}</span>}
+          {value.locationPlaceId && <small>Địa điểm HOLA Maps · ID {value.locationPlaceId}</small>}
+        </div>
+        <div className="hola-location-selected-actions">
+          <button type="button" onClick={() => setPickerOpen(true)}>Đổi vị trí</button>
+          <button type="button" className="danger" onClick={clearLocation}>Xóa</button>
+        </div>
       </div>}
 
-      <div className="hola-location-actions">
-        <button type="button" onClick={useCurrentLocation} disabled={locating}>
-          {locating ? <Loader2 className="spin" size={17}/> : <Crosshair size={17}/>} 
-          {locating ? 'Đang lấy vị trí...' : 'Dùng vị trí hiện tại'}
-        </button>
-        <button type="button" className="map-primary" onClick={() => setPickerOpen(true)}>
-          <MapPin size={17}/> Mở bản đồ để chọn vị trí
-        </button>
-      </div>
-    </>}
-
-    {hasStructuredLocation && <div className="hola-location-selected hola-location-selected-compact">
-      <CheckCircle2 size={19}/>
-      <div className="hola-location-selected-copy">
-        <b><MapPin size={15}/>{primaryLabel || 'Vị trí đã ghim'}</b>
-        {secondaryLabel && <span>{secondaryLabel}</span>}
-        {value.locationPlaceId && <small>Địa điểm HOLA Maps · ID {value.locationPlaceId}</small>}
-      </div>
-      <div className="hola-location-selected-actions">
-        <button type="button" onClick={() => setPickerOpen(true)}>Đổi vị trí</button>
-        <button type="button" className="danger" onClick={clearLocation}>Xóa</button>
-      </div>
-    </div>}
-
-    {mapMessage && <div className="hola-location-note success">{mapMessage}</div>}
-    {searchError && <div className="hola-location-note error">{searchError}</div>}
-    <div className="hola-location-note">Bài có ảnh + vị trí sẽ được backend HALO HOLA đồng bộ server-to-server sang gallery HOLA Maps. Shared secret không bao giờ được đưa xuống trình duyệt.</div>
-
-    {pickerOpen && <div className="hola-map-picker-modal" role="dialog" aria-modal="true" aria-label="Chọn vị trí trên HOLA Maps">
-      <div className="hola-map-picker-panel">
-        <header>
-          <div><span>HOLA MAPS</span><b>Chọn vị trí thực hiện tác phẩm</b></div>
-          <button type="button" onClick={() => setPickerOpen(false)} aria-label="Đóng HOLA Maps"><X size={20}/></button>
-        </header>
-        <iframe
-          src={pickerUrl}
-          title="HOLA Maps — chọn vị trí tác phẩm"
-          allow="geolocation; fullscreen"
-          referrerPolicy="strict-origin-when-cross-origin"
-        />
-      </div>
-    </div>}
-  </div>
+      {mapMessage && <div className="hola-location-note success">{mapMessage}</div>}
+      {searchError && <div className="hola-location-note error">{searchError}</div>}
+      <div className="hola-location-note">Bài có ảnh + vị trí sẽ được backend HALO HOLA đồng bộ server-to-server sang gallery HOLA Maps. Shared secret không bao giờ được đưa xuống trình duyệt.</div>
+    </div>
+    {pickerModal}
+  </>
 }
