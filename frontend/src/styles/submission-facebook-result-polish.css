@@ -1,0 +1,163 @@
+.submit-page:has(.facebook-required-flow) .stepper{
+  display:none!important;
+}
+
+.submit-page:has(.facebook-required-flow) .submit-layout{
+  grid-template-columns:minmax(0,860px)!important;
+  justify-content:center;
+  gap:0!important;
+}
+
+.submit-page:has(.facebook-required-flow) .submission-preview{
+  display:none!important;
+}
+
+.submit-page:has(.facebook-required-flow) .wizard-card{
+  min-width:0;
+}
+
+.submit-page:has(.facebook-required-flow) .wizard-card > .eyebrow,
+.submit-page:has(.facebook-required-flow) .wizard-card > div > h2{
+  display:none!important;
+}
+
+.facebook-required-flow{
+  display:grid!important;
+  gap:18px!important;
+}
+
+/* The required Facebook step must be the first thing seen after the form is saved. */
+.facebook-required-flow > .submit-facebook-share{
+  order:-20!important;
+}
+
+.facebook-required-flow > .submit-success-receipt{
+  order:-10!important;
+}
+
+.facebook-required-flow > .success-actions{
+  order:20!important;
+}
+
+.facebook-required-flow > .vault-result{
+  order:30!important;
+}
+
+.facebook-required-flow .submit-facebook-share{
+  overflow:hidden;
+}
+
+.facebook-required-flow:not(.facebook-confirmed) .submit-facebook-share{
+  border-width:2px!important;
+  box-shadow:0 24px 54px rgba(49,95,159,.14)!important;
+}
+
+.facebook-required-flow:not(.facebook-confirmed) .facebook-required-badge{
+  box-shadow:0 8px 20px rgba(185,81,49,.08);
+}
+
+.facebook-required-flow:not(.facebook-confirmed) .submit-facebook-primary{
+  min-height:58px!important;
+  font-size:1rem;
+}
+
+.facebook-required-flow:not(.facebook-confirmed) .facebook-required-finish:not(:disabled){
+  min-height:56px!important;
+}
+
+/* Once Facebook is confirmed, sharing controls are no longer useful. Keep the result concise. */
+.facebook-required-flow.facebook-confirmed .submit-facebook-caption,
+.facebook-required-flow.facebook-confirmed .submit-facebook-actions,
+.facebook-required-flow.facebook-confirmed .submit-facebook-tip,
+.facebook-required-flow.facebook-confirmed .submit-facebook-notice,
+.facebook-required-flow.facebook-confirmed .facebook-required-confirm{
+  display:none!important;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-facebook-share{
+  gap:0!important;
+  padding:22px!important;
+  border:1px solid rgba(23,100,63,.2)!important;
+  box-shadow:0 14px 34px rgba(23,100,63,.07)!important;
+}
+
+.facebook-required-flow.facebook-confirmed .facebook-required-intro{
+  gap:12px;
+  padding:0;
+}
+
+.facebook-required-flow.facebook-confirmed .facebook-required-intro > p{
+  max-width:660px;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-receipt{
+  padding:22px!important;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-icon{
+  width:46px;
+  height:46px;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-icon svg{
+  width:23px;
+  height:23px;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-receipt > p{
+  max-width:620px;
+}
+
+@media (max-width:720px){
+  .submit-page:has(.facebook-required-flow){
+    padding-top:18px!important;
+  }
+
+  .submit-page:has(.facebook-required-flow) .wizard-card{
+    padding-top:0!important;
+  }
+
+  .facebook-required-flow{
+    gap:14px!important;
+  }
+
+  .facebook-required-flow > .submit-facebook-share{
+    margin-top:0;
+  }
+
+  .facebook-required-flow:not(.facebook-confirmed) .submit-facebook-share{
+    padding:17px 14px!important;
+  }
+
+  .facebook-required-flow:not(.facebook-confirmed) .submit-facebook-primary,
+  .facebook-required-flow:not(.facebook-confirmed) .facebook-required-finish{
+    min-height:54px!important;
+    font-size:.95rem;
+  }
+
+  .facebook-required-flow .facebook-required-progress{
+    margin-bottom:4px;
+  }
+
+  .facebook-required-flow.facebook-confirmed .submit-facebook-share{
+    padding:18px 15px!important;
+  }
+
+  .facebook-required-flow.facebook-confirmed .facebook-required-intro h3{
+    font-size:1.45rem;
+    line-height:1.08;
+  }
+
+  .facebook-required-flow.facebook-confirmed .facebook-required-intro > p{
+    font-size:.94rem;
+    line-height:1.55;
+  }
+
+  .facebook-required-flow.facebook-confirmed .submit-success-receipt{
+    padding:18px 15px!important;
+  }
+
+  .facebook-required-flow.facebook-confirmed .success-actions{
+    margin-top:0;
+  }
+}
