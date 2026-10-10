@@ -14,6 +14,11 @@
 
 .submit-page:has(.facebook-required-flow) .wizard-card{
   min-width:0;
+  padding:26px!important;
+  border:1px solid rgba(23,63,52,.09)!important;
+  border-radius:28px!important;
+  background:linear-gradient(180deg,#fff 0%,#fbfaf6 100%)!important;
+  box-shadow:0 24px 64px rgba(36,50,45,.08)!important;
 }
 
 .submit-page:has(.facebook-required-flow) .wizard-card > .eyebrow,
@@ -26,28 +31,15 @@
   gap:18px!important;
 }
 
-/* The required Facebook step must be the first thing seen after the form is saved. */
-.facebook-required-flow > .submit-facebook-share{
+/* Stage 2: Facebook is a real submission step, not a post-submit extra. */
+.facebook-required-flow:not(.facebook-confirmed) > .submit-success-receipt,
+.facebook-required-flow:not(.facebook-confirmed) > .success-actions,
+.facebook-required-flow:not(.facebook-confirmed) > .vault-result{
+  display:none!important;
+}
+
+.facebook-required-flow:not(.facebook-confirmed) > .submit-facebook-share{
   order:-20!important;
-}
-
-.facebook-required-flow > .submit-success-receipt{
-  order:-10!important;
-}
-
-.facebook-required-flow > .success-actions{
-  order:20!important;
-}
-
-.facebook-required-flow > .vault-result{
-  order:30!important;
-}
-
-.facebook-required-flow .submit-facebook-share{
-  overflow:hidden;
-}
-
-.facebook-required-flow:not(.facebook-confirmed) .submit-facebook-share{
   border-width:2px!important;
   box-shadow:0 24px 54px rgba(49,95,159,.14)!important;
 }
@@ -65,56 +57,74 @@
   min-height:56px!important;
 }
 
-/* Once Facebook is confirmed, sharing controls are no longer useful. Keep the result concise. */
-.facebook-required-flow.facebook-confirmed .submit-facebook-caption,
-.facebook-required-flow.facebook-confirmed .submit-facebook-actions,
-.facebook-required-flow.facebook-confirmed .submit-facebook-tip,
-.facebook-required-flow.facebook-confirmed .submit-facebook-notice,
-.facebook-required-flow.facebook-confirmed .facebook-required-confirm{
+.facebook-required-flow .submit-facebook-share{
+  overflow:hidden;
+}
+
+/* Stage 3: once Facebook is confirmed, remove the sharing UI completely.
+   The user now sees only the clean completion + lookup receipt. */
+.facebook-required-flow.facebook-confirmed > .submit-facebook-share{
   display:none!important;
 }
 
-.facebook-required-flow.facebook-confirmed .submit-facebook-share{
-  gap:0!important;
-  padding:22px!important;
-  border:1px solid rgba(23,100,63,.2)!important;
-  box-shadow:0 14px 34px rgba(23,100,63,.07)!important;
+.facebook-required-flow.facebook-confirmed > .submit-success-receipt{
+  order:-10!important;
+  display:grid!important;
+  padding:26px!important;
+  border:1px solid rgba(23,100,63,.16)!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,#fbfffc 0%,#f4f8f2 100%)!important;
+  box-shadow:0 18px 44px rgba(23,100,63,.08)!important;
 }
 
-.facebook-required-flow.facebook-confirmed .facebook-required-intro{
-  gap:12px;
-  padding:0;
+.facebook-required-flow.facebook-confirmed > .success-actions{
+  order:10!important;
+  display:flex!important;
 }
 
-.facebook-required-flow.facebook-confirmed .facebook-required-intro > p{
-  max-width:660px;
-}
-
-.facebook-required-flow.facebook-confirmed .submit-success-receipt{
-  padding:22px!important;
+.facebook-required-flow.facebook-confirmed > .vault-result{
+  order:20!important;
 }
 
 .facebook-required-flow.facebook-confirmed .submit-success-icon{
-  width:46px;
-  height:46px;
+  width:50px;
+  height:50px;
+  border-radius:16px;
 }
 
 .facebook-required-flow.facebook-confirmed .submit-success-icon svg{
-  width:23px;
-  height:23px;
+  width:24px;
+  height:24px;
 }
 
 .facebook-required-flow.facebook-confirmed .submit-success-receipt > p{
-  max-width:620px;
+  max-width:640px;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-code{
+  border-radius:16px;
+}
+
+.facebook-required-flow.facebook-confirmed .submit-success-link{
+  border-radius:16px;
+}
+
+.submission-facebook-stage .wizard-card{
+  outline:4px solid rgba(49,95,159,.035);
+}
+
+.submission-complete-stage .wizard-card{
+  outline:4px solid rgba(23,100,63,.035);
 }
 
 @media (max-width:720px){
   .submit-page:has(.facebook-required-flow){
-    padding-top:18px!important;
+    padding-top:16px!important;
   }
 
   .submit-page:has(.facebook-required-flow) .wizard-card{
-    padding-top:0!important;
+    padding:14px!important;
+    border-radius:20px!important;
   }
 
   .facebook-required-flow{
@@ -139,25 +149,14 @@
     margin-bottom:4px;
   }
 
-  .facebook-required-flow.facebook-confirmed .submit-facebook-share{
+  .facebook-required-flow.facebook-confirmed > .submit-success-receipt{
     padding:18px 15px!important;
-  }
-
-  .facebook-required-flow.facebook-confirmed .facebook-required-intro h3{
-    font-size:1.45rem;
-    line-height:1.08;
-  }
-
-  .facebook-required-flow.facebook-confirmed .facebook-required-intro > p{
-    font-size:.94rem;
-    line-height:1.55;
-  }
-
-  .facebook-required-flow.facebook-confirmed .submit-success-receipt{
-    padding:18px 15px!important;
+    border-radius:18px!important;
   }
 
   .facebook-required-flow.facebook-confirmed .success-actions{
     margin-top:0;
+    display:grid!important;
+    grid-template-columns:1fr;
   }
 }
