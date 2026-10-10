@@ -16,6 +16,7 @@ import submissionsRoutes from './routes/submissions.routes.js';
 import contentRoutes from './routes/content.routes.js';
 import top52Routes from './routes/top52.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import submissionSyncAdminRoutes from './routes/submissionSyncAdmin.routes.js';
 import adminPreviewRoutes from './routes/adminPreview.routes.js';
 import publicationRoutes from './routes/publication.routes.js';
 import juryRoutes from './routes/jury.routes.js';
@@ -106,6 +107,7 @@ export function createApp() {
   app.use('/api/admin/public-preview', adminPreviewRoutes);
   app.use('/api/admin/colors', colorAdminRoutes);
   app.use('/api/admin/themes', themeAdminRoutes);
+  app.use('/api/admin/submissions', submissionSyncAdminRoutes);
   app.use('/api/admin', adminRoutes);
 
   app.use(notFoundHandler);
