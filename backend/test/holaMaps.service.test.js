@@ -110,7 +110,7 @@ test('deleteHaloPost encodes external post id and authenticates server-to-server
   let seen;
   global.fetch = async (url, options) => {
     seen = { url, options };
-    return new Response('', { status: 204 });
+    return new Response(null, { status: 204 });
   };
 
   await deleteHaloPost('halo/post 12');
