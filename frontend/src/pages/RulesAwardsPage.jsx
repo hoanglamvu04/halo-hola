@@ -12,11 +12,11 @@ import '../styles/rules-awards-desktop-reading.css'
 export const DEFAULT_AWARDS = [
   {
     code:'SPECIAL',
-    label:'Giải Nhất',
-    name:'Giải Nhất HALO HOLA 2026',
-    amount:'5.000.000đ + quà',
+    label:'Giải đặc biệt',
+    name:'Danh hiệu HALO HOLA 2026',
+    amount:'10.000.000đ + cúp + chứng nhận',
     quantity:'01 giải',
-    description:'Giải cao nhất của HALO HOLA 2026. Giá trị tiền mặt 5.000.000đ kèm quà tặng; kết quả theo cơ chế Hội đồng và bình chọn cộng đồng của chương trình.',
+    description:'Chọn từ 07 tác phẩm đoạt giải chủ đề 01–07; điểm Danh hiệu gồm 70% Hội đồng giám khảo và 30% bình chọn cộng đồng.',
     tone:'forest',
     featured:true,
     enabled:true
@@ -25,39 +25,39 @@ export const DEFAULT_AWARDS = [
     code:'THEME_01_07',
     label:'Giải chủ đề',
     name:'07 giải chủ đề 01–07',
-    amount:'2.000.000đ + quà / giải',
+    amount:'5.000.000đ / giải + chứng nhận',
     quantity:'07 giải',
-    description:'Mỗi chủ đề từ 01 đến 07 có 01 giải. Mỗi giải gồm 2.000.000đ tiền mặt và quà tặng.',
+    description:'Mỗi chủ đề từ 01 đến 07 có 01 giải, trị giá 5.000.000 đồng và chứng nhận.',
     tone:'terra',
     enabled:true
   },
   {
     code:'COLOR',
-    label:'Giải màu',
-    name:'05 giải màu Hòa Lạc',
-    amount:'1.000.000đ / giải',
-    quantity:'05 giải',
-    description:'05 giải thuộc nhóm Sắc màu Hòa Lạc, mỗi giải trị giá 1.000.000đ tiền mặt.',
+    label:'Chủ đề 08',
+    name:'Sắc màu Hòa Lạc · 06 chủ nhân',
+    amount:'1.000.000đ / chủ nhân + chứng nhận',
+    quantity:'06 chủ nhân',
+    description:'06 chủ nhân đại diện 06 đặc trưng sắc màu; xét trên mọi tác phẩm hợp lệ ở cả 8 chủ đề.',
     tone:'sun',
     enabled:true
   },
   {
     code:'FAVORITE',
-    label:'Giải online',
+    label:'Giải phụ',
     name:'Góc nhìn được yêu thích',
-    amount:'1.000.000đ + quà',
+    amount:'3.000.000đ + chứng nhận',
     quantity:'01 giải',
-    description:'Giải online dành cho tác phẩm được cộng đồng yêu thích theo quy định bình chọn; gồm 1.000.000đ tiền mặt và quà tặng.',
+    description:'Dành cho tác phẩm có điểm bình chọn hợp lệ cao nhất theo thể lệ chương trình.',
     tone:'green',
     enabled:true
   },
   {
     code:'SPREAD',
-    label:'Giải online',
+    label:'Giải phụ',
     name:'Giải Lan tỏa',
-    amount:'1.000.000đ + quà',
+    amount:'2.000.000đ + chứng nhận',
     quantity:'01 giải',
-    description:'Giải online ghi nhận khả năng lan tỏa của tác phẩm; gồm 1.000.000đ tiền mặt và quà tặng.',
+    description:'Ghi nhận khả năng lan tỏa tự nhiên của tác phẩm theo cách tính tương tác trong thể lệ.',
     tone:'beige',
     enabled:true
   }
@@ -85,9 +85,9 @@ const TIMELINE = [
   ['10.10','Phát động, mở nhận tác phẩm'],
   ['17.10 – 01.11','3 HOLA TOUR'],
   ['10.11 · 23:59','Hạn nộp tác phẩm'],
-  ['16.11','Công bố TOP52 · mở bình chọn'],
-  ['22.11 · 23:59','Khóa bình chọn'],
-  ['24.11 · 15:00–19:00','HOLA DAY · trao giải · triển lãm']
+  ['18.11','Công bố TOP52 · mở bình chọn'],
+  ['26.11 · 23:59','Khóa bình chọn'],
+  ['28.11 · 15:00–19:00','HOLA DAY · triển lãm · trao giải']
 ]
 
 const COMMUNES = ['Yên Xuân','Hòa Lạc','Yên Bài','Đoài Phương','Thạch Thất','Hạ Bằng','Tây Phương','Kiều Phú','Phú Cát']
@@ -108,7 +108,7 @@ const NAV = [
   ['VI.','Mốc thời gian','moc-thoi-gian'],['VII.','Quy định','luu-y']
 ]
 
-const mergeAwards=(value)=>Array.isArray(value)&&value.length?value:DEFAULT_AWARDS
+const mergeAwards=value=>Array.isArray(value)&&value.length?value:DEFAULT_AWARDS
 
 export default function RulesAwardsPage(){
   const [config,setConfig]=useState({})
@@ -122,11 +122,11 @@ export default function RulesAwardsPage(){
   },[])
 
   const awards=useMemo(()=>mergeAwards(config.awards).filter(item=>item?.enabled!==false),[config.awards])
-  const totalPrize=config.totalPrize||'26.000.000đ'
-  const totalAwards=Number(config.totalAwards)||15
-  const prizeSummary=config.prizeSummary||'7 giải chủ đề · 5 giải màu · 2 giải online · 1 giải Nhất'
+  const totalPrize=config.totalPrize||'56.000.000đ'
+  const totalAwards=Number(config.totalAwards)||11
+  const prizeSummary=config.prizeSummary||'8 giải chủ đề · 2 giải phụ · 1 giải đặc biệt'
   const pageTitle=config.title||'Thể lệ & Giải thưởng HALO HOLA 2026'
-  const intro=config.intro||'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng của HALO HOLA 2026.'
+  const intro=config.intro||'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng chính thức của HALO HOLA 2026.'
   const officialPdfUrl=(config.officialPdfUrl||'').trim()
 
   return <main className="rules4-page">
@@ -167,7 +167,7 @@ export default function RulesAwardsPage(){
 
         <article className="rules4-paper">
           <header className="rules4-paper-head">
-            <div><span>HALO HOLA 2026</span><h2>Thể lệ cuộc thi sáng tạo cộng đồng</h2></div>
+            <div><span>HALO HOLA 2026</span><h2>Thể lệ chương trình sáng tạo cộng đồng</h2></div>
             <div className="rules4-paper-stamp"><strong>{totalAwards} giải</strong><small>Tổng {totalPrize}</small></div>
           </header>
 
@@ -210,7 +210,7 @@ export default function RulesAwardsPage(){
               <div className="rules4-theme-grid">
                 {THEMES.map(([number,title,badge])=><div className="rules4-theme" key={number}><span className="num">{number}</span><b>{title}</b>{badge&&<small>{badge}</small>}</div>)}
               </div>
-              <div className="rules4-note">Chủ đề 08 “Sắc màu Hòa Lạc” gồm 6 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Mọi tác phẩm hợp lệ ở cả 8 chủ đề đều được xét giải Sắc màu.</div>
+              <div className="rules4-note">Chủ đề 08 “Sắc màu Hòa Lạc” gồm 6 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Mọi tác phẩm hợp lệ ở cả 8 chủ đề đều có thể khai báo sắc màu để được xét giải.</div>
             </div>
           </section>
 
@@ -230,8 +230,8 @@ export default function RulesAwardsPage(){
                 </tr>)}</tbody>
               </table>
               <div className="rules4-award-policy">
-                <div><b>Cách chọn Giải Nhất</b><span>{config.juryWeight||70}% Hội đồng + {config.communityWeight||30}% bình chọn cộng đồng.</span></div>
-                <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải màu, giải online và Giải Nhất nếu đáp ứng điều kiện.</span></div>
+                <div><b>Cách chọn Danh hiệu</b><span>{config.juryWeight??70}% Hội đồng + {config.communityWeight??30}% bình chọn cộng đồng.</span></div>
+                <div><b>Giải được cộng dồn</b><span>Một tác phẩm có thể đồng thời nhận giải chủ đề, giải Sắc màu, giải phụ và Danh hiệu nếu đáp ứng điều kiện.</span></div>
                 <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
               </div>
             </div>
@@ -245,8 +245,8 @@ export default function RulesAwardsPage(){
               <ol className="rules4-steps">
                 <li><span className="num">01</span><b>Đến Hòa Lạc</b><p>Sáng tạo theo 1 trong 8 chủ đề của chương trình.</p></li>
                 <li><span className="num">02</span><b>Nộp tác phẩm</b><p>Gửi qua form tại halohola.vn, kèm tên, chủ đề, địa điểm, thời gian và câu chuyện 50–150 chữ.</p></li>
-                <li><span className="num">03</span><b>Tối đa 05 tác phẩm</b><p>Mỗi người được gửi tối đa 05 tác phẩm; có thể tham gia cá nhân hoặc theo nhóm.</p></li>
-                <li><span className="num">04</span><b>Chia sẻ câu chuyện</b><p>Chia sẻ lên trang cá nhân hoặc Group CHECK IN HOALAC kèm hashtag #HaloHola.</p></li>
+                <li><span className="num">03</span><b>Tối đa 05 tác phẩm</b><p>Mỗi tác giả được gửi tối đa 05 tác phẩm; có thể tham gia cá nhân hoặc theo nhóm.</p></li>
+                <li><span className="num">04</span><b>Chia sẻ câu chuyện</b><p>Khuyến khích chia sẻ lên trang cá nhân hoặc Group CHECK IN HOALAC kèm hashtag #HaloHola.</p></li>
               </ol>
             </div>
           </section>
@@ -256,7 +256,7 @@ export default function RulesAwardsPage(){
             <div>
               <span className="rules4-section-kicker">Mốc thời gian</span>
               <h3>Từ phát động đến HOLA DAY</h3>
-              <p className="rules4-lead">HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố kết quả HALO HOLA 2026.</p>
+              <p className="rules4-lead">HOLA DAY diễn ra ngày 28.11, là điểm hẹn triển lãm TOP52, trao giải và công bố Danh hiệu HALO HOLA 2026.</p>
               <div className="rules4-timeline">
                 {TIMELINE.map(([date,title],index)=><div key={date} className={'rules4-time-row '+(index===TIMELINE.length-1?'is-final':'')}><time>{date}</time><b>{title}</b></div>)}
               </div>
