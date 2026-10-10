@@ -8,7 +8,9 @@ import {
   createFacebookQuickSubmission,
   getSubmissionOperationalState,
   addFilesByIdentity,
-  updateFacebookAdmin
+  updateFacebookAdmin,
+  getSubmissionOperationsOverview,
+  listOperationalSubmissions
 } from '../services/submissionOperations.service.js';
 import { authenticateAdmin } from '../middleware/auth.js';
 
@@ -88,6 +90,22 @@ router.post('/:code/files', lookupRateLimiter, upload.array('files'), async (req
     await Promise.all((req.files||[]).map(file=>fs.unlink(file.path).catch(()=>{})));
     next(error);
   }
+});
+
+router.get('/admin/overview', authenticateAdmin, async (_req,res,next)=>{
+  try { res.json(await getSubmissionOperationsOverview()); }
+  catch (error) { next(error); }
+});
+
+router.get('/admin/list', authenticateAdmin, async (req,res,next)=>{
+  try {
+    res.json(await listOperationalSubmissions({
+      source:req.query.source,
+      issue:req.query.issue,
+      q:req.query.q,
+      limit:req.query.limit
+    }));
+  } catch (error) { next(error); }
 });
 
 router.patch('/admin/:id/facebook', authenticateAdmin, async (req,res,next)=>{
