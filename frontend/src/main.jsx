@@ -32,6 +32,7 @@ import './styles/submit-hola-location-picker.css'
 import './styles/submission-facebook-required.css'
 import './styles/submission-facebook-result-polish.css'
 import './styles/ios-submission-fix.css'
+import './styles/major-submission-upgrade.css'
 import './styles/home-hero-mobile-spacing-tight.css'
 import './styles/campaign-admin-runtime.css'
 import './styles/campaign-mobile-readability-fix.css'
@@ -53,6 +54,7 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
 import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
 import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
+import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import IosSubmissionExperience from './components/IosSubmissionExperience.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -62,6 +64,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
         <MobileHeroExperience />
         <CampaignRuntimeCustomizer />
+        <SubmissionQuickMode />
         <SubmissionFacebookGate />
         <IosSubmissionExperience />
       </BrowserRouter>
