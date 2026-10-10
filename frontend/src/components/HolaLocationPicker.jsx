@@ -6,22 +6,30 @@ import {
   searchHolaPlaces
 } from '../services/holaMapsApi.js'
 
-const HOLA_MAPS_ORIGIN = 'https://maps.dothihoalac.vn'
+const configuredOrigin = String(import.meta.env.VITE_HOLA_MAPS_ORIGIN || 'https://maps.dothihoalac.vn').trim()
+const HOLA_MAPS_ORIGIN = (() => {
+  try { return new URL(configuredOrigin).origin } catch { return 'https://maps.dothihoalac.vn' }
+})()
 const HOLA_MAPS_URL = `${HOLA_MAPS_ORIGIN}/`
 
 const clean = value => String(value ?? '').trim()
 const finite = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value))
+const validCoordinates = (lat, lng) => {
+  const y = Number(lat)
+  const x = Number(lng)
+  return Number.isFinite(y) && Number.isFinite(x) && y >= -90 && y <= 90 && x >= -180 && x <= 180
+}
 
 function normalizeRows(response) {
   return (Array.isArray(response?.items) ? response.items : [])
     .map(normalizeHolaPlace)
-    .filter(item => item && finite(item.lat) && finite(item.lng))
+    .filter(item => item && validCoordinates(item.lat, item.lng))
 }
 
 function normalizePickerSource(source) {
   if (source === 'hola_place') return 'HOLA_MAPS'
   if (source === 'current_location') return 'GPS'
-  if (source === 'manual') return 'TEXT'
+  if (source === 'manual') return 'PIN'
   return 'PIN'
 }
 
@@ -35,19 +43,19 @@ export default function HolaLocationPicker({ value, onChange }) {
   const [searchError, setSearchError] = useState('')
 
   const position = useMemo(() => {
-    if (!finite(value.locationLat) || !finite(value.locationLng)) return null
+    if (!validCoordinates(value.locationLat, value.locationLng)) return null
     return [Number(value.locationLat), Number(value.locationLng)]
   }, [value.locationLat, value.locationLng])
 
   const pickerUrl = useMemo(() => {
-    if (typeof window === 'undefined') return `${HOLA_MAPS_ORIGIN}/picker`
+    if (typeof window === 'undefined') return `${HOLA_MAPS_ORIGIN}/embed/picker`
     const params = new URLSearchParams({ origin: window.location.origin })
     if (position) {
       params.set('lat', String(position[0]))
       params.set('lng', String(position[1]))
     }
     if (clean(value.location)) params.set('label', clean(value.location))
-    return `${HOLA_MAPS_ORIGIN}/picker?${params.toString()}`
+    return `${HOLA_MAPS_ORIGIN}/embed/picker?${params.toString()}`
   }, [position, value.location])
 
   useEffect(() => {
@@ -89,20 +97,26 @@ export default function HolaLocationPicker({ value, onChange }) {
 
   useEffect(() => {
     const receiveLocation = event => {
+      // Do not trust arbitrary postMessage senders. Only the configured Hola Maps
+      // origin is allowed to select a location for this form.
       if (event.origin !== HOLA_MAPS_ORIGIN) return
       if (event.data?.type !== 'HOLA_MAP_LOCATION_SELECTED') return
 
       const payload = event.data?.payload || {}
-      if (!finite(payload.lat) || !finite(payload.lng)) return
+      if (!validCoordinates(payload.lat, payload.lng)) {
+        setSearchError('HOLA Maps trả về tọa độ không hợp lệ. Vui lòng chọn lại vị trí.')
+        return
+      }
 
-      const label = clean(payload.label) || clean(payload.address) || 'Điểm ghim trên HOLA Maps'
+      const label = clean(payload.label) || clean(payload.address) || 'Vị trí đã ghim'
+      const placeId = clean(payload.placeId)
       setQuery(label)
       setResults([])
       setSearchError('')
-      setMapMessage('Đã nhận vị trí trực tiếp từ HOLA Maps.')
+      setMapMessage(placeId ? 'Đã liên kết địa điểm có sẵn trên HOLA Maps.' : 'Đã ghim vị trí trên HOLA Maps.')
       onChange({
         location: label,
-        locationPlaceId: clean(payload.placeId),
+        locationPlaceId: placeId,
         locationPlaceSlug: clean(payload.placeSlug),
         locationLat: Number(payload.lat),
         locationLng: Number(payload.lng),
@@ -145,17 +159,17 @@ export default function HolaLocationPicker({ value, onChange }) {
 
   const selectPlace = place => {
     if (!place) return
-    const label = place.address ? `${place.name} — ${place.address}` : place.name
+    const label = place.name || place.address || 'Địa điểm HOLA Maps'
     setQuery(label)
     setResults([])
     setSearchError('')
-    setMapMessage('Đã liên kết địa điểm từ HOLA Maps.')
+    setMapMessage('Đã liên kết địa điểm có sẵn trên HOLA Maps.')
     update({
       location: label,
       locationPlaceId: place.id || '',
       locationPlaceSlug: place.slug || '',
-      locationLat: finite(place.lat) ? Number(place.lat) : '',
-      locationLng: finite(place.lng) ? Number(place.lng) : '',
+      locationLat: validCoordinates(place.lat, place.lng) ? Number(place.lat) : '',
+      locationLng: validCoordinates(place.lat, place.lng) ? Number(place.lng) : '',
       locationAddress: place.address || '',
       locationSource: 'HOLA_MAPS'
     })
@@ -174,6 +188,12 @@ export default function HolaLocationPicker({ value, onChange }) {
       async positionResult => {
         const lat = Number(positionResult.coords.latitude)
         const lng = Number(positionResult.coords.longitude)
+        if (!validCoordinates(lat, lng)) {
+          setLocating(false)
+          setSearchError('Thiết bị trả về tọa độ không hợp lệ.')
+          return
+        }
+
         let nearest = null
         try {
           const nearby = await getHolaNearbyPlaces(lat, lng, 1200, { limit: 5 })
@@ -185,11 +205,11 @@ export default function HolaLocationPicker({ value, onChange }) {
         const label = nearest?.name ? `Vị trí hiện tại · gần ${nearest.name}` : 'Vị trí hiện tại'
         setQuery(label)
         setResults([])
-        setMapMessage('Đã lấy vị trí hiện tại; bạn có thể mở HOLA Maps để chỉnh pin chính xác hơn.')
+        setMapMessage('Đã lấy vị trí hiện tại. Đây là điểm ghim riêng, không tự gắn vào địa điểm lân cận.')
         update({
           location: label,
-          locationPlaceId: nearest?.id || '',
-          locationPlaceSlug: nearest?.slug || '',
+          locationPlaceId: '',
+          locationPlaceSlug: '',
           locationLat: lat,
           locationLng: lng,
           locationAddress: nearest?.address || '',
@@ -208,9 +228,13 @@ export default function HolaLocationPicker({ value, onChange }) {
     )
   }
 
-  const clearStructuredLocation = () => {
+  const clearLocation = () => {
+    setQuery('')
+    setResults([])
     setMapMessage('')
+    setSearchError('')
     update({
+      location: '',
       locationPlaceId: '',
       locationPlaceSlug: '',
       locationLat: '',
@@ -220,69 +244,65 @@ export default function HolaLocationPicker({ value, onChange }) {
     })
   }
 
+  const hasStructuredLocation = Boolean(clean(value.locationPlaceId) || position)
+  const primaryLabel = clean(value.location) || (position ? 'Vị trí đã ghim' : '')
+  const secondaryLabel = clean(value.locationAddress) || (position ? `${position[0].toFixed(6)}, ${position[1].toFixed(6)}` : '')
+
   return <div className="hola-location-picker">
     <div className="hola-location-heading">
       <div>
-        <b>Chọn địa điểm trên HOLA Maps *</b>
-        <span>Tìm địa điểm có sẵn, dùng vị trí hiện tại hoặc mở HOLA Maps để ghim đúng chỗ bạn chụp.</span>
+        <b>Gắn vị trí trên HOLA Maps *</b>
+        <span>Tìm địa điểm có sẵn hoặc ghim đúng nơi bạn chụp. Mã địa điểm được giữ nguyên nếu bạn chọn một place có sẵn.</span>
       </div>
       <a href={HOLA_MAPS_URL} target="_blank" rel="noreferrer">Mở HOLA Maps <ExternalLink size={15}/></a>
     </div>
 
-    <div className="hola-location-search">
-      <Search size={18}/>
-      <input
-        value={query}
-        onChange={event => handleText(event.target.value)}
-        placeholder="Tìm hồ, làng, trường, công trình, địa điểm trên HOLA Maps..."
-        autoComplete="off"
-      />
-      {searching && <Loader2 className="spin" size={18}/>} 
-    </div>
-
-    {results.length > 0 && <div className="hola-location-results">
-      {results.map(place => <button type="button" key={place.id || place.slug || place.name} onClick={() => selectPlace(place)}>
-        <MapPin size={17}/>
-        <span><b>{place.name}</b><small>{place.address || place.category || 'Hòa Lạc'}</small></span>
-      </button>)}
-    </div>}
-
-    <div className="hola-location-actions">
-      <button type="button" onClick={useCurrentLocation} disabled={locating}>
-        {locating ? <Loader2 className="spin" size={17}/> : <Crosshair size={17}/>} 
-        {locating ? 'Đang lấy vị trí...' : 'Dùng vị trí hiện tại'}
-      </button>
-      <button type="button" className="map-primary" onClick={() => setPickerOpen(true)}>
-        <MapPin size={17}/> Chọn / ghim trên HOLA Maps
-      </button>
-      {value.locationSource && value.locationSource !== 'TEXT' && <button type="button" className="ghost" onClick={clearStructuredLocation}>Chuyển về nhập địa điểm</button>}
-    </div>
-
-    <button type="button" className="hola-location-map-launch" onClick={() => setPickerOpen(true)}>
-      <div className="hola-location-map-launch-icon"><MapPin size={24}/></div>
-      <div>
-        <small>BẢN ĐỒ CHÍNH THỨC HOLA MAPS</small>
-        <b>{position ? 'Kiểm tra hoặc chỉnh lại điểm ghim' : 'Mở bản đồ để chọn vị trí chính xác'}</b>
-        <span>{position ? `${position[0].toFixed(6)}, ${position[1].toFixed(6)}` : 'Kéo bản đồ đến đúng cổng, công trình hoặc vị trí chụp'}</span>
+    {!hasStructuredLocation && <>
+      <div className="hola-location-search">
+        <Search size={18}/>
+        <input
+          value={query}
+          onChange={event => handleText(event.target.value)}
+          placeholder="Tìm hồ, làng, trường, công trình..."
+          autoComplete="off"
+        />
+        {searching && <Loader2 className="spin" size={18}/>} 
       </div>
-      <ExternalLink size={18}/>
-    </button>
 
-    {(value.location || position) && <div className="hola-location-selected">
-      <CheckCircle2 size={18}/>
-      <div>
-        <b>{value.location || 'Đã chọn vị trí'}</b>
-        <span>
-          {position ? `${Number(value.locationLat).toFixed(6)}, ${Number(value.locationLng).toFixed(6)}` : 'Địa điểm nhập bằng văn bản'}
-          {value.locationPlaceId ? ' · Đã liên kết địa điểm HOLA Maps' : ''}
-        </span>
-        {value.locationAddress && <small>{value.locationAddress}</small>}
+      {results.length > 0 && <div className="hola-location-results">
+        {results.map(place => <button type="button" key={place.id || place.slug || place.name} onClick={() => selectPlace(place)}>
+          <MapPin size={17}/>
+          <span><b>{place.name}</b><small>{place.address || place.category || 'Hòa Lạc'}</small></span>
+        </button>)}
+      </div>}
+
+      <div className="hola-location-actions">
+        <button type="button" onClick={useCurrentLocation} disabled={locating}>
+          {locating ? <Loader2 className="spin" size={17}/> : <Crosshair size={17}/>} 
+          {locating ? 'Đang lấy vị trí...' : 'Dùng vị trí hiện tại'}
+        </button>
+        <button type="button" className="map-primary" onClick={() => setPickerOpen(true)}>
+          <MapPin size={17}/> Chọn / ghim trên HOLA Maps
+        </button>
+      </div>
+    </>}
+
+    {hasStructuredLocation && <div className="hola-location-selected hola-location-selected-compact">
+      <CheckCircle2 size={19}/>
+      <div className="hola-location-selected-copy">
+        <b><MapPin size={15}/>{primaryLabel || 'Vị trí đã ghim'}</b>
+        {secondaryLabel && <span>{secondaryLabel}</span>}
+        {value.locationPlaceId && <small>Địa điểm HOLA Maps · ID {value.locationPlaceId}</small>}
+      </div>
+      <div className="hola-location-selected-actions">
+        <button type="button" onClick={() => setPickerOpen(true)}>Đổi vị trí</button>
+        <button type="button" className="danger" onClick={clearLocation}>Xóa</button>
       </div>
     </div>}
 
     {mapMessage && <div className="hola-location-note success">{mapMessage}</div>}
     {searchError && <div className="hola-location-note error">{searchError}</div>}
-    <div className="hola-location-note">Tọa độ và mã địa điểm HOLA Maps được lưu cùng tác phẩm để BTC đối chiếu địa bàn và gắn tác phẩm lên HOLA Map khi được tuyển chọn.</div>
+    <div className="hola-location-note">Bài có ảnh + vị trí sẽ được backend HALO HOLA đồng bộ server-to-server sang gallery HOLA Maps. Shared secret không bao giờ được đưa xuống trình duyệt.</div>
 
     {pickerOpen && <div className="hola-map-picker-modal" role="dialog" aria-modal="true" aria-label="Chọn vị trí trên HOLA Maps">
       <div className="hola-map-picker-panel">
