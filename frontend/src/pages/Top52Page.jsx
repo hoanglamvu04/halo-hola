@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Award, BookOpen, CheckCircle2, Compass, Grid2X2, Map, MapPin, Palette, Search, SlidersHorizontal, Sparkles, Trophy, Users } from 'lucide-react'
+import { Award, BookOpen, CheckCircle2, Compass, Grid2X2, Map, MapPin, Search, SlidersHorizontal, Sparkles, Trophy, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ArtworkCard from '../components/ArtworkCard.jsx'
 import { getColors, getPublicArtworks, getPublicTop52, getThemes } from '../services/api.js'
@@ -27,8 +27,8 @@ function badgeForExplore(item){
   return'GÓC NHÌN CỘNG ĐỒNG'
 }
 
-export default function Top52Page(){
-  const [view,setView]=useState('EXPLORE')
+export default function Top52Page({initialView='TOP52'}){
+  const [view,setView]=useState(initialView)
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
   const [items,setItems]=useState([])
@@ -39,6 +39,7 @@ export default function Top52Page(){
   const [loadingMore,setLoadingMore]=useState(false)
   const [error,setError]=useState('')
 
+  useEffect(()=>setView(initialView),[initialView])
   useEffect(()=>{
     getThemes().then(rows=>setThemes(Array.isArray(rows)?rows:[])).catch(()=>{})
     getColors().then(rows=>setColors(Array.isArray(rows)?rows:[])).catch(()=>{})
