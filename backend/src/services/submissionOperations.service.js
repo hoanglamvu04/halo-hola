@@ -19,9 +19,9 @@ export async function createFacebookQuickSubmission(data) {
     const { rows } = await client.query(
       `INSERT INTO submissions
        (code,name,display_name,email,phone,title,type,theme,color,location,story,
-        rights_confirmed,image_consent_confirmed,allow_media_use,allow_newsletter,submission_source,
-        facebook_completion_status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,TRUE,$12,$13,$14,'FACEBOOK','PENDING')
+        rights_confirmed,image_consent_confirmed,is_minor,guardian_name,guardian_consent,
+        allow_media_use,allow_newsletter,submission_source,facebook_completion_status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,TRUE,$12,$13,$14,$15,$16,$17,'FACEBOOK','PENDING')
        RETURNING *`,
       [
         code,
@@ -36,6 +36,9 @@ export async function createFacebookQuickSubmission(data) {
         clean(data.location),
         clean(data.story) || 'Bài dự thi được khởi tạo theo luồng Facebook. Nội dung tác phẩm được đăng tại bài Facebook gắn với mã dự thi này.',
         Boolean(data.imageConsentConfirmed),
+        Boolean(data.isMinor),
+        clean(data.guardianName) || null,
+        Boolean(data.guardianConsent),
         data.allowMediaUse !== false,
         Boolean(data.allowNewsletter)
       ]
