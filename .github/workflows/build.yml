@@ -21,6 +21,8 @@ jobs:
             frontend/package-lock.json
       - run: npm ci
       - run: npm run install:all
+      - name: Run backend tests
+        run: npm test --prefix backend
       - name: Audit backend production dependencies
         run: npm audit --prefix backend --omit=dev --audit-level=high
       - name: Audit frontend production dependencies
