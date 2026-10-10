@@ -12,6 +12,7 @@ import {
   getSubmissionOperationsOverview,
   listOperationalSubmissions
 } from '../services/submissionOperations.service.js';
+import { sendSubmissionReceived } from '../services/mail.service.js';
 import { authenticateAdmin } from '../middleware/auth.js';
 
 const router = Router();
@@ -29,12 +30,18 @@ const quickSchema = z.object({
   story: z.string().trim().max(5000).optional().or(z.literal('')),
   rightsConfirmed: z.union([z.boolean(), z.string()]),
   imageConsentConfirmed: z.union([z.boolean(), z.string()]),
+  isMinor: z.union([z.boolean(), z.string()]).optional(),
+  guardianName: z.string().trim().max(180).optional().or(z.literal('')),
+  guardianConsent: z.union([z.boolean(), z.string()]).optional(),
   allowMediaUse: z.union([z.boolean(), z.string()]).optional(),
   allowNewsletter: z.union([z.boolean(), z.string()]).optional()
 }).superRefine((value, ctx) => {
   const yes = x => x === true || String(x).toLowerCase() === 'true';
   if (!yes(value.rightsConfirmed)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rightsConfirmed'], message: 'Cần xác nhận quyền tác giả.' });
   if (!yes(value.imageConsentConfirmed)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['imageConsentConfirmed'], message: 'Cần xác nhận quyền hình ảnh phù hợp.' });
+  if (yes(value.isMinor) && (!value.guardianName || !yes(value.guardianConsent))) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['guardianConsent'], message: 'Người dưới 18 tuổi cần thông tin và xác nhận của người giám hộ.' });
+  }
 });
 
 function parseBool(value, fallback=false) {
@@ -49,9 +56,19 @@ router.post('/facebook-quick', submissionRateLimiter, async (req,res,next)=>{
     const created=await createFacebookQuickSubmission({
       ...parsed,
       imageConsentConfirmed:parseBool(parsed.imageConsentConfirmed,false),
+      isMinor:parseBool(parsed.isMinor,false),
+      guardianConsent:parseBool(parsed.guardianConsent,false),
       allowMediaUse:parseBool(parsed.allowMediaUse,true),
       allowNewsletter:parseBool(parsed.allowNewsletter,false)
     });
+
+    sendSubmissionReceived({
+      to: created.email,
+      name: created.display_name || created.name,
+      code: created.code,
+      title: created.title
+    }).catch((error)=>console.warn('Quick submission email skipped/failed:',error.message));
+
     res.status(201).json({
       id:created.id,
       code:created.code,
