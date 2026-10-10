@@ -2,6 +2,7 @@ import { pool } from '../database/pool.js';
 import { AppError } from '../utils/AppError.js';
 
 const ALLOWED_ACTIONS=new Set(['PUBLISH','HIDE','SCHEDULE']);
+const PUBLIC_ELIGIBLE_STATUSES=new Set(['VALID','SHORTLIST','TOP52','AWARDED']);
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function actorUuid(value){return uuidPattern.test(String(value||''))?value:null;}
@@ -16,7 +17,7 @@ function eligibility(item){
   const isMinor=item.is_minor??item.isMinor??false;
   const guardianConsent=item.guardian_consent??item.guardianConsent??false;
   const reasons=[];
-  if(!['TOP52','AWARDED'].includes(item.status)) reasons.push('Tác phẩm chưa ở trạng thái TOP52 hoặc Đạt giải.');
+  if(!PUBLIC_ELIGIBLE_STATUSES.has(item.status)) reasons.push('Bài dự thi chưa được BTC xác nhận đủ điều kiện công khai.');
   if(isDemo) reasons.push('Dữ liệu mẫu không được công bố public.');
   if(!allowMediaUse) reasons.push('Tác giả chưa cho phép sử dụng media.');
   if(!rightsConfirmed) reasons.push('Chưa xác nhận quyền tác giả.');
@@ -33,12 +34,12 @@ export async function getPublicationOverview(){
   const {rows}=await pool.query(`
     SELECT
       COUNT(*)::int AS total,
-      COUNT(*) FILTER (WHERE status IN ('TOP52','AWARDED') AND is_demo=FALSE AND allow_media_use=TRUE)::int AS eligible_status,
+      COUNT(*) FILTER (WHERE status IN ('VALID','SHORTLIST','TOP52','AWARDED') AND is_demo=FALSE AND allow_media_use=TRUE)::int AS eligible_status,
       COUNT(*) FILTER (WHERE ${effectivePublicSql('submissions')})::int AS public_now,
       COUNT(*) FILTER (WHERE publication_state='PUBLISHED')::int AS published,
       COUNT(*) FILTER (WHERE publication_state='SCHEDULED' AND publish_scheduled_at>NOW())::int AS scheduled,
       COUNT(*) FILTER (WHERE publication_state='HIDDEN')::int AS hidden,
-      COUNT(*) FILTER (WHERE status IN ('TOP52','AWARDED') AND is_demo=FALSE AND allow_media_use=TRUE
+      COUNT(*) FILTER (WHERE status IN ('VALID','SHORTLIST','TOP52','AWARDED') AND is_demo=FALSE AND allow_media_use=TRUE
         AND (rights_confirmed=FALSE OR image_consent_confirmed=FALSE OR (is_minor=TRUE AND guardian_consent=FALSE)))::int AS blocked_rights
     FROM submissions
   `);
@@ -55,7 +56,7 @@ export async function listPublicationItems(filters={}){
   }
   if(filters.status){values.push(String(filters.status));conditions.push(`s.status=$${values.length}`);}
   if(filters.publicationState){values.push(String(filters.publicationState));conditions.push(`s.publication_state=$${values.length}`);}
-  if(String(filters.eligibleOnly)==='true') conditions.push(`s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE`);
+  if(String(filters.eligibleOnly)==='true') conditions.push(`s.status IN ('VALID','SHORTLIST','TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE`);
   const limit=Math.max(1,Math.min(500,Number(filters.limit)||200));
   values.push(limit);const limitParam=values.length;
   const where=conditions.length?`WHERE ${conditions.join(' AND ')}`:'';
@@ -63,6 +64,7 @@ export async function listPublicationItems(filters={}){
     SELECT
       s.id,s.code,s.title,COALESCE(NULLIF(s.display_name,''),s.name) AS author,
       s.email,s.type,s.theme,s.color,s.location,s.status,s.is_demo AS "isDemo",
+      s.submission_source AS "submissionSource",s.facebook_post_url AS "facebookPostUrl",
       s.allow_media_use AS "allowMediaUse",s.rights_confirmed AS "rightsConfirmed",
       s.image_consent_confirmed AS "imageConsentConfirmed",s.is_minor AS "isMinor",
       s.guardian_consent AS "guardianConsent",s.publication_state AS "publicationState",
@@ -79,7 +81,7 @@ export async function listPublicationItems(filters={}){
     ${where}
     ORDER BY
       CASE WHEN ${effectivePublicSql('s')} THEN 0 WHEN s.publication_state='SCHEDULED' THEN 1 ELSE 2 END,
-      CASE s.status WHEN 'AWARDED' THEN 0 WHEN 'TOP52' THEN 1 ELSE 2 END,
+      CASE s.status WHEN 'AWARDED' THEN 0 WHEN 'TOP52' THEN 1 WHEN 'SHORTLIST' THEN 2 WHEN 'VALID' THEN 3 ELSE 4 END,
       s.publication_updated_at DESC,s.created_at DESC
     LIMIT $${limitParam}
   `,values);
