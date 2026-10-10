@@ -110,6 +110,137 @@
 .submit-success-reminder b,
 .submit-success-reminder strong{color:#143f33}
 
+.submit-facebook-share{
+  display:grid;
+  gap:16px;
+  padding:24px;
+  border:1px solid rgba(24,65,123,.14);
+  border-radius:22px;
+  background:linear-gradient(180deg,#f8fbff 0%,#f3f7fc 100%);
+  box-shadow:0 16px 38px rgba(24,65,123,.08);
+}
+
+.submit-facebook-share-head{
+  display:grid;
+  gap:6px;
+}
+
+.submit-facebook-share-head>span{
+  color:#315f9f;
+  font-size:.74rem;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+
+.submit-facebook-share-head h3{
+  margin:0;
+  color:#173f34;
+  font-size:clamp(1.35rem,2.3vw,1.9rem);
+  line-height:1.1;
+  letter-spacing:-.025em;
+}
+
+.submit-facebook-share-head p{
+  margin:0;
+  max-width:720px;
+  color:#5f6a65;
+  line-height:1.65;
+}
+
+.submit-facebook-caption{
+  overflow:hidden;
+  border:1px solid rgba(23,63,52,.13);
+  border-radius:16px;
+  background:#fff;
+}
+
+.submit-facebook-caption-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(23,63,52,.09);
+}
+
+.submit-facebook-caption-head>div{
+  display:grid;
+  gap:3px;
+}
+
+.submit-facebook-caption-head small{
+  color:#7a827e;
+  font-weight:700;
+}
+
+.submit-facebook-caption-head b{
+  color:#173f34;
+  font-size:.9rem;
+}
+
+.submit-facebook-caption-head button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:40px;
+  padding:0 13px;
+  border:1px solid rgba(23,63,52,.15);
+  border-radius:11px;
+  background:#f7fbf8;
+  color:#173f34;
+  font:inherit;
+  font-size:.86rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.submit-facebook-caption pre{
+  max-height:280px;
+  margin:0;
+  overflow:auto;
+  padding:17px 18px 20px;
+  color:#2f3e38;
+  font:inherit;
+  font-size:.92rem;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.submit-facebook-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.submit-facebook-primary{
+  border-color:#315f9f!important;
+  background:#315f9f!important;
+  color:#fff!important;
+}
+
+.submit-facebook-tip,
+.submit-facebook-notice{
+  padding:12px 14px;
+  border-radius:12px;
+  line-height:1.55;
+}
+
+.submit-facebook-tip{
+  border-left:3px solid #315f9f;
+  background:#edf4ff;
+  color:#54616c;
+}
+
+.submit-facebook-tip b{color:#244d86}
+
+.submit-facebook-notice{
+  background:#eef7ef;
+  color:#315f45;
+  font-weight:700;
+}
+
 .success-actions{
   display:flex;
   flex-wrap:wrap;
@@ -139,6 +270,22 @@
   }
   .submit-success-link button{width:100%}
   .submit-success-link code{font-size:.82rem;white-space:normal;overflow-wrap:anywhere}
+
+  .submit-facebook-share{
+    gap:14px;
+    padding:18px 14px;
+    border-radius:18px;
+  }
+
+  .submit-facebook-caption-head{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .submit-facebook-caption-head button{width:100%}
+  .submit-facebook-caption pre{max-height:240px;padding:15px 14px 17px;font-size:.86rem}
+  .submit-facebook-actions{display:grid;grid-template-columns:1fr}
+  .submit-facebook-actions .btn{width:100%;justify-content:center}
 
   .success-actions{display:grid;grid-template-columns:1fr}
   .success-actions .btn{width:100%;justify-content:center}
