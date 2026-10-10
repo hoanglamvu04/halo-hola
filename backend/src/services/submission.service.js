@@ -5,6 +5,7 @@ import path from 'node:path';
 import { pool, withTransaction } from '../database/pool.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
+import { kickHolaMapsSyncJob } from './holaMaps.service.js';
 import {
   createR2Client,
   getR2Buckets,
@@ -314,8 +315,33 @@ export async function replaceSubmissionFiles(id, files = []) {
 }
 
 export async function deleteSubmission(id) {
-  const { rows } = await pool.query('DELETE FROM submissions WHERE id=$1 RETURNING id,code', [id]);
-  return rows[0] || null;
+  const client = await pool.connect();
+  let jobId = null;
+  let deleted = null;
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query('SELECT id,code FROM submissions WHERE id=$1 FOR UPDATE', [id]);
+    if (!rows[0]) {
+      await client.query('ROLLBACK');
+      return null;
+    }
+    deleted = rows[0];
+    const job = await client.query(
+      `INSERT INTO hola_maps_sync_jobs(submission_id,external_post_id,action,status,next_attempt_at)
+       VALUES(NULL,$1,'DELETE','PENDING',NOW()) RETURNING id`,
+      [String(deleted.id)]
+    );
+    jobId = job.rows[0].id;
+    await client.query('DELETE FROM submissions WHERE id=$1', [id]);
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+  kickHolaMapsSyncJob(jobId);
+  return { ...deleted, holaMapsJobId: jobId };
 }
 
 export async function getMediaDownloadUrl(mediaId) {
