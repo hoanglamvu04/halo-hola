@@ -28,11 +28,13 @@ const quickSchema = z.object({
   location: z.string().trim().min(2).max(255),
   story: z.string().trim().max(5000).optional().or(z.literal('')),
   rightsConfirmed: z.union([z.boolean(), z.string()]),
+  imageConsentConfirmed: z.union([z.boolean(), z.string()]),
   allowMediaUse: z.union([z.boolean(), z.string()]).optional(),
   allowNewsletter: z.union([z.boolean(), z.string()]).optional()
 }).superRefine((value, ctx) => {
-  const yes = value.rightsConfirmed === true || String(value.rightsConfirmed).toLowerCase() === 'true';
-  if (!yes) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rightsConfirmed'], message: 'Cần xác nhận quyền tác giả.' });
+  const yes = x => x === true || String(x).toLowerCase() === 'true';
+  if (!yes(value.rightsConfirmed)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rightsConfirmed'], message: 'Cần xác nhận quyền tác giả.' });
+  if (!yes(value.imageConsentConfirmed)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['imageConsentConfirmed'], message: 'Cần xác nhận quyền hình ảnh phù hợp.' });
 });
 
 function parseBool(value, fallback=false) {
@@ -46,6 +48,7 @@ router.post('/facebook-quick', submissionRateLimiter, async (req,res,next)=>{
     const parsed=quickSchema.parse(req.body||{});
     const created=await createFacebookQuickSubmission({
       ...parsed,
+      imageConsentConfirmed:parseBool(parsed.imageConsentConfirmed,false),
       allowMediaUse:parseBool(parsed.allowMediaUse,true),
       allowNewsletter:parseBool(parsed.allowNewsletter,false)
     });
