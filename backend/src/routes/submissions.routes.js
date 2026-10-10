@@ -4,7 +4,8 @@ import { upload } from '../middleware/upload.js';
 import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimit.js';
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
-import { createSubmission, lookupSubmission, getPublicStats } from '../services/submission.service.js';
+import { createSubmission, lookupSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
+import { queueSubmissionSync } from '../services/holaMaps.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
 import { verifyToken } from '../utils/jwt.js';
 import { pool } from '../database/pool.js';
@@ -58,6 +59,19 @@ router.get('/lookup', lookupRateLimiter, async (req, res, next) => {
   }
 });
 
+// Stable public HALO media URL. For private R2 originals this endpoint issues a
+// fresh, short-lived redirect so Hola Maps never stores a temporary signed URL.
+router.get('/media/:mediaId/halo', async (req, res, next) => {
+  try {
+    const item = await getHaloPublicMediaUrl(req.params.mediaId);
+    if (!item?.url) throw new AppError('Ảnh này không sẵn sàng cho HOLA Maps.', 404);
+    res.set('Cache-Control', 'public, max-age=60');
+    res.redirect(302, item.url);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, next) => {
   try {
     const data = submissionSchema.parse(req.body);
@@ -66,6 +80,12 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
     }
 
     const created = await createSubmission(data, req.files || []);
+
+    // Sync is deliberately fire-and-forget. A Hola Maps outage must never make
+    // the HALO HOLA submission fail after its own transaction committed.
+    queueSubmissionSync(created.id).catch((error) =>
+      console.warn('Hola Maps submission sync enqueue failed:', error.message)
+    );
 
     sendSubmissionReceived({
       to: created.email,
@@ -80,6 +100,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       title: created.title,
       status: created.status,
       createdAt: created.created_at,
+      holaMapsSyncStatus: 'PENDING',
       media: created.media.map((m) => ({
         id: m.id,
         originalName: m.original_name,
