@@ -38,5 +38,9 @@ export const env = {
   maxUploadFileSizeMb: clampNumber(process.env.MAX_UPLOAD_FILE_SIZE_MB,1,100,25),
   maxUploadFileCount: clampNumber(process.env.MAX_UPLOAD_FILE_COUNT,1,10,10),
   publicBaseUrl: process.env.PUBLIC_BASE_URL || `http://localhost:${clampNumber(process.env.PORT,1,65535,5000)}`,
-  adminApiKey: (process.env.ADMIN_API_KEY || '').trim()
+  adminApiKey: (process.env.ADMIN_API_KEY || '').trim(),
+  haloHolaSiteUrl: (process.env.HALO_HOLA_SITE_URL || '').trim(),
+  holaMapsBaseUrl: (process.env.HOLA_MAPS_BASE_URL || '').trim(),
+  holaMapsHaloSecret: (process.env.HOLA_MAPS_HALO_SECRET || '').trim(),
+  holaMapsSyncTimeoutMs: clampNumber(process.env.HOLA_MAPS_SYNC_TIMEOUT_MS,1000,30000,8000)
 };
