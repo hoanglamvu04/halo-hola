@@ -1,12 +1,18 @@
 import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { pool } from './database/pool.js';
+import { recoverPendingHolaMapsSyncJobs } from './services/holaMaps.service.js';
 
 const app = createApp();
 
 const server = app.listen(env.port, () => {
   console.log(`HALO HOLA API listening on port ${env.port} (${env.nodeEnv})`);
   console.log(`Server running at: http://localhost:${env.port}`);
+  recoverPendingHolaMapsSyncJobs()
+    .then((count) => {
+      if (count) console.log(`Recovered ${count} pending Hola Maps sync job(s).`);
+    })
+    .catch((error) => console.warn('Hola Maps sync recovery skipped/failed:', error.message));
 });
 
 server.keepAliveTimeout = 65_000;
