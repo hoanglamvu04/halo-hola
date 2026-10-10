@@ -23,6 +23,7 @@ import juryRoutes from './routes/jury.routes.js';
 import juryBoardRoutes from './routes/juryBoard.routes.js';
 import juryResultsRoutes from './routes/juryResults.routes.js';
 import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
+import communityRegistrationsRoutes from './routes/communityRegistrations.routes.js';
 import siteRoutes from './routes/site.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import colorAdminRoutes from './routes/colorAdmin.routes.js';
@@ -96,6 +97,7 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/submissions', submissionsRoutes);
   app.use('/api/tour-registrations', tourRegistrationsRoutes);
+  app.use('/api/community-registrations', communityRegistrationsRoutes);
   app.use('/api/top52', top52Routes);
   app.use('/api', siteRoutes);
   app.use('/api', contentRoutes);
