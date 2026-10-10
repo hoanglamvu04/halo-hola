@@ -1,18 +1,18 @@
 import { pool } from './pool.js';
 
 const valuePatch={
-  totalPrize:'26.000.000đ',
-  totalAwards:15,
-  prizeSummary:'7 giải chủ đề · 5 giải màu · 2 giải online · 1 giải Nhất',
-  intro:'Một trang để bạn xem nhanh điều kiện tham gia, cách gửi tác phẩm, các mốc quan trọng và toàn bộ cơ cấu 15 giải của HALO HOLA 2026.',
+  totalPrize:'56.000.000đ',
+  totalAwards:11,
+  prizeSummary:'8 giải chủ đề · 2 giải phụ · 1 giải đặc biệt',
+  intro:'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng chính thức của HALO HOLA 2026.',
   awards:[
     {
       code:'SPECIAL',
-      label:'Giải Nhất',
-      name:'Giải Nhất HALO HOLA 2026',
-      amount:'5.000.000đ + quà',
+      label:'Giải đặc biệt',
+      name:'Danh hiệu HALO HOLA 2026',
+      amount:'10.000.000đ + cúp + chứng nhận',
       quantity:'01 giải',
-      description:'Giải cao nhất của HALO HOLA 2026. Giá trị tiền mặt 5.000.000đ kèm quà tặng; kết quả theo cơ chế Hội đồng và bình chọn cộng đồng của chương trình.',
+      description:'Chọn từ 07 tác phẩm đoạt giải chủ đề 01–07; điểm Danh hiệu gồm 70% Hội đồng giám khảo và 30% bình chọn cộng đồng.',
       tone:'forest',
       featured:true,
       enabled:true
@@ -21,42 +21,42 @@ const valuePatch={
       code:'THEME_01_07',
       label:'Giải chủ đề',
       name:'07 giải chủ đề 01–07',
-      amount:'2.000.000đ + quà / giải',
+      amount:'5.000.000đ / giải + chứng nhận',
       quantity:'07 giải',
-      description:'Mỗi chủ đề từ 01 đến 07 có 01 giải. Mỗi giải gồm 2.000.000đ tiền mặt và quà tặng.',
+      description:'Mỗi chủ đề từ 01 đến 07 có 01 giải, trị giá 5.000.000 đồng và chứng nhận.',
       tone:'terra',
       featured:false,
       enabled:true
     },
     {
       code:'COLOR',
-      label:'Giải màu',
-      name:'05 giải màu Hòa Lạc',
-      amount:'1.000.000đ / giải',
-      quantity:'05 giải',
-      description:'05 giải thuộc nhóm Sắc màu Hòa Lạc, mỗi giải trị giá 1.000.000đ tiền mặt.',
+      label:'Chủ đề 08',
+      name:'Sắc màu Hòa Lạc · 06 chủ nhân',
+      amount:'1.000.000đ / chủ nhân + chứng nhận',
+      quantity:'06 chủ nhân',
+      description:'06 chủ nhân đại diện 06 đặc trưng sắc màu; xét trên mọi tác phẩm hợp lệ ở cả 8 chủ đề.',
       tone:'sun',
       featured:false,
       enabled:true
     },
     {
       code:'FAVORITE',
-      label:'Giải online',
+      label:'Giải phụ',
       name:'Góc nhìn được yêu thích',
-      amount:'1.000.000đ + quà',
+      amount:'3.000.000đ + chứng nhận',
       quantity:'01 giải',
-      description:'Giải online dành cho tác phẩm được cộng đồng yêu thích theo quy định bình chọn; gồm 1.000.000đ tiền mặt và quà tặng.',
+      description:'Dành cho tác phẩm có điểm bình chọn hợp lệ cao nhất theo thể lệ chương trình.',
       tone:'green',
       featured:false,
       enabled:true
     },
     {
       code:'SPREAD',
-      label:'Giải online',
+      label:'Giải phụ',
       name:'Giải Lan tỏa',
-      amount:'1.000.000đ + quà',
+      amount:'2.000.000đ + chứng nhận',
       quantity:'01 giải',
-      description:'Giải online ghi nhận khả năng lan tỏa của tác phẩm; gồm 1.000.000đ tiền mặt và quà tặng.',
+      description:'Ghi nhận khả năng lan tỏa tự nhiên của tác phẩm theo cách tính tương tác trong thể lệ.',
       tone:'beige',
       featured:false,
       enabled:true
@@ -90,7 +90,7 @@ try {
     [JSON.stringify(value)]
   );
 
-  console.log('HALO HOLA 2026 prize structure v2 applied:', {
+  console.log('HALO HOLA 2026 official prize structure applied:', {
     totalPrize:rows[0].value.totalPrize,
     totalAwards:rows[0].value.totalAwards,
     awards:rows[0].value.awards.map(item=>({code:item.code,quantity:item.quantity,amount:item.amount}))
