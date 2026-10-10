@@ -3,6 +3,7 @@ import { pool } from '../database/pool.js';
 import { getMediaDownloadUrl } from '../services/submission.service.js';
 
 const router = Router();
+const PUBLIC_STATUSES="('VALID','SHORTLIST','TOP52','AWARDED')";
 const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
 
 router.get('/places', async (_req, res, next) => {
@@ -21,7 +22,7 @@ router.get('/themes', async (_req,res,next)=>{
     const {rows}=await pool.query(`
       SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
              t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
-             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
+             COUNT(s.id) FILTER (WHERE s.status IN ${PUBLIC_STATUSES} AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
       FROM themes t
       LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
       WHERE t.published=TRUE
@@ -37,7 +38,7 @@ router.get('/themes/:slug', async (req,res,next)=>{
     const {rows}=await pool.query(`
       SELECT t.id,t.slug,t.title,t.description,t.intro,t.image,t.color,
              t.location_label AS "locationLabel",t.sort_order AS "sortOrder",
-             COUNT(s.id) FILTER (WHERE s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
+             COUNT(s.id) FILTER (WHERE s.status IN ${PUBLIC_STATUSES} AND s.is_demo=FALSE AND ${publicArtworkCondition('s')})::int AS "artworkCount"
       FROM themes t
       LEFT JOIN submissions s ON s.theme=t.title AND s.allow_media_use=TRUE
       WHERE t.published=TRUE AND t.slug=$1
@@ -67,7 +68,7 @@ router.get('/public-media/:id', async (req,res,next)=>{
       SELECT m.id
       FROM submission_media m
       JOIN submissions s ON s.id=m.submission_id
-      WHERE m.id=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+      WHERE m.id=$1 AND s.status IN ${PUBLIC_STATUSES} AND s.is_demo=FALSE AND s.allow_media_use=TRUE
         AND ${publicArtworkCondition('s')}
       LIMIT 1
     `,[req.params.id]);
@@ -81,10 +82,16 @@ router.get('/public-media/:id', async (req,res,next)=>{
 router.get('/artworks', async (req,res,next)=>{
   try{
     const values=[];
-    const conditions=["s.status IN ('TOP52','AWARDED')","s.is_demo=FALSE","s.allow_media_use=TRUE",publicArtworkCondition('s')];
+    const conditions=[`s.status IN ${PUBLIC_STATUSES}`,"s.is_demo=FALSE","s.allow_media_use=TRUE",publicArtworkCondition('s')];
     if(req.query.theme){values.push(String(req.query.theme));conditions.push(`s.theme=$${values.length}`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
     if(req.query.color){values.push(String(req.query.color));conditions.push(`s.color=$${values.length}`);}
+    if(req.query.location){values.push(`%${String(req.query.location).trim()}%`);conditions.push(`s.location ILIKE $${values.length}`);}
+    if(req.query.q){
+      values.push(`%${String(req.query.q).trim()}%`);
+      const p=`$${values.length}`;
+      conditions.push(`(s.code ILIKE ${p} OR COALESCE(s.title,'') ILIKE ${p} OR s.name ILIKE ${p} OR COALESCE(s.display_name,'') ILIKE ${p} OR s.location ILIKE ${p} OR s.theme ILIKE ${p})`);
+    }
 
     const limit=Math.max(1,Math.min(100,Number(req.query.limit)||52));
     const offset=Math.max(0,Number(req.query.offset)||0);
@@ -92,12 +99,22 @@ router.get('/artworks', async (req,res,next)=>{
     const limitParam=values.length;
     values.push(offset);
     const offsetParam=values.length;
+    const sort=String(req.query.sort||'latest').toLowerCase();
+    const orderBy=sort==='score'
+      ? "CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,jury.avg_score DESC NULLS LAST,s.created_at DESC"
+      : sort==='oldest'
+        ? 'COALESCE(s.published_at,s.created_at) ASC,s.created_at ASC'
+        : 'COALESCE(s.published_at,s.created_at) DESC,s.created_at DESC';
 
     const {rows}=await pool.query(`
       SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
              COALESCE(NULLIF(s.display_name,''),s.name) AS author,
              s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
-             s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
+             s.status,s.submission_source AS "submissionSource",s.facebook_post_url AS "facebookPostUrl",
+             s.facebook_post_verified_at AS "facebookPostVerifiedAt",s.facebook_reactions AS "facebookReactions",
+             s.facebook_comments AS "facebookComments",s.facebook_shares AS "facebookShares",
+             (s.facebook_reactions + s.facebook_comments*2 + s.facebook_shares*3)::int AS "outreachScore",
+             s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
              COALESCE(jury.avg_score,0)::float AS "juryScore",
@@ -114,7 +131,7 @@ router.get('/artworks', async (req,res,next)=>{
         WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
       ) jury ON TRUE
       WHERE ${conditions.join(' AND ')}
-      ORDER BY CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,jury.avg_score DESC NULLS LAST,s.created_at ASC
+      ORDER BY ${orderBy}
       LIMIT $${limitParam} OFFSET $${offsetParam}
     `,values);
     res.json(rows);
@@ -127,7 +144,11 @@ router.get('/artworks/:slug', async (req,res,next)=>{
       SELECT s.id,LOWER(s.code) AS slug,s.code,s.title,
              COALESCE(NULLIF(s.display_name,''),s.name) AS author,
              s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
-             s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
+             s.status,s.submission_source AS "submissionSource",s.facebook_post_url AS "facebookPostUrl",
+             s.facebook_post_verified_at AS "facebookPostVerifiedAt",s.facebook_reactions AS "facebookReactions",
+             s.facebook_comments AS "facebookComments",s.facebook_shares AS "facebookShares",
+             (s.facebook_reactions + s.facebook_comments*2 + s.facebook_shares*3)::int AS "outreachScore",
+             s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
              COALESCE(jury.avg_score,0)::float AS "juryScore"
@@ -142,7 +163,7 @@ router.get('/artworks/:slug', async (req,res,next)=>{
         FROM jury_scores js
         WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
       ) jury ON TRUE
-      WHERE LOWER(s.code)=$1 AND s.status IN ('TOP52','AWARDED') AND s.is_demo=FALSE AND s.allow_media_use=TRUE
+      WHERE LOWER(s.code)=$1 AND s.status IN ${PUBLIC_STATUSES} AND s.is_demo=FALSE AND s.allow_media_use=TRUE
         AND ${publicArtworkCondition('s')}
       LIMIT 1
     `,[String(req.params.slug||'').toLowerCase()]);
