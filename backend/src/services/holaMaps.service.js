@@ -180,15 +180,20 @@ async function runJob(jobId) {
     await pool.query(
       `UPDATE hola_maps_sync_jobs
        SET status=$2, attempts=$3, last_error=$4,
-           next_attempt_at=CASE WHEN $2='FAILED' THEN next_attempt_at ELSE NOW() + ($5 || ' milliseconds')::interval END,
+           next_attempt_at=CASE WHEN $2='FAILED' THEN next_attempt_at ELSE NOW() + ($5::int * interval '1 millisecond') END,
            updated_at=NOW()
        WHERE id=$1`,
-      [job.id, finalFailure ? 'FAILED' : 'PENDING', attempt, message.slice(0, 2000), String(delay)]
+      [job.id, finalFailure ? 'FAILED' : 'PENDING', attempt, message.slice(0, 2000), delay]
     );
     if (job.submission_id) await setSubmissionSyncState(job.submission_id, finalFailure ? 'FAILED' : 'PENDING', message);
     console.warn(`[Hola Maps sync] ${job.action} ${job.external_post_id} attempt ${attempt} failed:`, message);
     if (!finalFailure) setTimeout(() => runJob(job.id).catch(err => console.warn('[Hola Maps sync retry]', err.message)), delay).unref?.();
   }
+}
+
+export function kickHolaMapsSyncJob(jobId) {
+  if (!jobId) return;
+  setImmediate(() => runJob(jobId).catch(error => console.warn('[Hola Maps sync job]', error.message)));
 }
 
 export async function enqueueHolaMapsSync({ submissionId = null, externalPostId, action = 'UPSERT' }) {
@@ -200,7 +205,7 @@ export async function enqueueHolaMapsSync({ submissionId = null, externalPostId,
   );
   if (submissionId && action === 'UPSERT') await setSubmissionSyncState(submissionId, 'PENDING', null);
   const id = rows[0].id;
-  setImmediate(() => runJob(id).catch(error => console.warn('[Hola Maps sync job]', error.message)));
+  kickHolaMapsSyncJob(id);
   return id;
 }
 
@@ -223,6 +228,6 @@ export async function recoverPendingHolaMapsSyncJobs(limit = 50) {
      ORDER BY created_at ASC LIMIT $1`,
     [Math.max(1, Math.min(Number(limit) || 50, 200))]
   );
-  for (const row of rows) setImmediate(() => runJob(row.id).catch(error => console.warn('[Hola Maps recovery]', error.message)));
+  for (const row of rows) kickHolaMapsSyncJob(row.id);
   return rows.length;
 }
