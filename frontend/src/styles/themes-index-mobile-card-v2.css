@@ -1,0 +1,156 @@
+/* Mobile theme-index cards: edge-to-edge imagery and a larger, more readable rhythm.
+   Scoped to /chu-de so homepage cards are unaffected. */
+@media (max-width: 700px) {
+  .theme-index-page .themes-showcase-inner {
+    width: calc(100% - 16px) !important;
+  }
+
+  .theme-index-page .themes-card-grid {
+    gap: 10px !important;
+  }
+
+  .theme-index-page .theme-card-reference {
+    height: 228px !important;
+    min-height: 228px !important;
+    max-height: 228px !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-media {
+    flex: 0 0 116px !important;
+    width: 100% !important;
+    height: 116px !important;
+    min-height: 116px !important;
+    max-height: 116px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #ebe5d9 !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-media img,
+  .theme-index-page .theme-card-reference .theme-card-placeholder {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body {
+    height: 112px !important;
+    min-height: 112px !important;
+    padding: 11px 39px 10px 12px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number {
+    gap: 8px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number b {
+    font-size: .68rem !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number i {
+    width: 31px !important;
+  }
+
+  .theme-index-page .theme-card-reference h3 {
+    min-height: 34px !important;
+    max-height: 34px !important;
+    margin-bottom: 4px !important;
+    font-size: .94rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -.018em !important;
+  }
+
+  .theme-index-page .theme-card-reference p {
+    min-height: 15px !important;
+    max-height: 15px !important;
+    font-size: .64rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body small {
+    padding-top: 6px !important;
+    font-size: .62rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-arrow {
+    top: 11px !important;
+    right: 9px !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-arrow svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .theme-index-page .themes-showcase-inner {
+    width: calc(100% - 12px) !important;
+  }
+
+  .theme-index-page .themes-card-grid {
+    gap: 8px !important;
+  }
+
+  .theme-index-page .theme-card-reference {
+    height: 222px !important;
+    min-height: 222px !important;
+    max-height: 222px !important;
+    border-radius: 17px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-media {
+    flex-basis: 112px !important;
+    height: 112px !important;
+    min-height: 112px !important;
+    max-height: 112px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body {
+    height: 110px !important;
+    min-height: 110px !important;
+    padding: 10px 37px 9px 11px !important;
+  }
+
+  .theme-index-page .theme-card-reference h3 {
+    min-height: 33px !important;
+    max-height: 33px !important;
+    font-size: .90rem !important;
+  }
+
+  .theme-index-page .theme-card-reference p {
+    font-size: .62rem !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body small {
+    font-size: .60rem !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-arrow {
+    top: 10px !important;
+    right: 8px !important;
+    width: 29px !important;
+    height: 29px !important;
+    min-width: 29px !important;
+    min-height: 29px !important;
+  }
+}
