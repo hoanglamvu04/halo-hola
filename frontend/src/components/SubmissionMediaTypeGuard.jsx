@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
+const DRAFT_KEY = 'halo_hola_submission_draft_v2'
+const TYPE_KEY = 'halo_hola_submission_type_v1'
+
 const RULES = {
   Photo: {
     accept: 'image/jpeg,image/png,image/webp',
@@ -24,8 +27,28 @@ const RULES = {
   }
 }
 
+function readDraftType() {
+  try {
+    return JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')?.type || ''
+  } catch {
+    return ''
+  }
+}
+
 function getSelectedType() {
-  return document.querySelector('.submit-page .type-grid button.selected b')?.textContent?.trim() || 'Photo'
+  const fromDom = document.querySelector('.submit-page .type-grid button.selected b')?.textContent?.trim()
+  if (RULES[fromDom]) {
+    sessionStorage.setItem(TYPE_KEY, fromDom)
+    return fromDom
+  }
+
+  const stored = sessionStorage.getItem(TYPE_KEY)
+  if (RULES[stored]) return stored
+
+  const draftType = readDraftType()
+  if (RULES[draftType]) return draftType
+
+  return 'Photo'
 }
 
 function getFileInput() {
@@ -35,14 +58,16 @@ function getFileInput() {
 function showNotice(message, tone = 'info') {
   const upload = document.querySelector('.submit-page .upload-box')
   if (!upload) return
+
   let notice = document.querySelector('.submission-media-guard-notice')
   if (!notice) {
     notice = document.createElement('div')
     notice.className = 'submission-media-guard-notice'
     upload.insertAdjacentElement('afterend', notice)
   }
-  notice.dataset.tone = tone
-  notice.textContent = message
+
+  if (notice.dataset.tone !== tone) notice.dataset.tone = tone
+  if (notice.textContent !== message) notice.textContent = message
 }
 
 function clearNotice() {
@@ -52,7 +77,9 @@ function clearNotice() {
 function updateHint(rule) {
   const hint = document.querySelector('.submit-page .upload-box > small')
   if (!hint || !rule) return
-  hint.textContent = `Định dạng phù hợp với loại hình đã chọn: ${rule.label} · tối đa theo cấu hình server.`
+
+  const nextText = `Định dạng phù hợp với loại hình đã chọn: ${rule.label} · tối đa theo cấu hình server.`
+  if (hint.textContent !== nextText) hint.textContent = nextText
 }
 
 function removeCurrentFiles() {
@@ -66,17 +93,21 @@ export default function SubmissionMediaTypeGuard() {
   useEffect(() => {
     if (pathname !== '/gui-goc-nhin') return undefined
 
-    let lastType = ''
-    let observer
+    let lastType = getSelectedType()
+    let syncTimer = 0
 
     const sync = ({ typeChanged = false } = {}) => {
       const type = getSelectedType()
       const rule = RULES[type] || RULES.Photo
       const input = getFileInput()
-      if (!input) return
 
-      input.setAttribute('accept', rule.accept)
-      input.dataset.submissionType = type
+      if (!input) {
+        lastType = type
+        return
+      }
+
+      if (input.getAttribute('accept') !== rule.accept) input.setAttribute('accept', rule.accept)
+      if (input.dataset.submissionType !== type) input.dataset.submissionType = type
       updateHint(rule)
 
       if (typeChanged && lastType && type !== lastType) {
@@ -89,13 +120,27 @@ export default function SubmissionMediaTypeGuard() {
           showNotice(`Đã chuyển sang “${type}”. Bước tải file sẽ chỉ nhận ${rule.label}.`, 'info')
         }
       }
+
       lastType = type
+    }
+
+    const scheduleSync = options => {
+      window.clearTimeout(syncTimer)
+      syncTimer = window.setTimeout(() => sync(options), 0)
     }
 
     const onClick = event => {
       const typeButton = event.target.closest?.('.submit-page .type-grid button')
-      if (!typeButton) return
-      window.setTimeout(() => sync({ typeChanged: true }), 0)
+      if (typeButton) {
+        const selectedType = String(typeButton.querySelector('b')?.textContent || '').trim()
+        if (RULES[selectedType]) sessionStorage.setItem(TYPE_KEY, selectedType)
+        scheduleSync({ typeChanged: true })
+        return
+      }
+
+      if (event.target.closest?.('.submit-page .wizard-actions button, .submit-page .stepper button')) {
+        scheduleSync()
+      }
     }
 
     const onFileChangeCapture = event => {
@@ -121,24 +166,12 @@ export default function SubmissionMediaTypeGuard() {
       showNotice(`File không phù hợp với loại hình “${type}”${names ? `: ${names}` : ''}. Chỉ chọn ${rule.label}.`, 'error')
     }
 
-    const start = () => {
-      sync()
-      observer = new MutationObserver(() => {
-        const type = getSelectedType()
-        if (type !== lastType) sync({ typeChanged: Boolean(lastType) })
-        else sync()
-      })
-      const page = document.querySelector('.submit-page')
-      if (page) observer.observe(page, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] })
-    }
-
     document.addEventListener('click', onClick, true)
     document.addEventListener('change', onFileChangeCapture, true)
-    const timer = window.setTimeout(start, 0)
+    scheduleSync()
 
     return () => {
-      window.clearTimeout(timer)
-      observer?.disconnect()
+      window.clearTimeout(syncTimer)
       document.removeEventListener('click', onClick, true)
       document.removeEventListener('change', onFileChangeCapture, true)
       clearNotice()
