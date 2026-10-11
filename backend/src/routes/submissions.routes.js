@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
 import { Router } from 'express';
 import { upload } from '../middleware/upload.js';
 import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimit.js';
@@ -13,6 +14,13 @@ import { pool } from '../database/pool.js';
 
 const router = Router();
 
+const FILE_EXTENSIONS_BY_TYPE = {
+  Photo: new Set(['.jpg','.jpeg','.png','.webp','.tif','.tiff','.dng','.cr2','.nef','.arw']),
+  Video: new Set(['.mp4','.mov']),
+  'Story & Creative': new Set(['.pdf','.doc','.docx','.mp3']),
+  'Art & Design': new Set(['.jpg','.jpeg','.png','.webp','.tif','.tiff','.pdf','.dng','.cr2','.nef','.arw'])
+};
+
 function hasAdminPreview(req) {
   const header=String(req.headers.authorization||'');
   if(!header.startsWith('Bearer ')) return false;
@@ -21,6 +29,22 @@ function hasAdminPreview(req) {
     return ['ADMIN','MODERATOR'].includes(user?.role);
   } catch {
     return false;
+  }
+}
+
+function validateFilesForArtworkType(type, files = []) {
+  if (!files.length) return;
+  const allowed = FILE_EXTENSIONS_BY_TYPE[type];
+  if (!allowed) throw new AppError('Loại hình tác phẩm chưa được hỗ trợ.', 400);
+
+  const invalid = files.filter((file) => {
+    const ext = path.extname(file.originalname || '').toLowerCase();
+    return !allowed.has(ext);
+  });
+
+  if (invalid.length) {
+    const names = invalid.map((file) => file.originalname).filter(Boolean).join(', ');
+    throw new AppError(`Loại hình ${type} không nhận tệp: ${names}. Vui lòng chọn đúng định dạng tác phẩm.`, 400);
   }
 }
 
@@ -106,6 +130,8 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
     if (!(req.files || []).length && !data.externalLink) {
       throw new AppError('Cần ít nhất một file gốc hoặc link tác phẩm.', 400);
     }
+
+    validateFilesForArtworkType(data.type, req.files || []);
 
     const created = await createSubmission(data, req.files || []);
 
