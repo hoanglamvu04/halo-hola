@@ -19,8 +19,6 @@ function clean(value) {
 
 export default function IosSubmissionExperience() {
   useEffect(() => {
-    if (!isIOSDevice()) return undefined
-
     let groupUrl = ''
     let active = true
 
@@ -34,12 +32,6 @@ export default function IosSubmissionExperience() {
       const button = event.target.closest?.('.submit-facebook-primary')
       if (!button) return
 
-      // Khi Web Share API khả dụng, để SubmitPage tự mở native Share Sheet.
-      // Chỉ can thiệp ở chế độ fallback để giữ nguyên luồng cũ mở đúng Group.
-      const supportsNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
-      const shareMode = button.dataset.shareMode || (supportsNativeShare ? 'native' : 'fallback')
-      if (shareMode === 'native' && supportsNativeShare) return
-
       const shareCard = button.closest('.submit-facebook-share')
       const stack = button.closest('.success-stack')
       const caption = clean(shareCard?.querySelector('.submit-facebook-caption pre')?.textContent)
@@ -50,8 +42,11 @@ export default function IosSubmissionExperience() {
 
       event.preventDefault()
       event.stopPropagation()
+      event.stopImmediatePropagation?.()
 
-      window.location.assign(groupUrl || CHECKIN_GROUP_SEARCH_URL)
+      const target = groupUrl || CHECKIN_GROUP_SEARCH_URL
+      if (isIOSDevice()) window.location.assign(target)
+      else window.open(target, '_blank', 'noopener,noreferrer')
     }
 
     document.addEventListener('click', onPrimaryFacebookClick, true)
