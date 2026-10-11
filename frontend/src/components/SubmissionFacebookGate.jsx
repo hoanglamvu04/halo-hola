@@ -33,26 +33,18 @@ function updateShareChoiceCopy(stack) {
   const heading = shareCard?.querySelector('.submit-facebook-share-head h3')
   const description = shareCard?.querySelector('.submit-facebook-share-head p')
   const primaryAction = shareCard?.querySelector('.submit-facebook-primary')
-  const supportsNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
 
-  if (heading && heading.textContent !== 'Chia sẻ góc nhìn lên Facebook') {
-    heading.textContent = 'Chia sẻ góc nhìn lên Facebook'
+  if (heading && heading.textContent !== 'Đăng bài lên CHECK IN HOALAC') {
+    heading.textContent = 'Đăng bài lên CHECK IN HOALAC'
   }
 
-  const descriptionCopy = supportsNativeShare
-    ? 'Bạn có thể thử Chia sẻ nhanh để gửi ảnh/video qua bảng chia sẻ của thiết bị. Cách cũ “Sao chép” rồi “Mở CHECK IN HOALAC” vẫn được giữ nguyên.'
-    : 'Thiết bị này sẽ dùng cách cũ: sao chép nội dung rồi mở CHECK IN HOALAC. Bạn vẫn có thể kiểm tra và chỉnh nội dung trước khi đăng.'
+  const descriptionCopy = 'Nội dung Facebook đã được chuẩn bị sẵn. Bấm nút bên dưới để sao chép nội dung và mở thẳng nhóm CHECK IN HOALAC, sau đó chỉ cần dán, thêm ảnh/video và đăng.'
   if (description && description.textContent !== descriptionCopy) description.textContent = descriptionCopy
 
   if (primaryAction) {
-    primaryAction.dataset.shareMode = supportsNativeShare ? 'native' : 'fallback'
-    setButtonText(primaryAction, supportsNativeShare ? 'Chia sẻ nhanh' : 'Mở Facebook')
-    primaryAction.setAttribute(
-      'title',
-      supportsNativeShare
-        ? 'Mở bảng chia sẻ của thiết bị; nội dung vẫn được sao chép sẵn làm phương án dự phòng.'
-        : 'Sao chép nội dung và mở Facebook theo cách cũ.'
-    )
+    primaryAction.dataset.shareMode = 'fallback'
+    setButtonText(primaryAction, 'Sao chép & mở nhóm')
+    primaryAction.setAttribute('title', 'Sao chép nội dung rồi mở thẳng nhóm CHECK IN HOALAC.')
   }
 }
 
@@ -206,7 +198,7 @@ export default function SubmissionFacebookGate() {
       <i />
       <div className={completed ? 'is-done' : 'is-active'}><span>{completed ? <Check size={15}/> : '2'}</span><b>Đăng Facebook</b><small>{completed ? 'Đã gắn link' : 'Tiếp theo'}</small></div>
       <i />
-      <div className={completed ? 'is-done' : 'is-locked'}><span>{completed ? <Check size={15}/> : '3'}</span><b>Hoàn tất</b><small>{completed ? 'Đã hoàn tất' : 'Nhận mã dự thi'}</small></div>
+      <div className={completed ? 'is-done' : 'is-locked'}><span>{completed ? <Check size={15}/> : '3'}</span><b>Hoàn tất</b><small>{completed ? 'Đã hoàn tất' : 'Gắn link bài'}</small></div>
     </div>
 
     {completed ? <>
@@ -216,7 +208,7 @@ export default function SubmissionFacebookGate() {
     </> : <>
       <div className="facebook-required-badge"><Sparkles size={17}/> SẮP HOÀN TẤT · BƯỚC 2 / 3</div>
       <h3>Chỉ còn một bước: đăng bài lên CHECK IN HOALAC</h3>
-      <p>Nội dung đã được chuẩn bị sẵn. Bạn có thể thử Chia sẻ nhanh; cách cũ Sao chép nội dung rồi Mở nhóm vẫn giữ nguyên để dùng bất cứ lúc nào.</p>
+      <p>Nội dung đã được chuẩn bị sẵn. Hãy bấm “Sao chép & mở nhóm”, sang Facebook dán nội dung, thêm ảnh/video của bạn rồi đăng bài.</p>
       <div className="facebook-required-callout"><Send size={19}/><span><b>Sau khi đăng xong, hãy dán link bài viết.</b> Link giúp BTC đối chiếu đúng bài và ghi nhận dữ liệu cho Giải Lan tỏa.</span></div>
     </>}
   </div>
@@ -225,7 +217,7 @@ export default function SubmissionFacebookGate() {
     {completed ? <div className="facebook-required-complete"><CheckCircle2 size={24}/><div><b>Đã ghi nhận Facebook</b><span>Bài dự thi đã chuyển sang bước hoàn tất.</span></div></div> : <>
       <div className="facebook-required-confirm-copy">
         <b>{facebookOpened ? 'Dán link bài Facebook để hoàn tất' : 'Mở nhóm CHECK IN HOALAC để đăng bài'}</b>
-        <span>{facebookOpened ? 'Mở bài viết vừa đăng, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Nội dung đã được chuẩn bị sẵn. Bạn có thể thử Chia sẻ nhanh hoặc dùng cách cũ Sao chép rồi mở nhóm.'}</span>
+        <span>{facebookOpened ? 'Mở bài viết vừa đăng, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Bấm “Sao chép & mở nhóm”. Nội dung sẽ được sao chép sẵn; sang Facebook chỉ cần dán, thêm ảnh/video và đăng.'}</span>
       </div>
       {facebookOpened&&<div className="facebook-post-url-field">
         <label><Link2 size={16}/> Link bài Facebook</label>
