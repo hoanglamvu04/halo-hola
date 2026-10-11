@@ -58,32 +58,43 @@
   }
 
   .theme-index-page .theme-card-reference .theme-card-number b {
-    font-size: .68rem !important;
+    font-size: .72rem !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-number i {
     width: 31px !important;
   }
 
+  /* Keep the title content-driven: one-line titles no longer reserve a second
+     empty line, while long titles still clamp cleanly to two lines. */
   .theme-index-page .theme-card-reference h3 {
-    min-height: 34px !important;
-    max-height: 34px !important;
-    margin-bottom: 4px !important;
-    font-size: .94rem !important;
-    line-height: 1.1 !important;
-    letter-spacing: -.018em !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 0 3px !important;
+    font-size: 1rem !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.02em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
   }
 
   .theme-index-page .theme-card-reference p {
-    min-height: 15px !important;
-    max-height: 15px !important;
-    font-size: .64rem !important;
-    line-height: 1.3 !important;
+    min-height: 0 !important;
+    max-height: 18px !important;
+    margin: 0 !important;
+    font-size: .70rem !important;
+    line-height: 1.28 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-body small {
+    margin-top: auto !important;
     padding-top: 6px !important;
-    font-size: .62rem !important;
+    font-size: .65rem !important;
     line-height: 1.1 !important;
   }
 
@@ -132,17 +143,18 @@
   }
 
   .theme-index-page .theme-card-reference h3 {
-    min-height: 33px !important;
-    max-height: 33px !important;
-    font-size: .90rem !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    font-size: .96rem !important;
+    line-height: 1.08 !important;
   }
 
   .theme-index-page .theme-card-reference p {
-    font-size: .62rem !important;
+    font-size: .67rem !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-body small {
-    font-size: .60rem !important;
+    font-size: .63rem !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-arrow {
