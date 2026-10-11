@@ -63,6 +63,7 @@ import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
 import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import SubmissionOperationsRuntime from './components/SubmissionOperationsRuntime.jsx'
 import IosSubmissionExperience from './components/IosSubmissionExperience.jsx'
+import SubmissionWizardExperience from './components/SubmissionWizardExperience.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -75,6 +76,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionFacebookGate />
         <SubmissionOperationsRuntime />
         <IosSubmissionExperience />
+        <SubmissionWizardExperience />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
