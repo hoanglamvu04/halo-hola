@@ -19,6 +19,7 @@ import '../styles/submit-success-receipt.css'
 
 const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
+const RECEIPT_PREFIX = 'halo_hola_submission_receipt_v1_'
 
 const initialForm = {
   name:'', display:'', email:'', phone:'', bio:'',
@@ -37,11 +38,54 @@ const isValidUrl=value=>{
   try { new URL(clean(value)); return true } catch { return false }
 }
 const hasCoordinate=value=>value!==''&&value!==null&&value!==undefined&&Number.isFinite(Number(value))
+const normalizeCode=value=>clean(value).toUpperCase()
+const receiptKey=code=>`${RECEIPT_PREFIX}${normalizeCode(code)}`
+
+function getReceiptCodeFromUrl(){
+  if(typeof window==='undefined') return ''
+  return normalizeCode(new URLSearchParams(window.location.search).get('code'))
+}
+
+function readReceipt(code){
+  const normalized=normalizeCode(code)
+  if(!normalized) return null
+  try{
+    const receipt=JSON.parse(localStorage.getItem(receiptKey(normalized))||'null')
+    return normalizeCode(receipt?.result?.code)===normalized ? receipt : null
+  }catch{
+    return null
+  }
+}
+
+function saveReceipt(result,form){
+  const code=normalizeCode(result?.code)
+  if(!code) return
+  try{
+    localStorage.setItem(receiptKey(code),JSON.stringify({result,form,savedAt:Date.now()}))
+  }catch{}
+}
+
+function replaceSubmissionUrl(code){
+  if(typeof window==='undefined') return
+  const normalized=normalizeCode(code)
+  const url=new URL(window.location.href)
+  if(normalized) url.searchParams.set('code',normalized)
+  else url.searchParams.delete('code')
+  url.searchParams.set('buoc',normalized?'xac-nhan':'thong-tin')
+  url.searchParams.delete('step')
+  window.history.replaceState(window.history.state,'',`${url.pathname}${url.search}${url.hash}`)
+}
 
 export default function SubmitPage(){
-  const [step,setStep]=useState(1)
+  const [restoredReceipt]=useState(()=>readReceipt(getReceiptCodeFromUrl()))
+  const [step,setStep]=useState(()=>restoredReceipt?7:1)
   const [form,setForm]=useState(()=>{
     try {
+      if(restoredReceipt?.form){
+        const merged={...initialForm,...restoredReceipt.form}
+        if(merged.type==='Ảnh') merged.type='Photo'
+        return merged
+      }
       const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')
       const merged=saved ? {...initialForm,...saved} : initialForm
       if(merged.type==='Ảnh') merged.type='Photo'
@@ -54,11 +98,11 @@ export default function SubmitPage(){
   const [files,setFiles]=useState([])
   const [previewUrl,setPreviewUrl]=useState('')
   const [submitting,setSubmitting]=useState(false)
-  const [result,setResult]=useState(null)
+  const [result,setResult]=useState(()=>restoredReceipt?.result||null)
   const [error,setError]=useState('')
-  const [savedAt,setSavedAt]=useState(null)
+  const [savedAt,setSavedAt]=useState(()=>restoredReceipt?.savedAt?new Date(restoredReceipt.savedAt):null)
   const [copiedAction,setCopiedAction]=useState('')
-  const [shareNotice,setShareNotice]=useState('')
+  const [shareNotice,setShareNotice]=useState(()=>restoredReceipt?'Đã khôi phục trạng thái theo Mã dự thi. Bạn có thể tiếp tục test bước chia sẻ mà không cần nhập lại từ đầu.':'')
   const inputRef=useRef(null)
   const saveTimer=useRef(null)
   const code=useMemo(()=>result?.code || 'HH26-XXXXX',[result])
@@ -173,7 +217,7 @@ export default function SubmitPage(){
     if(!isValidEmail(form.email)) issues.push({step:1,key:'email',label:'Email hợp lệ'})
     if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên tác phẩm'})
     if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link tác phẩm hợp lệ'})
-    if(!files.length&&!clean(form.externalLink)) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
+    if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
     if(!clean(form.theme)) issues.push({step:4,key:'theme',label:'Chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
@@ -219,6 +263,7 @@ export default function SubmitPage(){
 
   const resetDraft=()=>{
     localStorage.removeItem(DRAFT_KEY)
+    replaceSubmissionUrl('')
     setForm({...initialForm,theme:themes[0]?.title||'',color:colors[0]?.name||''})
     setFiles([])
     setStep(1)
@@ -259,7 +304,10 @@ export default function SubmitPage(){
         },
         files
       })
+      saveReceipt(data,form)
+      replaceSubmissionUrl(data?.code)
       localStorage.removeItem(DRAFT_KEY)
+      setStep(7)
       setResult(data)
     } catch (err) {
       const detail=Array.isArray(err.details)&&err.details.length
@@ -432,7 +480,7 @@ export default function SubmitPage(){
                 <div><small>Họ tên tác giả</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
                 <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
                 <div><small>Chủ đề</small><b>{clean(form.theme)||'Chưa chọn'}</b></div>
-                <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':'Chưa có'}</b></div>
+                <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':result?'Đã gửi file':'Chưa có'}</b></div>
                 <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
                 <div><small>HOLA Map</small><b>{clean(form.locationPlaceId)?'Đã liên kết địa điểm':hasPinnedLocation?'Đã ghim tọa độ':'Nhập thủ công'}</b></div>
                 <div><small>Tọa độ</small><b>{hasPinnedLocation?`${Number(form.locationLat).toFixed(6)}, ${Number(form.locationLng).toFixed(6)}`:'Chưa có'}</b></div>
