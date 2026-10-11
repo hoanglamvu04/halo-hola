@@ -167,6 +167,70 @@ function configureUploadStep() {
   }
 }
 
+function getRequiredConsentCheckboxes() {
+  return [...document.querySelectorAll('.submit-page .confirm-list input[type="checkbox"]')].slice(0, 4)
+}
+
+function allRequiredConsentsChecked() {
+  const boxes = getRequiredConsentCheckboxes()
+  return boxes.length === 4 && boxes.every(box => box.checked)
+}
+
+function showConsentError(message = '') {
+  const actions = document.querySelector('.submit-page .wizard-actions')
+  const card = document.querySelector('.submit-page .wizard-card')
+  if (!actions || !card) return
+
+  let node = card.querySelector('.submission-consent-error')
+  if (!message) {
+    node?.remove()
+    return
+  }
+
+  if (!node) {
+    node = document.createElement('div')
+    node.className = 'form-error submission-consent-error'
+    card.insertBefore(node, actions)
+  }
+  node.textContent = message
+}
+
+function decorateRequiredConsents() {
+  const boxes = getRequiredConsentCheckboxes()
+  boxes.forEach((box, index) => {
+    const label = box.closest('label')
+    label?.setAttribute('data-required-consent', 'true')
+    label?.setAttribute('data-required-consent-index', String(index + 1))
+  })
+}
+
+function syncReviewColor() {
+  const grid = document.querySelector('.submit-page .review-grid')
+  if (!grid) return
+
+  const color = String(readDraft()?.color || '').trim()
+  let item = grid.querySelector('[data-review-color="true"]')
+
+  if (!item) {
+    item = document.createElement('div')
+    item.setAttribute('data-review-color', 'true')
+    item.innerHTML = '<small>Sắc màu</small><b></b>'
+
+    const themeItem = [...grid.children].find(child => child.querySelector('small')?.textContent?.trim() === 'Chủ đề')
+    if (themeItem?.nextSibling) grid.insertBefore(item, themeItem.nextSibling)
+    else grid.appendChild(item)
+  }
+
+  const valueNode = item.querySelector('b')
+  if (valueNode) valueNode.textContent = color || 'Chưa chọn'
+}
+
+function syncStepEnhancements() {
+  configureUploadStep()
+  if (getRenderedStep() === 6) decorateRequiredConsents()
+  if (getRenderedStep() === 7) syncReviewColor()
+}
+
 export default function SubmissionWizardExperience() {
   const { pathname } = useLocation()
 
@@ -188,7 +252,7 @@ export default function SubmissionWizardExperience() {
       localStorage.setItem(STEP_KEY, String(current))
       replaceStepInUrl(current)
       decorateStep(current)
-      configureUploadStep()
+      syncStepEnhancements()
 
       if (scroll && previous && previous !== current) {
         window.requestAnimationFrame(scrollToWizard)
@@ -209,7 +273,7 @@ export default function SubmissionWizardExperience() {
       const requested = getSafeRequestedStep()
       lastStep = current
       decorateStep(current)
-      configureUploadStep()
+      syncStepEnhancements()
 
       observer = new MutationObserver(() => syncFromDom())
       observer.observe(card, { childList: true, subtree: true, characterData: true })
@@ -238,6 +302,24 @@ export default function SubmissionWizardExperience() {
         }
       }
 
+      const currentStep = getRenderedStep()
+      const wizardButton = event.target.closest?.('.submit-page .wizard-actions button')
+      const stepButton = event.target.closest?.('.submit-page .stepper button')
+      const stepButtons = stepButton ? [...document.querySelectorAll('.submit-page .stepper button')] : []
+      const targetStep = stepButton ? stepButtons.indexOf(stepButton) + 1 : 0
+      const attemptsToLeaveConsent = currentStep === 6 && (
+        (wizardButton && !wizardButton.disabled && /tiếp tục/i.test(wizardButton.textContent || '')) ||
+        targetStep > 6
+      )
+
+      if (attemptsToLeaveConsent && !allRequiredConsentsChecked()) {
+        event.preventDefault()
+        event.stopPropagation()
+        event.stopImmediatePropagation?.()
+        showConsentError('Vui lòng xác nhận đủ 4 nội dung bắt buộc trước khi tiếp tục. Mục “Tôi chưa đủ 18 tuổi” chỉ chọn khi phù hợp và không tính trong 4 xác nhận này.')
+        return
+      }
+
       if (!event.target.closest?.('.submit-page .wizard-actions button, .submit-page .stepper button')) return
       window.setTimeout(() => syncFromDom(), 0)
     }
@@ -263,8 +345,17 @@ export default function SubmissionWizardExperience() {
       if (files.length) sessionStorage.setItem(FILE_TYPE_KEY, type)
     }
 
+    const onConsentChange = event => {
+      if (!event.target.closest?.('.submit-page .confirm-list input[type="checkbox"]')) return
+      window.setTimeout(() => {
+        decorateRequiredConsents()
+        if (allRequiredConsentsChecked()) showConsentError('')
+      }, 0)
+    }
+
     document.addEventListener('click', onWizardClick, true)
     document.addEventListener('change', onFileChange, true)
+    document.addEventListener('change', onConsentChange, true)
     restoreRequestedStep()
 
     return () => {
@@ -274,6 +365,7 @@ export default function SubmissionWizardExperience() {
       window.clearTimeout(settleTimer)
       document.removeEventListener('click', onWizardClick, true)
       document.removeEventListener('change', onFileChange, true)
+      document.removeEventListener('change', onConsentChange, true)
     }
   }, [pathname])
 
