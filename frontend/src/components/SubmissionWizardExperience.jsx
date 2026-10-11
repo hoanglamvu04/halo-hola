@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import '../styles/submit-flow-v4.css'
 
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
+const RECEIPT_PREFIX = 'halo_hola_submission_receipt_v1_'
 const STEP_KEY = 'halo_hola_submission_step_v1'
 const TYPE_KEY = 'halo_hola_submission_type_v1'
 const FILE_TYPE_KEY = 'halo_hola_submission_file_type_v1'
@@ -66,16 +67,35 @@ function readDraft() {
   }
 }
 
+function readReceiptFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search)
+    const code = String(params.get('code') || '').trim().toUpperCase()
+    if (!code) return null
+    const receipt = JSON.parse(localStorage.getItem(`${RECEIPT_PREFIX}${code}`) || 'null')
+    const storedCode = String(receipt?.result?.code || '').trim().toUpperCase()
+    return storedCode === code ? receipt : null
+  } catch {
+    return null
+  }
+}
+
 function getSubmissionType() {
   const stored = sessionStorage.getItem(TYPE_KEY)
   if (UPLOAD_RULES[stored]) return stored
 
   const draftType = readDraft()?.type
   if (UPLOAD_RULES[draftType]) return draftType
+
+  const receiptType = readReceiptFromUrl()?.form?.type
+  if (UPLOAD_RULES[receiptType]) return receiptType
   return 'Photo'
 }
 
 function getSafeRequestedStep() {
+  const receipt = readReceiptFromUrl()
+  if (receipt) return 7
+
   const draft = readDraft()
   const requested = getStepFromUrl() || (draft ? normalizeStep(localStorage.getItem(STEP_KEY)) : 1) || 1
 
@@ -208,7 +228,7 @@ function syncReviewColor() {
   const grid = document.querySelector('.submit-page .review-grid')
   if (!grid) return
 
-  const color = String(readDraft()?.color || '').trim()
+  const color = String(readDraft()?.color || readReceiptFromUrl()?.form?.color || '').trim()
   let item = grid.querySelector('[data-review-color="true"]')
 
   if (!item) {
