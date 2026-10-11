@@ -1,0 +1,216 @@
+/* HALO HOLA — submission wizard flow v4
+   URL-aware steps, cleaner mobile rhythm and softer validation states. */
+
+.submit-page .wizard-card{
+  scroll-margin-top:112px;
+}
+
+.submit-page .wizard-card > div{
+  animation:haloWizardIn .18s ease-out;
+}
+
+@keyframes haloWizardIn{
+  from{opacity:.45;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+.submit-page .form-error{
+  margin-top:14px!important;
+  padding:12px 14px!important;
+  border:1px solid rgba(190,88,48,.16)!important;
+  border-left:3px solid #c56742!important;
+  border-radius:13px!important;
+  background:#fff8f2!important;
+  color:#754431!important;
+  font-size:.84rem!important;
+  font-weight:700!important;
+  line-height:1.45!important;
+  box-shadow:none!important;
+}
+
+.submit-page .form-grid label,
+.submit-page .guardian-box label{
+  gap:7px;
+  color:#234c3f;
+  font-weight:800;
+}
+
+.submit-page input:not([type='checkbox']):not([type='radio']):not([type='file']),
+.submit-page textarea,
+.submit-page select{
+  border-color:rgba(24,65,52,.13)!important;
+  background:#fff!important;
+  box-shadow:0 6px 18px rgba(30,48,40,.035)!important;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+
+.submit-page input:not([type='checkbox']):not([type='radio']):not([type='file']):focus,
+.submit-page textarea:focus,
+.submit-page select:focus{
+  outline:none!important;
+  border-color:rgba(20,86,65,.55)!important;
+  box-shadow:0 0 0 4px rgba(20,86,65,.08)!important;
+}
+
+.submit-page input::placeholder,
+.submit-page textarea::placeholder{
+  color:#a1aaa5!important;
+  opacity:1;
+}
+
+.submit-page .stepper button{
+  transition:color .18s ease,background .18s ease,transform .18s ease;
+}
+
+.submit-page .stepper button.active{
+  transform:translateY(-1px);
+}
+
+.submit-page .wizard-actions{
+  position:relative;
+  z-index:2;
+}
+
+@media(max-width:900px){
+  .submit-page .wizard-card{
+    scroll-margin-top:118px;
+  }
+
+  .submit-page .stepper{
+    position:sticky!important;
+    top:78px!important;
+    z-index:24!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+
+  .submit-page .stepper::-webkit-scrollbar{display:none}
+
+  .submit-page .stepper button{
+    scroll-snap-align:center;
+  }
+
+  .submit-page .wizard-card{
+    overflow:visible!important;
+  }
+
+  .submit-page .wizard-card > .eyebrow{
+    display:inline-flex!important;
+    align-items:center;
+    min-height:31px;
+  }
+
+  .submit-page .wizard-card h2{
+    max-width:100%;
+    text-wrap:balance;
+  }
+
+  .submit-page .wizard-card h2 + p{
+    max-width:34rem;
+  }
+
+  .submit-page .form-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  .submit-page .form-grid > label,
+  .submit-page .form-grid > label.full{
+    grid-column:1!important;
+    min-width:0;
+  }
+
+  .submit-page .form-grid label > small{
+    color:#8a938f!important;
+    font-size:.7rem!important;
+    font-weight:600!important;
+  }
+
+  .submit-page .type-grid button,
+  .submit-page .theme-select-grid button{
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .submit-page .wizard-actions{
+    position:sticky!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    margin-left:-3px!important;
+    margin-right:-3px!important;
+    padding:9px!important;
+    border-color:rgba(24,65,52,.09)!important;
+    background:rgba(250,248,241,.94)!important;
+    box-shadow:0 12px 34px rgba(30,47,39,.12)!important;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+
+  .submit-page .wizard-actions .btn{
+    font-weight:850!important;
+    letter-spacing:-.01em;
+  }
+
+  .submit-page .wizard-actions .btn:disabled{
+    opacity:.42!important;
+  }
+}
+
+@media(max-width:720px){
+  .submit-page{
+    padding-top:6px!important;
+  }
+
+  .submit-page .stepper{
+    top:76px!important;
+    margin-bottom:12px!important;
+    border-bottom:1px solid rgba(24,65,52,.08)!important;
+  }
+
+  .submit-page .stepper button{
+    flex-basis:82px!important;
+    padding-top:2px!important;
+    padding-bottom:2px!important;
+  }
+
+  .submit-page .wizard-card{
+    padding:17px 14px 14px!important;
+    border-radius:19px!important;
+  }
+
+  .submit-page .wizard-card h2{
+    margin-top:0!important;
+    font-size:clamp(1.62rem,8vw,2rem)!important;
+  }
+
+  .submit-page .wizard-card h2+p{
+    margin-top:0!important;
+    margin-bottom:16px!important;
+    font-size:.84rem!important;
+    line-height:1.48!important;
+  }
+
+  .submit-page .form-grid label{
+    font-size:.77rem!important;
+  }
+
+  .submit-page input:not([type='checkbox']):not([type='radio']):not([type='file']){
+    min-height:48px!important;
+  }
+
+  .submit-page textarea{
+    min-height:102px!important;
+  }
+
+  .submit-page .form-error{
+    margin-top:11px!important;
+    padding:10px 12px!important;
+    font-size:.77rem!important;
+  }
+
+  .submit-page .wizard-actions{
+    margin-top:17px!important;
+    border-radius:15px!important;
+  }
+}
