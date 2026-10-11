@@ -10,9 +10,9 @@
   }
 
   .theme-index-page .theme-card-reference {
-    height: 228px !important;
-    min-height: 228px !important;
-    max-height: 228px !important;
+    height: 234px !important;
+    min-height: 234px !important;
+    max-height: 234px !important;
     border-radius: 18px !important;
     overflow: hidden !important;
   }
@@ -46,34 +46,46 @@
     object-position: center !important;
   }
 
+  /* Explicit flex flow prevents legacy space-between rules from opening a gap
+     below one-line titles. The count remains pinned to the bottom. */
   .theme-index-page .theme-card-reference .theme-card-body {
-    height: 112px !important;
-    min-height: 112px !important;
-    padding: 11px 39px 10px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    height: 118px !important;
+    min-height: 118px !important;
+    padding: 10px 41px 10px 12px !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-number {
+    flex: 0 0 auto !important;
     gap: 8px !important;
-    margin-bottom: 5px !important;
+    margin: 0 0 4px !important;
+    line-height: 1 !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-number b {
-    font-size: .72rem !important;
+    font-size: .78rem !important;
+    line-height: 1 !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-number i {
-    width: 31px !important;
+    width: 32px !important;
   }
 
-  /* Keep the title content-driven: one-line titles no longer reserve a second
-     empty line, while long titles still clamp cleanly to two lines. */
+  /* Content-driven title height: one-line titles take one line only;
+     long titles clamp to two lines, and the description follows immediately. */
   .theme-index-page .theme-card-reference h3 {
+    flex: 0 0 auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    margin: 0 0 3px !important;
-    font-size: 1rem !important;
-    line-height: 1.08 !important;
-    letter-spacing: -.02em !important;
+    margin: 0 0 4px !important;
+    padding: 0 !important;
+    font-size: 1.08rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -.022em !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -81,35 +93,38 @@
   }
 
   .theme-index-page .theme-card-reference p {
+    flex: 0 0 auto !important;
     min-height: 0 !important;
-    max-height: 18px !important;
+    max-height: none !important;
     margin: 0 !important;
-    font-size: .70rem !important;
-    line-height: 1.28 !important;
+    padding: 0 !important;
+    font-size: .78rem !important;
+    line-height: 1.24 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-body small {
-    margin-top: auto !important;
+    flex: 0 0 auto !important;
+    margin: auto 0 0 !important;
     padding-top: 6px !important;
-    font-size: .65rem !important;
-    line-height: 1.1 !important;
+    font-size: .72rem !important;
+    line-height: 1.08 !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-arrow {
-    top: 11px !important;
+    top: 10px !important;
     right: 9px !important;
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-arrow svg {
-    width: 13px !important;
-    height: 13px !important;
+    width: 14px !important;
+    height: 14px !important;
   }
 }
 
@@ -123,9 +138,9 @@
   }
 
   .theme-index-page .theme-card-reference {
-    height: 222px !important;
-    min-height: 222px !important;
-    max-height: 222px !important;
+    height: 228px !important;
+    min-height: 228px !important;
+    max-height: 228px !important;
     border-radius: 17px !important;
   }
 
@@ -137,32 +152,42 @@
   }
 
   .theme-index-page .theme-card-reference .theme-card-body {
-    height: 110px !important;
-    min-height: 110px !important;
-    padding: 10px 37px 9px 11px !important;
+    height: 116px !important;
+    min-height: 116px !important;
+    padding: 9px 39px 9px 11px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number {
+    margin-bottom: 4px !important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number b {
+    font-size: .75rem !important;
   }
 
   .theme-index-page .theme-card-reference h3 {
     min-height: 0 !important;
     max-height: none !important;
-    font-size: .96rem !important;
-    line-height: 1.08 !important;
+    margin-bottom: 4px !important;
+    font-size: 1.03rem !important;
+    line-height: 1.06 !important;
   }
 
   .theme-index-page .theme-card-reference p {
-    font-size: .67rem !important;
+    font-size: .75rem !important;
+    line-height: 1.22 !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-body small {
-    font-size: .63rem !important;
+    font-size: .70rem !important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-arrow {
-    top: 10px !important;
+    top: 9px !important;
     right: 8px !important;
-    width: 29px !important;
-    height: 29px !important;
-    min-width: 29px !important;
-    min-height: 29px !important;
+    width: 31px !important;
+    height: 31px !important;
+    min-width: 31px !important;
+    min-height: 31px !important;
   }
 }
