@@ -6,6 +6,9 @@ import { client, getSiteSettings, getThemes } from '../services/api.js'
 import { CHECKIN_GROUP_SEARCH_URL, primeCaptionClipboard, resolveCheckinGroupUrl } from '../utils/facebookShare.js'
 
 const TYPES=['Photo','Video','Story & Creative','Art & Design']
+const FULL_FLOW_DRAFT_KEY='halo_hola_submission_draft_v2'
+const FULL_FLOW_STEP_KEY='halo_hola_submission_step_v1'
+const FULL_MODE_SESSION_KEY='halo_hola_submission_full_mode_started_v1'
 const emptyForm={
   name:'',displayName:'',email:'',phone:'',title:'',type:'Photo',theme:'',color:'',location:'',story:'',
   rightsConfirmed:false,imageConsentConfirmed:false,isMinor:false,guardianName:'',guardianConsent:false,
@@ -17,11 +20,25 @@ function isIOS(){
   if(typeof navigator==='undefined')return false
   return /iPad|iPhone|iPod/i.test(navigator.userAgent||'') || (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)
 }
+function hasExistingFullFlow(){
+  if(typeof window==='undefined')return false
+  try{
+    const params=new URLSearchParams(window.location.search)
+    if(clean(params.get('code')))return true
+    const draft=JSON.parse(localStorage.getItem(FULL_FLOW_DRAFT_KEY)||'null')
+    const step=Number(localStorage.getItem(FULL_FLOW_STEP_KEY)||0)
+    const started=sessionStorage.getItem(FULL_MODE_SESSION_KEY)==='1'
+    return Boolean(draft)||step>1||started
+  }catch{
+    return false
+  }
+}
 
 export default function SubmissionQuickMode(){
   const {pathname}=useLocation()
   const [target,setTarget]=useState(null)
   const [mode,setMode]=useState('FULL')
+  const [fullFlowStarted,setFullFlowStarted]=useState(()=>hasExistingFullFlow())
   const [form,setForm]=useState(emptyForm)
   const [themes,setThemes]=useState([])
   const [settings,setSettings]=useState({})
@@ -33,8 +50,24 @@ export default function SubmissionQuickMode(){
   const [error,setError]=useState('')
   const [copied,setCopied]=useState(false)
 
+  const enterFullMode=()=>{
+    setMode('FULL')
+    setFullFlowStarted(true)
+    try{sessionStorage.setItem(FULL_MODE_SESSION_KEY,'1')}catch{}
+  }
+
+  const enterQuickMode=()=>{
+    setMode('QUICK')
+    setFullFlowStarted(false)
+    try{sessionStorage.removeItem(FULL_MODE_SESSION_KEY)}catch{}
+  }
+
   useEffect(()=>{
     if(pathname!=='/gui-goc-nhin'){setTarget(null);return undefined}
+    if(hasExistingFullFlow()){
+      setMode('FULL')
+      setFullFlowStarted(true)
+    }
     let mount=null
     let page=null
     const attach=()=>{
@@ -63,6 +96,22 @@ export default function SubmissionQuickMode(){
     page.classList.toggle('major-quick-submission-mode',mode==='QUICK')
     return()=>page.classList.remove('major-quick-submission-mode')
   },[target,mode])
+
+  useEffect(()=>{
+    const page=target?.closest('.submit-page')
+    const wizard=page?.querySelector('.wizard-card')
+    if(!wizard||mode!=='FULL'||fullFlowStarted)return undefined
+    const markStarted=()=>{
+      setFullFlowStarted(true)
+      try{sessionStorage.setItem(FULL_MODE_SESSION_KEY,'1')}catch{}
+    }
+    wizard.addEventListener('pointerdown',markStarted,{once:true})
+    wizard.addEventListener('focusin',markStarted,{once:true})
+    return()=>{
+      wizard.removeEventListener('pointerdown',markStarted)
+      wizard.removeEventListener('focusin',markStarted)
+    }
+  },[target,mode,fullFlowStarted])
 
   useEffect(()=>{
     if(pathname!=='/gui-goc-nhin')return
@@ -142,6 +191,7 @@ export default function SubmissionQuickMode(){
   }
 
   if(!target)return null
+  if(mode==='FULL'&&fullFlowStarted)return null
 
   return createPortal(<section className="submission-mode-shell">
     <div className="submission-mode-heading">
@@ -150,10 +200,10 @@ export default function SubmissionQuickMode(){
       <p>Dù gửi đầy đủ trên web hay bắt đầu từ Facebook, mỗi tác phẩm đều có một Mã dự thi để BTC quản lý thống nhất.</p>
     </div>
     <div className="submission-mode-tabs">
-      <button type="button" className={mode==='FULL'?'active':''} onClick={()=>setMode('FULL')}>
+      <button type="button" className={mode==='FULL'?'active':''} onClick={enterFullMode}>
         <UploadCloud/><span><b>Gửi đầy đủ trên web</b><small>Tải file gốc · lưu hồ sơ · đăng Facebook</small></span>{mode==='FULL'&&<Check/>}
       </button>
-      <button type="button" className={mode==='QUICK'?'active':''} onClick={()=>setMode('QUICK')}>
+      <button type="button" className={mode==='QUICK'?'active':''} onClick={enterQuickMode}>
         <Smartphone/><span><b>Dự thi nhanh qua Facebook</b><small>Không cần tải file ngay · tạo Mã dự thi trước</small></span>{mode==='QUICK'&&<Check/>}
       </button>
     </div>
