@@ -1,5 +1,5 @@
 @media (max-width: 768px) {
-  /* 8 chủ đề: compact editorial cards */
+  /* Mobile theme gallery: keep the cards compact without losing existing layout behavior. */
   .home-themes-section .themes-grid,
   .themes-section .themes-grid,
   .home-themes-grid {
