@@ -20,6 +20,42 @@ function storageKey(prefix, code) {
   return code ? `halo_hola_${prefix}_${code}` : ''
 }
 
+function setButtonText(button, label) {
+  if (!button) return
+  const textNode = [...button.childNodes].find(node => node.nodeType === 3)
+  if (textNode && textNode.textContent !== ` ${label}`) textNode.textContent = ` ${label}`
+}
+
+function updateShareChoiceCopy(stack) {
+  if (!stack) return
+
+  const shareCard = stack.querySelector('.submit-facebook-share')
+  const heading = shareCard?.querySelector('.submit-facebook-share-head h3')
+  const description = shareCard?.querySelector('.submit-facebook-share-head p')
+  const primaryAction = shareCard?.querySelector('.submit-facebook-primary')
+  const supportsNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+
+  if (heading && heading.textContent !== 'Chia sẻ góc nhìn lên Facebook') {
+    heading.textContent = 'Chia sẻ góc nhìn lên Facebook'
+  }
+
+  const descriptionCopy = supportsNativeShare
+    ? 'Bạn có thể thử Chia sẻ nhanh để gửi ảnh/video qua bảng chia sẻ của thiết bị. Cách cũ “Sao chép” rồi “Mở CHECK IN HOALAC” vẫn được giữ nguyên.'
+    : 'Thiết bị này sẽ dùng cách cũ: sao chép nội dung rồi mở CHECK IN HOALAC. Bạn vẫn có thể kiểm tra và chỉnh nội dung trước khi đăng.'
+  if (description && description.textContent !== descriptionCopy) description.textContent = descriptionCopy
+
+  if (primaryAction) {
+    primaryAction.dataset.shareMode = supportsNativeShare ? 'native' : 'fallback'
+    setButtonText(primaryAction, supportsNativeShare ? 'Chia sẻ nhanh' : 'Mở Facebook')
+    primaryAction.setAttribute(
+      'title',
+      supportsNativeShare
+        ? 'Mở bảng chia sẻ của thiết bị; nội dung vẫn được sao chép sẵn làm phương án dự phòng.'
+        : 'Sao chép nội dung và mở Facebook theo cách cũ.'
+    )
+  }
+}
+
 function updatePostSubmissionLabels(stack) {
   if (!stack) return
 
@@ -30,6 +66,7 @@ function updatePostSubmissionLabels(stack) {
   if (codeLabel && codeLabel.textContent !== 'Mã dự thi') codeLabel.textContent = 'Mã dự thi'
   if (lookupAction && lookupAction.textContent !== 'Tra cứu bài dự thi') lookupAction.textContent = 'Tra cứu bài dự thi'
   if (resetAction && resetAction.textContent !== 'Gửi bài dự thi khác') resetAction.textContent = 'Gửi bài dự thi khác'
+  updateShareChoiceCopy(stack)
 }
 
 function updateReceiptCopy(stack, completed) {
@@ -179,7 +216,7 @@ export default function SubmissionFacebookGate() {
     </> : <>
       <div className="facebook-required-badge"><Sparkles size={17}/> SẮP HOÀN TẤT · BƯỚC 2 / 3</div>
       <h3>Chỉ còn một bước: đăng bài lên CHECK IN HOALAC</h3>
-      <p>Nội dung đã được chuẩn bị sẵn. Bạn mở nhóm, đăng bài như bình thường rồi quay lại dán link bài viết để hoàn tất hồ sơ.</p>
+      <p>Nội dung đã được chuẩn bị sẵn. Bạn có thể thử Chia sẻ nhanh; cách cũ Sao chép nội dung rồi Mở nhóm vẫn giữ nguyên để dùng bất cứ lúc nào.</p>
       <div className="facebook-required-callout"><Send size={19}/><span><b>Sau khi đăng xong, hãy dán link bài viết.</b> Link giúp BTC đối chiếu đúng bài và ghi nhận dữ liệu cho Giải Lan tỏa.</span></div>
     </>}
   </div>
@@ -188,7 +225,7 @@ export default function SubmissionFacebookGate() {
     {completed ? <div className="facebook-required-complete"><CheckCircle2 size={24}/><div><b>Đã ghi nhận Facebook</b><span>Bài dự thi đã chuyển sang bước hoàn tất.</span></div></div> : <>
       <div className="facebook-required-confirm-copy">
         <b>{facebookOpened ? 'Dán link bài Facebook để hoàn tất' : 'Mở nhóm CHECK IN HOALAC để đăng bài'}</b>
-        <span>{facebookOpened ? 'Mở bài viết vừa đăng, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Nội dung đã được sao chép sẵn. Bạn chỉ cần mở nhóm, đăng bài rồi quay lại đây.'}</span>
+        <span>{facebookOpened ? 'Mở bài viết vừa đăng, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Nội dung đã được chuẩn bị sẵn. Bạn có thể thử Chia sẻ nhanh hoặc dùng cách cũ Sao chép rồi mở nhóm.'}</span>
       </div>
       {facebookOpened&&<div className="facebook-post-url-field">
         <label><Link2 size={16}/> Link bài Facebook</label>
