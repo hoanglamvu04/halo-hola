@@ -1,0 +1,97 @@
+/* HALO HOLA — Step 7 final review mobile polish */
+
+@media (max-width: 720px) {
+  .submit-page .review-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+    margin-top: 16px !important;
+  }
+
+  .submit-page .review-grid > div {
+    min-width: 0;
+    min-height: 82px;
+    padding: 12px 13px !important;
+    border: 1px solid rgba(23, 61, 45, .08);
+    border-radius: 14px !important;
+    background: #fbfaf6 !important;
+    box-shadow: 0 5px 16px rgba(35, 47, 40, .035);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .submit-page .review-grid > div:nth-child(3),
+  .submit-page .review-grid > div:nth-child(4),
+  .submit-page .review-grid > div:nth-child(7),
+  .submit-page .review-grid > div:nth-child(8) {
+    grid-column: 1 / -1;
+  }
+
+  .submit-page .review-grid small {
+    color: #8a918d !important;
+    font-size: .66rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: .01em;
+  }
+
+  .submit-page .review-grid b {
+    margin-top: 0 !important;
+    color: #173f35;
+    font-size: .88rem !important;
+    line-height: 1.28 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .submit-page .review-grid > div:nth-child(1),
+  .submit-page .review-grid > div:nth-child(4),
+  .submit-page .review-grid > div:nth-child(7) {
+    background: linear-gradient(180deg, #f5f8f3 0%, #fbfaf6 100%) !important;
+  }
+
+  .submit-page .review-grid > div:nth-child(9),
+  .submit-page .review-grid > div:nth-child(10) {
+    border-color: rgba(23, 100, 63, .14);
+    background: #f6faf6 !important;
+  }
+
+  .submit-page .wizard-card:has(.review-grid) {
+    padding-bottom: 14px !important;
+  }
+
+  .submit-page .wizard-card:has(.review-grid) h2 {
+    margin-bottom: 5px !important;
+    font-size: clamp(1.8rem, 8vw, 2.15rem) !important;
+  }
+
+  .submit-page .wizard-card:has(.review-grid) h2::after {
+    content: 'Kiểm tra nhanh thông tin trước khi gửi chính thức';
+    display: block;
+    margin-top: 9px;
+    color: #7f8782;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: .76rem;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+
+  .submit-page .wizard-card:has(.review-grid) .wizard-actions {
+    margin-top: 14px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .submit-page .review-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .submit-page .review-grid > div {
+    min-height: 72px;
+  }
+
+  .submit-page .review-grid > div:nth-child(n) {
+    grid-column: auto;
+  }
+}
