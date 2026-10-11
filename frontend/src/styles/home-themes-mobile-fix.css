@@ -1,15 +1,8 @@
 @media (max-width: 768px) {
-  .home-change-themes-section .home-change-themes-grid,
-  .home-themes-section .themes-grid,
-  .themes-section .themes-grid,
   .home-themes-grid {
     gap: 10px !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  .home-change-theme-card,
-  .home-themes-section .theme-card,
-  .themes-section .theme-card,
   .home-theme-card {
     min-height: 0 !important;
     height: auto !important;
@@ -17,10 +10,6 @@
     overflow: hidden !important;
   }
 
-  .home-change-theme-card .home-change-theme-media,
-  .home-change-theme-card img,
-  .home-themes-section .theme-card img,
-  .themes-section .theme-card img,
   .home-theme-card img {
     width: 100% !important;
     height: 112px !important;
@@ -30,13 +19,7 @@
     display: block !important;
   }
 
-  .home-change-theme-card .home-change-theme-content,
-  .home-themes-section .theme-card-content,
-  .themes-section .theme-card-content,
-  .home-theme-card-content,
-  .home-themes-section .theme-card-body,
-  .themes-section .theme-card-body,
-  .home-theme-card-body {
+  .home-theme-card-content {
     padding: 12px 14px 13px !important;
     min-height: 122px !important;
     height: 122px !important;
@@ -46,19 +29,11 @@
     gap: 0 !important;
   }
 
-  .home-change-theme-card .home-change-theme-index,
-  .home-themes-section .theme-card-index,
-  .themes-section .theme-card-index,
-  .home-theme-card-index,
-  .home-themes-section .theme-number,
-  .themes-section .theme-number {
+  .home-theme-card-index {
     margin: 0 0 6px !important;
     line-height: 1 !important;
   }
 
-  .home-change-theme-card .home-change-theme-title-row,
-  .home-themes-section .theme-card-title-row,
-  .themes-section .theme-card-title-row,
   .home-theme-card-title-row {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 34px !important;
@@ -67,9 +42,6 @@
     margin: 0 !important;
   }
 
-  .home-change-theme-card h3,
-  .home-themes-section .theme-card h3,
-  .themes-section .theme-card h3,
   .home-theme-card h3 {
     font-size: 18px !important;
     line-height: 1.12 !important;
@@ -81,13 +53,7 @@
     overflow: hidden !important;
   }
 
-  .home-change-theme-card p,
-  .home-change-theme-card .home-change-theme-desc,
-  .home-themes-section .theme-card p,
-  .themes-section .theme-card p,
   .home-theme-card p,
-  .home-themes-section .theme-card-desc,
-  .themes-section .theme-card-desc,
   .home-theme-card-desc {
     margin: auto 0 0 !important;
     padding-top: 8px !important;
@@ -98,22 +64,11 @@
     text-overflow: ellipsis !important;
   }
 
-  .home-change-theme-card .home-change-theme-arrow,
-  .home-themes-section .theme-card-arrow,
-  .themes-section .theme-card-arrow,
-  .home-theme-card-arrow,
-  .home-themes-section .theme-card .arrow,
-  .themes-section .theme-card .arrow {
+  .home-theme-card-arrow {
     width: 34px !important;
     height: 34px !important;
     min-width: 34px !important;
     min-height: 34px !important;
     margin: 0 !important;
-  }
-
-  .home-change-themes-section,
-  .home-themes-section,
-  .themes-section {
-    padding-bottom: 18px !important;
   }
 }
