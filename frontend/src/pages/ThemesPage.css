@@ -10,8 +10,8 @@
 .theme-card-placeholder{width:100%;height:100%;min-height:160px;background:linear-gradient(135deg,#ebe4d6,#d9dfce)}
 
 @media(max-width:700px){
-  .theme-index-page .themes-showcase{padding:12px 0 28px!important}
-  .theme-index-page .themes-showcase-inner{width:calc(100% - 28px)!important}
+  .theme-index-page .themes-showcase{padding:10px 0 26px!important}
+  .theme-index-page .themes-showcase-inner{width:calc(100% - 24px)!important}
 
   .theme-index-page .gallery-filters.theme-index-filters{
     display:flex!important;
@@ -32,7 +32,7 @@
     gap:0!important;
     padding:0 12px!important;
     border:1px solid rgba(23,61,45,.16)!important;
-    border-radius:9px!important;
+    border-radius:10px!important;
     background:#fff!important;
     box-shadow:none!important;
     transition:border-color .15s ease,background .15s ease;
@@ -86,4 +86,154 @@
     border-color:#173d2d!important;
     color:#fff!important;
   }
+
+  /* Topic index cards need their own rhythm. The homepage compact-card rules
+     must not clip the extra artwork-count row used on this page. */
+  .theme-index-page .themes-card-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    align-items:stretch!important;
+    overflow:visible!important;
+    padding:0!important;
+  }
+
+  .theme-index-page .theme-card-reference{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    min-width:0!important;
+    height:198px!important;
+    min-height:198px!important;
+    max-height:198px!important;
+    margin:0!important;
+    border:1px solid rgba(30,61,45,.09)!important;
+    border-radius:17px!important;
+    overflow:hidden!important;
+    background:rgba(255,253,248,.98)!important;
+    box-shadow:0 5px 14px rgba(34,49,40,.055)!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-media{
+    flex:0 0 98px!important;
+    width:100%!important;
+    height:98px!important;
+    min-height:98px!important;
+    max-height:98px!important;
+    overflow:hidden!important;
+    background:#ebe5d9!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-media img,
+  .theme-index-page .theme-card-reference .theme-card-placeholder{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    display:block!important;
+    object-fit:cover!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important;
+    width:100%!important;
+    height:100px!important;
+    min-height:100px!important;
+    padding:9px 36px 8px 10px!important;
+    overflow:hidden!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number{
+    display:flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    margin:0 0 4px!important;
+    min-height:10px!important;
+    line-height:1!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number b{
+    font-size:.62rem!important;
+    line-height:1!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-number i{
+    width:28px!important;
+  }
+
+  .theme-index-page .theme-card-reference h3{
+    margin:0 0 3px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    font-size:.83rem!important;
+    line-height:1.12!important;
+    letter-spacing:-.018em!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+  }
+
+  .theme-index-page .theme-card-reference p{
+    margin:0!important;
+    min-height:13px!important;
+    max-height:13px!important;
+    font-size:.58rem!important;
+    line-height:1.3!important;
+    color:#7a817c!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-body small{
+    margin:auto 0 0!important;
+    padding:5px 0 0!important;
+    border-top:1px solid rgba(23,61,45,.07)!important;
+    font-size:.57rem!important;
+    line-height:1.1!important;
+    font-weight:650!important;
+    color:#8b7564!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-arrow{
+    position:absolute!important;
+    top:9px!important;
+    right:8px!important;
+    bottom:auto!important;
+    left:auto!important;
+    width:27px!important;
+    height:27px!important;
+    min-width:27px!important;
+    min-height:27px!important;
+    margin:0!important;
+    border-width:1px!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-arrow svg{
+    width:12px!important;
+    height:12px!important;
+  }
+
+  .theme-index-page .theme-card-reference .theme-card-glow,
+  .theme-index-page .theme-card-reference .theme-card-leaf{
+    display:none!important;
+  }
+}
+
+@media(max-width:390px){
+  .theme-index-page .themes-showcase-inner{width:calc(100% - 18px)!important}
+  .theme-index-page .themes-card-grid{gap:7px!important}
+  .theme-index-page .theme-card-reference{height:190px!important;min-height:190px!important;max-height:190px!important;border-radius:15px!important}
+  .theme-index-page .theme-card-reference .theme-card-media{flex-basis:94px!important;height:94px!important;min-height:94px!important;max-height:94px!important}
+  .theme-index-page .theme-card-reference .theme-card-body{height:96px!important;min-height:96px!important;padding:8px 34px 7px 9px!important}
+  .theme-index-page .theme-card-reference h3{font-size:.79rem!important;min-height:29px!important;max-height:29px!important}
+  .theme-index-page .theme-card-reference .theme-card-arrow{top:8px!important;right:7px!important;width:25px!important;height:25px!important;min-width:25px!important;min-height:25px!important}
+  .theme-index-page .theme-card-reference p{font-size:.56rem!important}
+  .theme-index-page .theme-card-reference .theme-card-body small{font-size:.55rem!important}
 }
