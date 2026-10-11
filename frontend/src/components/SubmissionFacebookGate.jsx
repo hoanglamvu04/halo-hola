@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Check, CheckCircle2, Loader2, LockKeyhole, Link2, ShieldCheck } from 'lucide-react'
+import { Check, CheckCircle2, Loader2, Link2, Send, Sparkles } from 'lucide-react'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '')
 
@@ -51,10 +51,10 @@ function updateReceiptCopy(stack, completed) {
         description: 'Thông tin, tác phẩm và link bài Facebook đã được ghi nhận. Hãy lưu Mã dự thi bên dưới để tra cứu trạng thái sau này.'
       }
     : {
-        pageHeading: 'Gửi bài dự thi · Bước 2/3',
-        kicker: 'BƯỚC 1 ĐÃ XONG · BƯỚC 2 BẮT BUỘC',
-        title: 'Đăng Facebook là một bước của quy trình gửi bài dự thi',
-        description: 'Thông tin và file đã được lưu. Bài dự thi chỉ hoàn tất sau khi bạn đăng lên CHECK IN HOALAC, dán link bài Facebook và xác nhận ở bước này.'
+        pageHeading: 'Sắp hoàn tất bài dự thi',
+        kicker: 'BƯỚC 1 ĐÃ XONG · TIẾP TỤC VỚI FACEBOOK',
+        title: 'Đăng bài lên CHECK IN HOALAC để hoàn tất bài dự thi',
+        description: 'Thông tin và tác phẩm của bạn đã được lưu. Chỉ còn bước đăng lên Facebook và dán lại link bài viết để hệ thống ghi nhận đầy đủ.'
       }
 
   if (pageHeading && pageHeading.textContent !== copy.pageHeading) pageHeading.textContent = copy.pageHeading
@@ -167,9 +167,9 @@ export default function SubmissionFacebookGate() {
     <div className="facebook-required-progress" aria-label="Tiến trình gửi bài dự thi">
       <div className="is-done"><span><Check size={15}/></span><b>Gửi thông tin</b><small>Đã lưu</small></div>
       <i />
-      <div className={completed ? 'is-done' : 'is-active'}><span>{completed ? <Check size={15}/> : '2'}</span><b>Đăng Facebook</b><small>{completed ? 'Đã gắn link' : 'Bắt buộc'}</small></div>
+      <div className={completed ? 'is-done' : 'is-active'}><span>{completed ? <Check size={15}/> : '2'}</span><b>Đăng Facebook</b><small>{completed ? 'Đã gắn link' : 'Tiếp theo'}</small></div>
       <i />
-      <div className={completed ? 'is-done' : 'is-locked'}><span>{completed ? <Check size={15}/> : '3'}</span><b>Hoàn tất</b><small>{completed ? 'Đã hoàn tất' : 'Chờ bước 2'}</small></div>
+      <div className={completed ? 'is-done' : 'is-locked'}><span>{completed ? <Check size={15}/> : '3'}</span><b>Hoàn tất</b><small>{completed ? 'Đã hoàn tất' : 'Nhận mã dự thi'}</small></div>
     </div>
 
     {completed ? <>
@@ -177,26 +177,26 @@ export default function SubmissionFacebookGate() {
       <h3>Cảm ơn bạn đã hoàn tất bài dự thi HALO HOLA 2026.</h3>
       <p>Hệ thống đã ghi nhận link bài Facebook. Mã dự thi của bạn đã sẵn sàng để tra cứu.</p>
     </> : <>
-      <div className="facebook-required-badge"><LockKeyhole size={17}/> BƯỚC 2 / 3 · BẮT BUỘC</div>
-      <h3>Đăng bài lên CHECK IN HOALAC để tiếp tục gửi bài dự thi</h3>
-      <p>Đây là một bước chính thức của quy trình dự thi. Nội dung đã được chuẩn bị sẵn; bạn mở Facebook, đăng bài, sau đó quay lại dán link bài viết.</p>
-      <div className="facebook-required-callout"><ShieldCheck size={20}/><span><b>Bài dự thi chưa hoàn tất ở thời điểm này.</b> Link Facebook giúp BTC xác minh đúng bài, phân loại hồ sơ và theo dõi Giải Lan tỏa.</span></div>
+      <div className="facebook-required-badge"><Sparkles size={17}/> SẮP HOÀN TẤT · BƯỚC 2 / 3</div>
+      <h3>Chỉ còn một bước: đăng bài lên CHECK IN HOALAC</h3>
+      <p>Nội dung đã được chuẩn bị sẵn. Bạn mở nhóm, đăng bài như bình thường rồi quay lại dán link bài viết để hoàn tất hồ sơ.</p>
+      <div className="facebook-required-callout"><Send size={19}/><span><b>Sau khi đăng xong, hãy dán link bài viết.</b> Link giúp BTC đối chiếu đúng bài và ghi nhận dữ liệu cho Giải Lan tỏa.</span></div>
     </>}
   </div>
 
   const confirmation = <div className={`facebook-required-confirm ${completed ? 'is-complete' : ''}`}>
     {completed ? <div className="facebook-required-complete"><CheckCircle2 size={24}/><div><b>Đã ghi nhận Facebook</b><span>Bài dự thi đã chuyển sang bước hoàn tất.</span></div></div> : <>
       <div className="facebook-required-confirm-copy">
-        <b>{facebookOpened ? 'Dán link bài Facebook vừa đăng' : 'Thực hiện bước Facebook trước'}</b>
-        <span>{facebookOpened ? 'Mở bài viết vừa đăng trên Facebook, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Hãy dùng nút “Đăng bài lên Facebook” hoặc “Mở CHECK IN HOALAC” ở phía trên.'}</span>
+        <b>{facebookOpened ? 'Dán link bài Facebook để hoàn tất' : 'Mở nhóm CHECK IN HOALAC để đăng bài'}</b>
+        <span>{facebookOpened ? 'Mở bài viết vừa đăng, chọn Sao chép liên kết rồi dán vào ô bên dưới.' : 'Nội dung đã được sao chép sẵn. Bạn chỉ cần mở nhóm, đăng bài rồi quay lại đây.'}</span>
       </div>
       {facebookOpened&&<div className="facebook-post-url-field">
-        <label><Link2 size={16}/> Link bài Facebook *</label>
-        <input value={facebookPostUrl} onChange={event=>{setFacebookPostUrl(event.target.value);setError('')}} placeholder="https://www.facebook.com/groups/.../posts/..." inputMode="url" autoCapitalize="none"/>
-        <small>Link này được lưu riêng cho Mã dự thi để BTC xác minh và tính Giải Lan tỏa.</small>
+        <label><Link2 size={16}/> Link bài Facebook</label>
+        <input value={facebookPostUrl} onChange={event=>{setFacebookPostUrl(event.target.value);setError('')}} placeholder="Dán link bài Facebook vừa đăng..." inputMode="url" autoCapitalize="none"/>
+        <small>Link được lưu cùng Mã dự thi để BTC xác minh và theo dõi Giải Lan tỏa.</small>
       </div>}
       <button type="button" className="facebook-required-finish" disabled={!facebookOpened || !clean(facebookPostUrl) || busy} onClick={confirmCompleted}>
-        {busy ? <><Loader2 className="spin" size={18}/> Đang xác nhận...</> : facebookOpened ? <><CheckCircle2 size={19}/> Gắn link Facebook · Sang bước hoàn tất</> : <><LockKeyhole size={18}/> Hãy mở Facebook trước</>}
+        {busy ? <><Loader2 className="spin" size={18}/> Đang ghi nhận...</> : facebookOpened ? <><CheckCircle2 size={19}/> Hoàn tất bài dự thi</> : <><Send size={18}/> Đăng bài Facebook trước</>}
       </button>
       {error && <div className="facebook-required-error">{error}</div>}
     </>}
