@@ -37,6 +37,7 @@ import './styles/ios-submission-fix.css'
 import './styles/major-submission-upgrade.css'
 import './styles/submission-operations-runtime.css'
 import './styles/submit-wizard-polish-v3.css'
+import './styles/submit-wizard-flow-v4.css'
 import './styles/submit-rights-mobile-polish.css'
 import './styles/submit-review-mobile-polish.css'
 import './styles/home-hero-mobile-spacing-tight.css'
@@ -62,6 +63,7 @@ import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.js
 import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
 import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import SubmissionOperationsRuntime from './components/SubmissionOperationsRuntime.jsx'
+import SubmissionWizardExperience from './components/SubmissionWizardExperience.jsx'
 import IosSubmissionExperience from './components/IosSubmissionExperience.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -74,6 +76,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionQuickMode />
         <SubmissionFacebookGate />
         <SubmissionOperationsRuntime />
+        <SubmissionWizardExperience />
         <IosSubmissionExperience />
       </BrowserRouter>
     </ErrorBoundary>
