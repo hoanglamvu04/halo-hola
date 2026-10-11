@@ -101,9 +101,9 @@
     flex-direction:column!important;
     width:100%!important;
     min-width:0!important;
-    height:210px!important;
-    min-height:210px!important;
-    max-height:210px!important;
+    height:214px!important;
+    min-height:214px!important;
+    max-height:214px!important;
     margin:0!important;
     border:1px solid rgba(30,61,45,.09)!important;
     border-radius:17px!important;
@@ -113,11 +113,11 @@
   }
 
   .theme-index-page .theme-card-reference .theme-card-media{
-    flex:0 0 98px!important;
+    flex:0 0 110px!important;
     width:100%!important;
-    height:98px!important;
-    min-height:98px!important;
-    max-height:98px!important;
+    height:110px!important;
+    min-height:110px!important;
+    max-height:110px!important;
     overflow:hidden!important;
     background:#ebe5d9!important;
   }
@@ -139,9 +139,9 @@
     gap:0!important;
     flex:1 1 auto!important;
     width:100%!important;
-    height:112px!important;
-    min-height:112px!important;
-    padding:9px 38px 8px 10px!important;
+    height:104px!important;
+    min-height:104px!important;
+    padding:8px 37px 7px 10px!important;
     overflow:hidden!important;
   }
 
@@ -150,13 +150,13 @@
     align-items:center!important;
     flex:0 0 auto!important;
     gap:7px!important;
-    margin:0 0 4px!important;
+    margin:0 0 3px!important;
     min-height:0!important;
     line-height:1!important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-number b{
-    font-size:calc(.62rem + 3px)!important;
+    font-size:calc(.62rem + 1px)!important;
     line-height:1!important;
   }
 
@@ -166,11 +166,11 @@
 
   .theme-index-page .theme-card-reference h3{
     flex:0 0 auto!important;
-    margin:0 0 3px!important;
+    margin:0 0 2px!important;
     min-height:0!important;
     max-height:none!important;
     padding:0!important;
-    font-size:calc(.83rem + 3px)!important;
+    font-size:calc(.83rem + 1px)!important;
     line-height:1.08!important;
     letter-spacing:-.018em!important;
     display:-webkit-box!important;
@@ -185,7 +185,7 @@
     min-height:0!important;
     max-height:none!important;
     padding:0!important;
-    font-size:calc(.58rem + 3px)!important;
+    font-size:calc(.58rem + 1px)!important;
     line-height:1.22!important;
     color:#6f7772!important;
     white-space:nowrap!important;
@@ -196,9 +196,9 @@
   .theme-index-page .theme-card-reference .theme-card-body small{
     flex:0 0 auto!important;
     margin:auto 0 0!important;
-    padding:5px 0 0!important;
+    padding:4px 0 0!important;
     border-top:1px solid rgba(23,61,45,.07)!important;
-    font-size:calc(.57rem + 3px)!important;
+    font-size:calc(.57rem + 1px)!important;
     line-height:1.08!important;
     font-weight:700!important;
     color:#806b5b!important;
@@ -209,21 +209,21 @@
 
   .theme-index-page .theme-card-reference .theme-card-arrow{
     position:absolute!important;
-    top:9px!important;
+    top:8px!important;
     right:8px!important;
     bottom:auto!important;
     left:auto!important;
-    width:29px!important;
-    height:29px!important;
-    min-width:29px!important;
-    min-height:29px!important;
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+    min-height:28px!important;
     margin:0!important;
     border-width:1px!important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-arrow svg{
-    width:13px!important;
-    height:13px!important;
+    width:12px!important;
+    height:12px!important;
   }
 
   .theme-index-page .theme-card-reference .theme-card-glow,
@@ -235,12 +235,12 @@
 @media(max-width:390px){
   .theme-index-page .themes-showcase-inner{width:calc(100% - 18px)!important}
   .theme-index-page .themes-card-grid{gap:7px!important}
-  .theme-index-page .theme-card-reference{height:204px!important;min-height:204px!important;max-height:204px!important;border-radius:15px!important}
-  .theme-index-page .theme-card-reference .theme-card-media{flex-basis:94px!important;height:94px!important;min-height:94px!important;max-height:94px!important}
-  .theme-index-page .theme-card-reference .theme-card-body{height:110px!important;min-height:110px!important;padding:8px 36px 7px 9px!important}
-  .theme-index-page .theme-card-reference .theme-card-number b{font-size:calc(.60rem + 3px)!important}
-  .theme-index-page .theme-card-reference h3{font-size:calc(.79rem + 3px)!important;min-height:0!important;max-height:none!important;line-height:1.08!important}
-  .theme-index-page .theme-card-reference .theme-card-arrow{top:8px!important;right:7px!important;width:27px!important;height:27px!important;min-width:27px!important;min-height:27px!important}
-  .theme-index-page .theme-card-reference p{font-size:calc(.56rem + 3px)!important}
-  .theme-index-page .theme-card-reference .theme-card-body small{font-size:calc(.55rem + 3px)!important}
+  .theme-index-page .theme-card-reference{height:208px!important;min-height:208px!important;max-height:208px!important;border-radius:15px!important}
+  .theme-index-page .theme-card-reference .theme-card-media{flex-basis:104px!important;height:104px!important;min-height:104px!important;max-height:104px!important}
+  .theme-index-page .theme-card-reference .theme-card-body{height:104px!important;min-height:104px!important;padding:7px 35px 7px 9px!important}
+  .theme-index-page .theme-card-reference .theme-card-number b{font-size:calc(.60rem + 1px)!important}
+  .theme-index-page .theme-card-reference h3{font-size:calc(.79rem + 1px)!important;min-height:0!important;max-height:none!important;line-height:1.08!important}
+  .theme-index-page .theme-card-reference .theme-card-arrow{top:7px!important;right:7px!important;width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important}
+  .theme-index-page .theme-card-reference p{font-size:calc(.56rem + 1px)!important}
+  .theme-index-page .theme-card-reference .theme-card-body small{font-size:calc(.55rem + 1px)!important}
 }
