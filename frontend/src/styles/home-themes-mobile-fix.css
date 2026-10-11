@@ -1,221 +1,108 @@
-/* Mobile refinement for the homepage 8-theme section.
-   Keep a 2-column grid, make each card feel fuller and closer to the supplied reference. */
-@media (max-width: 760px) {
-  .themes-showcase {
-    padding: 20px 0 22px !important;
-    overflow: hidden !important;
-  }
-
-  .themes-showcase-inner {
-    width: calc(100% - 10px) !important;
-    margin-inline: auto !important;
-  }
-
-  .themes-showcase-head {
-    display: block !important;
-    margin: 0 0 12px !important;
-    padding-inline: 5px !important;
-  }
-
-  .themes-eyebrow-row {
-    margin-bottom: 6px !important;
-    gap: 8px !important;
-  }
-
-  .themes-eyebrow-row .eyebrow {
-    margin: 0 !important;
-    font-size: .64rem !important;
-    line-height: 1.3 !important;
-    letter-spacing: .14em !important;
-  }
-
-  .themes-showcase-title h2 {
-    margin: 0 !important;
-    font-size: 2.08rem !important;
-    line-height: .94 !important;
-    letter-spacing: -.045em !important;
-  }
-
-  .themes-showcase-title h2 span,
-  .themes-showcase-title h2 em {
-    display: block !important;
-  }
-
-  .themes-title-stroke {
-    width: 46px !important;
-    margin-top: 6px !important;
-  }
-
-  .themes-showcase-side {
-    margin-top: 7px !important;
-  }
-
-  .themes-showcase-side p {
-    margin: 0 0 7px !important;
-    font-size: .75rem !important;
-    line-height: 1.42 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-  }
-
-  .themes-all-link {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    margin: 0 !important;
-    padding-bottom: 2px !important;
-    font-size: .72rem !important;
-  }
-
-  .themes-all-link svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
-
-  .themes-card-grid {
-    display: grid !important;
+@media (max-width: 768px) {
+  /* 8 chủ đề: compact editorial cards */
+  .home-themes-section .themes-grid,
+  .themes-section .themes-grid,
+  .home-themes-grid {
+    gap: 10px !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 7px !important;
-    width: 100% !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    overflow-x: visible !important;
-    scroll-snap-type: none !important;
-    align-items: start !important;
   }
 
-  .theme-card-reference {
-    display: block !important;
-    align-self: start !important;
-    width: 100% !important;
-    min-width: 0 !important;
+  .home-themes-section .theme-card,
+  .themes-section .theme-card,
+  .home-theme-card {
     min-height: 0 !important;
     height: auto !important;
-    margin: 0 !important;
-    border-radius: 15px !important;
-    overflow: hidden !important;
-    scroll-snap-align: none !important;
-    background: rgba(255, 253, 248, .96) !important;
-    box-shadow: 0 7px 18px rgba(34, 49, 40, .07) !important;
-  }
-
-  .theme-card-reference .theme-card-media {
-    height: 128px !important;
-    min-height: 128px !important;
-    max-height: 128px !important;
+    border-radius: 20px !important;
     overflow: hidden !important;
   }
 
-  .theme-card-reference .theme-card-media img,
-  .theme-card-reference .theme-card-placeholder {
+  .home-themes-section .theme-card img,
+  .themes-section .theme-card img,
+  .home-theme-card img {
     width: 100% !important;
-    height: 100% !important;
+    height: 112px !important;
+    min-height: 112px !important;
+    max-height: 112px !important;
     object-fit: cover !important;
-  }
-
-  .theme-card-reference .theme-card-body {
     display: block !important;
-    position: relative !important;
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 10px 39px 12px 10px !important;
   }
 
-  .theme-card-reference .theme-card-number {
-    margin: 0 0 4px !important;
+  .home-themes-section .theme-card-content,
+  .themes-section .theme-card-content,
+  .home-theme-card-content,
+  .home-themes-section .theme-card-body,
+  .themes-section .theme-card-body,
+  .home-theme-card-body {
+    padding: 12px 14px 13px !important;
+    min-height: 122px !important;
+    height: 122px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
   }
 
-  .theme-card-reference .theme-card-number b {
-    font-size: .65rem !important;
+  .home-themes-section .theme-card-index,
+  .themes-section .theme-card-index,
+  .home-theme-card-index,
+  .home-themes-section .theme-number,
+  .themes-section .theme-number {
+    margin: 0 0 6px !important;
+    line-height: 1 !important;
   }
 
-  .theme-card-reference h3 {
-    margin: 0 0 3px !important;
-    min-height: 0 !important;
-    font-size: .88rem !important;
-    line-height: 1.14 !important;
-    letter-spacing: -.015em !important;
+  .home-themes-section .theme-card-title-row,
+  .themes-section .theme-card-title-row,
+  .home-theme-card-title-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 34px !important;
+    align-items: start !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  .home-themes-section .theme-card h3,
+  .themes-section .theme-card h3,
+  .home-theme-card h3 {
+    font-size: 18px !important;
+    line-height: 1.12 !important;
+    margin: 0 !important;
+    min-height: 40px !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
   }
 
-  .theme-card-reference p {
-    margin: 0 !important;
-    min-height: 0 !important;
-    font-size: .61rem !important;
-    line-height: 1.32 !important;
-    color: #737b75 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 1 !important;
-    -webkit-box-orient: vertical !important;
+  .home-themes-section .theme-card p,
+  .themes-section .theme-card p,
+  .home-theme-card p,
+  .home-themes-section .theme-card-desc,
+  .themes-section .theme-card-desc,
+  .home-theme-card-desc {
+    margin: auto 0 0 !important;
+    padding-top: 8px !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
     overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
-  .theme-card-reference .theme-card-arrow {
-    position: absolute !important;
-    width: 27px !important;
-    height: 27px !important;
-    top: 9px !important;
-    right: 9px !important;
-    bottom: auto !important;
-    left: auto !important;
+  .home-themes-section .theme-card-arrow,
+  .themes-section .theme-card-arrow,
+  .home-theme-card-arrow,
+  .home-themes-section .theme-card .arrow,
+  .themes-section .theme-card .arrow {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
     margin: 0 !important;
   }
 
-  .theme-card-reference .theme-card-arrow svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
-
-  .theme-card-reference .theme-card-leaf,
-  .themes-decor {
-    display: none !important;
-  }
-}
-
-@media (max-width: 390px) {
-  .themes-showcase {
-    padding: 18px 0 20px !important;
-  }
-
-  .themes-showcase-inner {
-    width: calc(100% - 8px) !important;
-  }
-
-  .themes-showcase-head {
-    padding-inline: 4px !important;
-  }
-
-  .themes-card-grid {
-    gap: 6px !important;
-  }
-
-  .theme-card-reference .theme-card-media {
-    height: 122px !important;
-    min-height: 122px !important;
-    max-height: 122px !important;
-  }
-
-  .theme-card-reference .theme-card-body {
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 9px 37px 11px 9px !important;
-  }
-
-  .theme-card-reference .theme-card-arrow {
-    top: 8px !important;
-    right: 8px !important;
-  }
-
-  .theme-card-reference h3 {
-    font-size: .84rem !important;
-  }
-
-  .theme-card-reference p {
-    font-size: .59rem !important;
+  .home-themes-section,
+  .themes-section {
+    padding-bottom: 18px !important;
   }
 }
