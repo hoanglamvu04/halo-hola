@@ -56,6 +56,7 @@ import './styles/hola-day-modern.css'
 import './styles/rules-awards-mobile-facts-fix.css'
 import './styles/mobile-bottom-nav-clearance.css'
 import './styles/submission-mobile-actions-fix.css'
+import './styles/submission-media-guard.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
@@ -65,6 +66,7 @@ import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import SubmissionOperationsRuntime from './components/SubmissionOperationsRuntime.jsx'
 import IosSubmissionExperience from './components/IosSubmissionExperience.jsx'
 import SubmissionWizardExperience from './components/SubmissionWizardExperience.jsx'
+import SubmissionMediaTypeGuard from './components/SubmissionMediaTypeGuard.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -78,6 +80,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionOperationsRuntime />
         <IosSubmissionExperience />
         <SubmissionWizardExperience />
+        <SubmissionMediaTypeGuard />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
