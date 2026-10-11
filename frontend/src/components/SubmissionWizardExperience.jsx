@@ -326,7 +326,7 @@ export default function SubmissionWizardExperience() {
         event.preventDefault()
         event.stopPropagation()
         event.stopImmediatePropagation?.()
-        showConsentError('Vui lòng xác nhận đủ 4 nội dung bắt buộc trước khi tiếp tục. Mục “Tôi chưa đủ 18 tuổi” chỉ chọn khi phù hợp và không tính trong 4 xác nhận này.')
+        showConsentError('Bạn vui lòng xác nhận các nội dung cần thiết trước khi tiếp tục nhé.')
         return
       }
 
