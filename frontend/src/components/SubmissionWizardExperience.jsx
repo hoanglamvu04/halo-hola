@@ -140,7 +140,7 @@ function showUploadFormatError(message = '') {
     node.className = 'form-error submission-upload-format-error'
     box.appendChild(node)
   }
-  node.textContent = message
+  if (node.textContent !== message) node.textContent = message
 }
 
 function configureUploadStep() {
@@ -149,11 +149,11 @@ function configureUploadStep() {
 
   const type = getSubmissionType()
   const rule = UPLOAD_RULES[type] || UPLOAD_RULES.Photo
-  input.setAttribute('accept', rule.accept)
-  input.setAttribute('data-artwork-type', type)
+  if (input.getAttribute('accept') !== rule.accept) input.setAttribute('accept', rule.accept)
+  if (input.getAttribute('data-artwork-type') !== type) input.setAttribute('data-artwork-type', type)
 
   const hint = input.closest('.upload-box')?.querySelector('small')
-  if (hint) hint.textContent = rule.hint
+  if (hint && hint.textContent !== rule.hint) hint.textContent = rule.hint
 
   if (sessionStorage.getItem(CLEAR_FILES_KEY) === '1') {
     sessionStorage.removeItem(CLEAR_FILES_KEY)
@@ -192,7 +192,7 @@ function showConsentError(message = '') {
     node.className = 'form-error submission-consent-error'
     card.insertBefore(node, actions)
   }
-  node.textContent = message
+  if (node.textContent !== message) node.textContent = message
 }
 
 function decorateRequiredConsents() {
@@ -222,7 +222,8 @@ function syncReviewColor() {
   }
 
   const valueNode = item.querySelector('b')
-  if (valueNode) valueNode.textContent = color || 'Chưa chọn'
+  const nextValue = color || 'Chưa chọn'
+  if (valueNode && valueNode.textContent !== nextValue) valueNode.textContent = nextValue
 }
 
 function syncStepEnhancements() {
@@ -240,6 +241,7 @@ export default function SubmissionWizardExperience() {
     let observer
     let retryTimer
     let settleTimer
+    let syncFrame = 0
     let lastStep = 0
     let disposed = false
 
@@ -259,6 +261,14 @@ export default function SubmissionWizardExperience() {
       }
     }
 
+    const queueDomSync = () => {
+      if (disposed || syncFrame) return
+      syncFrame = window.requestAnimationFrame(() => {
+        syncFrame = 0
+        if (!disposed) syncFromDom()
+      })
+    }
+
     const restoreRequestedStep = () => {
       if (disposed) return
       const card = document.querySelector('.submit-page .wizard-card')
@@ -275,7 +285,7 @@ export default function SubmissionWizardExperience() {
       decorateStep(current)
       syncStepEnhancements()
 
-      observer = new MutationObserver(() => syncFromDom())
+      observer = new MutationObserver(queueDomSync)
       observer.observe(card, { childList: true, subtree: true, characterData: true })
 
       if (requested !== current && buttons[requested - 1]) {
@@ -363,6 +373,7 @@ export default function SubmissionWizardExperience() {
       observer?.disconnect()
       window.clearTimeout(retryTimer)
       window.clearTimeout(settleTimer)
+      if (syncFrame) window.cancelAnimationFrame(syncFrame)
       document.removeEventListener('click', onWizardClick, true)
       document.removeEventListener('change', onFileChange, true)
       document.removeEventListener('change', onConsentChange, true)
