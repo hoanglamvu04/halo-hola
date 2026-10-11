@@ -1,0 +1,80 @@
+/* Submission wizard mobile navigation recovery.
+   Keep Back / Continue / Submit controls visible above iOS/Android browser chrome. */
+@media (max-width: 760px) {
+  .submit-page {
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .submit-page .wizard-card {
+    overflow: visible !important;
+  }
+
+  .submit-page .wizard-actions {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 2147483000 !important;
+    width: auto !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 8px !important;
+    gap: 8px !important;
+    border: 1px solid rgba(23, 61, 45, .12) !important;
+    border-radius: 17px !important;
+    background: rgba(255, 253, 248, .96) !important;
+    box-shadow: 0 10px 34px rgba(31, 43, 37, .16) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    backdrop-filter: blur(18px) !important;
+    transform: none !important;
+  }
+
+  .submit-page .wizard-actions .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    padding: 11px 12px !important;
+    border-radius: 12px !important;
+    font-size: 13px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+  }
+
+  .submit-page .wizard-actions .btn:first-child {
+    flex: .9 1 0 !important;
+  }
+
+  .submit-page .wizard-actions .btn:last-child {
+    flex: 1.15 1 0 !important;
+  }
+
+  .submit-page .wizard-actions .btn:disabled {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: .48 !important;
+  }
+
+  .submit-page .form-error:last-of-type {
+    margin-bottom: 8px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .submit-page .wizard-actions {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .submit-page .wizard-actions .btn {
+    font-size: 12px !important;
+    padding-inline: 9px !important;
+  }
+}
