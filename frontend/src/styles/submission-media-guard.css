@@ -1,0 +1,25 @@
+.submission-media-guard-notice{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border:1px solid rgba(23,61,45,.12);
+  border-radius:12px;
+  background:#f5f8f4;
+  color:#315044;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.submission-media-guard-notice[data-tone="error"]{
+  border-color:rgba(182,72,43,.18);
+  background:#fff5ef;
+  color:#8b432f;
+}
+
+@media(max-width:720px){
+  .submission-media-guard-notice{
+    margin-top:8px;
+    padding:9px 10px;
+    border-radius:10px;
+    font-size:11px;
+  }
+}
