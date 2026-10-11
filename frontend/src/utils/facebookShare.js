@@ -1,6 +1,8 @@
 const clean = value => String(value ?? '').trim()
 
-export const CHECKIN_GROUP_SEARCH_URL = 'https://www.facebook.com/search/groups/?q=CHECK%20IN%20HOALAC'
+export const CHECKIN_GROUP_URL = 'https://www.facebook.com/share/g/1K1YRBevZw/?mibextid=wwXIfr'
+// Giữ alias cũ để không phá các import hiện tại.
+export const CHECKIN_GROUP_SEARCH_URL = CHECKIN_GROUP_URL
 
 export function buildSubmissionFacebookCaption({ form = {}, code = '' } = {}) {
   const author = clean(form.display) || clean(form.name) || 'Tác giả HALO HOLA'
@@ -21,7 +23,7 @@ export function buildSubmissionFacebookCaption({ form = {}, code = '' } = {}) {
     story,
     '',
     'Tôi vừa gửi góc nhìn của mình tới HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc.',
-    code ? `Mã tác phẩm: ${code}` : '',
+    code ? `Mã dự thi: ${code}` : '',
     '',
     '#HaloHola #52GocNhin1HoaLac #HelloHoaLac'
   ].filter((line, index, rows) => line || (index > 0 && rows[index - 1])).join('\n').trim()
@@ -32,9 +34,9 @@ export function resolveCheckinGroupUrl(siteSettings = {}) {
   if (explicit) return explicit
 
   const footerFacebook = clean(siteSettings?.footer?.facebook)
-  if (/facebook\.com\/groups\//i.test(footerFacebook)) return footerFacebook
+  if (/facebook\.com\/(groups\/|share\/g\/)/i.test(footerFacebook)) return footerFacebook
 
-  return ''
+  return CHECKIN_GROUP_URL
 }
 
 export function copyTextSynchronously(text) {
