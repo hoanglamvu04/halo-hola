@@ -10,7 +10,8 @@ import {
   Sun,
   BookOpen,
   Send,
-  Palette
+  Palette,
+  ChevronRight
 } from 'lucide-react'
 import { getThemes } from '../services/api.js'
 import ThemeCard from '../components/ThemeCard.jsx'
@@ -25,6 +26,7 @@ export default function ThemesPage(){
   const [loading,setLoading]=useState(true)
   const [error,setError]=useState('')
   const searchRef=useRef(null)
+  const chipsRef=useRef(null)
 
   useEffect(()=>{
     setLoading(true);setError('')
@@ -51,6 +53,10 @@ export default function ThemesPage(){
     })
   },[themes,selected,query])
 
+  const scrollThemes=()=>{
+    chipsRef.current?.scrollBy({left:Math.max(360,(chipsRef.current?.clientWidth||520)*.72),behavior:'smooth'})
+  }
+
   return <main className="theme-index-page">
     <section className="stories-intro-ref">
       <div className="stories-contours"/>
@@ -72,21 +78,29 @@ export default function ThemesPage(){
         <div className="gallery-filters theme-index-filters">
           <div className="theme-index-search">
             <Search size={18}/>
-            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề..."/>
+            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề, địa điểm, trải nghiệm..."/>
             <kbd><span>⌘</span>K</kbd>
           </div>
-          <div className="theme-index-chips">
-            <button className={selected==='all'?'active':''} onClick={()=>setSelected('all')}>
-              <LayoutGrid className="theme-chip-icon" aria-hidden="true"/>
-              <span>Tất cả</span>
-            </button>
-            {themes.map((t,index)=>{
-              const Icon=themeIcons[index%themeIcons.length]
-              return <button className={selected===t.slug?'active':''} onClick={()=>setSelected(t.slug)} key={t.slug}>
-                <Icon className="theme-chip-icon" aria-hidden="true"/>
-                <span>{String(t.id).padStart(2,'0')} · {t.title}</span>
+
+          <div className="theme-index-strip">
+            <div className="theme-index-chips" ref={chipsRef}>
+              <button className={selected==='all'?'active':''} onClick={()=>setSelected('all')}>
+                <span className="theme-chip-thumb theme-chip-thumb-all"><LayoutGrid aria-hidden="true"/></span>
+                <span>Tất cả</span>
               </button>
-            })}
+              {themes.map((t,index)=>{
+                const Icon=themeIcons[index%themeIcons.length]
+                return <button className={selected===t.slug?'active':''} onClick={()=>setSelected(t.slug)} key={t.slug}>
+                  <span className="theme-chip-thumb">
+                    {t.image?<img src={t.image} alt="" loading="lazy" decoding="async"/>:<Icon aria-hidden="true"/>}
+                  </span>
+                  <span>{String(t.id).padStart(2,'0')} · {t.title}</span>
+                </button>
+              })}
+            </div>
+            <button type="button" className="theme-index-next" aria-label="Xem thêm chủ đề" onClick={scrollThemes}>
+              <ChevronRight/>
+            </button>
           </div>
         </div>
 
