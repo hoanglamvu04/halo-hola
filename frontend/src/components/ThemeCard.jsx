@@ -22,8 +22,12 @@ export default function ThemeCard({ theme, index = 0 }) {
           <b>{String(id).padStart(2, '0')}</b>
           <i />
         </div>
-        <h3>{title}</h3>
-        <p>{theme?.description || ''}</p>
+
+        <div className="theme-card-copy">
+          <h3>{title}</h3>
+          <p>{theme?.description || ''}</p>
+        </div>
+
         <small>{artworkCount} tác phẩm đã công bố</small>
         <span className="theme-card-arrow" aria-hidden="true"><ArrowRight /></span>
       </div>
