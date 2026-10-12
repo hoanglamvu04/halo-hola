@@ -263,6 +263,7 @@ export default function SubmissionWizardExperience() {
     let settleTimer
     let syncFrame = 0
     let lastStep = 0
+    let successVisible = false
     let disposed = false
 
     const syncFromDom = ({ scroll = true } = {}) => {
@@ -270,6 +271,7 @@ export default function SubmissionWizardExperience() {
       if (!current) return
 
       const previous = lastStep
+      const successNow = Boolean(document.querySelector('.submit-page .wizard-card .success-stack'))
       lastStep = current
       localStorage.setItem(STEP_KEY, String(current))
       replaceStepInUrl(current)
@@ -278,6 +280,13 @@ export default function SubmissionWizardExperience() {
 
       if (scroll && previous && previous !== current) {
         window.requestAnimationFrame(scrollToWizard)
+      }
+
+      if (successNow && !successVisible) {
+        successVisible = true
+        window.setTimeout(scrollToWizard, 40)
+      } else if (!successNow) {
+        successVisible = false
       }
     }
 
@@ -302,6 +311,7 @@ export default function SubmissionWizardExperience() {
       const current = getRenderedStep() || 1
       const requested = getSafeRequestedStep()
       lastStep = current
+      successVisible = Boolean(card.querySelector('.success-stack'))
       decorateStep(current)
       syncStepEnhancements()
 
