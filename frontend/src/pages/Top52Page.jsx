@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import ArtworkCard from '../components/ArtworkCard.jsx'
 import { getColors, getPublicArtworks, getPublicTop52, getThemes } from '../services/api.js'
 import './Top52Page.css'
+import './Top52PageMobilePolish.css'
 import './ExploreUpgrade.css'
 
 const PAGE_SIZE=16
