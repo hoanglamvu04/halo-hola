@@ -18,6 +18,7 @@ import ThemeCard from '../components/ThemeCard.jsx'
 import './ThemesPage.css'
 
 const themeIcons=[Leaf,Mountain,Landmark,Trees,Sun,BookOpen,Send,Palette]
+const compactThemeLabels=['Nét Đoài','Sắc Mường','Kiến trúc','Hòa Lạc xanh','Nắng Hòa Lạc','Câu chuyện','Ước mơ','Sắc màu']
 
 export default function ThemesPage(){
   const [themes,setThemes]=useState([])
@@ -94,7 +95,8 @@ export default function ThemesPage(){
                   <span className="theme-chip-thumb">
                     {t.image?<img src={t.image} alt="" loading="lazy" decoding="async"/>:<Icon aria-hidden="true"/>}
                   </span>
-                  <span>{String(t.id).padStart(2,'0')} · {t.title}</span>
+                  <span className="theme-chip-label-short">{String(t.id).padStart(2,'0')} · {compactThemeLabels[index]||t.title}</span>
+                  <span className="theme-chip-label-full">{String(t.id).padStart(2,'0')} · {t.title}</span>
                 </button>
               })}
             </div>
