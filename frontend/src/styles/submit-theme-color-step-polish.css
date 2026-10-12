@@ -1,4 +1,4 @@
-/* HALO HOLA — Step 4 mobile polish: themes + colors feel like one coherent chooser. */
+/* HALO HOLA — Step 4 mobile polish: compact theme chooser + coherent color chooser. */
 
 @media(max-width:720px){
   .submit-page .wizard-card[data-current-step='4']{
@@ -9,78 +9,95 @@
     margin-bottom:14px!important;
   }
 
-  /* Theme chooser */
+  /* Theme chooser: this is a quick selection step, so keep it text-only and compact. */
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid{
     display:grid!important;
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:10px!important;
+    gap:8px!important;
     margin:0!important;
+    counter-reset:submit-theme;
   }
 
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button{
     position:relative!important;
     overflow:hidden!important;
-    min-height:0!important;
-    padding:0!important;
+    display:grid!important;
+    grid-template-columns:30px minmax(0,1fr)!important;
+    align-items:center!important;
+    min-height:64px!important;
+    padding:10px 34px 10px 10px!important;
     border:1px solid rgba(23,61,45,.10)!important;
-    border-radius:16px!important;
-    background:#fff!important;
-    box-shadow:0 5px 16px rgba(31,43,37,.035)!important;
+    border-radius:14px!important;
+    background:#fbfcfa!important;
+    box-shadow:none!important;
     transform:none!important;
+    counter-increment:submit-theme;
   }
 
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button img,
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button .theme-card-placeholder{
-    display:block!important;
-    width:100%!important;
-    height:96px!important;
-    min-height:96px!important;
-    object-fit:cover!important;
-    border-radius:0!important;
-    background:linear-gradient(135deg,#e8efe7,#f4eadf)!important;
+    display:none!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button::before{
+    content:counter(submit-theme, decimal-leading-zero);
+    display:grid;
+    place-items:center;
+    width:26px;
+    height:26px;
+    border-radius:9px;
+    background:#f3eee5;
+    color:#bd5835;
+    font-size:.62rem;
+    font-weight:900;
+    letter-spacing:.02em;
   }
 
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button>span:last-child{
-    display:flex!important;
-    align-items:flex-start!important;
-    min-height:48px!important;
-    padding:9px 10px 10px!important;
+    display:block!important;
+    min-height:0!important;
+    padding:0!important;
     color:#173f35!important;
-    font-size:.76rem!important;
-    font-weight:800!important;
+    font-size:.74rem!important;
+    font-weight:820!important;
     line-height:1.18!important;
     text-align:left!important;
   }
 
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button.selected{
-    border:2px solid #c85b32!important;
-    background:#fffaf6!important;
-    box-shadow:0 8px 22px rgba(184,78,43,.10)!important;
+    border:1.5px solid #c85b32!important;
+    background:#fff8f3!important;
+    box-shadow:0 6px 16px rgba(184,78,43,.07)!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button.selected::before{
+    background:#f6dfd3;
+    color:#a74629;
   }
 
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button.selected::after{
     content:'✓';
     position:absolute;
-    top:8px;
-    right:8px;
-    width:24px;
-    height:24px;
+    top:50%;
+    right:10px;
+    width:21px;
+    height:21px;
     display:grid;
     place-items:center;
-    border:2px solid rgba(255,255,255,.95);
+    transform:translateY(-50%);
     border-radius:50%;
     background:#c85b32;
     color:#fff;
-    font-size:.72rem;
+    font-size:.65rem;
     font-weight:900;
     line-height:1;
-    box-shadow:0 4px 12px rgba(96,49,31,.18);
+    box-shadow:0 3px 9px rgba(96,49,31,.14);
   }
 
   /* Separate the color chooser visually without making it another heavy card. */
   .submit-page .wizard-card[data-current-step='4'] .form-subtitle{
-    margin:18px 0 10px!important;
-    padding-top:15px!important;
+    margin:16px 0 9px!important;
+    padding-top:14px!important;
     border-top:1px solid rgba(23,61,45,.08)!important;
     color:#173f35!important;
     font-size:.8rem!important;
@@ -165,13 +182,25 @@
 
 @media(max-width:380px){
   .submit-page .wizard-card[data-current-step='4'] .theme-select-grid{
-    gap:8px!important;
+    gap:7px!important;
   }
-  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button img,
-  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button .theme-card-placeholder{
-    height:90px!important;
-    min-height:90px!important;
+
+  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button{
+    grid-template-columns:27px minmax(0,1fr)!important;
+    min-height:60px!important;
+    padding:9px 31px 9px 8px!important;
   }
+
+  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button::before{
+    width:24px;
+    height:24px;
+    font-size:.58rem;
+  }
+
+  .submit-page .wizard-card[data-current-step='4'] .theme-select-grid button>span:last-child{
+    font-size:.69rem!important;
+  }
+
   .submit-page .wizard-card[data-current-step='4'] .color-select-grid button>span:first-child{
     width:52px!important;
     height:52px!important;
