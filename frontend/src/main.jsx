@@ -82,6 +82,7 @@ import SubmissionPhoneRequired from './components/SubmissionPhoneRequired.jsx'
 import SubmissionUploadCopyPolish from './components/SubmissionUploadCopyPolish.jsx'
 import SubmissionReviewRuntime from './components/SubmissionReviewRuntime.jsx'
 import SubmissionEmailValidation from './components/SubmissionEmailValidation.jsx'
+import AdminSubmissionResetRuntime from './components/AdminSubmissionResetRuntime.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -103,6 +104,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionUploadCopyPolish />
         <SubmissionReviewRuntime />
         <SubmissionEmailValidation />
+        <AdminSubmissionResetRuntime />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
