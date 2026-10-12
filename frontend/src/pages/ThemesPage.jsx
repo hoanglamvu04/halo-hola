@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRight, Search, SlidersHorizontal } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Search, SlidersHorizontal } from 'lucide-react'
 import { getThemes } from '../services/api.js'
+import ThemeCard from '../components/ThemeCard.jsx'
 import './ThemesPage.css'
 
 export default function ThemesPage(){
@@ -56,19 +56,7 @@ export default function ThemesPage(){
         {!loading&&!error&&visible.length===0&&<div className="jw-empty">Không có chủ đề phù hợp.</div>}
 
         <div className="themes-card-grid">
-          {visible.map((t,index)=><Link to={'/chu-de/'+t.slug} className="theme-card theme-card-reference" key={t.id||t.slug}>
-            <div className="theme-card-media">
-              {t.image?<img src={t.image} alt={t.title}/>:<div className="theme-card-placeholder"/>}
-              <span className="theme-card-glow"/>
-            </div>
-            <div className="theme-card-body">
-              <div className="theme-card-number"><b>{String(t.id||index+1).padStart(2,'0')}</b><i/></div>
-              <h3>{t.title}</h3>
-              <p>{t.description}</p>
-              <small>{Number(t.artworkCount||0)} tác phẩm đã công bố</small>
-              <span className="theme-card-arrow"><ArrowRight/></span>
-            </div>
-          </Link>)}
+          {visible.map((t,index)=><ThemeCard theme={t} index={index} key={t.id||t.slug}/>)}
         </div>
       </div>
     </section>
