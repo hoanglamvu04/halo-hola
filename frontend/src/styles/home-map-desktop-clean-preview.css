@@ -1,0 +1,27 @@
+/* Desktop HOLA Map homepage preview: show only the map surface.
+   The official embed UI lives inside a cross-origin iframe, so we crop the
+   central map area instead of trying to style iframe internals. */
+@media (min-width: 761px) {
+  .home-map-live-frame {
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    background: #dfe9e2 !important;
+  }
+
+  .home-map-live-frame iframe {
+    position: absolute !important;
+    width: 160% !important;
+    height: 760px !important;
+    min-height: 760px !important;
+    left: -45% !important;
+    top: -145px !important;
+    border: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .home-map-live-badge,
+  .home-map-live-loading {
+    display: none !important;
+  }
+}
