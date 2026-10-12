@@ -5,7 +5,8 @@ import { upload } from '../middleware/upload.js';
 import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimit.js';
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
-import { createSubmission, lookupSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
+import { createSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
+import { getSubmissionOperationalState } from '../services/submissionOperations.service.js';
 import { confirmFacebookSubmission } from '../services/facebookCompletion.service.js';
 import { queueSubmissionSync } from '../services/holaMaps.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
@@ -72,7 +73,7 @@ router.get('/stats', async (req, res, next) => {
 router.get('/lookup', lookupRateLimiter, async (req, res, next) => {
   try {
     const { code, email } = lookupSchema.parse(req.query);
-    const item = await lookupSubmission(code, email);
+    const item = await getSubmissionOperationalState(code, email);
     if (!item) throw new AppError('Không tìm thấy bài dự thi với mã và email này.', 404);
     res.set('Cache-Control','no-store');
     res.json(item);
