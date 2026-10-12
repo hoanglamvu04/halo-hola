@@ -1,0 +1,32 @@
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import './ThemeCard.css'
+
+export default function ThemeCard({ theme, index = 0 }) {
+  const id = theme?.id || index + 1
+  const title = theme?.title || ''
+  const slug = theme?.slug || ''
+  const artworkCount = Number(theme?.artworkCount || 0)
+
+  return (
+    <Link to={'/chu-de/' + slug} className="theme-card theme-card-reference shared-theme-card">
+      <div className="theme-card-media">
+        {theme?.image
+          ? <img src={theme.image} alt={title} loading="lazy" decoding="async" />
+          : <div className="theme-card-placeholder" />}
+        <span className="theme-card-glow" />
+      </div>
+
+      <div className="theme-card-body">
+        <div className="theme-card-number">
+          <b>{String(id).padStart(2, '0')}</b>
+          <i />
+        </div>
+        <h3>{title}</h3>
+        <p>{theme?.description || ''}</p>
+        <small>{artworkCount} tác phẩm đã công bố</small>
+        <span className="theme-card-arrow" aria-hidden="true"><ArrowRight /></span>
+      </div>
+    </Link>
+  )
+}
