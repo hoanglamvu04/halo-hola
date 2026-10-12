@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
-  Search, Bell, CheckCircle2, Clock3, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette, Trophy
+  Search, CheckCircle2, LogIn, RefreshCw, Download, ShieldCheck,
+  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette, Trophy,
+  ChevronRight
 } from 'lucide-react'
-import { artworks } from '../data/siteData.js'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
 import ColorManagementManager from '../components/ColorManagementManager.jsx'
@@ -17,33 +17,76 @@ import JuryBoardManager from '../components/JuryBoardManager.jsx'
 import JuryResultsManager from '../components/JuryResultsManager.jsx'
 import PublicationManager from '../components/PublicationManager.jsx'
 import AnalyticsManager from '../components/AnalyticsManager.jsx'
+import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
 } from '../services/api.js'
 
-const nav=[
-  {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
-  {label:'Trang chủ',icon:Home,path:'/admin/homepage'},
-  {label:'Chủ đề',icon:Layers3,path:'/admin/themes'},
-  {label:'Sắc màu',icon:Palette,path:'/admin/colors'},
-  {label:'Media Library',icon:FolderOpen,path:'/admin/media'},
-  {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
-  {label:'Tác giả',icon:Users,path:'/admin/authors'},
-  {label:'TOP52',icon:Images,path:'/admin/top52'},
-  {label:'Giải thưởng',icon:Trophy,path:'/admin/awards'},
-  {label:'Công bố',icon:Globe2,path:'/admin/publication'},
-  {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
-  {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'},
-  {label:'Analytics',icon:Activity,path:'/admin/analytics'},
-  {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
-  {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
-  {label:'Stories',icon:BookOpen,path:'/admin/stories'},
-  {label:'Đối tác',icon:Handshake,path:'/admin/partners'},
-  {label:'Cài đặt',icon:Settings,path:'/admin/settings'}
+const navGroups=[
+  {
+    label:'Điều hành',
+    primary:true,
+    items:[
+      {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
+      {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
+      {label:'Tác giả',icon:Users,path:'/admin/authors'},
+      {label:'Công bố',icon:Globe2,path:'/admin/publication'}
+    ]
+  },
+  {
+    label:'Nội dung',
+    items:[
+      {label:'Trang chủ',icon:Home,path:'/admin/homepage'},
+      {label:'Chủ đề',icon:Layers3,path:'/admin/themes'},
+      {label:'Sắc màu',icon:Palette,path:'/admin/colors'},
+      {label:'Media Library',icon:FolderOpen,path:'/admin/media'},
+      {label:'Stories',icon:BookOpen,path:'/admin/stories'},
+      {label:'Đối tác',icon:Handshake,path:'/admin/partners'}
+    ]
+  },
+  {
+    label:'Chấm giải',
+    items:[
+      {label:'TOP52',icon:Images,path:'/admin/top52'},
+      {label:'Giải thưởng',icon:Trophy,path:'/admin/awards'},
+      {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
+      {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'}
+    ]
+  },
+  {
+    label:'Hệ thống',
+    items:[
+      {label:'Analytics',icon:Activity,path:'/admin/analytics'},
+      {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
+      {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
+      {label:'Cài đặt',icon:Settings,path:'/admin/settings'}
+    ]
+  }
 ]
+const nav=navGroups.flatMap(group=>group.items)
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
 const statusLabels={PENDING:'Mới nhận',VALID:'Hợp lệ',SHORTLIST:'Shortlist',TOP52:'TOP52',AWARDED:'Đạt giải',REJECTED:'Không hợp lệ'}
+const sectionDescriptions={
+  'Tổng quan':'Ưu tiên công việc, theo dõi hồ sơ và tiến độ chương trình.',
+  'Tác phẩm':'Duyệt hồ sơ, kiểm tra file gốc, quyền sử dụng và trạng thái bài thi.',
+  'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
+  'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
+  'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
+  'Chủ đề':'Quản lý hệ chủ đề của HALO HOLA 2026.',
+  'Sắc màu':'Quản lý hệ màu và nội dung kể chuyện theo sắc màu Hòa Lạc.',
+  'Media Library':'Quản lý hình ảnh và tài nguyên dùng trên website.',
+  'Stories':'Quản lý nội dung Stories.',
+  'Đối tác':'Quản lý đối tác và nội dung hợp tác.',
+  'TOP52':'Theo dõi danh sách tác phẩm đã vào TOP52.',
+  'Giải thưởng':'Quản lý cơ cấu và thông tin giải thưởng.',
+  'Hội đồng BGK':'Quản lý tài khoản và phạm vi chấm của hội đồng.',
+  'Kết quả BGK':'Tổng hợp điểm, lựa chọn và khóa kết quả vòng chấm.',
+  'Analytics':'Theo dõi hoạt động và hiệu quả sử dụng website.',
+  'HOLA Map':'Quản lý nội dung liên quan tới bản đồ Hòa Lạc.',
+  'HOLA Tour':'Quản lý tour và danh sách đăng ký.',
+  'Cài đặt':'Thiết lập hệ thống và thông tin website.'
+}
 
 export default function AdminPage(){
  const location=useLocation()
@@ -118,9 +161,6 @@ export default function AdminPage(){
 
  const uniqueCreators=useMemo(()=>new Set(submissions.map(x=>x.email)).size,[submissions])
  const authors=useMemo(()=>Array.from(new globalThis.Map(submissions.map(s=>[s.email,s])).values()),[submissions])
- const totalBytes=useMemo(()=>submissions.reduce((sum,s)=>sum+(s.media||[]).reduce((a,m)=>a+Number(m.size||0),0),0),[submissions])
- const pendingCount=submissions.filter(x=>x.status==='PENDING').length
- const shortlistCount=submissions.filter(x=>x.status==='SHORTLIST').length
 
  if(!token) return <main className="admin-login"><form onSubmit={login}>
    <div className="brand admin-login-brand">HAL<span>O</span> HOLA</div>
@@ -134,45 +174,38 @@ export default function AdminPage(){
 
  return <main className="admin-shell">
    <aside className="admin-sidebar">
-     <div className="brand admin-brand">HAL<span>O</span> HOLA</div><small>ADMIN 2026</small>
-     <nav>{nav.map(({label,icon:I,path})=><button className={active===label?'active':''} key={path} onClick={()=>navigate(path)}><I size={18}/>{label}</button>)}</nav>
+     <div className="brand admin-brand">HAL<span>O</span> HOLA</div><small>VẬN HÀNH 2026</small>
+     <nav>{navGroups.map(group=>{
+       const content=<div className="admin-nav-items">{group.items.map(({label,icon:I,path})=><button className={active===label?'active':''} key={path} onClick={()=>navigate(path)}><I size={18}/>{label}</button>)}</div>
+       if(group.primary) return <div className="admin-nav-group" key={group.label}><div className="admin-nav-group-title">{group.label}</div>{content}</div>
+       return <details className="admin-nav-group" key={group.label} open={group.items.some(item=>item.label===active)}>
+         <summary>{group.label}<ChevronRight/></summary>{content}
+       </details>
+     })}</nav>
      <Link className="admin-jury-link" to="/jury"><Star size={17}/> Jury Mode</Link>
      <button className="admin-logout" onClick={()=>{setAdminToken(null);setToken('')}}>Đăng xuất</button>
    </aside>
 
    <section className="admin-main">
      <header className="admin-top">
-       <div><h1>{active}</h1><p>Quản trị tác phẩm, file gốc và vận hành HALO HOLA.</p></div>
-       <div><button className="icon-btn" onClick={load}><RefreshCw className={loading?'spin':''}/></button><Bell/><div className="avatar">HL</div></div>
+       <div><h1>{active}</h1><p>{sectionDescriptions[active]||'Quản trị và vận hành HALO HOLA 2026.'}</p></div>
+       <div>
+         <a className="admin-view-site" href="/" target="_blank" rel="noreferrer"><ExternalLink size={15}/> Xem website</a>
+         <button className="icon-btn" onClick={load} aria-label="Làm mới dữ liệu"><RefreshCw className={loading?'spin':''}/></button>
+         <div className="avatar">HL</div>
+       </div>
      </header>
 
      {error&&<div className="form-error">{error}</div>}
 
-     {active==='Tổng quan'?<>
-       <div className="admin-stats">
-         <div><span>Tác phẩm</span><b>{submissions.length}</b><small>{pendingCount} đang chờ kiểm tra</small></div>
-         <div><span>Tác giả</span><b>{uniqueCreators}</b><small>Theo email người gửi</small></div>
-         <div><span>Shortlist</span><b>{shortlistCount}</b><small>Sẵn sàng cho Jury Mode</small></div>
-         <div><span>Original Vault</span><b>{(totalBytes/1024/1024/1024).toFixed(2)} GB</b><small>Tổng file trong danh sách hiện tại</small></div>
-       </div>
-       <div className="admin-grid">
-         <div className="admin-panel">
-           <div className="admin-panel-head"><h2>Tác phẩm mới</h2><button className="text-button" onClick={()=>go('Tác phẩm')}>Xem tất cả</button></div>
-           {(submissions.length?submissions:artworks.slice(0,6)).slice(0,8).map((a)=><button className="admin-row admin-row-button" key={a.id||a.slug} onClick={()=>{if(a.id){setSelected(a);go('Tác phẩm')}}}>
-             <div className="admin-row-thumb">{a.media?.length?<ShieldCheck/>:<Images/>}</div>
-             <div><b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name||a.author} · {a.code||''}</small></div>
-             <span className={'status '+((a.status||'VALID')==='PENDING'?'pending':'approved')}>{(a.status||'VALID')==='PENDING'?<Clock3/>:<CheckCircle2/>}{statusLabels[a.status]||a.status||'Hợp lệ'}</span>
-           </button>)}
-         </div>
-         <div className="admin-panel">
-           <h2>Kiểm tra vận hành</h2>
-           <div className="ops-check good"><ShieldCheck/><div><b>Original Vault</b><small>R2 + SHA-256</small></div></div>
-           <div className="ops-check good"><CheckCircle2/><div><b>Submission Lookup</b><small>Mã tác phẩm + email</small></div></div>
-           <div className="ops-check"><AlertTriangle/><div><b>Email Notification</b><small>Chưa cấu hình SMTP</small></div></div>
-           <div className="progress-item"><span>HOLA Map API</span><b>Chờ kết nối</b><i style={{width:'45%'}}/></div>
-         </div>
-       </div>
-     </>:
+     {active==='Tổng quan'?<AdminOverviewV2
+       submissions={submissions}
+       uniqueCreators={uniqueCreators}
+       loading={loading}
+       onNavigate={go}
+       onRefresh={load}
+       onOpenSubmission={(item)=>{setSelected(item);go('Tác phẩm')}}
+     />:
      active==='Trang chủ'?<HomepageManager/>:
      active==='Chủ đề'?<ThemeManagementManager/>:
      active==='Sắc màu'?<ColorManagementManager/>:
