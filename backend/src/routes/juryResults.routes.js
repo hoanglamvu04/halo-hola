@@ -10,6 +10,10 @@ import {
   publishTop52Selection,
   listJuryAudit
 } from '../services/juryResults.service.js';
+import {
+  getPendingTop52NotificationIds,
+  sendStatusNotificationsByIds
+} from '../services/submissionNotification.service.js';
 
 const router=Router();
 router.use(authenticateAdmin);
@@ -58,7 +62,14 @@ router.post('/round/reopen',async (req,res,next)=>{
 });
 
 router.post('/publish-top52',async (req,res,next)=>{
-  try{res.json(await publishTop52Selection({actorId:req.user?.id,reason:req.body?.reason||''}));}
+  try{
+    const notifyIds=await getPendingTop52NotificationIds();
+    const result=await publishTop52Selection({actorId:req.user?.id,reason:req.body?.reason||''});
+    sendStatusNotificationsByIds(notifyIds).catch((error)=>
+      console.warn('TOP52 notification emails skipped/failed:',error.message)
+    );
+    res.json(result);
+  }
   catch(error){
     if(error?.message==='NO_TOP52_SELECTION') return next(new AppError('Chưa có danh sách TOP52 để đồng bộ.',400));
     next(error);
