@@ -7,14 +7,14 @@
   }
 
   .themes-showcase-inner {
-    width: calc(100% - 10px) !important;
+    width: calc(100% - 24px) !important;
     margin-inline: auto !important;
   }
 
   .themes-showcase-head {
     display: block !important;
     margin: 0 0 10px !important;
-    padding-inline: 5px !important;
+    padding-inline: 0 !important;
   }
 
   .themes-eyebrow-row {
@@ -85,11 +85,10 @@
   }
 
   .themes-showcase-inner {
-    width: calc(100% - 8px) !important;
+    width: calc(100% - 18px) !important;
   }
 
   .themes-showcase-head {
-    padding-inline: 4px !important;
     margin-bottom: 9px !important;
   }
 }
