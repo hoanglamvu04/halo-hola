@@ -1,8 +1,22 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Search, SlidersHorizontal } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Search,
+  SlidersHorizontal,
+  LayoutGrid,
+  Leaf,
+  Mountain,
+  Landmark,
+  Trees,
+  Sun,
+  BookOpen,
+  Send,
+  Palette
+} from 'lucide-react'
 import { getThemes } from '../services/api.js'
 import ThemeCard from '../components/ThemeCard.jsx'
 import './ThemesPage.css'
+
+const themeIcons=[Leaf,Mountain,Landmark,Trees,Sun,BookOpen,Send,Palette]
 
 export default function ThemesPage(){
   const [themes,setThemes]=useState([])
@@ -10,10 +24,22 @@ export default function ThemesPage(){
   const [query,setQuery]=useState('')
   const [loading,setLoading]=useState(true)
   const [error,setError]=useState('')
+  const searchRef=useRef(null)
 
   useEffect(()=>{
     setLoading(true);setError('')
     getThemes().then(data=>setThemes(Array.isArray(data)?data:[])).catch(err=>setError(err.message)).finally(()=>setLoading(false))
+  },[])
+
+  useEffect(()=>{
+    const onKeyDown=(event)=>{
+      if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='k'){
+        event.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown',onKeyDown)
+    return()=>window.removeEventListener('keydown',onKeyDown)
   },[])
 
   const visible=useMemo(()=>{
@@ -44,10 +70,23 @@ export default function ThemesPage(){
     <section className="themes-showcase">
       <div className="themes-showcase-inner">
         <div className="gallery-filters theme-index-filters">
-          <div className="theme-index-search"><Search size={18}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề..."/></div>
+          <div className="theme-index-search">
+            <Search size={18}/>
+            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề..."/>
+            <kbd><span>⌘</span>K</kbd>
+          </div>
           <div className="theme-index-chips">
-            <button className={selected==='all'?'active':''} onClick={()=>setSelected('all')}>Tất cả</button>
-            {themes.map(t=><button className={selected===t.slug?'active':''} onClick={()=>setSelected(t.slug)} key={t.slug}>{String(t.id).padStart(2,'0')} · {t.title}</button>)}
+            <button className={selected==='all'?'active':''} onClick={()=>setSelected('all')}>
+              <LayoutGrid className="theme-chip-icon" aria-hidden="true"/>
+              <span>Tất cả</span>
+            </button>
+            {themes.map((t,index)=>{
+              const Icon=themeIcons[index%themeIcons.length]
+              return <button className={selected===t.slug?'active':''} onClick={()=>setSelected(t.slug)} key={t.slug}>
+                <Icon className="theme-chip-icon" aria-hidden="true"/>
+                <span>{String(t.id).padStart(2,'0')} · {t.title}</span>
+              </button>
+            })}
           </div>
         </div>
 
