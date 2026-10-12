@@ -65,6 +65,7 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
 import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
 import ColorStoryDesktopExperience from './components/ColorStoryDesktopExperience.jsx'
+import ColorArtworkBadgeRuntime from './components/ColorArtworkBadgeRuntime.jsx'
 import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
 import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import SubmissionOperationsRuntime from './components/SubmissionOperationsRuntime.jsx'
@@ -81,6 +82,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <MobileHeroExperience />
         <CampaignRuntimeCustomizer />
         <ColorStoryDesktopExperience />
+        <ColorArtworkBadgeRuntime />
         <SubmissionQuickMode />
         <SubmissionFacebookGate />
         <SubmissionOperationsRuntime />
