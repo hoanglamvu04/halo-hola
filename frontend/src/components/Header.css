@@ -1,0 +1,115 @@
+/* Compact desktop navigation for HALO HOLA header. Mobile keeps the existing full menu. */
+@media (min-width: 761px) {
+  .site-header .main-nav {
+    overflow: visible !important;
+  }
+
+  .site-header .desktop-nav-list {
+    display: flex !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+
+  .site-header .main-nav > .mobile-nav-primary-list,
+  .site-header .main-nav > .mobile-nav-primary-label,
+  .site-header .main-nav > .mobile-nav-head,
+  .site-header .main-nav > .mobile-nav-actions,
+  .site-header .main-nav > .mobile-nav-quick {
+    display: none !important;
+  }
+
+  .site-header .desktop-nav-more {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .site-header .desktop-nav-more-trigger {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 42px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #35423b;
+    font: inherit;
+    font-size: .84rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .site-header .desktop-nav-more-trigger svg {
+    width: 14px;
+    height: 14px;
+    transition: transform .18s ease;
+  }
+
+  .site-header .desktop-nav-dropdown {
+    position: absolute;
+    top: calc(100% + 7px);
+    right: -14px;
+    z-index: 1200;
+    display: grid;
+    min-width: 228px;
+    padding: 8px;
+    border: 1px solid rgba(23,61,45,.10);
+    border-radius: 15px;
+    background: rgba(251,247,239,.98);
+    box-shadow: 0 16px 40px rgba(31,43,37,.12);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+  }
+
+  .site-header .desktop-nav-dropdown a {
+    display: block;
+    padding: 11px 12px;
+    border-radius: 10px;
+    font-size: .82rem;
+    line-height: 1.25;
+    color: #35423b;
+  }
+
+  .site-header .desktop-nav-dropdown a:hover,
+  .site-header .desktop-nav-dropdown a.active {
+    background: rgba(23,61,45,.07);
+    color: #173d2d;
+  }
+
+  .site-header .desktop-nav-dropdown a::after {
+    display: none !important;
+  }
+
+  .site-header .desktop-nav-more:hover .desktop-nav-dropdown,
+  .site-header .desktop-nav-more:focus-within .desktop-nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .site-header .desktop-nav-more:hover .desktop-nav-more-trigger svg,
+  .site-header .desktop-nav-more:focus-within .desktop-nav-more-trigger svg {
+    transform: rotate(180deg);
+  }
+
+  .site-header .desktop-nav-more:has(.desktop-nav-dropdown a.active) .desktop-nav-more-trigger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--terra, #c45b32);
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header .desktop-nav-list {
+    display: none !important;
+  }
+}
