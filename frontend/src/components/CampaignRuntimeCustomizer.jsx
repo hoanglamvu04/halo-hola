@@ -2,6 +2,16 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { getHomepageContent } from '../services/api.js'
 
+const officialMilestones=[
+  ['11.10','Mở nhận tác phẩm'],
+  ['17–18.10','HOLA Tour #01'],
+  ['25.10','HOLA Tour #02'],
+  ['31.10–01.11','HOLA Tour #03'],
+  ['10.11 · 23:59','Đóng nhận tác phẩm'],
+  ['16.11','Công bố TOP52 · mở bình chọn'],
+  ['24.11','HOLA DAY']
+]
+
 const defaults={
   mainBg:'#fbf7ef',titleColor:'#103f31',textColor:'#52675e',eyebrowColor:'#e55329',
   statCardBg:'#fffdf7',statCardBorder:'#eadfcd',statNumberColor:'#103f31',statLabelColor:'#40564d',statIconColor:'#0f6a4a',
@@ -10,13 +20,13 @@ const defaults={
   activeMilestoneBg:'#1b684f',activeMilestoneBorder:'#e2b34f',activeMilestoneDateColor:'#ffd15c',
   backgroundImage:'',
   journeyTitle:'Hành trình 2026',
-  milestone1Date:'10.10',milestone1Label:'Mở nhận tác phẩm',
-  milestone2Date:'17.10',milestone2Label:'HOLA Tour #01',
-  milestone3Date:'24.10',milestone3Label:'HOLA Tour #02',
-  milestone4Date:'31.10',milestone4Label:'HOLA Tour #03',
-  milestone5Date:'10.11',milestone5Label:'Đóng nhận tác phẩm',
-  milestone6Date:'18.11',milestone6Label:'Công bố TOP52',
-  milestone7Date:'28.11',milestone7Label:'HOLA DAY'
+  milestone1Date:officialMilestones[0][0],milestone1Label:officialMilestones[0][1],
+  milestone2Date:officialMilestones[1][0],milestone2Label:officialMilestones[1][1],
+  milestone3Date:officialMilestones[2][0],milestone3Label:officialMilestones[2][1],
+  milestone4Date:officialMilestones[3][0],milestone4Label:officialMilestones[3][1],
+  milestone5Date:officialMilestones[4][0],milestone5Label:officialMilestones[4][1],
+  milestone6Date:officialMilestones[5][0],milestone6Label:officialMilestones[5][1],
+  milestone7Date:officialMilestones[6][0],milestone7Label:officialMilestones[6][1]
 }
 
 /* Auto-upgrade only the exact old defaults that were saved before the mobile redesign.
@@ -62,6 +72,13 @@ function normalizePalette(content){
     if(String(campaign[key]||'').trim().toLowerCase()===oldValue){
       campaign[key]=newValue
     }
+  })
+
+  // Timeline dates are campaign-wide official dates, so stale CMS values must not override them.
+  officialMilestones.forEach(([date,label],index)=>{
+    const n=index+1
+    campaign[`milestone${n}Date`]=date
+    campaign[`milestone${n}Label`]=label
   })
   return campaign
 }
@@ -111,15 +128,30 @@ export default function CampaignRuntimeCustomizer(){
       }
     }
 
+    const setText=(node,value)=>{
+      if(node&&value&&node.textContent!==value) node.textContent=value
+    }
+
+    const syncOfficialTimeline=()=>{
+      const root=document.querySelector('.campaign-live')
+      if(!root) return
+      const milestones=root.querySelectorAll('.campaign-milestone')
+      milestones.forEach((item,index)=>{
+        const data=officialMilestones[index]
+        if(!data) return
+        setText(item.querySelector('span'),data[0])
+        setText(item.querySelector('b'),data[1])
+      })
+    }
+
+    // Apply the official schedule immediately so the old hard-coded dates do not flash on screen.
+    syncOfficialTimeline()
+
     const boot=async()=>{
       try{
         const homepage=await getHomepageContent()
         if(cancelled) return
         const campaign=normalizePalette(homepage?.campaign?.content||{})
-
-        const setText=(node,value)=>{
-          if(node&&value&&node.textContent!==value) node.textContent=value
-        }
 
         const apply=()=>{
           const root=document.querySelector('.campaign-live')
@@ -157,6 +189,7 @@ export default function CampaignRuntimeCustomizer(){
         observer.observe(document.body,{childList:true,subtree:true})
       }catch{
         // Keep the coded defaults when the public homepage configuration is unavailable.
+        syncOfficialTimeline()
       }
     }
 
