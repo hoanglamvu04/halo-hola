@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import { Router } from 'express';
-import { authenticateAdmin } from '../middleware/auth.js';
+import { authenticateAdmin, requireRoles } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 import { AppError } from '../utils/AppError.js';
 import {
   deleteSubmission,
+  listSubmissions,
   replaceSubmissionFiles,
   updateSubmissionContent
 } from '../services/submission.service.js';
@@ -18,6 +19,26 @@ function enqueueResync(id) {
     console.warn(`Hola Maps re-sync enqueue failed for submission ${id}:`, error.message)
   );
 }
+
+router.post('/reset-all', requireRoles('ADMIN'), async (req, res, next) => {
+  try {
+    const confirmation = String(req.body?.confirm || '').trim();
+    if (confirmation !== 'RESET_ALL_SUBMISSIONS') {
+      throw new AppError('Cần xác nhận thao tác làm trống danh sách tác phẩm.', 400);
+    }
+
+    const items = await listSubmissions();
+    let removed = 0;
+    for (const item of items) {
+      const result = await deleteSubmission(item.id);
+      if (result) removed += 1;
+    }
+
+    res.json({ ok: true, removed });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.patch('/:id/content', async (req, res, next) => {
   try {
