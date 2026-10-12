@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, CalendarDays, ChevronLeft, ChevronRight,
-  Eye, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles, X
+  ExternalLink, Eye, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles, X
 } from 'lucide-react'
 import {
   getPublicArtwork,
@@ -22,6 +22,13 @@ function formatDate(value){
   if(!value)return 'Theo hồ sơ tác phẩm'
   const date=new Date(value)
   return Number.isNaN(date.getTime())?'Theo hồ sơ tác phẩm':date.toLocaleDateString('vi-VN')
+}
+
+function safeHttpUrl(value){
+  try{
+    const url=new URL(String(value||'').trim())
+    return url.protocol==='http:'||url.protocol==='https:'?url.href:''
+  }catch{return ''}
 }
 
 export default function ArtworkPage({preview=false}){
@@ -103,6 +110,7 @@ export default function ArtworkPage({preview=false}){
  const story=String(item.story||'').trim()||'Tác phẩm được công bố trong hành trình HALO HOLA 2026.'
  const lead=story.split(/\n+/)[0]
  const score=Number(item.juryScore||0)
+ const facebookUrl=safeHttpUrl(item.facebookPostUrl)
 
  return <main className="artwork-showcase">
    <div className="artwork-showcase-top container">
@@ -170,6 +178,7 @@ export default function ArtworkPage({preview=false}){
        <div className="artwork-showcase-actions">
          <Link className="btn btn-green" to="/hola-map"><MapPin size={17}/> Mở HOLA Map</Link>
          <button className="btn btn-outline" type="button" onClick={share}><Share2 size={17}/> {shareLabel}</button>
+         {facebookUrl&&<a className="btn btn-outline artwork-facebook-link" href={facebookUrl} target="_blank" rel="noopener noreferrer" style={{gridColumn:'1 / -1'}}><ExternalLink size={17}/> Xem bài đăng Facebook</a>}
        </div>
      </aside>
    </section>
