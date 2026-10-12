@@ -29,6 +29,20 @@ export async function getSubmissionNotificationTargetByCode(code) {
   return rows[0] || null;
 }
 
+export async function getPendingTop52NotificationIds() {
+  const { rows } = await pool.query(
+    `SELECT s.id
+     FROM submissions s
+     JOIN jury_selections js ON js.submission_id=s.id
+     JOIN jury_rounds jr ON jr.id=js.round_id
+     WHERE jr.code='PRELIMINARY'
+       AND js.selection_type='TOP52'
+       AND s.status NOT IN ('TOP52','AWARDED')
+       AND s.is_demo=FALSE`
+  );
+  return rows.map((row) => row.id);
+}
+
 export async function sendStatusNotificationForSubmission(submission) {
   if (!submission?.email || !submission?.code) {
     return { skipped: true, reason: 'MISSING_RECIPIENT' };
