@@ -7,6 +7,135 @@
 .theme-index-chips button{flex:0 0 auto;border:1px solid rgba(33,70,49,.16);background:#fff;color:#365244;border-radius:999px;padding:9px 14px;font-weight:650;cursor:pointer;transition:.18s ease}
 .theme-index-chips button:hover,.theme-index-chips button.active{background:#254c38;color:#fff;border-color:#254c38}
 
+/* Desktop: compact premium filter toolbar instead of a large empty card. */
+@media(min-width:701px){
+  .theme-index-page .themes-showcase{
+    padding-top:34px!important;
+  }
+
+  .theme-index-page .gallery-filters.theme-index-filters{
+    display:grid!important;
+    grid-template-columns:minmax(290px,360px) minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:18px 22px!important;
+    margin:0 0 32px!important;
+    padding:15px 18px!important;
+    border:1px solid rgba(23,61,45,.10)!important;
+    border-radius:20px!important;
+    background:rgba(255,253,248,.84)!important;
+    box-shadow:0 12px 34px rgba(59,49,36,.055)!important;
+    backdrop-filter:blur(10px);
+  }
+
+  .theme-index-search{
+    width:100%!important;
+    max-width:none!important;
+    min-height:52px!important;
+    gap:11px!important;
+    padding:0 15px!important;
+    border:1px solid rgba(23,61,45,.14)!important;
+    border-radius:15px!important;
+    background:#fff!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 14px rgba(44,59,50,.035)!important;
+    transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+  }
+
+  .theme-index-search:focus-within{
+    border-color:rgba(23,61,45,.44)!important;
+    box-shadow:0 0 0 3px rgba(23,61,45,.07),0 7px 20px rgba(44,59,50,.05)!important;
+  }
+
+  .theme-index-search svg{
+    width:20px!important;
+    height:20px!important;
+    color:#2f5a43!important;
+    stroke-width:2!important;
+  }
+
+  .theme-index-search input{
+    height:50px!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    color:#173d2d!important;
+    font-size:.94rem!important;
+    line-height:1!important;
+    font-weight:560!important;
+  }
+
+  .theme-index-search input::placeholder{
+    color:#8a918d!important;
+    opacity:1!important;
+  }
+
+  .theme-index-chips{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    scrollbar-width:none!important;
+  }
+
+  .theme-index-chips::-webkit-scrollbar{display:none!important}
+
+  .theme-index-chips button{
+    position:relative!important;
+    flex:0 0 auto!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:8px 13px!important;
+    border:1px solid rgba(23,61,45,.12)!important;
+    border-radius:999px!important;
+    background:rgba(255,255,255,.7)!important;
+    color:#355244!important;
+    font-size:.78rem!important;
+    line-height:1.1!important;
+    font-weight:700!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+    box-shadow:none!important;
+    transition:background .17s ease,border-color .17s ease,color .17s ease,transform .17s ease,box-shadow .17s ease!important;
+  }
+
+  .theme-index-chips button:hover{
+    transform:translateY(-1px)!important;
+    border-color:rgba(23,61,45,.28)!important;
+    background:#fff!important;
+    color:#173d2d!important;
+    box-shadow:0 5px 14px rgba(34,50,42,.055)!important;
+  }
+
+  .theme-index-chips button.active{
+    border-color:#173d2d!important;
+    background:#173d2d!important;
+    color:#fff!important;
+    box-shadow:0 7px 18px rgba(23,61,45,.14)!important;
+  }
+
+  .theme-index-chips button.active:after{
+    content:'';
+    position:absolute;
+    left:50%;
+    bottom:-5px;
+    width:18px;
+    height:2px;
+    border-radius:999px;
+    background:var(--terra,#c45b32);
+    transform:translateX(-50%);
+  }
+}
+
+@media(min-width:701px) and (max-width:1120px){
+  .theme-index-page .gallery-filters.theme-index-filters{
+    grid-template-columns:1fr!important;
+  }
+  .theme-index-search{max-width:420px!important}
+}
+
 @media(max-width:700px){
   .theme-index-page .themes-showcase{padding:10px 0 26px!important}
   .theme-index-page .themes-showcase-inner{width:calc(100% - 24px)!important}
