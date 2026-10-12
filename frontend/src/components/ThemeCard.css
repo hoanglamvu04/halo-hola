@@ -155,7 +155,28 @@
   white-space: nowrap !important;
 }
 
+/* Global legacy rule `.theme-card span{position:absolute...}` used to catch
+   these footer spans and stack them on top of each other. Explicitly reset
+   every positional property inside the shared footer. */
+.shared-theme-card .theme-card-footer > span {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
 .shared-theme-card .theme-card-count {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
   color: #806b5b !important;
   font-weight: 650 !important;
 }
@@ -170,14 +191,18 @@
   display: inline-flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
+  flex: 0 0 auto !important;
   gap: 5px !important;
   color: #315743 !important;
   font-weight: 750 !important;
+  text-align: right !important;
 }
 
 .shared-theme-card .theme-card-status svg {
+  position: static !important;
   width: 13px !important;
   height: 13px !important;
+  margin: 0 !important;
   stroke-width: 2 !important;
   transition: transform .18s ease !important;
 }
