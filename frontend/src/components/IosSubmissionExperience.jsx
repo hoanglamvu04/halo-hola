@@ -6,13 +6,6 @@ import {
   resolveCheckinGroupUrl
 } from '../utils/facebookShare.js'
 
-function isIOSDevice() {
-  if (typeof navigator === 'undefined') return false
-  const ua = navigator.userAgent || ''
-  const platform = navigator.platform || ''
-  return /iPad|iPhone|iPod/i.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-}
-
 function clean(value) {
   return String(value ?? '').trim()
 }
@@ -45,8 +38,7 @@ export default function IosSubmissionExperience() {
       event.stopImmediatePropagation?.()
 
       const target = groupUrl || CHECKIN_GROUP_SEARCH_URL
-      if (isIOSDevice()) window.location.assign(target)
-      else window.open(target, '_blank', 'noopener,noreferrer')
+      window.open(target, '_blank', 'noopener,noreferrer')
     }
 
     document.addEventListener('click', onPrimaryFacebookClick, true)
