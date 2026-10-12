@@ -1,6 +1,7 @@
 .hm-page{
+  --halo-header-height:72px;
   background:#e9eeea;
-  min-height:calc(100vh - 72px);
+  min-height:calc(100vh - var(--halo-header-height));
 }
 
 .hm-official-page{
@@ -10,7 +11,7 @@
 .hm-official-shell{
   position:relative;
   width:100%;
-  height:calc(100vh - 72px);
+  height:calc(100vh - var(--halo-header-height));
   min-height:640px;
   overflow:hidden;
   background:#dfe6df;
@@ -18,10 +19,9 @@
 }
 
 /*
- * The HOLA Maps embed contains its own search/filter/toolbars.
- * On HALO HOLA we only need a clean map preview, so the iframe is
- * deliberately taller than the viewport and cropped from both ends.
- * This keeps the map visible while the embed chrome stays outside the crop.
+ * Keep the HOLA Maps embed fully inside the content area below the HALO HOLA
+ * header. The old negative top offset cropped the upper map controls and made
+ * the sticky site header look like it was covering the map.
  */
 .hm-map-crop{
   position:absolute;
@@ -32,11 +32,10 @@
 
 .hm-official-frame{
   position:absolute;
-  left:0;
-  top:-170px;
+  inset:0;
   display:block;
   width:100%;
-  height:calc(100% + 430px);
+  height:100%;
   border:0;
   background:#e7ece7;
 }
@@ -102,14 +101,19 @@
 }
 
 @media(max-width:820px){
+  .hm-page{
+    --halo-header-height:72px;
+    min-height:calc(100dvh - var(--halo-header-height));
+  }
+
   .hm-official-shell{
-    height:calc(100dvh - 72px);
+    height:calc(100dvh - var(--halo-header-height));
     min-height:520px;
   }
 
   .hm-official-frame{
-    top:-150px;
-    height:calc(100% + 390px);
+    inset:0;
+    height:100%;
   }
 
   .hm-official-open{
@@ -122,17 +126,17 @@
 
 @media(max-width:520px){
   .hm-page{
-    min-height:calc(100dvh - 72px);
+    min-height:calc(100dvh - var(--halo-header-height));
   }
 
   .hm-official-shell{
-    height:calc(100dvh - 72px);
+    height:calc(100dvh - var(--halo-header-height));
     min-height:430px;
   }
 
   .hm-official-frame{
-    top:-138px;
-    height:calc(100% + 360px);
+    inset:0;
+    height:100%;
   }
 
   .hm-official-open{
