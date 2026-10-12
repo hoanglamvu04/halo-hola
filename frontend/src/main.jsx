@@ -45,6 +45,7 @@ import './styles/submission-stepper-field-hierarchy.css'
 import './styles/submit-theme-color-step-polish.css'
 import './styles/submit-rights-mobile-polish.css'
 import './styles/submit-review-mobile-polish.css'
+import './styles/submission-email-validation.css'
 import './styles/home-hero-mobile-spacing-tight.css'
 import './styles/campaign-admin-runtime.css'
 import './styles/campaign-mobile-readability-fix.css'
@@ -80,6 +81,7 @@ import SubmissionCaptureDateGuard from './components/SubmissionCaptureDateGuard.
 import SubmissionPhoneRequired from './components/SubmissionPhoneRequired.jsx'
 import SubmissionUploadCopyPolish from './components/SubmissionUploadCopyPolish.jsx'
 import SubmissionReviewRuntime from './components/SubmissionReviewRuntime.jsx'
+import SubmissionEmailValidation from './components/SubmissionEmailValidation.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -100,6 +102,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionPhoneRequired />
         <SubmissionUploadCopyPolish />
         <SubmissionReviewRuntime />
+        <SubmissionEmailValidation />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
