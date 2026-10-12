@@ -29,8 +29,7 @@ export default function ThemeCard({ theme, index = 0 }) {
         </div>
 
         <div className="theme-card-footer">
-          <span className="theme-card-count"><b>{artworkCount}</b> tác phẩm</span>
-          <span className="theme-card-status">Đã công bố <ArrowRight aria-hidden="true" /></span>
+          <span className="theme-card-count">{artworkCount} tác phẩm đã công bố</span>
         </div>
 
         <span className="theme-card-arrow" aria-hidden="true"><ArrowRight /></span>
