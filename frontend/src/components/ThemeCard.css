@@ -139,20 +139,51 @@
   text-overflow: ellipsis !important;
 }
 
-.shared-theme-card .theme-card-body small {
+.shared-theme-card .theme-card-footer {
   position: static !important;
-  display: block !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
   flex: 0 0 auto !important;
+  width: 100% !important;
   margin: auto 0 0 !important;
-  padding: 7px 0 0 !important;
-  border-top: 1px solid rgba(23, 61, 45, .07) !important;
-  color: #806b5b !important;
+  padding: 8px 0 0 !important;
+  border-top: 1px solid rgba(23, 61, 45, .08) !important;
   font-size: .72rem !important;
-  line-height: 1.08 !important;
-  font-weight: 700 !important;
+  line-height: 1.1 !important;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+}
+
+.shared-theme-card .theme-card-count {
+  color: #806b5b !important;
+  font-weight: 650 !important;
+}
+
+.shared-theme-card .theme-card-count b {
+  color: #6f5848 !important;
+  font-size: 1.08em !important;
+  font-weight: 800 !important;
+}
+
+.shared-theme-card .theme-card-status {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  color: #315743 !important;
+  font-weight: 750 !important;
+}
+
+.shared-theme-card .theme-card-status svg {
+  width: 13px !important;
+  height: 13px !important;
+  stroke-width: 2 !important;
+  transition: transform .18s ease !important;
+}
+
+.shared-theme-card:hover .theme-card-status svg {
+  transform: translateX(2px) !important;
 }
 
 .shared-theme-card .theme-card-arrow {
@@ -208,6 +239,11 @@
 
   .shared-theme-card p {
     font-size: .74rem !important;
+  }
+
+  .shared-theme-card .theme-card-footer {
+    font-size: .68rem !important;
+    gap: 8px !important;
   }
 
   .shared-theme-card .theme-card-arrow {
@@ -304,9 +340,19 @@
     line-height: 1.24 !important;
   }
 
-  .shared-theme-card .theme-card-body small {
+  .shared-theme-card .theme-card-footer {
+    gap: 5px !important;
     padding-top: 4px !important;
-    font-size: calc(.57rem + 1px) !important;
+    font-size: calc(.55rem + 1px) !important;
+  }
+
+  .shared-theme-card .theme-card-status {
+    gap: 3px !important;
+  }
+
+  .shared-theme-card .theme-card-status svg {
+    width: 10px !important;
+    height: 10px !important;
   }
 
   .shared-theme-card .theme-card-arrow {
@@ -364,8 +410,8 @@
     line-height: 1.22 !important;
   }
 
-  .shared-theme-card .theme-card-body small {
-    font-size: calc(.55rem + 1px) !important;
+  .shared-theme-card .theme-card-footer {
+    font-size: .56rem !important;
   }
 
   .shared-theme-card .theme-card-arrow {
