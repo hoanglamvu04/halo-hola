@@ -76,7 +76,7 @@ export default function ThemesPage(){
 
     <section className="themes-showcase">
       <div className="themes-showcase-inner">
-        <div className="gallery-filters theme-index-filters">
+        <div className="theme-index-filters">
           <div className="theme-index-search">
             <Search size={18}/>
             <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề, địa điểm, trải nghiệm..."/>
