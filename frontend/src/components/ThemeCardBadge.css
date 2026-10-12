@@ -1,0 +1,144 @@
+/* Artwork count badge + compact card proportions.
+   Loaded after ThemeCard.css so Home and /chu-de stay perfectly in sync. */
+
+.shared-theme-card .theme-card-media {
+  position: relative !important;
+}
+
+.shared-theme-card .theme-card-count-badge {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 4 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  height: 28px !important;
+  min-width: 0 !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 999px !important;
+  background: rgba(255,252,245,.91) !important;
+  color: #315743 !important;
+  box-shadow: 0 5px 16px rgba(34,49,40,.12) !important;
+  backdrop-filter: blur(9px) !important;
+  -webkit-backdrop-filter: blur(9px) !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+
+/* The old footer is gone, so reclaim the empty lower third. */
+.shared-theme-card.theme-card-reference {
+  height: 318px !important;
+  min-height: 318px !important;
+  max-height: 318px !important;
+}
+
+.shared-theme-card .theme-card-body {
+  height: 128px !important;
+  min-height: 128px !important;
+  padding: 14px 16px 13px !important;
+}
+
+.shared-theme-card .theme-card-number {
+  margin-bottom: 6px !important;
+}
+
+.shared-theme-card .theme-card-copy {
+  gap: 5px !important;
+}
+
+@media (max-width: 1320px) and (min-width: 701px) {
+  .shared-theme-card.theme-card-reference {
+    height: 302px !important;
+    min-height: 302px !important;
+    max-height: 302px !important;
+  }
+
+  .shared-theme-card .theme-card-body {
+    height: 124px !important;
+    min-height: 124px !important;
+    padding: 13px 14px 12px !important;
+  }
+
+  .shared-theme-card .theme-card-count-badge {
+    top: 10px !important;
+    right: 10px !important;
+    height: 26px !important;
+    padding: 0 9px !important;
+    font-size: .68rem !important;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 701px) {
+  .shared-theme-card.theme-card-reference {
+    height: 320px !important;
+    min-height: 320px !important;
+    max-height: 320px !important;
+  }
+
+  .shared-theme-card .theme-card-body {
+    height: 125px !important;
+    min-height: 125px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .shared-theme-card.theme-card-reference {
+    height: 202px !important;
+    min-height: 202px !important;
+    max-height: 202px !important;
+  }
+
+  .shared-theme-card .theme-card-body {
+    height: 92px !important;
+    min-height: 92px !important;
+    padding: 7px 10px 7px !important;
+  }
+
+  .shared-theme-card .theme-card-number {
+    margin-bottom: 2px !important;
+  }
+
+  .shared-theme-card .theme-card-copy {
+    gap: 2px !important;
+  }
+
+  .shared-theme-card .theme-card-count-badge {
+    top: 7px !important;
+    right: 7px !important;
+    height: 23px !important;
+    padding: 0 7px !important;
+    font-size: .59rem !important;
+    box-shadow: 0 3px 10px rgba(34,49,40,.11) !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .shared-theme-card.theme-card-reference {
+    height: 194px !important;
+    min-height: 194px !important;
+    max-height: 194px !important;
+  }
+
+  .shared-theme-card .theme-card-body {
+    height: 90px !important;
+    min-height: 90px !important;
+    padding: 6px 9px !important;
+  }
+
+  .shared-theme-card .theme-card-count-badge {
+    top: 6px !important;
+    right: 6px !important;
+    height: 21px !important;
+    padding: 0 6px !important;
+    font-size: .55rem !important;
+  }
+}
