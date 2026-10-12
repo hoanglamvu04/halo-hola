@@ -26,6 +26,16 @@ function setButtonText(button, label) {
   if (textNode && textNode.textContent !== ` ${label}`) textNode.textContent = ` ${label}`
 }
 
+function scrollToPageTop() {
+  if (typeof window === 'undefined') return
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? 'auto' : 'smooth' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  })
+}
+
 function updateShareChoiceCopy(stack) {
   if (!stack) return
 
@@ -183,6 +193,7 @@ export default function SubmissionFacebookGate() {
       localStorage.setItem(storageKey('facebook_url', identity.code), payload.facebookPostUrl || clean(facebookPostUrl))
       localStorage.setItem(storageKey('facebook_completed', identity.code), '1')
       setCompleted(true)
+      window.setTimeout(scrollToPageTop, 60)
     } catch (requestError) {
       setError(requestError.message || 'Chưa thể xác nhận bước Facebook. Vui lòng thử lại.')
     } finally {
