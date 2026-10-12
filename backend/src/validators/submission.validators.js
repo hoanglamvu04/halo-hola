@@ -10,7 +10,7 @@ export const submissionSchema = z.object({
   name: z.string().trim().min(2).max(160),
   displayName: z.string().trim().max(160).optional().or(z.literal('')),
   email: z.string().trim().email().max(255),
-  phone: z.string().trim().max(60).optional().or(z.literal('')),
+  phone: z.string().trim().min(1, 'Số điện thoại là bắt buộc.').max(60),
   bio: z.string().trim().max(1000).optional().or(z.literal('')),
   title: z.string().trim().min(2).max(280),
   capturedAt: z.string().trim().max(30).optional().or(z.literal('')),
