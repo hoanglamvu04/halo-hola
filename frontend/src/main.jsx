@@ -14,6 +14,7 @@ import './styles/home-change-mobile-fix.css'
 import './styles/home-change-desktop-card-fix.css'
 import './styles/home-themes-mobile-fix.css'
 import './styles/home-colors-mobile-fix.css'
+import './styles/home-colors-desktop-story-grid.css'
 import './styles/home-color-cards-shared-style.css'
 import './styles/home-tour-mobile-spacing-fix.css'
 import './styles/home-map-mobile-fix.css'
@@ -63,6 +64,7 @@ import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
 import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
+import ColorStoryDesktopExperience from './components/ColorStoryDesktopExperience.jsx'
 import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
 import SubmissionQuickMode from './components/SubmissionQuickMode.jsx'
 import SubmissionOperationsRuntime from './components/SubmissionOperationsRuntime.jsx'
@@ -78,6 +80,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
         <MobileHeroExperience />
         <CampaignRuntimeCustomizer />
+        <ColorStoryDesktopExperience />
         <SubmissionQuickMode />
         <SubmissionFacebookGate />
         <SubmissionOperationsRuntime />
