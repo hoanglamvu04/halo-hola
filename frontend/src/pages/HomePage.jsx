@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import ThemeCard from '../components/ThemeCard.jsx'
 import { img } from '../data/siteData.js'
 import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPublicArtworks } from '../services/api.js'
 import { getHolaMapConfig } from '../services/holaMapsApi.js'
@@ -289,19 +290,7 @@ export default function HomePage() {
         </header>
 
         <div className="themes-card-grid">
-          {themes.map((t,index) => <Link to={'/chu-de/'+t.slug} className="theme-card theme-card-reference" key={t.id||t.slug}>
-            <div className="theme-card-media">
-              {t.image?<img src={t.image} alt={t.title}/>:<div className="theme-card-placeholder"/>}
-              <span className="theme-card-glow"/>
-            </div>
-            <div className="theme-card-body">
-              <div className="theme-card-number"><b>{String(t.id||index+1).padStart(2,'0')}</b><i/></div>
-              <h3>{t.title}</h3>
-              <p>{t.description}</p>
-              <span className="theme-card-arrow"><ArrowRight/></span>
-              <Leaf className="theme-card-leaf"/>
-            </div>
-          </Link>)}
+          {themes.map((t,index)=><ThemeCard theme={t} index={index} key={t.id||t.slug}/>)}
         </div>
       </div>
     </section>}
