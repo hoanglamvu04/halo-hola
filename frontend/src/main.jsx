@@ -73,6 +73,7 @@ import IosSubmissionExperience from './components/IosSubmissionExperience.jsx'
 import SubmissionWizardExperience from './components/SubmissionWizardExperience.jsx'
 import SubmissionMediaTypeGuard from './components/SubmissionMediaTypeGuard.jsx'
 import SubmissionCaptureDateGuard from './components/SubmissionCaptureDateGuard.jsx'
+import SubmissionPhoneRequired from './components/SubmissionPhoneRequired.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -90,6 +91,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionWizardExperience />
         <SubmissionMediaTypeGuard />
         <SubmissionCaptureDateGuard />
+        <SubmissionPhoneRequired />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
