@@ -1,7 +1,8 @@
-import { Menu, Search, X, ArrowRight, Leaf } from 'lucide-react'
+import { Menu, Search, X, ArrowRight, Leaf, ChevronDown } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { getHomepageContent, getSiteSettings } from '../services/api.js'
+import './Header.css'
 
 const DEFAULT_NAV_LINKS = [
   {label:'Khám phá',href:'/'},
@@ -13,6 +14,8 @@ const DEFAULT_NAV_LINKS = [
   {label:'Thể lệ & Giải thưởng',href:'/the-le-giai-thuong'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
+
+const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/we-hola'])
 
 const MOBILE_QUICK_LINKS = [
   {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
@@ -180,7 +183,9 @@ export default function Header() {
     mobileHeaderVisible||open?'mobile-header-visible':'mobile-header-hidden'
   ].filter(Boolean).join(' ')
 
-  const navLinks=Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS
+  const navLinks=(Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS).filter(item=>item?.label&&item?.href)
+  const programLinks=navLinks.filter(item=>PROGRAM_HREFS.has(item.href))
+  const desktopPrimaryLinks=navLinks.filter(item=>!PROGRAM_HREFS.has(item.href))
   const closeMenu=()=>setOpen(false)
   const searchUrl=config.searchUrl||'/tra-cuu'
   const searchLabel=config.searchLabel||'Tra cứu tác phẩm'
@@ -200,9 +205,21 @@ export default function Header() {
           <button onClick={closeMenu} aria-label="Đóng menu"><X/></button>
         </div>
 
+        <div className="desktop-nav-list" aria-label="Điều hướng chính">
+          {desktopPrimaryLinks.map((item,index)=><HeaderNavLink key={(item.href||'link')+'-desktop-'+index} item={item}/>)}
+          {programLinks.length>0&&<div className="desktop-nav-more">
+            <button className="desktop-nav-more-trigger" type="button" aria-haspopup="true">
+              Chương trình <ChevronDown aria-hidden="true" />
+            </button>
+            <div className="desktop-nav-dropdown">
+              {programLinks.map((item,index)=><HeaderNavLink key={(item.href||'program')+'-'+index} item={item}/>)}
+            </div>
+          </div>}
+        </div>
+
         <div className="mobile-nav-primary-label">Khám phá</div>
         <div className="mobile-nav-primary-list">
-          {navLinks.filter(item=>item?.label&&item?.href).map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
+          {navLinks.map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
         </div>
 
         <div className="mobile-nav-actions">
