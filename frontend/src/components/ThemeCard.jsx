@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import './ThemeCard.css'
+import './ThemeCardBadge.css'
 
 export default function ThemeCard({ theme, index = 0 }) {
   const id = theme?.id || index + 1
@@ -15,6 +16,7 @@ export default function ThemeCard({ theme, index = 0 }) {
           ? <img src={theme.image} alt={title} loading="lazy" decoding="async" />
           : <div className="theme-card-placeholder" />}
         <span className="theme-card-glow" />
+        <span className="theme-card-count-badge">{artworkCount} tác phẩm</span>
       </div>
 
       <div className="theme-card-body">
@@ -26,10 +28,6 @@ export default function ThemeCard({ theme, index = 0 }) {
         <div className="theme-card-copy">
           <h3>{title}</h3>
           <p>{theme?.description || ''}</p>
-        </div>
-
-        <div className="theme-card-footer">
-          <span className="theme-card-count">{artworkCount} tác phẩm đã công bố</span>
         </div>
 
         <span className="theme-card-arrow" aria-hidden="true"><ArrowRight /></span>
