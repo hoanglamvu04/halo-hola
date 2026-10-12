@@ -193,6 +193,8 @@ router.get('/artworks/:id', async (req, res, next) => {
              s.type, s.theme, s.color, s.location, s.story,
              s.captured_at AS "capturedAt", s.status,
              s.is_demo AS "isDemo", s.allow_media_use AS "allowMediaUse",
+             s.facebook_post_url AS "facebookPostUrl",
+             s.facebook_post_verified_at AS "facebookPostVerifiedAt",
              s.created_at AS "createdAt",
              COALESCE(jury.avg_score,0)::float AS "juryScore"
       FROM submissions s
