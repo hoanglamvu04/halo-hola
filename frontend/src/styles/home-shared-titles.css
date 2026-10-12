@@ -77,6 +77,14 @@
   content: ' ';
 }
 
+/* Remove the slanted decorative brush strokes on both desktop and mobile. */
+.hero-title-stroke,
+.themes-title-stroke,
+.colors-title-stroke,
+.home-tour-stroke {
+  display: none !important;
+}
+
 @media (max-width: 760px) {
   .home-hero-copy h1,
   .campaign-live .live-counter h2,
