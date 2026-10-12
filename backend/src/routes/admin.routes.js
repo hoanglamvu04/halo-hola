@@ -20,6 +20,11 @@ import {
   getMediaDownloadUrl
 } from '../services/submission.service.js';
 import {
+  getSubmissionNotificationTargetById,
+  sendStatusNotificationForSubmission,
+  sendStatusNotificationByCode
+} from '../services/submissionNotification.service.js';
+import {
   listJurySubmissions,
   getJuryScorecard,
   saveJuryScore,
@@ -209,14 +214,41 @@ router.get('/submissions', async (req, res, next) => {
 router.patch('/submissions/:id/status', async (req, res, next) => {
   try {
     const { status } = statusSchema.parse(req.body);
+    const before = await getSubmissionNotificationTargetById(req.params.id);
     const updated = await updateSubmissionStatus(req.params.id, status);
     if (!updated) throw new AppError('Không tìm thấy tác phẩm.', 404);
+
+    if (before && before.status !== status) {
+      sendStatusNotificationForSubmission(updated).catch((error) =>
+        console.warn('Status email skipped/failed:', error.message)
+      );
+    }
+
     res.json(updated);
   } catch (error) {
     if (error?.name === 'ZodError') {
       return next(new AppError('Trạng thái không hợp lệ.', 400, error.issues));
     }
     return next(error);
+  }
+});
+
+router.post('/submissions/notify', async (req, res, next) => {
+  try {
+    const code = String(req.body?.code || '').trim().toUpperCase();
+    if (!/^HH26-[A-Z0-9-]{3,}$/i.test(code)) {
+      throw new AppError('Mã dự thi chưa hợp lệ.', 400);
+    }
+    const result = await sendStatusNotificationByCode(code);
+    if (!result) throw new AppError('Không tìm thấy tác phẩm.', 404);
+    res.json({
+      ok: true,
+      code: result.submission.code,
+      status: result.submission.status,
+      delivery: result.delivery
+    });
+  } catch (error) {
+    next(error);
   }
 });
 
