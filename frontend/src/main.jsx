@@ -79,6 +79,7 @@ import SubmissionMediaTypeGuard from './components/SubmissionMediaTypeGuard.jsx'
 import SubmissionCaptureDateGuard from './components/SubmissionCaptureDateGuard.jsx'
 import SubmissionPhoneRequired from './components/SubmissionPhoneRequired.jsx'
 import SubmissionUploadCopyPolish from './components/SubmissionUploadCopyPolish.jsx'
+import SubmissionReviewRuntime from './components/SubmissionReviewRuntime.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -98,6 +99,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionCaptureDateGuard />
         <SubmissionPhoneRequired />
         <SubmissionUploadCopyPolish />
+        <SubmissionReviewRuntime />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
