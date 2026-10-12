@@ -1,0 +1,40 @@
+.submit-page .submission-email-field .submission-email-status{
+  display:none;
+  margin-top:-1px;
+  font-size:11px;
+  line-height:1.35;
+  font-weight:700;
+}
+
+.submit-page .submission-email-field .submission-email-status.is-valid,
+.submit-page .submission-email-field .submission-email-status.is-invalid{
+  display:block;
+}
+
+.submit-page .submission-email-field .submission-email-status.is-valid{
+  color:#287553;
+}
+
+.submit-page .submission-email-field .submission-email-status.is-invalid{
+  color:#b34e31;
+}
+
+.submit-page .submission-email-field input.is-email-valid{
+  border-color:rgba(40,117,83,.42)!important;
+  box-shadow:0 0 0 3px rgba(40,117,83,.06)!important;
+  background:#fbfffc!important;
+}
+
+.submit-page .submission-email-field input.is-email-invalid{
+  border-color:rgba(179,78,49,.48)!important;
+  box-shadow:0 0 0 3px rgba(179,78,49,.07)!important;
+  background:#fffaf8!important;
+}
+
+@media(max-width:720px){
+  .submit-page .submission-email-field .submission-email-status{
+    margin-top:-2px;
+    padding-left:2px;
+    font-size:10.5px;
+  }
+}
