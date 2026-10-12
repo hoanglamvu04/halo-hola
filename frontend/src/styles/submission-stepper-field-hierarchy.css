@@ -61,6 +61,77 @@
   background:#fcfcfa;
 }
 
+/* Step 2 follows the same hierarchy: title/type are essential, date/link are optional. */
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label{
+  position:relative;
+  padding-right:76px;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label::after,
+.submit-page .wizard-card[data-current-step='2'] .form-subtitle::after{
+  padding:3px 7px;
+  border-radius:999px;
+  font-size:.56rem;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label::after{
+  position:absolute;
+  top:-1px;
+  right:0;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(1){
+  color:#173f35;
+  font-weight:850;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(1)::after{
+  content:'Bắt buộc';
+  background:#fff0e7;
+  color:#ad4d2d;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(2),
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(3){
+  color:#78827d;
+  font-weight:700;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(2)::after,
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(3)::after{
+  content:'Tùy chọn';
+  background:#f2f3f0;
+  color:#7d8681;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(1) input{
+  border-color:rgba(23,61,45,.19);
+  background:#fff;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(2) input,
+.submit-page .wizard-card[data-current-step='2'] .form-grid > label:nth-child(3) input{
+  border-color:rgba(23,61,45,.09);
+  background:#fcfcfa;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-subtitle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.submit-page .wizard-card[data-current-step='2'] .form-subtitle::after{
+  content:'Bắt buộc';
+  background:#fff0e7;
+  color:#ad4d2d;
+}
+
 @media(max-width:720px){
   /* Seven equal checkpoints stay visible; only the current step keeps its title. */
   .submit-page .stepper{
@@ -70,6 +141,7 @@
     margin:0 -10px 12px!important;
     padding:7px 7px 30px!important;
     overflow:hidden!important;
+    counter-reset:halo-submit-step;
   }
 
   .submit-page .stepper:before{
@@ -85,6 +157,7 @@
     flex:none!important;
     padding:0!important;
     gap:0!important;
+    counter-increment:halo-submit-step;
   }
 
   .submit-page .stepper button span{
@@ -125,22 +198,74 @@
     text-align:right!important;
   }
 
+  /* A default value must not make a future step look completed.
+     Only a .done button before the active checkpoint keeps its check mark. */
+  .submit-page .stepper button.done:not(:has(~ button.active)){
+    color:#8a918c!important;
+  }
+
+  .submit-page .stepper button.done:not(:has(~ button.active)) span{
+    border-color:rgba(23,61,45,.16)!important;
+    background:#fffdf8!important;
+    color:#758078!important;
+    box-shadow:0 3px 10px rgba(31,43,37,.04)!important;
+    transform:none!important;
+  }
+
+  .submit-page .stepper button.done:not(:has(~ button.active)) span svg{
+    display:none!important;
+  }
+
+  .submit-page .stepper button.done:not(:has(~ button.active)) span::after{
+    content:counter(halo-submit-step);
+    display:block;
+    font-size:.68rem;
+    font-weight:500;
+  }
+
   /* Step 1 becomes easier to scan: primary contact fields first, profile extras recede. */
   .submit-page .wizard-card[data-current-step='1'] .form-grid{
     gap:11px!important;
   }
 
-  .submit-page .wizard-card[data-current-step='1'] .form-grid > label{
+  .submit-page .wizard-card[data-current-step='1'] .form-grid > label,
+  .submit-page .wizard-card[data-current-step='2'] .form-grid > label{
     padding-right:70px;
   }
 
-  .submit-page .wizard-card[data-current-step='1'] .form-grid > label::after{
-    top:0;
+  .submit-page .wizard-card[data-current-step='1'] .form-grid > label::after,
+  .submit-page .wizard-card[data-current-step='2'] .form-grid > label::after,
+  .submit-page .wizard-card[data-current-step='2'] .form-subtitle::after{
     padding:3px 6px;
     font-size:.52rem;
   }
 
   .submit-page .wizard-card[data-current-step='1'] .form-grid > label:nth-child(5) textarea{
     min-height:78px!important;
+  }
+
+  /* Step 2: denser media-type chooser, with slightly stronger labels. */
+  .submit-page .wizard-card[data-current-step='2'] .form-grid{
+    gap:11px!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='2'] .form-subtitle{
+    margin-top:18px!important;
+    margin-bottom:10px!important;
+    gap:7px!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='2'] .type-grid button{
+    min-height:104px!important;
+    padding:11px 9px!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='2'] .type-grid button b{
+    font-size:.91rem!important;
+  }
+
+  .submit-page .wizard-card[data-current-step='2'] .type-grid button small{
+    font-size:.66rem!important;
+    line-height:1.25!important;
   }
 }
