@@ -275,13 +275,16 @@
 }
 
 @media(max-width:760px){
+  /* Bottom-nav clearance is already owned by `.site-shell.has-mobile-bottom-nav`.
+     Do not reserve it a second time inside the footer. Keep only a tiny visual
+     breathing space before the fixed mobile navigation. */
   .site-footer.site-footer-v2{
-    padding:0 0 calc(92px + env(safe-area-inset-bottom))!important;
+    padding:0 0 8px!important;
   }
 
   .site-footer-v2 .footer-shell-v2{
     width:100%!important;
-    padding:26px 18px 16px!important;
+    padding:26px 18px 12px!important;
     grid-template-columns:1fr!important;
     gap:24px!important;
   }
