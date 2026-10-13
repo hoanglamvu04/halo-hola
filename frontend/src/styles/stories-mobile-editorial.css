@@ -189,7 +189,6 @@
     background:#fffdf8!important;
   }
 
-  /* Badge already lives on the image; avoid repeating it below. */
   .stories-feature-copy>.eyebrow{
     display:none!important;
   }
@@ -277,7 +276,7 @@
     height:13px!important;
   }
 
-  /* ===== Other stories: editorial list rather than mini dashboards ===== */
+  /* ===== Other stories: calmer, more legible editorial rows ===== */
   .stories-list-ref{
     padding:20px 16px 34px!important;
     background:#f5efe5!important;
@@ -293,7 +292,7 @@
 
   .stories-list-head{
     display:block!important;
-    margin:0 0 14px!important;
+    margin:0 0 16px!important;
   }
 
   .stories-list-head .stories-kicker{
@@ -317,26 +316,27 @@
   .stories-grid-ref{
     display:grid!important;
     grid-template-columns:minmax(0,1fr)!important;
-    gap:9px!important;
+    gap:11px!important;
     width:100%!important;
   }
 
   .story-card-ref{
     display:grid!important;
-    grid-template-columns:104px minmax(0,1fr)!important;
-    min-height:112px!important;
+    grid-template-columns:118px minmax(0,1fr)!important;
+    min-height:124px!important;
     overflow:hidden!important;
-    border:1px solid rgba(18,63,50,.07)!important;
-    border-radius:16px!important;
+    border:1px solid rgba(18,63,50,.065)!important;
+    border-radius:15px!important;
     background:#fffdf8!important;
-    box-shadow:0 5px 16px rgba(37,50,43,.035)!important;
+    box-shadow:0 4px 14px rgba(37,50,43,.025)!important;
     text-decoration:none!important;
   }
 
   .story-card-media{
-    width:104px!important;
-    height:100%!important;
-    min-height:112px!important;
+    width:118px!important;
+    height:124px!important;
+    min-height:124px!important;
+    align-self:stretch!important;
     overflow:hidden!important;
     border-radius:0!important;
   }
@@ -345,7 +345,7 @@
   .story-card-media .theme-card-placeholder{
     width:100%!important;
     height:100%!important;
-    min-height:112px!important;
+    min-height:124px!important;
     object-fit:cover!important;
   }
 
@@ -359,7 +359,7 @@
     bottom:8px!important;
     padding:4px 6px!important;
     border-radius:999px!important;
-    background:rgba(255,253,248,.9)!important;
+    background:rgba(255,253,248,.92)!important;
     color:#0d4b3d!important;
     font-size:.5rem!important;
     font-weight:850!important;
@@ -369,17 +369,17 @@
     display:flex!important;
     min-width:0!important;
     flex-direction:column!important;
-    justify-content:center!important;
-    padding:10px 11px!important;
+    justify-content:flex-start!important;
+    padding:12px 12px 10px!important;
   }
 
   .story-card-category{
-    margin:0 0 4px!important;
+    margin:0 0 6px!important;
     color:#b65735!important;
-    font-size:.52rem!important;
+    font-size:.54rem!important;
     line-height:1.2!important;
     font-weight:850!important;
-    letter-spacing:.1em!important;
+    letter-spacing:.095em!important;
     text-transform:uppercase!important;
   }
 
@@ -390,24 +390,17 @@
     overflow:hidden!important;
     margin:0!important;
     color:#133f33!important;
-    font-size:.91rem!important;
-    line-height:1.13!important;
+    font-size:1rem!important;
+    line-height:1.16!important;
     font-weight:850!important;
-    letter-spacing:-.02em!important;
+    letter-spacing:-.023em!important;
   }
 
+  /* The list is for scanning; excerpts made these cards feel cramped. */
   .story-card-copy>p{
-    display:-webkit-box!important;
-    -webkit-box-orient:vertical!important;
-    -webkit-line-clamp:1!important;
-    overflow:hidden!important;
-    margin:5px 0 0!important;
-    color:#748078!important;
-    font-size:.6rem!important;
-    line-height:1.35!important;
+    display:none!important;
   }
 
-  /* On a compact editorial list, author avatars add noise. */
   .story-card-author{
     display:none!important;
   }
@@ -415,23 +408,28 @@
   .story-card-bottom{
     display:flex!important;
     align-items:center!important;
-    flex-wrap:wrap!important;
-    gap:7px!important;
-    margin-top:7px!important;
-    color:#849088!important;
-    font-size:.54rem!important;
+    flex-wrap:nowrap!important;
+    gap:9px!important;
+    margin-top:auto!important;
+    padding-top:10px!important;
+    color:#7f8a84!important;
+    font-size:.58rem!important;
   }
 
   .story-card-bottom span{
     display:inline-flex!important;
     min-width:0!important;
     align-items:center!important;
-    gap:3px!important;
+    gap:4px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
   }
 
   .story-card-bottom svg{
-    width:10px!important;
-    height:10px!important;
+    width:11px!important;
+    height:11px!important;
+    flex:0 0 auto!important;
     color:#6d857b!important;
   }
 }
@@ -453,10 +451,26 @@
   }
 
   .story-card-ref{
-    grid-template-columns:96px minmax(0,1fr)!important;
+    grid-template-columns:108px minmax(0,1fr)!important;
+    min-height:118px!important;
   }
 
   .story-card-media{
-    width:96px!important;
+    width:108px!important;
+    height:118px!important;
+    min-height:118px!important;
+  }
+
+  .story-card-media img,
+  .story-card-media .theme-card-placeholder{
+    min-height:118px!important;
+  }
+
+  .story-card-copy{
+    padding:11px 10px 9px!important;
+  }
+
+  .story-card-copy h3{
+    font-size:.96rem!important;
   }
 }
