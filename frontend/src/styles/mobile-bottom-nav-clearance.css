@@ -14,12 +14,11 @@
   }
 
   /* The theme block is followed by other homepage sections, so it must not
-     reserve bottom-nav space of its own. That clearance belongs only to the
-     end of the page shell. Keep this selector explicit to override any older
-     bundled rule that added the nav clearance to the theme grid. */
+     reserve bottom-nav space of its own. Keep only a small visual breathing
+     gap before the next section instead of the old 88px+ nav clearance. */
   .site-shell.has-mobile-bottom-nav .themes-showcase .themes-card-grid,
   .themes-showcase .themes-card-grid {
-    padding-bottom: 0 !important;
+    padding-bottom: 8px !important;
     margin-bottom: 0 !important;
   }
 
