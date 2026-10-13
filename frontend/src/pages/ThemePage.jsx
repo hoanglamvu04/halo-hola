@@ -107,7 +107,7 @@ export default function ThemePage(){
   if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
   if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
 
-  const visibleCount=Number(theme.artworkCount||totalCount||0)
+  const visibleCount=Number(theme.artworkCount ?? totalCount ?? 0)
 
   return <main className="theme-page-ref">
     <section className="theme-hero-ref">
@@ -187,7 +187,14 @@ export default function ThemePage(){
 
         {collectionError&&<div className="theme-gallery-error">{collectionError}</div>}
         {galleryLoading?<div className="theme-gallery-loading">Đang tải tác phẩm...</div>:
-          related.length===0?<div className="jw-empty">Chưa có tác phẩm phù hợp bộ lọc.</div>:<>
+          related.length===0?<div className="theme-gallery-empty">
+            <span className="theme-gallery-empty-icon"><ImageIcon/></span>
+            <div>
+              <h3>{activeType?'Chưa có tác phẩm ở loại hình này':'Chưa có tác phẩm công khai'}</h3>
+              <p>{activeType?'Bạn có thể thử một loại hình khác hoặc xem lại tất cả tác phẩm.':'Hãy là người đầu tiên gửi một góc nhìn cho chủ đề này.'}</p>
+            </div>
+            {activeType?<button type="button" onClick={()=>loadCollection('')}>Xem tất cả</button>:<Link to="/gui-goc-nhin">Gửi tác phẩm đầu tiên <ArrowRight/></Link>}
+          </div>:<>
             <div className="theme-related-grid theme-gallery-grid theme-gallery-visible">
               {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.id||a.slug}>
                 <div className="theme-related-media">
