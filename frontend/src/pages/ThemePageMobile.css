@@ -1,5 +1,24 @@
-/* Mobile-only simplification for theme detail pages. */
+/* HALO HOLA theme detail — compact mobile editorial layout.
+   Keeps desktop untouched and puts the artwork collection closer to the top. */
 @media(max-width:760px){
+  .theme-page-ref{
+    overflow-x:hidden!important;
+    background:#fbf7ef!important;
+  }
+
+  .theme-page-ref .theme-hero-inner,
+  .theme-page-ref .theme-story-inner,
+  .theme-page-ref .theme-related-inner{
+    width:calc(100% - 24px)!important;
+    max-width:none!important;
+    margin-inline:auto!important;
+  }
+
+  /* ===== Compact theme hero ===== */
+  .theme-page-ref .theme-hero-ref{
+    padding:14px 0 10px!important;
+  }
+
   .theme-page-ref .theme-hero-inner{
     grid-template-columns:1fr!important;
     gap:0!important;
@@ -9,7 +28,379 @@
     display:none!important;
   }
 
-  .theme-page-ref .theme-hero-ref{
-    padding-bottom:14px!important;
+  .theme-page-ref .theme-hero-copy .story-back-link{
+    margin:0 0 8px!important;
+    font-size:.66rem!important;
+  }
+
+  .theme-page-ref .theme-hero-copy .theme-kicker{
+    margin:0 0 5px!important;
+  }
+
+  .theme-page-ref .theme-kicker span{
+    font-size:.58rem!important;
+    letter-spacing:.13em!important;
+  }
+
+  .theme-page-ref .theme-kicker i{
+    width:34px!important;
+    max-width:34px!important;
+  }
+
+  .theme-page-ref .theme-hero-copy h1{
+    margin:0 0 5px!important;
+    max-width:350px!important;
+    color:#0c4a3b!important;
+    font-size:clamp(2.15rem,10.5vw,2.7rem)!important;
+    line-height:.94!important;
+    letter-spacing:-.052em!important;
+  }
+
+  .theme-page-ref .theme-hero-copy h3{
+    margin:0!important;
+    color:#6b6f6b!important;
+    font-size:.86rem!important;
+    line-height:1.28!important;
+    font-weight:650!important;
+  }
+
+  .theme-page-ref .theme-hero-copy>p{
+    display:none!important;
+  }
+
+  .theme-page-ref .theme-hero-actions{
+    display:block!important;
+    margin-top:11px!important;
+  }
+
+  .theme-page-ref .theme-hero-actions .btn{
+    width:100%!important;
+    min-height:40px!important;
+    padding:9px 16px!important;
+    border-radius:13px!important;
+    font-size:.72rem!important;
+  }
+
+  .theme-page-ref .theme-explore-link{
+    display:none!important;
+  }
+
+  .theme-page-ref .theme-hero-stats{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:0!important;
+    margin-top:11px!important;
+    padding:10px 0 0!important;
+    border-top:1px solid rgba(23,61,45,.11)!important;
+  }
+
+  .theme-page-ref .theme-hero-stats>div{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:2px!important;
+    min-width:0!important;
+    padding:0 5px!important;
+    border-right:1px solid rgba(23,61,45,.08)!important;
+    text-align:center!important;
+  }
+
+  .theme-page-ref .theme-hero-stats>div:last-child{
+    border-right:0!important;
+  }
+
+  .theme-page-ref .theme-hero-stats span{
+    width:29px!important;
+    height:29px!important;
+    margin-bottom:1px!important;
+  }
+
+  .theme-page-ref .theme-hero-stats svg{
+    width:14px!important;
+    height:14px!important;
+  }
+
+  .theme-page-ref .theme-hero-stats b{
+    font-size:.72rem!important;
+    line-height:1.08!important;
+  }
+
+  .theme-page-ref .theme-hero-stats small{
+    max-width:94px!important;
+    font-size:.47rem!important;
+    line-height:1.18!important;
+  }
+
+  /* ===== Discovery prompt ===== */
+  .theme-page-ref .theme-story-ref{
+    padding:18px 0 16px!important;
+  }
+
+  .theme-page-ref .theme-story-inner{
+    gap:11px!important;
+  }
+
+  .theme-page-ref .theme-story-copy .theme-kicker{
+    margin-bottom:4px!important;
+  }
+
+  .theme-page-ref .theme-story-copy h2{
+    margin:0 0 6px!important;
+    max-width:360px!important;
+    font-size:clamp(1.72rem,8.2vw,2.08rem)!important;
+    line-height:.98!important;
+    letter-spacing:-.045em!important;
+  }
+
+  .theme-page-ref .theme-story-copy>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    overflow:hidden!important;
+    margin:0!important;
+    font-size:.69rem!important;
+    line-height:1.42!important;
+  }
+
+  .theme-page-ref .theme-tip-panel{
+    padding:10px!important;
+    border-radius:14px!important;
+  }
+
+  .theme-page-ref .theme-tip-head{
+    grid-template-columns:10px 1fr!important;
+    gap:6px!important;
+    margin-bottom:8px!important;
+  }
+
+  .theme-page-ref .theme-tip-head>i{
+    width:7px!important;
+    margin-top:8px!important;
+  }
+
+  .theme-page-ref .theme-tip-head h3{
+    margin:0!important;
+    font-size:.98rem!important;
+  }
+
+  .theme-page-ref .theme-tip-head p{
+    display:none!important;
+  }
+
+  .theme-page-ref .theme-tip-list{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+
+  .theme-page-ref .theme-tip-list>div{
+    grid-template-columns:26px minmax(0,1fr)!important;
+    gap:6px!important;
+    min-height:48px!important;
+    padding:7px!important;
+    border-radius:11px!important;
+  }
+
+  .theme-page-ref .theme-tip-list>div>span{
+    width:26px!important;
+    height:26px!important;
+  }
+
+  .theme-page-ref .theme-tip-list svg{
+    width:13px!important;
+    height:13px!important;
+  }
+
+  .theme-page-ref .theme-tip-list b{
+    font-family:'DM Sans',system-ui,sans-serif!important;
+    font-size:.63rem!important;
+    line-height:1.2!important;
+  }
+
+  .theme-page-ref .theme-tip-list small{
+    display:none!important;
+  }
+
+  /* ===== Artwork collection ===== */
+  .theme-page-ref .theme-related-ref{
+    padding:22px 0 30px!important;
+  }
+
+  .theme-page-ref .theme-related-head{
+    display:block!important;
+    margin:0 0 12px!important;
+  }
+
+  .theme-page-ref .theme-related-head .theme-kicker{
+    margin-bottom:4px!important;
+  }
+
+  .theme-page-ref .theme-related-head h2{
+    margin:0!important;
+    max-width:365px!important;
+    font-size:clamp(1.85rem,8.8vw,2.2rem)!important;
+    line-height:.98!important;
+    letter-spacing:-.046em!important;
+  }
+
+  .theme-page-ref .theme-related-head p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    overflow:hidden!important;
+    margin:6px 0 0!important;
+    font-size:.67rem!important;
+    line-height:1.42!important;
+  }
+
+  .theme-page-ref .theme-related-actions{
+    margin-top:8px!important;
+  }
+
+  .theme-page-ref .theme-view-all{
+    font-size:.64rem!important;
+  }
+
+  .theme-page-ref .theme-gallery-toolbar{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:7px!important;
+    margin:0 0 12px!important;
+  }
+
+  .theme-page-ref .theme-filter-row{
+    display:flex!important;
+    width:100%!important;
+    gap:6px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    flex-wrap:nowrap!important;
+    padding:1px 2px 4px!important;
+    scrollbar-width:none!important;
+    scroll-snap-type:x proximity!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  .theme-page-ref .theme-filter-row::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  .theme-page-ref .theme-filter-row button{
+    flex:0 0 auto!important;
+    min-height:32px!important;
+    padding:0 10px!important;
+    border-radius:999px!important;
+    white-space:nowrap!important;
+    scroll-snap-align:start!important;
+    font-size:.61rem!important;
+  }
+
+  .theme-page-ref .theme-filter-row button svg{
+    width:12px!important;
+    height:12px!important;
+  }
+
+  .theme-page-ref .theme-gallery-count{
+    padding-left:2px!important;
+    font-size:.61rem!important;
+    color:#79847e!important;
+  }
+
+  .theme-page-ref .theme-gallery-count b{
+    font-size:.68rem!important;
+  }
+
+  .theme-page-ref .theme-gallery-loading{
+    min-height:110px!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty{
+    display:grid!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    gap:10px!important;
+    align-items:center!important;
+    margin:4px 0 0!important;
+    padding:14px!important;
+    border:1px solid rgba(23,61,45,.08)!important;
+    border-radius:15px!important;
+    background:#fffdf8!important;
+    box-shadow:0 5px 16px rgba(37,50,43,.025)!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty-icon{
+    width:38px!important;
+    height:38px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:12px!important;
+    background:#eef4ef!important;
+    color:#174a38!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty-icon svg{
+    width:17px!important;
+    height:17px!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty h3{
+    margin:0 0 3px!important;
+    color:#174a38!important;
+    font-size:.82rem!important;
+    line-height:1.15!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty p{
+    margin:0!important;
+    color:#758079!important;
+    font-size:.61rem!important;
+    line-height:1.36!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty>a,
+  .theme-page-ref .theme-gallery-empty>button{
+    grid-column:1/-1!important;
+    width:100%!important;
+    min-height:36px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin-top:2px!important;
+    padding:0 12px!important;
+    border:0!important;
+    border-radius:11px!important;
+    background:#174a38!important;
+    color:#fff!important;
+    font-size:.64rem!important;
+    font-weight:800!important;
+    text-decoration:none!important;
+  }
+
+  .theme-page-ref .theme-gallery-empty>a svg{
+    width:13px!important;
+    height:13px!important;
+  }
+
+  .theme-page-ref .theme-related-ref .theme-gallery-visible{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+}
+
+@media(max-width:390px){
+  .theme-page-ref .theme-hero-copy h1{
+    font-size:2.12rem!important;
+  }
+
+  .theme-page-ref .theme-story-copy h2,
+  .theme-page-ref .theme-related-head h2{
+    font-size:1.78rem!important;
+  }
+
+  .theme-page-ref .theme-tip-list>div{
+    padding:6px!important;
+  }
+
+  .theme-page-ref .theme-filter-row button{
+    padding:0 9px!important;
   }
 }
