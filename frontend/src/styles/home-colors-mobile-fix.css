@@ -2,7 +2,8 @@
    Make the visual story compact and present all six colors as a balanced 2-column gallery. */
 @media (max-width: 760px) {
   .color-section-v3 {
-    padding: 20px 0 22px !important;
+    padding: 10px 0 22px !important;
+    margin-top: 0 !important;
     overflow: hidden !important;
   }
 
@@ -197,7 +198,7 @@
 
 @media (max-width: 390px) {
   .color-section-v3 {
-    padding: 18px 0 20px !important;
+    padding: 8px 0 20px !important;
   }
 
   .color-v3-top,
