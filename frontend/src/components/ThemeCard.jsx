@@ -2,7 +2,6 @@ import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import './ThemeCard.css'
 import './ThemeCardBadge.css'
-import './ThemeCardTitleAlignment.css'
 
 export default function ThemeCard({ theme, index = 0 }) {
   const id = theme?.id || index + 1
