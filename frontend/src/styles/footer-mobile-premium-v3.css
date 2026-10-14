@@ -112,33 +112,53 @@
     display:none!important;
   }
 
+  /* Editorial footer links — deliberately flat, no pills/cards. */
   .site-footer-v2 .footer-nav-grid,
   .site-footer-v2 .footer-participate-links{
-    display:flex!important;
-    flex-wrap:wrap!important;
-    gap:7px!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    column-gap:24px!important;
+    row-gap:0!important;
     width:100%!important;
   }
 
   .site-footer-v2 .footer-nav-grid a,
   .site-footer-v2 .footer-participate-links a{
-    width:auto!important;
+    position:relative!important;
+    width:100%!important;
     max-width:none!important;
-    padding:7px 10px!important;
-    border:1px solid rgba(23,61,45,.09)!important;
-    border-radius:999px!important;
-    background:rgba(255,255,255,.5)!important;
+    min-height:32px!important;
+    display:flex!important;
+    align-items:center!important;
+    padding:7px 15px 7px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(23,61,45,.075)!important;
+    border-radius:0!important;
+    background:transparent!important;
     color:#53635a!important;
-    font-size:.65rem!important;
-    line-height:1!important;
+    font-size:.68rem!important;
+    line-height:1.25!important;
     font-weight:650!important;
+    box-shadow:none!important;
+  }
+
+  .site-footer-v2 .footer-nav-grid a:after,
+  .site-footer-v2 .footer-participate-links a:after{
+    content:'›'!important;
+    position:absolute!important;
+    right:1px!important;
+    top:50%!important;
+    transform:translateY(-52%)!important;
+    color:rgba(23,61,45,.38)!important;
+    font-size:.9rem!important;
+    font-weight:500!important;
   }
 
   .site-footer-v2 .footer-submit-cta{
     min-height:42px!important;
-    margin:0 0 10px!important;
+    margin:0 0 8px!important;
     padding:0 13px 0 15px!important;
-    border-radius:12px!important;
+    border-radius:10px!important;
     background:#c85d31!important;
     box-shadow:none!important;
     font-size:.72rem!important;
@@ -183,9 +203,13 @@
     max-width:260px!important;
   }
 
+  .site-footer-v2 .footer-nav-grid,
+  .site-footer-v2 .footer-participate-links{
+    column-gap:18px!important;
+  }
+
   .site-footer-v2 .footer-nav-grid a,
   .site-footer-v2 .footer-participate-links a{
-    padding-inline:9px!important;
-    font-size:.62rem!important;
+    font-size:.65rem!important;
   }
 }
