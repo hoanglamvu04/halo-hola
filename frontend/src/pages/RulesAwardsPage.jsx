@@ -82,12 +82,13 @@ const THEMES = [
 ]
 
 const TIMELINE = [
-  ['10.10','Phát động, mở nhận tác phẩm'],
-  ['17.10 – 01.11','3 HOLA TOUR'],
-  ['10.11 · 23:59','Hạn nộp tác phẩm'],
-  ['18.11','Công bố TOP52 · mở bình chọn'],
-  ['26.11 · 23:59','Khóa bình chọn'],
-  ['28.11 · 15:00–19:00','HOLA DAY · triển lãm · trao giải']
+  ['11.10','Mở nhận tác phẩm'],
+  ['17–18.10','HOLA Tour #01'],
+  ['25.10','HOLA Tour #02'],
+  ['31.10–01.11','HOLA Tour #03'],
+  ['10.11 · 10:11','Đóng nhận tác phẩm'],
+  ['16.11','Công bố TOP52 · mở bình chọn'],
+  ['24.11','HOLA DAY · triển lãm · trao giải']
 ]
 
 const COMMUNES = ['Yên Xuân','Hòa Lạc','Yên Bài','Đoài Phương','Thạch Thất','Hạ Bằng','Tây Phương','Kiều Phú','Phú Cát']
@@ -145,7 +146,7 @@ export default function RulesAwardsPage(){
         <div className="rules4-hero-meta" aria-label="Thông tin nhanh">
           <div><span>Tổng số giải</span><b>{totalAwards} giải</b></div>
           <div><span>Tổng tiền mặt</span><b>{totalPrize}</b></div>
-          <div><span>Hạn nhận bài</span><b>10.11 · 23:59</b></div>
+          <div><span>Hạn nhận bài</span><b>10.11 · 10:11</b></div>
         </div>
       </div>
     </section>
@@ -256,7 +257,7 @@ export default function RulesAwardsPage(){
             <div>
               <span className="rules4-section-kicker">Mốc thời gian</span>
               <h3>Từ phát động đến HOLA DAY</h3>
-              <p className="rules4-lead">HOLA DAY diễn ra ngày 28.11, là điểm hẹn triển lãm TOP52, trao giải và công bố Danh hiệu HALO HOLA 2026.</p>
+              <p className="rules4-lead">HOLA DAY diễn ra ngày 24.11, là điểm hẹn triển lãm TOP52, trao giải và công bố Danh hiệu HALO HOLA 2026.</p>
               <div className="rules4-timeline">
                 {TIMELINE.map(([date,title],index)=><div key={date} className={'rules4-time-row '+(index===TIMELINE.length-1?'is-final':'')}><time>{date}</time><b>{title}</b></div>)}
               </div>
