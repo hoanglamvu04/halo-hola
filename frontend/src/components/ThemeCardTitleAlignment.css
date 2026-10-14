@@ -1,0 +1,9 @@
+/* Keep mobile theme-card descriptions aligned across each row.
+   A one-line title reserves the same space as a two-line title. */
+@media (max-width:700px){
+  .shared-theme-card .theme-card-copy h3{
+    min-height:2.16em!important;
+    max-height:2.16em!important;
+    -webkit-line-clamp:2!important;
+  }
+}
