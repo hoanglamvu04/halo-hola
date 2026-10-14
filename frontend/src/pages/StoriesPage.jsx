@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, MapPin, Clock3, BookOpen, Heart, Users, Leaf } from 'lucide-react'
+import { ArrowRight, MapPin, Clock3, BookOpen, Users, Leaf } from 'lucide-react'
 import { getStories } from '../services/api.js'
 import { normalizeStory } from '../utils/contentAdapters.js'
+import StoryListCard from '../components/StoryListCard.jsx'
 
 export default function StoriesPage(){
   const [stories,setStories]=useState([])
@@ -71,26 +72,7 @@ export default function StoriesPage(){
         </header>
 
         <div className="stories-grid-ref">
-          {rest.map((s,index)=><Link className="story-card-ref" to={'/stories/'+s.slug} key={s.slug}>
-            <div className="story-card-media">
-              {s.image?<img src={s.image} alt={s.title}/>:<div className="theme-card-placeholder"/>}
-              <span className="story-card-heart"><Heart/></span>
-              <span className="story-card-index">{String(index+2).padStart(2,'0')}</span>
-            </div>
-            <div className="story-card-copy">
-              <span className="story-card-category">{s.category}</span>
-              <h3>{s.title}</h3>
-              <p>{s.excerpt}</p>
-              <div className="story-card-author">
-                <span>{s.author?.charAt(0)}</span>
-                <div><b>{s.author}</b><small>{s.role}</small></div>
-              </div>
-              <div className="story-card-bottom">
-                <span><MapPin/> {s.location}</span>
-                <span><Clock3/> {s.readTime}</span>
-              </div>
-            </div>
-          </Link>)}
+          {rest.map((s,index)=><StoryListCard story={s} index={index+2} key={s.slug}/>)}
         </div>
       </div>
     </section>}
