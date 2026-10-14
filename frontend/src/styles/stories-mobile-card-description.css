@@ -69,7 +69,7 @@
   }
 
   .story-card-bottom{
-    margin-top:5px!important;
+    margin-top:0!important;
     padding-top:0!important;
     gap:7px!important;
     font-size:.55rem!important;
@@ -115,6 +115,6 @@
   }
 
   .story-card-bottom{
-    margin-top:4px!important;
+    margin-top:0!important;
   }
 }
