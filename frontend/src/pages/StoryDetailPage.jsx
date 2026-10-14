@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { getStoryBySlug, getStories } from '../services/api.js'
 import { normalizeStory } from '../utils/contentAdapters.js'
+import StoryListSection from '../components/StoryListSection.jsx'
 
 export default function StoryDetailPage(){
   const {slug}=useParams()
@@ -141,16 +142,13 @@ export default function StoryDetailPage(){
       </div>
     </section>
 
-    {related.length>0&&<section className="story-related-ref">
-      <div className="story-related-inner">
-        <header><div><span className="eyebrow">ĐỌC TIẾP</span><h2>Những câu chuyện liên quan</h2></div><Link className="stories-read-link" to="/stories">Xem tất cả Stories <ArrowRight/></Link></header>
-        <div className="story-related-grid">
-          {related.map(s=><Link className="story-related-card" to={'/stories/'+s.slug} key={s.slug}>
-            {s.image?<img src={s.image} alt={s.title}/>:<div className="theme-card-placeholder"/>}
-            <div><span>{s.category}</span><h3>{s.title}</h3><p>{s.excerpt}</p><small>{s.author} · {s.readTime}</small></div>
-          </Link>)}
-        </div>
-      </div>
-    </section>}
+    <StoryListSection
+      stories={related}
+      kicker="ĐỌC TIẾP"
+      title="Những câu chuyện liên quan"
+      description=""
+      startIndex={2}
+      className="story-related-shared"
+    />
   </main>
 }
