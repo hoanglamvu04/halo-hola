@@ -7,7 +7,7 @@
     flex-direction:column!important;
     justify-content:flex-start!important;
     align-items:stretch!important;
-    gap:8px!important;
+    gap:0!important;
     height:auto!important;
     min-height:0!important;
     max-height:none!important;
@@ -37,7 +37,7 @@
     min-height:0!important;
     max-height:none!important;
     margin:0!important;
-    padding-top:0!important;
+    padding-top:3px!important;
     padding-bottom:0!important;
   }
 }
