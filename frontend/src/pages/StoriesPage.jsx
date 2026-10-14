@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, MapPin, Clock3, BookOpen, Users, Leaf } from 'lucide-react'
 import { getStories } from '../services/api.js'
 import { normalizeStory } from '../utils/contentAdapters.js'
-import StoryListCard from '../components/StoryListCard.jsx'
+import StoryListSection from '../components/StoryListSection.jsx'
 
 export default function StoriesPage(){
   const [stories,setStories]=useState([])
@@ -61,20 +61,6 @@ export default function StoriesPage(){
       </div>
     </section>}
 
-    {rest.length>0&&<section className="stories-list-ref">
-      <div className="stories-list-inner">
-        <header className="stories-list-head">
-          <div>
-            <div className="stories-kicker"><span>NHỮNG CÂU CHUYỆN KHÁC</span><i/></div>
-            <h2>Khám phá Hòa Lạc qua nhiều lớp góc nhìn</h2>
-          </div>
-          <p>Mỗi câu chuyện là một lát cắt: văn hóa, thiên nhiên, kiến trúc, con người, tuổi trẻ và những chuyển động mới.</p>
-        </header>
-
-        <div className="stories-grid-ref">
-          {rest.map((s,index)=><StoryListCard story={s} index={index+2} key={s.slug}/>)}
-        </div>
-      </div>
-    </section>}
+    <StoryListSection stories={rest}/>
   </main>
 }
