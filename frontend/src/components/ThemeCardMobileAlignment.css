@@ -1,9 +1,0 @@
-/* Restore the mobile title-slot alignment for shared theme cards.
-   One-line titles reserve the same vertical space as two-line titles so
-   every description begins on the same baseline across the 2-column grid. */
-@media (max-width:700px){
-  .shared-theme-card .theme-card-copy h3{
-    min-height:2.16em!important;
-    max-height:2.16em!important;
-  }
-}
