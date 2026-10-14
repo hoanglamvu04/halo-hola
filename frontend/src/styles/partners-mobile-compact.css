@@ -1,0 +1,376 @@
+/* HALO HOLA — compact mobile treatment for /dong-hanh */
+@media (max-width: 760px){
+  .partners-page-modern{
+    --partners-mobile-gap:10px;
+  }
+
+  .partners-page-modern .container{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  /* Hero: keep the story, remove unnecessary vertical weight. */
+  .partners-hero-modern{
+    padding:10px 0 16px !important;
+  }
+
+  .partners-hero-grid{
+    gap:10px !important;
+  }
+
+  .partners-hero-copy{
+    padding:8px 0 0 !important;
+  }
+
+  .partners-page-modern .eyebrow{
+    margin-bottom:6px !important;
+    font-size:.58rem !important;
+    letter-spacing:.11em !important;
+  }
+
+  .partners-hero-copy h1{
+    margin-bottom:10px !important;
+    font-size:2.05rem !important;
+    line-height:.98 !important;
+    letter-spacing:-.05em !important;
+  }
+
+  .partners-hero-copy h1 em{
+    margin-top:3px !important;
+  }
+
+  .partners-hero-copy>p{
+    font-size:.79rem !important;
+    line-height:1.52 !important;
+  }
+
+  .partners-hero-actions{
+    margin-top:13px !important;
+    gap:7px !important;
+  }
+
+  .partner-btn{
+    min-height:40px !important;
+    padding:0 14px !important;
+    font-size:.72rem !important;
+    gap:7px !important;
+  }
+
+  .partner-btn svg{
+    width:15px !important;
+    height:15px !important;
+  }
+
+  .partners-hero-facts{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+    margin-top:13px !important;
+  }
+
+  .partners-hero-facts>div{
+    min-height:58px !important;
+    padding:8px 6px !important;
+    border:1px solid rgba(23,61,45,.09) !important;
+    border-radius:12px !important;
+    background:rgba(255,255,255,.52) !important;
+    grid-template-columns:1fr !important;
+    align-content:center !important;
+    gap:4px !important;
+  }
+
+  .partners-hero-facts b{
+    font-size:1.15rem !important;
+  }
+
+  .partners-hero-facts svg{
+    width:18px !important;
+    height:18px !important;
+  }
+
+  .partners-hero-facts span{
+    font-size:.58rem !important;
+    line-height:1.25 !important;
+  }
+
+  .partners-hero-visual{
+    min-height:240px !important;
+    border-radius:16px !important;
+    box-shadow:0 10px 28px rgba(51,43,31,.11) !important;
+  }
+
+  .partners-hero-card{
+    left:10px !important;
+    right:10px !important;
+    bottom:10px !important;
+    padding:11px 12px !important;
+    border-radius:12px !important;
+  }
+
+  .partners-hero-card>span{
+    margin-bottom:4px !important;
+    font-size:.54rem !important;
+  }
+
+  .partners-hero-card>b{
+    font-size:.92rem !important;
+    line-height:1.2 !important;
+  }
+
+  .partners-hero-card>p{
+    display:none !important;
+  }
+
+  /* The three support modes become one compact row instead of three tall rows. */
+  .partners-intro-strip{
+    padding:9px 0 !important;
+  }
+
+  .partners-intro-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+
+  .partners-intro-grid>div{
+    display:flex !important;
+    min-width:0 !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:3px !important;
+    padding:9px 8px !important;
+    border:1px solid rgba(23,61,45,.08) !important;
+    border-radius:11px !important;
+    background:rgba(255,255,255,.5) !important;
+  }
+
+  .partners-intro-grid svg{
+    width:18px !important;
+    height:18px !important;
+  }
+
+  .partners-intro-grid b{
+    font-size:.68rem !important;
+  }
+
+  .partners-intro-grid span{
+    display:none !important;
+  }
+
+  /* Tier section: card height is now content-driven, not 240-280px. */
+  .partners-tier-section,
+  .partners-live-section,
+  .partners-principles-section{
+    padding:28px 0 !important;
+  }
+
+  .partners-section-head{
+    gap:6px !important;
+    margin-bottom:14px !important;
+  }
+
+  .partners-section-head h2{
+    font-size:1.7rem !important;
+    line-height:1.04 !important;
+  }
+
+  .partners-section-head>p{
+    max-width:34rem !important;
+    font-size:.74rem !important;
+    line-height:1.48 !important;
+  }
+
+  .partners-tier-grid{
+    gap:9px !important;
+  }
+
+  .partner-tier-card,
+  .partner-tier-card.is-featured{
+    min-height:0 !important;
+    padding:13px !important;
+    border-radius:15px !important;
+    box-shadow:0 6px 18px rgba(48,42,31,.045) !important;
+  }
+
+  .partner-tier-top{
+    min-height:34px !important;
+  }
+
+  .partner-tier-icon{
+    width:34px !important;
+    height:34px !important;
+    border-radius:11px !important;
+  }
+
+  .partner-tier-icon svg{
+    width:17px !important;
+    height:17px !important;
+  }
+
+  .partner-tier-index{
+    font-size:.58rem !important;
+  }
+
+  .partner-tier-body{
+    margin-top:9px !important;
+  }
+
+  .partner-tier-label{
+    margin-bottom:3px !important;
+    font-size:.52rem !important;
+    letter-spacing:.11em !important;
+  }
+
+  .partner-tier-body h3,
+  .is-featured .partner-tier-body h3{
+    margin:0 0 2px !important;
+    font-size:1.18rem !important;
+    line-height:1.08 !important;
+  }
+
+  .partner-tier-body strong,
+  .is-featured .partner-tier-body strong{
+    margin:0 0 7px !important;
+    font-size:1.2rem !important;
+    line-height:1.08 !important;
+  }
+
+  .partner-tier-body p,
+  .is-featured .partner-tier-body p{
+    margin:0 !important;
+    max-width:none !important;
+    font-size:.67rem !important;
+    line-height:1.42 !important;
+  }
+
+  .partner-tier-meta,
+  .is-featured .partner-tier-meta{
+    margin-top:9px !important;
+    padding-top:8px !important;
+    gap:6px !important;
+    font-size:.58rem !important;
+    line-height:1.3 !important;
+  }
+
+  .partner-tier-meta svg{
+    width:13px !important;
+    height:13px !important;
+    flex:0 0 auto !important;
+  }
+
+  /* Live partners are compact information rows on phones. */
+  .partners-live-grid-modern{
+    gap:8px !important;
+  }
+
+  .partner-live-card-modern{
+    min-height:0 !important;
+    display:grid !important;
+    grid-template-columns:58px minmax(0,1fr) !important;
+    gap:10px !important;
+    padding:11px !important;
+    border-radius:14px !important;
+  }
+
+  .partner-live-logo-modern{
+    width:58px !important;
+    height:58px !important;
+    margin:0 !important;
+    padding:8px !important;
+    border-radius:10px !important;
+  }
+
+  .partner-live-copy-modern>span{
+    margin-bottom:3px !important;
+    font-size:.52rem !important;
+  }
+
+  .partner-live-copy-modern h3{
+    margin-bottom:3px !important;
+    font-size:.86rem !important;
+  }
+
+  .partner-live-copy-modern p{
+    font-size:.64rem !important;
+    line-height:1.4 !important;
+  }
+
+  .partner-live-card-modern small{
+    grid-column:2 !important;
+    margin-top:4px !important;
+    padding-top:0 !important;
+    font-size:.6rem !important;
+  }
+
+  /* Principles: shorter intro + tighter list rhythm. */
+  .partners-principles-grid{
+    gap:16px !important;
+  }
+
+  .partners-principles-copy h2{
+    margin-bottom:9px !important;
+    font-size:1.8rem !important;
+    line-height:1.02 !important;
+  }
+
+  .partners-principles-copy>p{
+    font-size:.74rem !important;
+    line-height:1.5 !important;
+  }
+
+  .partner-principle-row{
+    grid-template-columns:28px minmax(0,1fr) !important;
+    gap:8px !important;
+    padding:12px 0 !important;
+  }
+
+  .partner-principle-row>span{
+    font-size:.58rem !important;
+  }
+
+  .partner-principle-row b{
+    margin-bottom:2px !important;
+    font-size:.78rem !important;
+  }
+
+  .partner-principle-row p{
+    font-size:.66rem !important;
+    line-height:1.42 !important;
+  }
+
+  .partners-final-cta{
+    padding:8px 0 28px !important;
+  }
+
+  .partners-final-card{
+    padding:17px 15px !important;
+    border-radius:16px !important;
+  }
+
+  .partners-final-card h2{
+    font-size:1.45rem !important;
+    line-height:1.05 !important;
+  }
+
+  .partners-final-actions{
+    margin-top:12px !important;
+    gap:7px !important;
+  }
+}
+
+@media (max-width: 390px){
+  .partners-page-modern .container{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+
+  .partners-hero-copy h1{
+    font-size:1.85rem !important;
+  }
+
+  .partners-hero-facts span{
+    font-size:.54rem !important;
+  }
+
+  .partners-section-head h2{
+    font-size:1.55rem !important;
+  }
+}
