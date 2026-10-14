@@ -17,60 +17,81 @@
     background:transparent!important;
   }
 
+  /* Brand intro uses the full mobile width instead of stacking under the logo. */
   .site-footer-v2 .footer-brand-column{
     position:relative!important;
+    display:grid!important;
+    grid-template-columns:126px minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    column-gap:13px!important;
+    row-gap:7px!important;
+    align-items:start!important;
     padding:0 0 14px!important;
   }
 
   .site-footer-v2 .footer-logo-card{
-    margin:0 0 9px!important;
+    grid-column:1!important;
+    grid-row:1 / span 3!important;
+    align-self:start!important;
+    margin:0!important;
   }
 
   .site-footer-v2 .footer-logo-card img{
-    max-width:140px!important;
-    max-height:48px!important;
+    width:100%!important;
+    max-width:126px!important;
+    max-height:54px!important;
+    object-fit:contain!important;
+    object-position:left top!important;
   }
 
   .site-footer-v2 .footer-brand-copy{
-    max-width:290px!important;
+    grid-column:2!important;
+    grid-row:1!important;
+    max-width:none!important;
     margin:0!important;
     display:-webkit-box!important;
     -webkit-box-orient:vertical!important;
-    -webkit-line-clamp:2!important;
+    -webkit-line-clamp:3!important;
     overflow:hidden!important;
     color:#627067!important;
-    font-size:.72rem!important;
+    font-size:.7rem!important;
     line-height:1.48!important;
   }
 
   .site-footer-v2 .footer-address{
-    margin-top:7px!important;
-    font-size:.64rem!important;
-    line-height:1.45!important;
+    grid-column:2!important;
+    grid-row:2!important;
+    margin:0!important;
+    font-size:.63rem!important;
+    line-height:1.42!important;
   }
 
   .site-footer-v2 .footer-email{
+    grid-column:2!important;
+    grid-row:3!important;
     width:max-content!important;
-    margin-top:10px!important;
-    padding:7px 10px!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:6px 9px!important;
     gap:6px!important;
     border:1px solid rgba(23,61,45,.10)!important;
     border-radius:999px!important;
     background:rgba(255,255,255,.62)!important;
-    font-size:.66rem!important;
+    font-size:.64rem!important;
     line-height:1!important;
   }
 
   .site-footer-v2 .footer-email svg{
-    width:13px!important;
-    height:13px!important;
+    width:12px!important;
+    height:12px!important;
   }
 
   .site-footer-v2 .footer-socials{
-    position:absolute!important;
-    top:2px!important;
-    right:0!important;
-    margin:0!important;
+    position:static!important;
+    grid-column:1 / -1!important;
+    grid-row:auto!important;
+    justify-content:flex-start!important;
+    margin:2px 0 0!important;
     gap:6px!important;
   }
 
@@ -195,12 +216,18 @@
     padding-inline:14px!important;
   }
 
+  .site-footer-v2 .footer-brand-column{
+    grid-template-columns:112px minmax(0,1fr)!important;
+    column-gap:11px!important;
+  }
+
   .site-footer-v2 .footer-logo-card img{
-    max-width:132px!important;
+    max-width:112px!important;
+    max-height:50px!important;
   }
 
   .site-footer-v2 .footer-brand-copy{
-    max-width:260px!important;
+    font-size:.67rem!important;
   }
 
   .site-footer-v2 .footer-nav-grid,
