@@ -1,0 +1,270 @@
+/* WE HOLA — compact mobile community/action experience. Desktop remains untouched. */
+@media (max-width:760px){
+  .we-hola-page{
+    background:#fbf7ef!important;
+    color:#173d2d!important;
+    overflow-x:hidden!important;
+  }
+
+  /* Hero */
+  .we-hola-page .page-hero{
+    padding:18px 0 20px!important;
+    background:#fbf7ef!important;
+  }
+  .we-hola-page .page-hero-grid{
+    display:block!important;
+    width:100%!important;
+  }
+  .we-hola-page .page-hero-copy .eyebrow{
+    margin-bottom:7px!important;
+    font-size:.58rem!important;
+    letter-spacing:.16em!important;
+  }
+  .we-hola-page .page-hero-copy h1{
+    margin:0!important;
+    color:#0f4b3d!important;
+    font-size:2.5rem!important;
+    line-height:.95!important;
+    letter-spacing:-.055em!important;
+  }
+  .we-hola-page .page-hero-copy h1 em{
+    margin-top:5px!important;
+    font-size:.47em!important;
+    line-height:1.05!important;
+    letter-spacing:-.025em!important;
+  }
+  .we-hola-page .page-hero-copy>p{
+    margin:10px 0 0!important;
+    max-width:31rem!important;
+    color:#68726d!important;
+    font-size:.74rem!important;
+    line-height:1.48!important;
+  }
+  .we-hola-page .page-hero-copy>.btn,
+  .we-hola-page .page-hero-copy .actions .btn{
+    width:100%!important;
+    min-height:44px!important;
+    margin-top:14px!important;
+    padding:0 16px!important;
+    border-radius:13px!important;
+    box-shadow:none!important;
+    font-size:.72rem!important;
+  }
+  .we-hola-page .page-hero-visual{
+    height:190px!important;
+    margin-top:16px!important;
+  }
+  .we-hola-page .page-hero-visual img{
+    width:100%!important;
+    height:190px!important;
+    border-radius:18px!important;
+    object-fit:cover!important;
+    filter:saturate(.9) contrast(.98)!important;
+  }
+  .we-hola-page .page-hero-visual:before,
+  .we-hola-page .page-hero-visual .hand-note{
+    display:none!important;
+  }
+
+  /* Goals */
+  .we-hola-goals{
+    padding:26px 0 28px!important;
+  }
+  .we-hola-goals .section-heading{
+    display:block!important;
+    margin:0 0 15px!important;
+  }
+  .we-hola-goals .section-heading .eyebrow{
+    margin-bottom:6px!important;
+    font-size:.56rem!important;
+  }
+  .we-hola-goals .section-heading h2{
+    margin:0!important;
+    max-width:290px!important;
+    color:#113f33!important;
+    font-size:1.72rem!important;
+    line-height:1.02!important;
+    letter-spacing:-.04em!important;
+  }
+  .we-hola-goals .section-heading>p{
+    margin:8px 0 0!important;
+    max-width:31rem!important;
+    color:#737a75!important;
+    font-size:.69rem!important;
+    line-height:1.45!important;
+  }
+  .we-hola-goals .goal-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  .we-hola-goals .goal-grid>div{
+    min-height:118px!important;
+    padding:13px!important;
+    border:1px solid rgba(23,61,45,.08)!important;
+    border-radius:15px!important;
+    background:#fffdf8!important;
+    box-shadow:0 5px 16px rgba(45,55,48,.025)!important;
+  }
+  .we-hola-goals .goal-grid svg{
+    width:21px!important;
+    height:21px!important;
+    color:#c45b32!important;
+  }
+  .we-hola-goals .goal-grid h3{
+    margin:8px 0 4px!important;
+    color:#123f33!important;
+    font-family:inherit!important;
+    font-size:.92rem!important;
+    line-height:1.12!important;
+    letter-spacing:-.02em!important;
+  }
+  .we-hola-goals .goal-grid p{
+    margin:0!important;
+    color:#717973!important;
+    font-size:.61rem!important;
+    line-height:1.38!important;
+  }
+
+  /* Action spotlight */
+  .we-hola-action-band{
+    background:#f3ede3!important;
+    background-image:none!important;
+    border-block:1px solid rgba(23,61,45,.05)!important;
+  }
+  .we-hola-action{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    padding:28px 0!important;
+  }
+  .we-hola-action>div:first-child{
+    padding:18px!important;
+    border-radius:18px!important;
+    background:#0f4b3d!important;
+    color:white!important;
+  }
+  .we-hola-action .eyebrow{
+    margin-bottom:7px!important;
+    color:#efb56e!important;
+    font-size:.55rem!important;
+  }
+  .we-hola-action h2{
+    margin:0!important;
+    max-width:310px!important;
+    color:white!important;
+    font-size:1.7rem!important;
+    line-height:1.02!important;
+    letter-spacing:-.04em!important;
+  }
+  .we-hola-action>div:first-child>p{
+    margin:10px 0 0!important;
+    color:rgba(255,255,255,.74)!important;
+    font-size:.7rem!important;
+    line-height:1.45!important;
+  }
+  .we-hola-action .chip-wrap{
+    display:flex!important;
+    gap:6px!important;
+    margin-top:13px!important;
+  }
+  .we-hola-action .chip-wrap span{
+    padding:6px 8px!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    border-radius:999px!important;
+    background:rgba(255,255,255,.08)!important;
+    color:#eef7f1!important;
+    font-size:.55rem!important;
+    line-height:1!important;
+  }
+  .we-hola-action .btn{
+    width:100%!important;
+    min-height:42px!important;
+    margin-top:14px!important;
+    padding:0 14px!important;
+    border-radius:12px!important;
+    background:#c95e32!important;
+    box-shadow:none!important;
+    font-size:.69rem!important;
+  }
+  .we-hola-action>img{
+    width:100%!important;
+    height:168px!important;
+    min-height:168px!important;
+    max-height:168px!important;
+    border-radius:18px!important;
+    object-fit:cover!important;
+  }
+
+  /* Local collaboration flow */
+  .we-hola-flow-section{
+    padding:28px 0 32px!important;
+  }
+  .we-hola-flow-section>h2{
+    margin:0 0 14px!important;
+    max-width:270px!important;
+    color:#123f33!important;
+    font-size:1.66rem!important;
+    line-height:1.02!important;
+    letter-spacing:-.04em!important;
+  }
+  .we-hola-flow-section .community-flow{
+    counter-reset:weh-step;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  .we-hola-flow-section .community-flow>span{
+    display:none!important;
+  }
+  .we-hola-flow-section .community-flow>div{
+    counter-increment:weh-step;
+    position:relative!important;
+    min-height:96px!important;
+    padding:28px 13px 12px!important;
+    border:1px solid rgba(23,61,45,.08)!important;
+    border-radius:14px!important;
+    background:#fffdf8!important;
+    box-shadow:none!important;
+  }
+  .we-hola-flow-section .community-flow>div:before{
+    content:'0' counter(weh-step);
+    position:absolute;
+    left:13px;
+    top:11px;
+    color:#c45b32;
+    font-size:.51rem;
+    font-weight:850;
+    letter-spacing:.08em;
+  }
+  .we-hola-flow-section .community-flow b{
+    display:block!important;
+    margin:0!important;
+    color:#153f34!important;
+    font-family:inherit!important;
+    font-size:.87rem!important;
+    line-height:1.15!important;
+  }
+  .we-hola-flow-section .community-flow p{
+    margin:5px 0 0!important;
+    color:#768079!important;
+    font-size:.59rem!important;
+    line-height:1.35!important;
+  }
+}
+
+@media (max-width:390px){
+  .we-hola-goals .goal-grid{
+    gap:7px!important;
+  }
+  .we-hola-goals .goal-grid>div{
+    min-height:114px!important;
+    padding:12px!important;
+  }
+  .we-hola-action h2{
+    font-size:1.58rem!important;
+  }
+  .we-hola-flow-section .community-flow>div{
+    min-height:92px!important;
+  }
+}
