@@ -1,0 +1,43 @@
+/* Final mobile cascade guard for shared theme cards.
+   Keep copy in natural document flow so descriptions sit immediately after
+   one- or two-line titles. This intentionally loads after legacy mobile CSS. */
+@media (max-width:700px){
+  .shared-theme-card .theme-card-copy{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-start!important;
+    align-items:stretch!important;
+    gap:3px!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  .shared-theme-card .theme-card-copy h3,
+  .shared-theme-card.theme-card-reference h3,
+  .theme-index-page .shared-theme-card h3{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+    overflow:hidden!important;
+  }
+
+  .shared-theme-card .theme-card-copy p,
+  .shared-theme-card.theme-card-reference p,
+  .theme-index-page .shared-theme-card p{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+  }
+}
