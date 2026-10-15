@@ -29,7 +29,7 @@ export default function Footer() {
   useEffect(()=>{getSiteSettings().then(setSettings).catch(()=>{})},[])
   const brand=settings.brand||{}
   const footer=settings.footer||{}
-  const email=footer.email||'admin@halohola.vn'
+  const email=footer.email||'admin@xspace.vn'
 
   return <footer className="site-footer site-footer-v2">
     <div className="container footer-shell footer-shell-v2">
