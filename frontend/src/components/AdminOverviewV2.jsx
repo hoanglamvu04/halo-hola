@@ -3,6 +3,7 @@ import {
   AlertTriangle, ArrowRight, CheckCircle2, Clock3, FileWarning, Globe2,
   Images, RefreshCw, ShieldCheck, Sparkles, Trophy, Users
 } from 'lucide-react'
+import AdminOperationsInsights from './AdminOperationsInsights.jsx'
 import './AdminOverviewV2.css'
 
 const statusLabels={
@@ -36,14 +37,12 @@ export default function AdminOverviewV2({
     const top52=submissions.filter(x=>x.status==='TOP52').length
     const awarded=submissions.filter(x=>x.status==='AWARDED').length
     const rejected=submissions.filter(x=>x.status==='REJECTED').length
-    const missingMedia=submissions.filter(x=>!(x.media||[]).length).length
-    const missingFacebook=submissions.filter(x=>{
-      const needsFacebook=String(x.facebook_completion_status||'').toUpperCase()==='PENDING' || x.submission_source==='FACEBOOK'
-      return needsFacebook && !x.facebook_post_url
-    }).length
+    const missingMedia=submissions.filter(x=>!(x.media||[]).length&&!x.external_link).length
+    const missingFacebook=submissions.filter(x=>x.submission_source==='FACEBOOK'&&!x.facebook_post_url).length
     const needsPublication=submissions.filter(x=>
-      ['TOP52','AWARDED'].includes(x.status) && x.publication_state!=='PUBLISHED'
+      ['VALID','SHORTLIST','TOP52','AWARDED'].includes(x.status) && x.publication_state!=='PUBLISHED'
     ).length
+    const mapFailed=submissions.filter(x=>String(x.hola_maps_sync_status||'').toUpperCase()==='FAILED').length
     const completed=Math.max(0,total-pending)
     const reviewProgress=total?Math.round((completed/total)*100):0
     const recent=[...submissions].sort((a,b)=>dateValue(b)-dateValue(a)).slice(0,5)
@@ -52,8 +51,8 @@ export default function AdminOverviewV2({
       const value=x.created_at||x.createdAt
       return value && new Date(value).toLocaleDateString('vi-VN')===todayKey
     }).length
-    const issueCount=pending+missingMedia+missingFacebook+needsPublication
-    return {total,pending,valid,shortlist,top52,awarded,rejected,missingMedia,missingFacebook,needsPublication,reviewProgress,recent,today,issueCount}
+    const issueCount=pending+missingMedia+missingFacebook+needsPublication+mapFailed
+    return {total,pending,valid,shortlist,top52,awarded,rejected,missingMedia,missingFacebook,needsPublication,mapFailed,reviewProgress,recent,today,issueCount}
   },[submissions])
 
   const priorities=[
@@ -73,8 +72,8 @@ export default function AdminOverviewV2({
       icon:FileWarning,
       title:(data.missingMedia+data.missingFacebook)?'Hồ sơ chưa hoàn tất':'Hồ sơ đang đầy đủ',
       text:(data.missingMedia+data.missingFacebook)
-        ? `${data.missingMedia} bài thiếu file · ${data.missingFacebook} bài thiếu liên kết Facebook.`
-        :'Chưa phát hiện hồ sơ thiếu file hoặc bước Facebook trong danh sách hiện tại.',
+        ? `${data.missingMedia} bài thiếu file/link · ${data.missingFacebook} bài Facebook thiếu liên kết.`
+        :'Chưa phát hiện hồ sơ thiếu media hoặc bước Facebook bắt buộc.',
       action:'Kiểm tra hồ sơ',
       tone:(data.missingMedia+data.missingFacebook)?'danger':'good',
       go:()=>onNavigate?.('Tác phẩm')
@@ -83,11 +82,21 @@ export default function AdminOverviewV2({
       key:'publish',
       count:data.needsPublication,
       icon:Globe2,
-      title:data.needsPublication?'Có kết quả chưa công bố':'Công bố đã đồng bộ',
-      text:data.needsPublication?`${data.needsPublication} bài TOP52/đạt giải đang chưa ở trạng thái công khai.`:'Không có kết quả TOP52/đạt giải đang chờ công bố.',
+      title:data.needsPublication?'Có bài hợp lệ chưa công bố':'Công bố đã đồng bộ',
+      text:data.needsPublication?`${data.needsPublication} bài đủ điều kiện đang chưa ở trạng thái công khai.`:'Không có bài hợp lệ đang chờ công bố.',
       action:'Mở công bố',
       tone:data.needsPublication?'info':'good',
       go:()=>onNavigate?.('Công bố')
+    },
+    {
+      key:'maps',
+      count:data.mapFailed,
+      icon:AlertTriangle,
+      title:data.mapFailed?'HOLA Maps có lỗi đồng bộ':'HOLA Maps không có lỗi',
+      text:data.mapFailed?`${data.mapFailed} bài cần đồng bộ lại từ module Tác phẩm.`:'Không phát hiện job HOLA Maps bị FAILED trong danh sách hiện tại.',
+      action:'Kiểm tra Maps',
+      tone:data.mapFailed?'danger':'good',
+      go:()=>onNavigate?.('Tác phẩm')
     }
   ]
 
@@ -166,6 +175,8 @@ export default function AdminOverviewV2({
         </div>
       </div>
     </section>
+
+    <AdminOperationsInsights/>
 
     {data.rejected>0&&<div className="admin-v2-foot-alert"><AlertTriangle/><span><b>{data.rejected} hồ sơ không hợp lệ.</b> Có thể xem lại tại module Tác phẩm để đảm bảo lý do xử lý đã rõ ràng.</span><button onClick={()=>onNavigate?.('Tác phẩm')}>Mở danh sách</button></div>}
   </div>
