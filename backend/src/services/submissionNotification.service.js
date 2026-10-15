@@ -5,6 +5,32 @@ function normalizeCode(value) {
   return String(value || '').trim().toUpperCase();
 }
 
+async function writeNotificationLog({submissionId,kind='STATUS',status,recipient,deliveryStatus,detail}){
+  if(!submissionId||!recipient)return;
+  try{
+    await pool.query(
+      `INSERT INTO submission_notification_logs(submission_id,kind,status,recipient,delivery_status,detail)
+       VALUES($1,$2,$3,$4,$5,$6)`,
+      [submissionId,kind,status||null,String(recipient).toLowerCase(),deliveryStatus,String(detail||'').slice(0,1000)||null]
+    );
+  }catch(error){
+    console.warn('Notification log write failed:',error.message);
+  }
+}
+
+export async function logReceivedNotification({submissionId,email,delivery,error}){
+  const deliveryStatus=error?'FAILED':delivery?.skipped?'SKIPPED':'SENT';
+  const detail=error?.message||delivery?.reason||null;
+  await writeNotificationLog({
+    submissionId,
+    kind:'RECEIVED',
+    status:'PENDING',
+    recipient:email,
+    deliveryStatus,
+    detail
+  });
+}
+
 export async function getSubmissionNotificationTargetById(id) {
   const { rows } = await pool.query(
     `SELECT id,code,title,name,display_name,email,status,is_demo,updated_at
@@ -50,13 +76,34 @@ export async function sendStatusNotificationForSubmission(submission) {
   if (submission.is_demo) {
     return { skipped: true, reason: 'DEMO_SUBMISSION' };
   }
-  return sendSubmissionStatusUpdate({
-    to: submission.email,
-    name: submission.display_name || submission.name || 'bạn',
-    code: submission.code,
-    title: submission.title,
-    status: submission.status
-  });
+  try{
+    const delivery=await sendSubmissionStatusUpdate({
+      to: submission.email,
+      name: submission.display_name || submission.name || 'bạn',
+      code: submission.code,
+      title: submission.title,
+      status: submission.status
+    });
+    await writeNotificationLog({
+      submissionId:submission.id,
+      kind:'STATUS',
+      status:submission.status,
+      recipient:submission.email,
+      deliveryStatus:delivery?.skipped?'SKIPPED':'SENT',
+      detail:delivery?.reason||null
+    });
+    return delivery;
+  }catch(error){
+    await writeNotificationLog({
+      submissionId:submission.id,
+      kind:'STATUS',
+      status:submission.status,
+      recipient:submission.email,
+      deliveryStatus:'FAILED',
+      detail:error.message
+    });
+    throw error;
+  }
 }
 
 export async function sendStatusNotificationById(id) {
