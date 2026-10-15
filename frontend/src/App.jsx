@@ -9,6 +9,7 @@ import { classifyClick, trackEvent } from './services/analytics.js'
 
 const SubmitPage=lazy(()=>import('./pages/SubmitPage.jsx'))
 const MapPage=lazy(()=>import('./pages/MapPage.jsx'))
+const CommunityGalleryPage=lazy(()=>import('./pages/CommunityGalleryPage.jsx'))
 const Top52Page=lazy(()=>import('./pages/Top52Page.jsx'))
 const ArtworkPage=lazy(()=>import('./pages/ArtworkPage.jsx'))
 const TourPage=lazy(()=>import('./pages/TourPage.jsx'))
@@ -35,8 +36,8 @@ const SEO_ROUTES={
   '/hola-tour':['HOLA Tour | HALO HOLA','Đi, gặp, trải nghiệm và kể lại Hòa Lạc qua ba hành trình HOLA Tour cùng diễn ra ngày 25/10/2026.'],
   '/hola-map':['HOLA Map | HALO HOLA','Khám phá địa điểm, câu chuyện và góc nhìn Hòa Lạc trên bản đồ tương tác.'],
   '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện về con người, nơi chốn, ký ức và chuyển động của Hòa Lạc.'],
-  '/kham-pha':['HALO HOLA Explore — Khám phá góc nhìn Hòa Lạc','Khám phá những tác phẩm, câu chuyện, sắc màu và địa điểm Hòa Lạc được cộng đồng gửi về và Ban Tổ chức duyệt công khai.'],
-  '/top52':['TOP52 | HALO HOLA 2026','52 góc nhìn nổi bật được lựa chọn trong HALO HOLA 2026.'],
+  '/kham-pha':['Góc nhìn cộng đồng | HALO HOLA 2026','Gallery các góc nhìn về Hòa Lạc đã được Ban Tổ chức duyệt và công bố, có thể lọc theo chủ đề, sắc màu, địa điểm và loại hình.'],
+  '/top52':['TOP52 | HALO HOLA 2026','Triển lãm 52 góc nhìn nổi bật được lựa chọn trong HALO HOLA 2026.'],
   '/we-hola':['WE HOLA — Chúng ta là Hòa Lạc','Cộng đồng cùng kết nối và làm những việc cụ thể để Hòa Lạc xanh hơn, đẹp hơn và đáng sống hơn.'],
   '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Gửi tác phẩm, câu chuyện và góc nhìn của bạn về Hòa Lạc tới HALO HOLA 2026.'],
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố những dấu mốc của HALO HOLA 2026.'],
@@ -226,8 +227,8 @@ function SiteShell() {
           <Route path="/" element={<HomePage />} />
           <Route path="/gui-goc-nhin" element={<SubmitPage />} />
           <Route path="/hola-map" element={<MapPage />} />
-          <Route path="/kham-pha" element={<Top52Page initialView="EXPLORE" />} />
-          <Route path="/top52" element={<Top52Page initialView="TOP52" />} />
+          <Route path="/kham-pha" element={<CommunityGalleryPage />} />
+          <Route path="/top52" element={<Top52Page />} />
           <Route path="/tac-pham/xem-truoc/:submissionId" element={<ArtworkPage preview />} />
           <Route path="/tac-pham/:slug" element={<ArtworkPage />} />
           <Route path="/hola-tour" element={<TourPage />} />
