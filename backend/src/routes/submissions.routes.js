@@ -111,10 +111,28 @@ router.post('/facebook-complete', lookupRateLimiter, async (req, res, next) => {
   }
 });
 
-// Stable public HALO media URL. Media is only exposed after the submission is
-// eligible and effectively published; private R2 originals stay protected.
+// Stable public HALO media URL. Media becomes available to HOLA Maps only after
+// moderation + publication, and disappears again when the submission is hidden.
 router.get('/media/:mediaId/halo', async (req, res, next) => {
   try {
+    const gate=await pool.query(`
+      SELECT 1
+      FROM submission_media m
+      JOIN submissions s ON s.id=m.submission_id
+      WHERE m.id=$1
+        AND s.status IN ('VALID','SHORTLIST','TOP52','AWARDED')
+        AND s.is_demo=FALSE
+        AND s.allow_media_use=TRUE
+        AND s.rights_confirmed=TRUE
+        AND s.image_consent_confirmed=TRUE
+        AND (s.is_minor=FALSE OR s.guardian_consent=TRUE)
+        AND (
+          s.publication_state='PUBLISHED'
+          OR (s.publication_state='SCHEDULED' AND s.publish_scheduled_at IS NOT NULL AND s.publish_scheduled_at<=NOW())
+        )
+      LIMIT 1`,[req.params.mediaId]);
+    if(!gate.rowCount) throw new AppError('Ảnh này chưa được công bố cho HOLA Maps.',404);
+
     const item = await getHaloPublicMediaUrl(req.params.mediaId);
     if (!item?.url) throw new AppError('Ảnh này chưa sẵn sàng cho HOLA Maps.', 404);
     res.set('Cache-Control', 'public, max-age=60');
