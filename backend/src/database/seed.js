@@ -24,9 +24,9 @@ const places = [
 
 const tours = [
   {
-    number:'01',title:'Đoài · Mường',dates:'17–18.10.2026',kicker:'Đi tìm bản sắc',
+    number:'01',title:'Đoài · Mường',dates:'25.10.2026',kicker:'Đi tìm bản sắc',
     description:'Khám phá lớp giá trị cội nguồn của Hòa Lạc qua làng xóm, kiến trúc truyền thống, con người, Nét Đoài, văn hóa Mường và ký ức địa phương.',
-    image:img.village,location:'Hòa Lạc',duration:'17–18/10/2026',audience:'Đăng ký theo form HOLA Tour',sort:10,
+    image:img.village,location:'Hòa Lạc',duration:'1 ngày · 25/10/2026',audience:'Đăng ký theo form HOLA Tour',sort:10,
     itinerary:[
       {time:'Bắt đầu',title:'Check-in & giới thiệu hành trình',description:'Giới thiệu câu chuyện địa điểm, nguyên tắc sáng tạo và tinh thần đi – nhìn – gặp – trải nghiệm – kể.'},
       {time:'Trong tour',title:'Khám phá làng xóm & kiến trúc truyền thống',description:'Quan sát những lớp không gian gắn với Nét Đoài, ký ức địa phương và đời sống cộng đồng.'},
@@ -45,9 +45,9 @@ const tours = [
     ]
   },
   {
-    number:'02',title:'Sắc màu Hòa Lạc',dates:'24–25.10.2026',kicker:'Đi tìm màu sắc',
+    number:'02',title:'Sắc màu Hòa Lạc',dates:'25.10.2026',kicker:'Đi tìm màu sắc',
     description:'Khám phá Hòa Lạc qua 6 đặc trưng sắc màu: Đá ong, Nắng, Xanh rêu, Xanh non, Be và Sắc Hòa Lạc; từ kiến trúc, cảnh quan đến con người và đời sống.',
-    image:img.architecture,location:'Hòa Lạc',duration:'24–25/10/2026',audience:'Đăng ký theo form HOLA Tour',sort:20,
+    image:img.architecture,location:'Hòa Lạc',duration:'1 ngày · 25/10/2026',audience:'Đăng ký theo form HOLA Tour',sort:20,
     itinerary:[
       {time:'Bắt đầu',title:'Nhận diện 6 sắc màu',description:'Giới thiệu cách đọc màu sắc như một lớp câu chuyện thay vì chỉ là màu của cảnh vật.'},
       {time:'Trong tour',title:'Kiến trúc & vật liệu',description:'Quan sát nhà ở, công trình mới, vật liệu và không gian sống.'},
@@ -66,9 +66,9 @@ const tours = [
     ]
   },
   {
-    number:'03',title:'Nắng Hòa Lạc',dates:'31.10–01.11.2026',kicker:'Đi tìm cảm xúc',
+    number:'03',title:'Nắng Hòa Lạc',dates:'25.10.2026',kicker:'Đi tìm cảm xúc',
     description:'Khai thác vẻ đẹp ánh sáng và cảm xúc của Hòa Lạc qua bình minh, nắng trên kiến trúc, nắng qua làng xóm, chiều vàng, Ba Vì và hoàng hôn phía Tây.',
-    image:img.sunset,location:'Hòa Lạc',duration:'31/10–01/11/2026',audience:'Đăng ký theo form HOLA Tour',sort:30,
+    image:img.sunset,location:'Hòa Lạc',duration:'1 ngày · 25/10/2026',audience:'Đăng ký theo form HOLA Tour',sort:30,
     itinerary:[
       {time:'Sớm',title:'Khoảnh khắc nắng đầu ngày',description:'Quan sát ánh sáng sớm trên cảnh quan, con đường và khoảng xanh.'},
       {time:'Trong ngày',title:'Nắng trên kiến trúc & làng xóm',description:'Tìm những lớp bóng, chất liệu và nhịp sống thay đổi theo ánh sáng.'},
@@ -112,12 +112,12 @@ const stories = [
   },
   {
     slug:'hola-tour-di-nhin-gap-trai-nghiem-ke',title:'HOLA Tour: đi – nhìn – gặp – trải nghiệm – kể',author:'Ban biên tập HALO HOLA',role:'Nội dung chính thức',category:'HOLA Tour',location:'Hòa Lạc',readTime:'5 phút đọc',image:img.people,featured:false,sort:30,
-    excerpt:'Ba hành trình cuối tuần giúp người tham gia chạm vào bản sắc, màu sắc và cảm xúc của Hòa Lạc bằng trải nghiệm thực tế.',
+    excerpt:'Ba hành trình HOLA Tour cùng diễn ra trong một ngày 25/10/2026, giúp người tham gia chạm vào những lớp khác nhau của Hòa Lạc bằng trải nghiệm thực tế.',
     lead:'HOLA Tour không chỉ là chuyến đi chụp ảnh. Mỗi hành trình được thiết kế để tạo ra hình ảnh, video, câu chuyện và địa điểm cho HOLA Map.',quote:'Tham gia tour không tạo lợi thế khi chấm giải; tác phẩm từ tour vẫn tuân thủ đầy đủ thể lệ HALO HOLA.',
     body:[
-      {heading:'Tour #01 · Đoài · Mường · 17–18/10',paragraphs:['Đi tìm bản sắc qua làng xóm, kiến trúc truyền thống, con người, Nét Đoài, văn hóa Mường và ký ức địa phương.']},
-      {heading:'Tour #02 · Sắc màu Hòa Lạc · 24–25/10',paragraphs:['Đi tìm 6 sắc màu qua kiến trúc, cảnh quan và con người. kientruchoalac.com đồng hành chuyên môn kiến trúc.']},
-      {heading:'Tour #03 · Nắng Hòa Lạc · 31/10–01/11',paragraphs:['Đi tìm cảm xúc qua bình minh, nắng trên kiến trúc, nắng qua làng xóm, chiều vàng, Ba Vì và hoàng hôn phía Tây.']}
+      {heading:'Tour #01 · Đoài · Mường · 25/10',paragraphs:['Đi tìm bản sắc qua làng xóm, kiến trúc truyền thống, con người, Nét Đoài, văn hóa Mường và ký ức địa phương.']},
+      {heading:'Tour #02 · Sắc màu Hòa Lạc · 25/10',paragraphs:['Đi tìm 6 sắc màu qua kiến trúc, cảnh quan và con người. kientruchoalac.com đồng hành chuyên môn kiến trúc.']},
+      {heading:'Tour #03 · Nắng Hòa Lạc · 25/10',paragraphs:['Đi tìm cảm xúc qua bình minh, nắng trên kiến trúc, nắng qua làng xóm, chiều vàng, Ba Vì và hoàng hôn phía Tây.']}
     ],gallery:[img.village,img.architecture,img.sunset]
   },
   {
@@ -167,7 +167,7 @@ const sections = {
   change:{title:'Hòa Lạc đang thay đổi',description:'Từ những lớp bản sắc Xứ Đoài, văn hóa Mường và cảnh quan tự nhiên, Hòa Lạc hôm nay đang đón nhận tri thức, công nghệ, đô thị và những cộng đồng mới.'},
   themes:{eyebrow:'8 CHỦ ĐỀ · 4 LOẠI HÌNH SÁNG TẠO',title:'8 chủ đề về Hòa Lạc',description:'Từ Nét Đoài, Sắc Mường, kiến trúc và thiên nhiên đến nắng, câu chuyện, ước mơ và 6 đặc trưng Sắc màu Hòa Lạc.'},
   colors:{eyebrow:'SẮC MÀU HÒA LẠC',title:'Hòa Lạc trong bạn có màu gì?',description:'Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc — mỗi màu là một lát cắt và một câu chuyện.'},
-  tours:{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Ba hành trình trải nghiệm giúp người tham gia đi – nhìn – gặp – trải nghiệm – sáng tạo về Hòa Lạc.'},
+  tours:{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Ba hành trình HOLA Tour cùng diễn ra trong một ngày 25/10/2026 — ba hướng khám phá khác nhau về Hòa Lạc.'},
   map:{eyebrow:'ĐỊA ĐIỂM · CÂU CHUYỆN · GÓC NHÌN',title:'HOLA Map',description:'Lưu lại những điểm chạm của Hòa Lạc từ cảnh quan, tri thức, văn hóa, kiến trúc đến những câu chuyện cộng đồng.'},
   stories:{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'Nội dung chính thức, câu chuyện cộng đồng và những góc nhìn được tuyển chọn trong hành trình HALO HOLA 2026.'},
   community:{eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',title:'WE HOLA – Chúng ta là Hòa Lạc',description:'Cộng đồng hành động tiếp nối HALO HOLA, cùng lan tỏa giá trị và đóng góp cho một Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.'}
@@ -176,7 +176,7 @@ const sections = {
 const settings = {
   brand:{siteName:'HALO HOLA',tagline:'52 góc nhìn · 1 Hòa Lạc'},
   seo:{defaultTitle:'HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc',defaultDescription:'Chương trình sáng tạo cộng đồng khám phá, ghi lại và kể những câu chuyện về Hòa Lạc qua Photo, Video, Story & Creative, Art & Design.',canonicalDomain:env.publicBaseUrl},
-  footer:{email:'admin@halohola.vn',description:'HALO HOLA — nơi những câu chuyện về Hòa Lạc được khám phá, ghi lại và kể tiếp.'}
+  footer:{email:'admin@xspace.vn',description:'HALO HOLA — nơi những câu chuyện về Hòa Lạc được khám phá, ghi lại và kể tiếp.'}
 };
 
 const client = await pool.connect();
