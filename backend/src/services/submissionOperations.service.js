@@ -49,7 +49,7 @@ export async function createFacebookQuickSubmission(data) {
 
 export async function getSubmissionOperationalState(code, email) {
   const { rows } = await pool.query(
-    `SELECT s.id,s.code,s.title,s.name,s.display_name,s.email,s.phone,s.type,s.theme,s.color,s.location,s.story,
+    `SELECT s.id,s.code,s.title,s.name,s.display_name,s.email,s.phone,s.type,s.theme,s.color,s.location,s.story,s.external_link,
             s.status,s.submission_source,s.facebook_completion_status,s.facebook_completed_at,s.facebook_post_url,
             s.facebook_post_verified_at,s.facebook_reactions,s.facebook_comments,s.facebook_shares,s.facebook_metrics_updated_at,
             s.created_at,s.updated_at,
@@ -66,16 +66,17 @@ export async function getSubmissionOperationalState(code, email) {
   if (!row) return null;
   const missing = [];
   if (!row.phone) missing.push('PHONE');
-  if (!Number(row.media_count)) missing.push('MEDIA');
-  if (!row.facebook_post_url) missing.push('FACEBOOK_URL');
-  if (row.facebook_completion_status !== 'CONFIRMED' && row.facebook_completion_status !== 'LEGACY') missing.push('FACEBOOK_CONFIRMATION');
-  const required = ['PHONE','MEDIA','FACEBOOK_URL','FACEBOOK_CONFIRMATION'];
+  if (!Number(row.media_count) && !clean(row.external_link)) missing.push('MEDIA');
+  const facebookRequired = row.submission_source === 'FACEBOOK' || Boolean(row.facebook_post_url) || row.facebook_completion_status === 'CONFIRMED';
+  if (facebookRequired && !row.facebook_post_url) missing.push('FACEBOOK_URL');
+  if (facebookRequired && row.facebook_completion_status !== 'CONFIRMED' && row.facebook_completion_status !== 'LEGACY') missing.push('FACEBOOK_CONFIRMATION');
+  const required = ['PHONE','MEDIA',...(facebookRequired?['FACEBOOK_URL','FACEBOOK_CONFIRMATION']:[])];
   const completed = required.filter(key => !missing.includes(key)).length;
   return {
     ...row,
     outreachScore: Number(row.facebook_reactions || 0) + Number(row.facebook_comments || 0) * 2 + Number(row.facebook_shares || 0) * 3,
     missing,
-    completionPercent: Math.round((completed / required.length) * 100)
+    completionPercent: required.length ? Math.round((completed / required.length) * 100) : 100
   };
 }
 
@@ -111,10 +112,10 @@ export async function getSubmissionOperationsOverview() {
     SELECT
       COUNT(*) FILTER (WHERE is_demo=FALSE)::int AS total,
       COUNT(*) FILTER (WHERE is_demo=FALSE AND submission_source='FACEBOOK')::int AS facebook_only,
-      COUNT(*) FILTER (WHERE is_demo=FALSE AND NOT EXISTS (SELECT 1 FROM submission_media m WHERE m.submission_id=submissions.id))::int AS missing_media,
-      COUNT(*) FILTER (WHERE is_demo=FALSE AND COALESCE(TRIM(facebook_post_url),'')='')::int AS missing_facebook,
+      COUNT(*) FILTER (WHERE is_demo=FALSE AND COALESCE(TRIM(external_link),'')='' AND NOT EXISTS (SELECT 1 FROM submission_media m WHERE m.submission_id=submissions.id))::int AS missing_media,
+      COUNT(*) FILTER (WHERE is_demo=FALSE AND submission_source='FACEBOOK' AND COALESCE(TRIM(facebook_post_url),'')='')::int AS missing_facebook,
       COUNT(*) FILTER (WHERE is_demo=FALSE AND COALESCE(TRIM(facebook_post_url),'')<>'' AND facebook_post_verified_at IS NULL)::int AS facebook_unverified,
-      COUNT(*) FILTER (WHERE is_demo=FALSE AND facebook_completion_status='PENDING')::int AS facebook_pending,
+      COUNT(*) FILTER (WHERE is_demo=FALSE AND submission_source='FACEBOOK' AND facebook_completion_status='PENDING')::int AS facebook_pending,
       COUNT(*) FILTER (WHERE is_demo=FALSE AND facebook_post_url IS NOT NULL AND facebook_completion_status='CONFIRMED')::int AS outreach_eligible
     FROM submissions
   `);
@@ -133,16 +134,16 @@ export async function listOperationalSubmissions({ source, issue, q, limit=120 }
     conditions.push(`(s.code ILIKE $${values.length} OR s.title ILIKE $${values.length} OR s.name ILIKE $${values.length} OR s.email ILIKE $${values.length} OR s.phone ILIKE $${values.length})`);
   }
   const normalizedIssue=String(issue||'').toUpperCase();
-  if (normalizedIssue==='MISSING_MEDIA') conditions.push('NOT EXISTS (SELECT 1 FROM submission_media mm WHERE mm.submission_id=s.id)');
-  if (normalizedIssue==='MISSING_FACEBOOK') conditions.push("COALESCE(TRIM(s.facebook_post_url),'')=''");
+  if (normalizedIssue==='MISSING_MEDIA') conditions.push("COALESCE(TRIM(s.external_link),'')='' AND NOT EXISTS (SELECT 1 FROM submission_media mm WHERE mm.submission_id=s.id)");
+  if (normalizedIssue==='MISSING_FACEBOOK') conditions.push("s.submission_source='FACEBOOK' AND COALESCE(TRIM(s.facebook_post_url),'')=''");
   if (normalizedIssue==='UNVERIFIED_FACEBOOK') conditions.push("COALESCE(TRIM(s.facebook_post_url),'')<>'' AND s.facebook_post_verified_at IS NULL");
-  if (normalizedIssue==='PENDING_FACEBOOK') conditions.push("s.facebook_completion_status='PENDING'");
+  if (normalizedIssue==='PENDING_FACEBOOK') conditions.push("s.submission_source='FACEBOOK' AND s.facebook_completion_status='PENDING'");
   if (normalizedIssue==='OUTREACH_ELIGIBLE') conditions.push("s.facebook_completion_status='CONFIRMED' AND COALESCE(TRIM(s.facebook_post_url),'')<>''");
 
   values.push(Math.max(1,Math.min(300,Number(limit)||120)));
   const limitParam=values.length;
   const { rows }=await pool.query(`
-    SELECT s.id,s.code,s.title,s.name,s.display_name,s.email,s.phone,s.type,s.theme,s.location,s.status,
+    SELECT s.id,s.code,s.title,s.name,s.display_name,s.email,s.phone,s.type,s.theme,s.location,s.status,s.external_link,
            s.submission_source,s.facebook_completion_status,s.facebook_completed_at,s.facebook_post_url,s.facebook_post_verified_at,
            s.facebook_reactions,s.facebook_comments,s.facebook_shares,s.facebook_metrics_updated_at,s.created_at,s.updated_at,
            (SELECT COUNT(*)::int FROM submission_media m WHERE m.submission_id=s.id) AS media_count
@@ -155,10 +156,10 @@ export async function listOperationalSubmissions({ source, issue, q, limit=120 }
     ...row,
     outreachScore:Number(row.facebook_reactions||0)+Number(row.facebook_comments||0)*2+Number(row.facebook_shares||0)*3,
     issues:[
-      !Number(row.media_count)?'MISSING_MEDIA':null,
-      !row.facebook_post_url?'MISSING_FACEBOOK':null,
+      !Number(row.media_count)&&!clean(row.external_link)?'MISSING_MEDIA':null,
+      row.submission_source==='FACEBOOK'&&!row.facebook_post_url?'MISSING_FACEBOOK':null,
       row.facebook_post_url&&!row.facebook_post_verified_at?'UNVERIFIED_FACEBOOK':null,
-      row.facebook_completion_status==='PENDING'?'PENDING_FACEBOOK':null
+      row.submission_source==='FACEBOOK'&&row.facebook_completion_status==='PENDING'?'PENDING_FACEBOOK':null
     ].filter(Boolean)
   }));
 }
