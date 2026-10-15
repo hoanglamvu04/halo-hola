@@ -3,7 +3,9 @@ import { pool } from '../database/pool.js';
 
 const router=Router();
 const ROUND_CODE='PRELIMINARY';
+const TAXONOMY_SEPARATOR=' • ';
 const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
+const taxonomyArraySql=(alias,column)=>`string_to_array(COALESCE(${alias}.${column},''),'${TAXONOMY_SEPARATOR}')`;
 
 function safeNumber(value,fallback=0){
   const n=Number(value);
@@ -46,7 +48,7 @@ router.get('/',async(req,res,next)=>{
       const p=`$${values.length}`;
       conditions.push(`(s.code ILIKE ${p} OR COALESCE(s.title,'') ILIKE ${p} OR s.name ILIKE ${p} OR COALESCE(s.display_name,'') ILIKE ${p} OR s.location ILIKE ${p})`);
     }
-    if(req.query.theme){values.push(String(req.query.theme));conditions.push(`s.theme=$${values.length}`);}
+    if(req.query.theme){values.push(String(req.query.theme));conditions.push(`$${values.length}=ANY(${taxonomyArraySql('s','theme')})`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
     if(req.query.award==='true') conditions.push(`s.status='AWARDED'`);
 
@@ -59,7 +61,10 @@ router.get('/',async(req,res,next)=>{
       SELECT
         s.id,LOWER(s.code) AS slug,s.code,s.title,
         COALESCE(NULLIF(s.display_name,''),s.name) AS author,
-        s.type,s.theme,s.color,s.location,s.story,s.captured_at AS "capturedAt",
+        s.type,s.theme,s.color,
+        ${taxonomyArraySql('s','theme')} AS themes,
+        ${taxonomyArraySql('s','color')} AS colors,
+        s.location,s.story,s.captured_at AS "capturedAt",
         s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
         sel.source AS "selectionSource",sel.selected_at AS "selectedAt",
         COALESCE(media.media,'[]'::json) AS media,
