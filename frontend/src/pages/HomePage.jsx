@@ -90,11 +90,11 @@ export default function HomePage() {
   ]
 
   const milestones=[
-    ['10.10','Mở nhận tác phẩm'],
+    ['11.10','Mở nhận tác phẩm'],
     ['25.10','HOLA Tour #01 · #02 · #03'],
-    ['10.11','Đóng nhận tác phẩm'],
-    ['18.11','Công bố TOP52'],
-    ['28.11','HOLA DAY']
+    ['10.11 · 10:11','Đóng nhận tác phẩm'],
+    ['16.11','Công bố TOP52 · mở bình chọn'],
+    ['24.11','HOLA DAY']
   ]
 
   return <main>
