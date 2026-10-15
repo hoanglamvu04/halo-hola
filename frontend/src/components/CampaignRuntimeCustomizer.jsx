@@ -4,9 +4,7 @@ import { getHomepageContent } from '../services/api.js'
 
 const officialMilestones=[
   ['11.10','Mở nhận tác phẩm'],
-  ['17–18.10','HOLA Tour #01'],
-  ['25.10','HOLA Tour #02'],
-  ['31.10–01.11','HOLA Tour #03'],
+  ['25.10','HOLA Tour #01 · #02 · #03'],
   ['10.11 · 10:11','Đóng nhận tác phẩm'],
   ['16.11','Công bố TOP52 · mở bình chọn'],
   ['24.11','HOLA DAY']
@@ -24,9 +22,7 @@ const defaults={
   milestone2Date:officialMilestones[1][0],milestone2Label:officialMilestones[1][1],
   milestone3Date:officialMilestones[2][0],milestone3Label:officialMilestones[2][1],
   milestone4Date:officialMilestones[3][0],milestone4Label:officialMilestones[3][1],
-  milestone5Date:officialMilestones[4][0],milestone5Label:officialMilestones[4][1],
-  milestone6Date:officialMilestones[5][0],milestone6Label:officialMilestones[5][1],
-  milestone7Date:officialMilestones[6][0],milestone7Label:officialMilestones[6][1]
+  milestone5Date:officialMilestones[4][0],milestone5Label:officialMilestones[4][1]
 }
 
 /* Auto-upgrade only the exact old defaults that were saved before the mobile redesign.
@@ -144,7 +140,7 @@ export default function CampaignRuntimeCustomizer(){
       })
     }
 
-    // Apply the official schedule immediately so the old hard-coded dates do not flash on screen.
+    // Apply the official schedule immediately so stale CMS dates never flash on screen.
     syncOfficialTimeline()
 
     const boot=async()=>{
