@@ -8,7 +8,6 @@ import { submissionSchema, lookupSchema } from '../validators/submission.validat
 import { createSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
 import { getSubmissionOperationalState } from '../services/submissionOperations.service.js';
 import { confirmFacebookSubmission } from '../services/facebookCompletion.service.js';
-import { queueSubmissionSync } from '../services/holaMaps.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
 import { verifyToken } from '../utils/jwt.js';
 import { pool } from '../database/pool.js';
@@ -112,12 +111,12 @@ router.post('/facebook-complete', lookupRateLimiter, async (req, res, next) => {
   }
 });
 
-// Stable public HALO media URL. For private R2 originals this endpoint issues a
-// fresh, short-lived redirect so Hola Maps never stores a temporary signed URL.
+// Stable public HALO media URL. Media is only exposed after the submission is
+// eligible and effectively published; private R2 originals stay protected.
 router.get('/media/:mediaId/halo', async (req, res, next) => {
   try {
     const item = await getHaloPublicMediaUrl(req.params.mediaId);
-    if (!item?.url) throw new AppError('Ảnh này không sẵn sàng cho HOLA Maps.', 404);
+    if (!item?.url) throw new AppError('Ảnh này chưa sẵn sàng cho HOLA Maps.', 404);
     res.set('Cache-Control', 'public, max-age=60');
     res.redirect(302, item.url);
   } catch (error) {
@@ -136,12 +135,8 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
 
     const created = await createSubmission(data, req.files || []);
 
-    // Sync is deliberately fire-and-forget. A Hola Maps outage must never make
-    // the HALO HOLA submission fail after its own transaction committed.
-    queueSubmissionSync(created.id).catch((error) =>
-      console.warn('Hola Maps submission sync enqueue failed:', error.message)
-    );
-
+    // Important: a newly received submission is NOT sent to HOLA Maps here.
+    // HOLA Maps synchronization starts only after Admin approval + publication.
     sendSubmissionReceived({
       to: created.email,
       name: created.display_name || created.name,
@@ -157,7 +152,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       source: created.submission_source || 'WEB',
       facebookCompletionStatus: created.facebook_completion_status || 'PENDING',
       createdAt: created.created_at,
-      holaMapsSyncStatus: 'PENDING',
+      holaMapsSyncStatus: 'WAITING_PUBLICATION',
       media: created.media.map((m) => ({
         id: m.id,
         originalName: m.original_name,
