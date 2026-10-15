@@ -52,9 +52,28 @@ export async function getSubmissionOperationalState(code, email) {
     `SELECT s.id,s.code,s.title,s.name,s.display_name,s.email,s.phone,s.type,s.theme,s.color,s.location,s.story,s.external_link,
             s.status,s.submission_source,s.facebook_completion_status,s.facebook_completed_at,s.facebook_post_url,
             s.facebook_post_verified_at,s.facebook_reactions,s.facebook_comments,s.facebook_shares,s.facebook_metrics_updated_at,
+            s.publication_state,s.published_at,s.publish_scheduled_at,s.publication_updated_at,
+            s.hola_maps_sync_status,s.hola_maps_published,s.hola_maps_last_sync_error,s.hola_maps_last_synced_at,
+            s.hola_maps_external_spot_id,s.hola_maps_public_url,
             s.created_at,s.updated_at,
             COUNT(m.id)::int AS media_count,
-            COALESCE(SUM(m.size_bytes),0)::bigint AS total_bytes
+            COALESCE(SUM(m.size_bytes),0)::bigint AS total_bytes,
+            COALESCE((
+              SELECT json_agg(json_build_object(
+                'id',n.id,
+                'kind',n.kind,
+                'status',n.status,
+                'recipient',n.recipient,
+                'deliveryStatus',n.delivery_status,
+                'detail',n.detail,
+                'createdAt',n.created_at
+              ) ORDER BY n.created_at DESC)
+              FROM (
+                SELECT * FROM submission_notification_logs nl
+                WHERE nl.submission_id=s.id
+                ORDER BY nl.created_at DESC LIMIT 20
+              ) n
+            ),'[]'::json) AS notification_history
      FROM submissions s
      LEFT JOIN submission_media m ON m.submission_id=s.id
      WHERE UPPER(s.code)=UPPER($1) AND LOWER(s.email)=LOWER($2)
@@ -72,8 +91,14 @@ export async function getSubmissionOperationalState(code, email) {
   if (facebookRequired && row.facebook_completion_status !== 'CONFIRMED' && row.facebook_completion_status !== 'LEGACY') missing.push('FACEBOOK_CONFIRMATION');
   const required = ['PHONE','MEDIA',...(facebookRequired?['FACEBOOK_URL','FACEBOOK_CONFIRMATION']:[])];
   const completed = required.filter(key => !missing.includes(key)).length;
+  const publicNow=row.publication_state==='PUBLISHED'||(
+    row.publication_state==='SCHEDULED'&&row.publish_scheduled_at&&new Date(row.publish_scheduled_at).getTime()<=Date.now()
+  );
   return {
     ...row,
+    publicNow:Boolean(publicNow),
+    publicArtworkUrl:publicNow?`/tac-pham/${String(row.code||'').toLowerCase()}`:null,
+    facebookRequired,
     outreachScore: Number(row.facebook_reactions || 0) + Number(row.facebook_comments || 0) * 2 + Number(row.facebook_shares || 0) * 3,
     missing,
     completionPercent: required.length ? Math.round((completed / required.length) * 100) : 100
