@@ -4,6 +4,7 @@ import { env } from '../src/config/env.js';
 import {
   buildHolaMapsPayload,
   deleteHaloPost,
+  isSubmissionEligibleForHolaMaps,
   syncHaloPost
 } from '../src/services/holaMaps.service.js';
 
@@ -40,6 +41,15 @@ function baseSubmission(overrides = {}) {
     location_address: 'Hạ Bằng, Hà Nội',
     location_source: 'HOLA_MAPS',
     created_at: '2026-10-10T02:30:00.000Z',
+    status: 'VALID',
+    is_demo: false,
+    allow_media_use: true,
+    rights_confirmed: true,
+    image_consent_confirmed: true,
+    is_minor: false,
+    guardian_consent: false,
+    publication_state: 'PUBLISHED',
+    publish_scheduled_at: null,
     ...overrides
   };
 }
@@ -49,8 +59,8 @@ function imageMedia(id = 'media-1') {
 }
 
 test('build payload preserves canonical Hola Maps placeId', () => {
-  env.publicBaseUrl = 'https://halohola.xspace.vn';
-  env.haloHolaSiteUrl = 'https://halohola.xspace.vn';
+  env.publicBaseUrl = 'https://halohola.vn';
+  env.haloHolaSiteUrl = 'https://halohola.vn';
   const payload = buildHolaMapsPayload(baseSubmission({
     hola_map_place_id: '123',
     location_lat: 20.99,
@@ -61,12 +71,22 @@ test('build payload preserves canonical Hola Maps placeId', () => {
   assert.equal(payload.location.placeId, '123');
   assert.equal(payload.location.spotId, undefined);
   assert.equal(payload.location.lat, 20.99);
-  assert.equal(payload.media[0].url, 'https://halohola.xspace.vn/api/submissions/media/media-1/halo');
-  assert.match(payload.sourceUrl, /\/tra-cuu\?code=HH26-00001$/);
+  assert.equal(payload.media[0].url, 'https://halohola.vn/api/submissions/media/media-1/halo');
+  assert.match(payload.sourceUrl, /\/tac-pham\/hh26-00001$/);
+});
+
+test('publication gate requires moderation rights and effective publication', () => {
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission()), true);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ status: 'PENDING' })), false);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ publication_state: 'HIDDEN' })), false);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ allow_media_use: false })), false);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ rights_confirmed: false })), false);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ image_consent_confirmed: false })), false);
+  assert.equal(isSubmissionEligibleForHolaMaps(baseSubmission({ is_minor: true, guardian_consent: false })), false);
 });
 
 test('build payload uses custom spotId for a manual pin', () => {
-  env.publicBaseUrl = 'https://halohola.xspace.vn';
+  env.publicBaseUrl = 'https://halohola.vn';
   const payload = buildHolaMapsPayload(baseSubmission({
     hola_map_place_id: null,
     location_source: 'PIN',
