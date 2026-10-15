@@ -14,6 +14,8 @@ import ArtworkCard from '../components/ArtworkCard.jsx'
 import './ArtworkPage.css'
 import './ArtworkViewer.css'
 
+const SITE_URL='https://halohola.vn'
+
 function isVideoMedia(media,item){
   return String(media?.mimeType||'').startsWith('video/') || (!media?.mimeType && item?.type==='Video')
 }
@@ -29,6 +31,26 @@ function safeHttpUrl(value){
     const url=new URL(String(value||'').trim())
     return url.protocol==='http:'||url.protocol==='https:'?url.href:''
   }catch{return ''}
+}
+
+function setMeta(key,value,attribute='name'){
+  if(!value)return
+  let node=document.head.querySelector(`meta[${attribute}="${key}"]`)
+  if(!node){node=document.createElement('meta');node.setAttribute(attribute,key);document.head.appendChild(node)}
+  node.setAttribute('content',value)
+}
+
+function setCanonical(url){
+  let node=document.head.querySelector('link[rel="canonical"]')
+  if(!node){node=document.createElement('link');node.rel='canonical';document.head.appendChild(node)}
+  node.href=url
+}
+
+function publicBadge(status){
+  if(status==='AWARDED')return'ĐẠT GIẢI'
+  if(status==='TOP52')return'TOP52'
+  if(status==='SHORTLIST')return'SHORTLIST'
+  return'GÓC NHÌN CỘNG ĐỒNG'
 }
 
 export default function ArtworkPage({preview=false}){
@@ -57,6 +79,47 @@ export default function ArtworkPage({preview=false}){
    }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
    return()=>{alive=false}
  },[slug,submissionId,preview])
+
+ useEffect(()=>{
+   if(preview||!item)return undefined
+   const canonical=`${SITE_URL}/tac-pham/${item.slug||String(item.code||'').toLowerCase()}`
+   const story=String(item.story||'').replace(/\s+/g,' ').trim()
+   const description=(story||`Khám phá tác phẩm ${item.title||item.code} trong HALO HOLA 2026.`).slice(0,180)
+   const title=`${item.title||item.code} · ${item.author||'HALO HOLA'} | HALO HOLA 2026`
+   const image=item.image?new URL(item.image,window.location.origin).href:''
+   document.title=title
+   setCanonical(canonical)
+   setMeta('description',description)
+   setMeta('og:title',title,'property')
+   setMeta('og:description',description,'property')
+   setMeta('og:url',canonical,'property')
+   setMeta('og:type','article','property')
+   if(image)setMeta('og:image',image,'property')
+   setMeta('twitter:title',title)
+   setMeta('twitter:description',description)
+   if(image)setMeta('twitter:image',image)
+
+   const schema={
+     '@context':'https://schema.org',
+     '@type':'CreativeWork',
+     '@id':canonical,
+     url:canonical,
+     name:item.title||item.code,
+     description,
+     creator:{'@type':'Person',name:item.author||'Tác giả HALO HOLA'},
+     genre:item.type||undefined,
+     keywords:[item.theme,item.color,item.location].filter(Boolean).join(', '),
+     dateCreated:item.capturedAt||item.createdAt||undefined,
+     datePublished:item.publishedAt||undefined,
+     contentLocation:item.location?{'@type':'Place',name:item.location}:undefined,
+     image:image?{'@type':'ImageObject',contentUrl:image,name:item.title||item.code}:undefined,
+     isPartOf:{'@type':'CreativeWorkSeries',name:'HALO HOLA 2026',url:SITE_URL}
+   }
+   let node=document.getElementById('artwork-structured-data')
+   if(!node){node=document.createElement('script');node.id='artwork-structured-data';node.type='application/ld+json';document.head.appendChild(node)}
+   node.textContent=JSON.stringify(schema)
+   return()=>{document.getElementById('artwork-structured-data')?.remove()}
+ },[item,preview])
 
  const mediaItems=useMemo(()=>{
    const rows=Array.isArray(item?.media)?item.media.filter(x=>x?.url):[]
@@ -104,9 +167,12 @@ export default function ArtworkPage({preview=false}){
  }
 
  if(loading)return <main className="artwork-showcase"><div className="artwork-showcase-state">Đang tải tác phẩm từ hệ thống...</div></main>
- if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy tác phẩm.'}</div><Link className="btn btn-outline" to="/top52"><ArrowLeft/> Quay lại TOP52</Link></div></main>
+ if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy tác phẩm.'}</div><Link className="btn btn-outline" to="/kham-pha"><ArrowLeft/> Quay lại Góc nhìn cộng đồng</Link></div></main>
 
- const badge=item.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'
+ const badge=publicBadge(item.status)
+ const isCurated=['TOP52','AWARDED'].includes(item.status)
+ const backPath=isCurated?'/top52':'/kham-pha'
+ const backLabel=isCurated?'TOP52':'Góc nhìn cộng đồng'
  const story=String(item.story||'').trim()||'Tác phẩm được công bố trong hành trình HALO HOLA 2026.'
  const lead=story.split(/\n+/)[0]
  const score=Number(item.juryScore||0)
@@ -114,7 +180,7 @@ export default function ArtworkPage({preview=false}){
 
  return <main className="artwork-showcase">
    <div className="artwork-showcase-top container">
-     <Link to="/top52"><ArrowLeft/> TOP52</Link>
+     <Link to={backPath}><ArrowLeft/> {backLabel}</Link>
      <span>{item.code} · {item.type}</span>
    </div>
 
@@ -199,12 +265,12 @@ export default function ArtworkPage({preview=false}){
    </section>
 
    {related.length>0&&<section className="container artwork-related-section">
-     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng chủ đề {item.theme}</h2></div><Link to="/top52">Xem TOP52 <ArrowRight/></Link></header>
+     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng chủ đề {item.theme}</h2></div><Link to="/kham-pha">Xem góc nhìn cộng đồng <ArrowRight/></Link></header>
      <div className="art-grid compact artwork-related-grid">{related.map(a=><ArtworkCard key={a.id||a.slug} item={a}/>)}</div>
    </section>}
 
    <section className="container artwork-showcase-bottom">
-     <Link to="/top52" className="btn btn-outline"><ArrowLeft size={16}/> Xem toàn bộ TOP52</Link>
+     <Link to={backPath} className="btn btn-outline"><ArrowLeft size={16}/> Xem {backLabel}</Link>
      <Link to="/gui-goc-nhin" className="btn btn-terra">Gửi góc nhìn của bạn <ArrowRight size={16}/></Link>
    </section>
 
