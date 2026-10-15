@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
-import path from 'node:path';
 import { pool } from '../database/pool.js';
 import { createDownloadUrl, createR2Client, getR2Buckets, putR2Object } from '../storage/r2.js';
 
@@ -67,8 +66,8 @@ export async function storeSubmissionMediaVariants(submission,variantFiles=[]){
 
 export async function getOptimizedMediaUrl(mediaId,{width=960,format='auto'}={}){
   const requestedWidth=WIDTHS.reduce((best,current)=>Math.abs(current-Number(width||960))<Math.abs(best-Number(width||960))?current:best,960);
-  const requestedFormat=FORMATS.includes(String(format).toLowerCase())?String(format).toLowerCase():'auto';
-  const order=requestedFormat==='auto'?['avif','webp']:[requestedFormat,...FORMATS.filter(x=>x!==requestedFormat)];
+  const normalizedFormat=String(format||'auto').toLowerCase();
+  const order=FORMATS.includes(normalizedFormat)?[normalizedFormat]:['webp','avif'];
   const {rows}=await pool.query(
     `SELECT id,media_id,width,format,mime_type,bucket,object_key
      FROM submission_media_variants
