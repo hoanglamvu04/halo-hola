@@ -81,7 +81,6 @@ import './styles/admin-mobile-sidebar.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
-import CampaignRuntimeCustomizer from './components/CampaignRuntimeCustomizer.jsx'
 import ColorStoryDesktopExperience from './components/ColorStoryDesktopExperience.jsx'
 import ColorArtworkBadgeRuntime from './components/ColorArtworkBadgeRuntime.jsx'
 import SubmissionFacebookGate from './components/SubmissionFacebookGate.jsx'
@@ -105,7 +104,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <App />
         <MobileHeroExperience />
-        <CampaignRuntimeCustomizer />
         <ColorStoryDesktopExperience />
         <ColorArtworkBadgeRuntime />
         <SubmissionQuickMode />
