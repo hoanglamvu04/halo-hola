@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getHolaPlacesInBounds, normalizeHolaPlace } from './holaMapsApi.js';
+import { buildSubmissionImageVariants } from '../utils/imageVariants.js';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
 const HOME_HOLA_BOUNDS = { north: 21.145, south: 20.885, east: 105.665, west: 105.325 };
@@ -45,12 +46,18 @@ export function setAdminToken(token) {
 
 export function healthCheck() { return unwrap(client.get('/health')); }
 
-export function submitArtwork(payload) {
+export async function submitArtwork(payload) {
   const form = new FormData();
   Object.entries(payload.fields || {}).forEach(([key, value]) => {
     if (value !== undefined && value !== null) form.append(key, String(value));
   });
-  (payload.files || []).forEach((file) => form.append('files', file));
+  const files=payload.files || [];
+  files.forEach((file) => form.append('files', file));
+  // Generate public delivery derivatives in-browser. The immutable originals are
+  // still uploaded untouched for judging/archival; unsupported RAW/TIFF files
+  // simply skip this optimization and keep the original fallback.
+  const variants=await buildSubmissionImageVariants(files).catch(()=>[]);
+  variants.forEach(({blob,name})=>form.append('previews',blob,name));
   return unwrap(client.post('/submissions', form, { timeout: 0 }));
 }
 
