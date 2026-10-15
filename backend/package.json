@@ -16,6 +16,8 @@
     "db:seed:showcase:dates": "node src/database/fixShowcaseDates.js",
     "db:seed:showcase:public": "node src/database/publishShowcase.js",
     "db:seed:showcase:clean": "node src/database/cleanupShowcase.js",
+    "db:seed:hola-maps-test": "node src/database/seedHolaMapsIntegration.js",
+    "db:seed:hola-maps-test:clean": "node src/database/seedHolaMapsIntegration.js --clean",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "db:content:tours-2026": "node src/database/syncTours2026.js",
     "db:content:awards-2026-values": "node src/database/updateAwards2026Values.js",
