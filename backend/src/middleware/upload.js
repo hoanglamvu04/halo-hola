@@ -20,6 +20,7 @@ const mimeByExtension = new Map([
   ['.jpeg', new Set(['image/jpeg'])],
   ['.png', new Set(['image/png'])],
   ['.webp', new Set(['image/webp'])],
+  ['.avif', new Set(['image/avif'])],
   ['.tif', new Set(['image/tiff'])],
   ['.tiff', new Set(['image/tiff'])],
   ['.dng', new Set(['image/x-adobe-dng','application/octet-stream'])],
@@ -34,6 +35,15 @@ const mimeByExtension = new Map([
   ['.mp3', new Set(['audio/mpeg','audio/mp3'])]
 ]);
 
+function fileFilter(_req,file,cb){
+  const ext = path.extname(file.originalname || '').toLowerCase();
+  const acceptedMimes = mimeByExtension.get(ext);
+  if (!acceptedMimes || !acceptedMimes.has(String(file.mimetype || '').toLowerCase())) {
+    return cb(new AppError('Định dạng tệp hoặc phần mở rộng không được hỗ trợ.', 400));
+  }
+  cb(null, true);
+}
+
 export const upload = multer({
   storage,
   limits: {
@@ -45,12 +55,22 @@ export const upload = multer({
     parts: env.maxUploadFileCount + 45,
     headerPairs: 100
   },
-  fileFilter: (_req, file, cb) => {
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const acceptedMimes = mimeByExtension.get(ext);
-    if (!acceptedMimes || !acceptedMimes.has(String(file.mimetype || '').toLowerCase())) {
-      return cb(new AppError('Định dạng tệp hoặc phần mở rộng không được hỗ trợ.', 400));
-    }
-    cb(null, true);
-  }
+  fileFilter
+});
+
+// Submission originals remain capped at MAX_UPLOAD_FILE_COUNT, while the browser
+// may attach up to six lightweight WebP/AVIF derivatives for each original image.
+// Field-level maxCount on the route still protects the number of originals.
+export const submissionUpload = multer({
+  storage,
+  limits:{
+    fileSize:env.maxUploadFileSizeMb*1024*1024,
+    files:env.maxUploadFileCount*7,
+    fields:40,
+    fieldNameSize:80,
+    fieldSize:20*1024,
+    parts:env.maxUploadFileCount*7+45,
+    headerPairs:100
+  },
+  fileFilter
 });
