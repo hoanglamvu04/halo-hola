@@ -23,8 +23,9 @@ export const submissionSchema = z.object({
   guardianName: z.string().trim().max(180).optional().or(z.literal('')),
   guardianConsent: boolish,
   type: z.string().trim().min(1).max(80),
-  theme: z.string().trim().min(1).max(180),
-  color: z.string().trim().max(120).optional().or(z.literal('')),
+  // Multiple selections are serialized as `Tên 1 • Tên 2` for backwards compatibility.
+  theme: z.string().trim().min(1).max(1200),
+  color: z.string().trim().max(1200).optional().or(z.literal('')),
   location: z.string().trim().min(2).max(255),
   locationPlaceId: z.string().trim().max(160).optional().or(z.literal('')),
   locationPlaceSlug: z.string().trim().max(180).optional().or(z.literal('')),
