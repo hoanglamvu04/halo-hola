@@ -20,7 +20,9 @@ echo "==> Sync Git"
 git fetch origin "$BRANCH" --prune
 git clean -f -- package-lock.json backend/package-lock.json frontend/package-lock.json >/dev/null 2>&1 || true
 git checkout "$BRANCH"
-git pull --ff-only origin "$BRANCH"
+# This checkout is deployment-only: mirror origin exactly instead of relying on
+# local branch ancestry, which also recovers safely after a rewritten remote ref.
+git reset --hard "origin/$BRANCH"
 
 echo "==> Install backend dependencies from lockfile"
 npm ci --prefix backend --omit=dev
