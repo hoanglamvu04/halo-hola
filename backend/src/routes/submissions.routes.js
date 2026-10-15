@@ -9,6 +9,7 @@ import { createSubmission, getPublicStats, getHaloPublicMediaUrl } from '../serv
 import { getSubmissionOperationalState } from '../services/submissionOperations.service.js';
 import { confirmFacebookSubmission } from '../services/facebookCompletion.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
+import { logReceivedNotification } from '../services/submissionNotification.service.js';
 import { verifyToken } from '../utils/jwt.js';
 import { pool } from '../database/pool.js';
 
@@ -160,7 +161,14 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       name: created.display_name || created.name,
       code: created.code,
       title: created.title
-    }).catch((error) => console.warn('Submission email skipped/failed:', error.message));
+    }).then((delivery)=>logReceivedNotification({
+      submissionId:created.id,
+      email:created.email,
+      delivery
+    })).catch((error)=>{
+      logReceivedNotification({submissionId:created.id,email:created.email,error}).catch(()=>{});
+      console.warn('Submission email skipped/failed:', error.message);
+    });
 
     res.status(201).json({
       id: created.id,
