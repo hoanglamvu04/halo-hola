@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const nodeEnv=process.env.NODE_ENV || 'development';
+const OFFICIAL_SITE_URL='https://halohola.vn';
+const LEGACY_SITE_URL='https://halohola.xspace.vn';
 
 function requireInProduction(name, value, fallback) {
   if (value) return value;
@@ -16,6 +18,11 @@ function clampNumber(value,min,max,fallback){
   return Math.min(max,Math.max(min,number));
 }
 
+function normalizeSiteUrl(value){
+  const url=String(value||'').trim();
+  return url===LEGACY_SITE_URL ? OFFICIAL_SITE_URL : url;
+}
+
 const databaseUrl=requireInProduction(
   'DATABASE_URL',
   process.env.DATABASE_URL,
@@ -27,19 +34,24 @@ if(nodeEnv==='production' && jwtSecret.length<32){
   throw new Error('JWT_SECRET must be at least 32 characters in production.');
 }
 
+const configuredCors=(process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((x) => x.trim()).filter(Boolean);
+const corsOrigins=nodeEnv==='production'
+  ? [...new Set([...configuredCors,OFFICIAL_SITE_URL,'https://www.halohola.vn'])]
+  : configuredCors;
+
 export const env = {
   nodeEnv,
   port: clampNumber(process.env.PORT,1,65535,5000),
   databaseUrl,
   jwtSecret,
   jwtExpiresIn: process.env.JWT_EXPIRES || '7d',
-  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((x) => x.trim()).filter(Boolean),
+  corsOrigins,
   uploadDir: process.env.UPLOAD_DIR || 'uploads',
   maxUploadFileSizeMb: clampNumber(process.env.MAX_UPLOAD_FILE_SIZE_MB,1,100,25),
   maxUploadFileCount: clampNumber(process.env.MAX_UPLOAD_FILE_COUNT,1,10,10),
-  publicBaseUrl: process.env.PUBLIC_BASE_URL || `http://localhost:${clampNumber(process.env.PORT,1,65535,5000)}`,
+  publicBaseUrl: normalizeSiteUrl(process.env.PUBLIC_BASE_URL) || `http://localhost:${clampNumber(process.env.PORT,1,65535,5000)}`,
   adminApiKey: (process.env.ADMIN_API_KEY || '').trim(),
-  haloHolaSiteUrl: (process.env.HALO_HOLA_SITE_URL || '').trim(),
+  haloHolaSiteUrl: normalizeSiteUrl(process.env.HALO_HOLA_SITE_URL),
   holaMapsBaseUrl: (process.env.HOLA_MAPS_BASE_URL || '').trim(),
   holaMapsHaloSecret: (process.env.HOLA_MAPS_HALO_SECRET || '').trim(),
   holaMapsSyncTimeoutMs: clampNumber(process.env.HOLA_MAPS_SYNC_TIMEOUT_MS,1000,30000,8000)
