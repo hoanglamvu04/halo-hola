@@ -1,5 +1,6 @@
 import { pool } from '../database/pool.js';
 import { AppError } from '../utils/AppError.js';
+import { reconcileSubmissionHolaMaps } from './holaMaps.service.js';
 
 const ALLOWED_ACTIONS=new Set(['PUBLISH','HIDE','SCHEDULE']);
 const PUBLIC_ELIGIBLE_STATUSES=new Set(['VALID','SHORTLIST','TOP52','AWARDED']);
@@ -28,6 +29,13 @@ function eligibility(item){
 function mapRow(row){
   const gate=eligibility(row);
   return {...row,...gate,publicNow:Boolean(row.publicNow)};
+}
+async function reconcileHolaMapsSafely(submissionId){
+  try{return await reconcileSubmissionHolaMaps(submissionId);}
+  catch(error){
+    console.warn(`HOLA Maps publication reconcile failed for ${submissionId}:`,error.message);
+    return {action:'ERROR',error:error.message};
+  }
 }
 
 export async function getPublicationOverview(){
@@ -70,6 +78,8 @@ export async function listPublicationItems(filters={}){
       s.guardian_consent AS "guardianConsent",s.publication_state AS "publicationState",
       s.published_at AS "publishedAt",s.publish_scheduled_at AS "publishScheduledAt",
       s.publication_updated_at AS "publicationUpdatedAt",s.created_at AS "createdAt",
+      s.hola_maps_sync_status AS "holaMapsSyncStatus",s.hola_maps_published AS "holaMapsPublished",
+      s.hola_maps_last_sync_error AS "holaMapsLastSyncError",s.hola_maps_last_synced_at AS "holaMapsLastSyncedAt",
       ${effectivePublicSql('s')} AS "publicNow",
       COALESCE(sel.types,'[]'::json) AS "selectionTypes"
     FROM submissions s
@@ -124,25 +134,29 @@ async function applyAction(client,{submissionId,action,scheduledAt,reason,actorI
 
 export async function setPublicationState(payload){
   const client=await pool.connect();
+  let result;
   try{
     await client.query('BEGIN');
-    const result=await applyAction(client,payload);
+    result=await applyAction(client,payload);
     await client.query('COMMIT');
-    return result;
   }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
+  const holaMaps=await reconcileHolaMapsSafely(result.id);
+  return {...result,holaMaps};
 }
 
 export async function bulkSetPublicationState({ids=[],action,scheduledAt,reason,actorId}){
   const unique=[...new Set((Array.isArray(ids)?ids:[]).map(String))].slice(0,200);
   if(!unique.length) throw new AppError('Chưa chọn tác phẩm.',400);
   const client=await pool.connect();
+  let results=[];
   try{
     await client.query('BEGIN');
-    const results=[];
     for(const id of unique){results.push(await applyAction(client,{submissionId:id,action,scheduledAt,reason,actorId}));}
     await client.query('COMMIT');
-    return {updated:results.length,items:results};
   }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
+  const syncResults=await Promise.all(results.map(item=>reconcileHolaMapsSafely(item.id)));
+  results=results.map((item,index)=>({...item,holaMaps:syncResults[index]}));
+  return {updated:results.length,items:results};
 }
 
 export async function listPublicationAudit(limit=100){
