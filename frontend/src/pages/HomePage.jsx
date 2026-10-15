@@ -6,6 +6,7 @@ import { img } from '../data/siteData.js'
 import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPublicArtworks } from '../services/api.js'
 import { getHolaMapConfig } from '../services/holaMapsApi.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
+import { campaignCssVars, normalizeCampaignConfig, OFFICIAL_CAMPAIGN_MILESTONES } from '../utils/campaignConfig.js'
 
 export default function HomePage() {
   const [stats,setStats]=useState({submissions:0,creators:0,locations:0,top52:0})
@@ -39,7 +40,7 @@ export default function HomePage() {
     floatImageA:img.architecture,
     floatImageB:img.people
   })
-  const campaign=sectionData('campaign',{
+  const campaign=normalizeCampaignConfig(sectionData('campaign',{
     eyebrow:'HALO HOLA ĐANG DIỄN RA',
     title:'Mỗi ngày thêm một góc nhìn mới.',
     description:'Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.',
@@ -48,7 +49,7 @@ export default function HomePage() {
     discoverImage:img.hills,
     keepImage:img.architecture,
     shareImage:img.student
-  })
+  }))
   const change=sectionData('change',{
     title:'Hòa Lạc đang thay đổi',
     description:'Từ Xứ Đoài trầm tích, làng xóm yên bình và những viên đá ong mộc mạc, Hòa Lạc hôm nay đang vươn mình thành trung tâm tri thức, công nghệ và đổi mới sáng tạo.',
@@ -89,13 +90,7 @@ export default function HomePage() {
     colorsCopy.colorImage6
   ]
 
-  const milestones=[
-    ['11.10','Mở nhận tác phẩm'],
-    ['25.10','HOLA Tour #01 · #02 · #03'],
-    ['10.11 · 10:11','Đóng nhận tác phẩm'],
-    ['16.11','Công bố TOP52 · mở bình chọn'],
-    ['24.11','HOLA DAY']
-  ]
+  const milestones=OFFICIAL_CAMPAIGN_MILESTONES
 
   return <main>
     {sectionOn('hero')&&<section className="home-hero home-hero-reference">
@@ -164,7 +159,7 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('campaign')&&<section className="campaign-live">
+    {sectionOn('campaign')&&<section className="campaign-live" style={campaignCssVars(campaign)}>
       <div className="campaign-live-grid">
         <div className="live-counter">
           <div className="campaign-kicker"><span className="eyebrow">{campaign.eyebrow}</span><i/></div>
@@ -172,17 +167,17 @@ export default function HomePage() {
           <span className="campaign-accent-line"/>
           <p className="campaign-desc">{campaign.description}</p>
           <div className="live-stats">
-            <div className="live-stat stat-camera"><Camera/><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></div>
-            <div className="live-stat stat-people"><Users/><b>{stats.creators}</b><small>Người kể chuyện</small></div>
-            <div className="live-stat stat-place"><MapPin/><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></div>
-            <div className="live-stat stat-top52"><FileText/><b>{stats.top52}</b><small>Tác phẩm TOP52</small></div>
+            <Link to="/kham-pha" className="live-stat stat-camera" aria-label="Xem các góc nhìn cộng đồng đã công bố"><Camera/><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></Link>
+            <Link to="/stories" className="live-stat stat-people" aria-label="Xem các câu chuyện cộng đồng"><Users/><b>{stats.creators}</b><small>Người kể chuyện</small></Link>
+            <Link to="/hola-map" className="live-stat stat-place" aria-label="Khám phá các địa điểm trên HOLA Map"><MapPin/><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></Link>
+            <Link to="/top52" className="live-stat stat-top52" aria-label="Xem triển lãm TOP52"><FileText/><b>{stats.top52}</b><small>Tác phẩm TOP52</small></Link>
           </div>
           <Link className="campaign-cta" to="/gui-goc-nhin">{campaign.ctaText} <ArrowRight size={22}/></Link>
           <div className="campaign-signature">52 góc nhìn · 1 Hòa Lạc · cùng nhau lưu giữ một vùng đất đang chuyển mình</div>
         </div>
 
         <div className="campaign-timeline">
-          <div className="timeline-title"><CalendarDays/><b>Hành trình 2026</b></div>
+          <div className="timeline-title"><CalendarDays/><b>{campaign.journeyTitle||'Hành trình 2026'}</b></div>
           <div className="campaign-milestones">
             {milestones.map(([date,label],i)=><div className="campaign-milestone" key={date}>
               <span>{date}</span><i className={i===0?'active':''}/><b>{label}</b>
