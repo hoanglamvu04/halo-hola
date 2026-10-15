@@ -215,6 +215,7 @@ export default function SubmitPage(){
     const issues=[]
     if(clean(form.name).length<2) issues.push({step:1,key:'name',label:'Họ và tên'})
     if(!isValidEmail(form.email)) issues.push({step:1,key:'email',label:'Email hợp lệ'})
+    if(!clean(form.phone)) issues.push({step:1,key:'phone',label:'Số điện thoại'})
     if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên tác phẩm'})
     if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link tác phẩm hợp lệ'})
     if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
@@ -223,6 +224,8 @@ export default function SubmitPage(){
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
     if(clean(form.story).length<20) issues.push({step:5,key:'story',label:'Câu chuyện (tối thiểu 20 ký tự)'})
     if(!form.rightsConfirmed) issues.push({step:6,key:'rightsConfirmed',label:'Xác nhận quyền tác giả'})
+    if(!form.imageConsentConfirmed) issues.push({step:6,key:'imageConsentConfirmed',label:'Xác nhận đồng thuận hình ảnh'})
+    if(!form.allowMediaUse) issues.push({step:6,key:'allowMediaUse',label:'Quyền sử dụng tác phẩm theo thể lệ'})
     if(form.isMinor&&clean(form.guardianName).length<2) issues.push({step:6,key:'guardianName',label:'Họ tên người giám hộ'})
     if(form.isMinor&&!form.guardianConsent) issues.push({step:6,key:'guardianConsent',label:'Xác nhận của người giám hộ'})
     return issues
@@ -291,6 +294,7 @@ export default function SubmitPage(){
           display:clean(form.display),
           displayName: clean(form.display),
           email:clean(form.email),
+          phone:clean(form.phone),
           title:clean(form.title),
           externalLink:clean(form.externalLink),
           theme:clean(form.theme),
@@ -345,7 +349,7 @@ export default function SubmitPage(){
               <label>Họ và tên *<input value={form.name} onChange={e=>upd('name',e.target.value)} placeholder="Nguyễn Minh An"/></label>
               <label>Tên hiển thị<input value={form.display} onChange={e=>upd('display',e.target.value)} placeholder="Minh An"/></label>
               <label>Email *<input type="email" value={form.email} onChange={e=>upd('email',e.target.value)} placeholder="an.nguyen@gmail.com"/></label>
-              <label>Số điện thoại<input value={form.phone} onChange={e=>upd('phone',e.target.value)} placeholder="0987 654 321"/></label>
+              <label>Số điện thoại *<input type="tel" inputMode="tel" autoComplete="tel" required value={form.phone} onChange={e=>upd('phone',e.target.value)} placeholder="0987 654 321"/></label>
               <label className="full">Giới thiệu ngắn<textarea value={form.bio} onChange={e=>upd('bio',e.target.value)} placeholder="Một vài dòng về bạn..."/></label>
             </div>
           </div>}
@@ -405,10 +409,10 @@ export default function SubmitPage(){
           {step===6&&<div>
             <h2>Quyền tác giả & đồng thuận</h2><p>Những xác nhận này giúp bảo vệ tác giả, người xuất hiện trong tác phẩm và BTC.</p>
             <div className="confirm-list">
-              <label><input type="checkbox" checked={form.rightsConfirmed} onChange={e=>upd('rightsConfirmed',e.target.checked)}/> <b>Tôi xác nhận mình có quyền gửi và sử dụng tác phẩm này.</b></label>
-              <label><input type="checkbox" checked={form.imageConsentConfirmed} onChange={e=>upd('imageConsentConfirmed',e.target.checked)}/> Tôi đã có sự đồng ý phù hợp của người có thể nhận diện trong ảnh/video (nếu có).</label>
-              <label><input type="checkbox" checked={form.allowMediaUse} onChange={e=>upd('allowMediaUse',e.target.checked)}/> Tôi đồng ý cho HALO HOLA sử dụng tác phẩm cho mục đích truyền thông theo thể lệ.</label>
-              <label><input type="checkbox" checked={form.allowNewsletter} onChange={e=>upd('allowNewsletter',e.target.checked)}/> Tôi đồng ý nhận tin về HALO HOLA và các hoạt động cộng đồng.</label>
+              <label><input type="checkbox" checked={form.rightsConfirmed} onChange={e=>upd('rightsConfirmed',e.target.checked)}/> <b>Tôi xác nhận mình có quyền gửi và sử dụng tác phẩm này. *</b></label>
+              <label><input type="checkbox" checked={form.imageConsentConfirmed} onChange={e=>upd('imageConsentConfirmed',e.target.checked)}/> Tôi xác nhận đã có sự đồng ý phù hợp của người có thể nhận diện trong ảnh/video (nếu có). *</label>
+              <label><input type="checkbox" checked={form.allowMediaUse} onChange={e=>upd('allowMediaUse',e.target.checked)}/> Tôi đồng ý cho HALO HOLA sử dụng tác phẩm cho mục đích truyền thông theo thể lệ. *</label>
+              <label><input type="checkbox" checked={form.allowNewsletter} onChange={e=>upd('allowNewsletter',e.target.checked)}/> Tôi đồng ý nhận tin về HALO HOLA và các hoạt động cộng đồng. <small>(không bắt buộc)</small></label>
               <label><input type="checkbox" checked={form.isMinor} onChange={e=>upd('isMinor',e.target.checked)}/> Tôi chưa đủ 18 tuổi.</label>
             </div>
             {form.isMinor&&<div className="guardian-box">
@@ -479,13 +483,14 @@ export default function SubmitPage(){
                 <div><small>Tác phẩm</small><b>{clean(form.title)||'Chưa nhập'}</b></div>
                 <div><small>Họ tên tác giả</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
                 <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
+                <div><small>Số điện thoại</small><b>{clean(form.phone)||'Chưa nhập'}</b></div>
                 <div><small>Chủ đề</small><b>{clean(form.theme)||'Chưa chọn'}</b></div>
                 <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':result?'Đã gửi file':'Chưa có'}</b></div>
                 <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
                 <div><small>HOLA Map</small><b>{clean(form.locationPlaceId)?'Đã liên kết địa điểm':hasPinnedLocation?'Đã ghim tọa độ':'Nhập thủ công'}</b></div>
                 <div><small>Tọa độ</small><b>{hasPinnedLocation?`${Number(form.locationLat).toFixed(6)}, ${Number(form.locationLng).toFixed(6)}`:'Chưa có'}</b></div>
                 <div><small>Câu chuyện</small><b>{storyLength>=20?`Đã nhập · ${storyLength} ký tự`:'Chưa đủ nội dung'}</b></div>
-                <div><small>Quyền tác giả</small><b>{form.rightsConfirmed?'Đã xác nhận':'Chưa xác nhận'}</b></div>
+                <div><small>Quyền tác giả</small><b>{form.rightsConfirmed&&form.imageConsentConfirmed&&form.allowMediaUse?'Đã xác nhận':'Chưa đủ xác nhận'}</b></div>
               </div>
               {error&&<div className="form-error">{error}</div>}
             </>}
