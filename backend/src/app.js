@@ -16,6 +16,7 @@ import submissionsRoutes from './routes/submissions.routes.js';
 import submissionOperationsRoutes from './routes/submissionOperations.routes.js';
 import contentRoutes from './routes/content.routes.js';
 import top52Routes from './routes/top52.routes.js';
+import sitemapRoutes from './routes/sitemap.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import submissionSyncAdminRoutes from './routes/submissionSyncAdmin.routes.js';
 import adminOperationsRoutes from './routes/adminOperations.routes.js';
@@ -103,6 +104,7 @@ export function createApp() {
   app.use('/api/tour-registrations', tourRegistrationsRoutes);
   app.use('/api/community-registrations', communityRegistrationsRoutes);
   app.use('/api/top52', top52Routes);
+  app.use('/api/sitemap', sitemapRoutes);
   app.use('/api', siteRoutes);
   app.use('/api', contentRoutes);
   app.use('/api', analyticsRoutes);
