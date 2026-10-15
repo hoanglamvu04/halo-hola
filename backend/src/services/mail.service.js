@@ -62,7 +62,7 @@ function transporter() {
 }
 
 function siteUrl() {
-  return String(process.env.HALO_HOLA_SITE_URL || 'https://halohola.xspace.vn').replace(/\/$/, '');
+  return String(process.env.HALO_HOLA_SITE_URL || 'https://halohola.vn').replace(/\/$/, '');
 }
 
 function lookupUrl(code) {
