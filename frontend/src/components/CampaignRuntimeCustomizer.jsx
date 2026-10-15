@@ -56,7 +56,7 @@ const cssVars={
 }
 
 const statLinks=[
-  ['.stat-camera','/top52','Xem các góc nhìn đã gửi'],
+  ['.stat-camera','/kham-pha','Xem tất cả góc nhìn đã gửi'],
   ['.stat-people','/stories','Xem các câu chuyện cộng đồng'],
   ['.stat-place','/hola-map','Khám phá địa điểm trên HOLA Map'],
   ['.stat-top52','/top52','Xem tác phẩm TOP52']
