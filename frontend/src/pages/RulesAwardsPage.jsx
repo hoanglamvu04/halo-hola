@@ -83,9 +83,7 @@ const THEMES = [
 
 const TIMELINE = [
   ['11.10','Mở nhận tác phẩm'],
-  ['17–18.10','HOLA Tour #01'],
-  ['25.10','HOLA Tour #02'],
-  ['31.10–01.11','HOLA Tour #03'],
+  ['25.10','HOLA Tour #01 · #02 · #03'],
   ['10.11 · 10:11','Đóng nhận tác phẩm'],
   ['16.11','Công bố TOP52 · mở bình chọn'],
   ['24.11','HOLA DAY · triển lãm · trao giải']
