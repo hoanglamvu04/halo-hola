@@ -27,7 +27,7 @@ export function normalizeTour(item){
     highlights:Array.isArray(item.highlights)?item.highlights:parseJson(item.highlights,[]),
     stops:Array.isArray(item.stops)?item.stops:parseJson(item.stops,[]),
     location:item.location||'Hòa Lạc, Hà Nội',
-    durationLabel:item.durationLabel||item.duration_label||'2 ngày',
+    durationLabel:item.durationLabel||item.duration_label||'1 ngày',
     audienceLabel:item.audienceLabel||item.audience_label||'15–20 người'
   }
 }
