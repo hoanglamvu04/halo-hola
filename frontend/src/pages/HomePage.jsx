@@ -91,9 +91,7 @@ export default function HomePage() {
 
   const milestones=[
     ['10.10','Mở nhận tác phẩm'],
-    ['17.10','HOLA Tour #01'],
-    ['24.10','HOLA Tour #02'],
-    ['31.10','HOLA Tour #03'],
+    ['25.10','HOLA Tour #01 · #02 · #03'],
     ['10.11','Đóng nhận tác phẩm'],
     ['18.11','Công bố TOP52'],
     ['28.11','HOLA DAY']
