@@ -96,6 +96,21 @@ export async function deleteHaloPost(postId) {
   });
 }
 
+function mapPublicMetadata(result) {
+  if (!result || typeof result !== 'object') return { spotId: null, publicUrl: null };
+  const spotId = safeText(
+    result.spotId ?? result.spot_id ?? result.spot?.id ?? result.data?.spotId ?? result.data?.spot?.id,
+    240
+  );
+  const explicitUrl = safeText(
+    result.publicUrl ?? result.public_url ?? result.url ?? result.spotUrl ?? result.spot_url ?? result.data?.publicUrl,
+    1000
+  );
+  const base = trimSlash(env.holaMapsBaseUrl);
+  const publicUrl = explicitUrl || (spotId && base ? `${base}/halo?spot=${encodeURIComponent(spotId)}` : null);
+  return { spotId, publicUrl };
+}
+
 export function buildHolaMapsPayload(submission, media = []) {
   if (!submission) return null;
   const images = media.filter(item => isImageMime(item.mime_type));
@@ -157,17 +172,36 @@ async function loadSubmissionForSync(submissionId) {
   return rows[0] || null;
 }
 
-async function setSubmissionSyncState(submissionId, status, error = null, published = null) {
+async function setSubmissionSyncState(submissionId, status, error = null, published = null, mapMeta = null) {
   if (!submissionId) return;
+  const clearMapMeta = published === false;
   await pool.query(
     `UPDATE submissions
      SET hola_maps_sync_status=$2,
          hola_maps_last_sync_error=$3,
          hola_maps_last_synced_at=CASE WHEN $2='SYNCED' THEN NOW() ELSE hola_maps_last_synced_at END,
          hola_maps_published=COALESCE($4,hola_maps_published),
+         hola_maps_external_spot_id=CASE
+           WHEN $7::boolean THEN NULL
+           WHEN $5::text IS NOT NULL THEN $5
+           ELSE hola_maps_external_spot_id
+         END,
+         hola_maps_public_url=CASE
+           WHEN $7::boolean THEN NULL
+           WHEN $6::text IS NOT NULL THEN $6
+           ELSE hola_maps_public_url
+         END,
          updated_at=NOW()
      WHERE id=$1`,
-    [submissionId, status, error ? String(error).slice(0, 2000) : null, published]
+    [
+      submissionId,
+      status,
+      error ? String(error).slice(0, 2000) : null,
+      published,
+      mapMeta?.spotId || null,
+      mapMeta?.publicUrl || null,
+      clearMapMeta
+    ]
   );
 }
 
@@ -179,7 +213,7 @@ async function clearPendingJobs(submissionId) {
 async function executeJob(job) {
   if (job.action === 'DELETE') {
     await deleteHaloPost(job.external_post_id);
-    return { skipped: false, published: false };
+    return { skipped: false, published: false, mapMeta: null };
   }
 
   const submission = await loadSubmissionForSync(job.submission_id);
@@ -189,8 +223,8 @@ async function executeJob(job) {
   }
   const payload = buildHolaMapsPayload(submission, submission.media || []);
   if (!payload) return { skipped: true, reason: 'Bài chưa có ảnh hoặc chưa có vị trí có cấu trúc.' };
-  await syncHaloPost(payload);
-  return { skipped: false, published: true };
+  const response = await syncHaloPost(payload);
+  return { skipped: false, published: true, mapMeta: mapPublicMetadata(response), response };
 }
 
 async function runJob(jobId) {
@@ -215,7 +249,7 @@ async function runJob(jobId) {
       `UPDATE hola_maps_sync_jobs SET status='SYNCED', attempts=$2, last_error=NULL, updated_at=NOW() WHERE id=$1`,
       [job.id, attempt]
     );
-    if (job.submission_id) await setSubmissionSyncState(job.submission_id, 'SYNCED', null, result.published);
+    if (job.submission_id) await setSubmissionSyncState(job.submission_id, 'SYNCED', null, result.published, result.mapMeta);
   } catch (error) {
     const message = error?.name === 'AbortError' ? 'Hola Maps sync timeout.' : (error?.message || String(error));
     const finalFailure = attempt >= MAX_ATTEMPTS;
