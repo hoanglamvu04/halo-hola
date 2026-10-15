@@ -9,15 +9,17 @@ import {
   replaceSubmissionFiles,
   updateSubmissionContent
 } from '../services/submission.service.js';
-import { queueSubmissionSync } from '../services/holaMaps.service.js';
+import { reconcileSubmissionHolaMaps } from '../services/holaMaps.service.js';
 
 const router = Router();
 router.use(authenticateAdmin);
 
-function enqueueResync(id) {
-  queueSubmissionSync(id).catch((error) =>
-    console.warn(`Hola Maps re-sync enqueue failed for submission ${id}:`, error.message)
-  );
+async function reconcile(id) {
+  try{return await reconcileSubmissionHolaMaps(id);}
+  catch(error){
+    console.warn(`Hola Maps re-sync failed for submission ${id}:`, error.message);
+    return {action:'ERROR',error:error.message};
+  }
 }
 
 router.post('/reset-all', requireRoles('ADMIN'), async (req, res, next) => {
@@ -44,8 +46,8 @@ router.patch('/:id/content', async (req, res, next) => {
   try {
     const updated = await updateSubmissionContent(req.params.id, req.body || {});
     if (!updated) throw new AppError('Không tìm thấy tác phẩm.', 404);
-    enqueueResync(updated.id);
-    res.json({ ...updated, holaMapsSyncStatus: 'PENDING' });
+    const holaMaps=await reconcile(updated.id);
+    res.json({ ...updated, holaMaps });
   } catch (error) {
     next(error);
   }
@@ -56,10 +58,10 @@ router.put('/:id/media', upload.array('files'), async (req, res, next) => {
     if (!(req.files || []).length) throw new AppError('Cần ít nhất một file thay thế.', 400);
     const updated = await replaceSubmissionFiles(req.params.id, req.files || []);
     if (!updated) throw new AppError('Không tìm thấy tác phẩm.', 404);
-    enqueueResync(req.params.id);
+    const holaMaps=await reconcile(req.params.id);
     res.json({
       id: req.params.id,
-      holaMapsSyncStatus: 'PENDING',
+      holaMaps,
       media: updated.media.map((item) => ({
         id: item.id,
         originalName: item.original_name,
@@ -76,9 +78,17 @@ router.put('/:id/media', upload.array('files'), async (req, res, next) => {
 
 router.post('/:id/hola-maps-sync', async (req, res, next) => {
   try {
-    const jobId = await queueSubmissionSync(req.params.id);
-    if (!jobId) throw new AppError('Tác phẩm chưa có ảnh hoặc chưa có vị trí để đồng bộ HOLA Maps.', 400);
-    res.status(202).json({ ok: true, jobId, holaMapsSyncStatus: 'PENDING' });
+    const holaMaps = await reconcileSubmissionHolaMaps(req.params.id);
+    if (holaMaps.action === 'NONE') {
+      throw new AppError(
+        holaMaps.reason === 'MISSING_IMAGE_OR_LOCATION'
+          ? 'Tác phẩm đã công bố nhưng chưa có ảnh hoặc vị trí có cấu trúc để đồng bộ HOLA Maps.'
+          : 'Tác phẩm chưa được duyệt và công bố nên chưa thể đồng bộ HOLA Maps.',
+        400
+      );
+    }
+    if (holaMaps.action === 'ERROR') throw new AppError(holaMaps.error || 'Không thể đồng bộ HOLA Maps.',502);
+    res.status(202).json({ ok: true, holaMaps });
   } catch (error) {
     next(error);
   }
