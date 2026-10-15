@@ -26,13 +26,13 @@ const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
 const JurorWorkspacePage=lazy(()=>import('./pages/JurorWorkspacePage.jsx'))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
-const SITE_URL='https://halohola.xspace.vn'
+const SITE_URL='https://halohola.vn'
 const DEFAULT_DESCRIPTION='HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc. Khám phá, kể lại và lưu giữ những câu chuyện về Hòa Lạc.'
 const DEFAULT_OG_IMAGE='https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=85'
 const SEO_ROUTES={
   '/': ['HALO HOLA 2026 — Hello Hòa Lạc',DEFAULT_DESCRIPTION],
   '/chu-de':['8 chủ đề về Hòa Lạc | HALO HOLA','Khám phá 8 chủ đề sáng tạo và những lớp câu chuyện về Hòa Lạc trong HALO HOLA 2026.'],
-  '/hola-tour':['HOLA Tour | HALO HOLA','Đi, gặp, trải nghiệm và kể lại Hòa Lạc qua những hành trình HOLA Tour 2026.'],
+  '/hola-tour':['HOLA Tour | HALO HOLA','Đi, gặp, trải nghiệm và kể lại Hòa Lạc qua ba hành trình HOLA Tour cùng diễn ra ngày 25/10/2026.'],
   '/hola-map':['HOLA Map | HALO HOLA','Khám phá địa điểm, câu chuyện và góc nhìn Hòa Lạc trên bản đồ tương tác.'],
   '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện về con người, nơi chốn, ký ức và chuyển động của Hòa Lạc.'],
   '/kham-pha':['HALO HOLA Explore — Khám phá góc nhìn Hòa Lạc','Khám phá những tác phẩm, câu chuyện, sắc màu và địa điểm Hòa Lạc được cộng đồng gửi về và Ban Tổ chức duyệt công khai.'],
@@ -41,7 +41,7 @@ const SEO_ROUTES={
   '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Gửi tác phẩm, câu chuyện và góc nhìn của bạn về Hòa Lạc tới HALO HOLA 2026.'],
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố những dấu mốc của HALO HOLA 2026.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác đồng hành cùng HALO HOLA.'],
-  '/the-le-giai-thuong':['Thể lệ & Giải thưởng HALO HOLA 2026','Điều kiện tham gia, 4 loại hình, 8 chủ đề, mốc thời gian và cơ cấu 11 giải trị giá 56 triệu đồng của HALO HOLA 2026.'],
+  '/the-le-giai-thuong':['Thể lệ & Giải thưởng HALO HOLA 2026','Điều kiện tham gia, 4 loại hình, 8 chủ đề, mốc thời gian và cơ cấu giải thưởng của HALO HOLA 2026.'],
   '/tra-cuu':['Tra cứu bài dự thi | HALO HOLA','Tra cứu hồ sơ, mức hoàn thiện và trạng thái bài dự thi HALO HOLA 2026.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
