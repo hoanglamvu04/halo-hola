@@ -27,18 +27,22 @@ try {
   const result=await pool.query(
     `UPDATE tours SET
       title=$2,
-      kicker=$3,
-      description=$4,
-      image=$5,
-      itinerary=$6::jsonb,
-      highlights=$7::jsonb,
-      stops=$8::jsonb,
+      dates=$3,
+      duration_label=$4,
+      kicker=$5,
+      description=$6,
+      image=$7,
+      itinerary=$8::jsonb,
+      highlights=$9::jsonb,
+      stops=$10::jsonb,
       updated_at=NOW()
      WHERE number=$1
      RETURNING number,title`,
     [
       '03',
       'Làng nghề Hòa Lạc',
+      '25.10.2026',
+      '1 ngày · 25/10/2026',
       'Đi tìm bàn tay nghề',
       'Khám phá những lớp nghề thủ công quanh Hòa Lạc qua không gian làng, vật liệu, bàn tay người thợ, câu chuyện sinh kế và cách các nghề truyền thống đang tiếp tục sống trong nhịp hiện đại.',
       imageVillage,
@@ -58,14 +62,14 @@ try {
     `UPDATE stories
      SET body = CASE
        WHEN slug='hola-tour-di-nhin-gap-trai-nghiem-ke' THEN jsonb_build_array(
-         jsonb_build_object('heading','Tour #01 · Đoài · Mường · 17–18/10','paragraphs',jsonb_build_array('Đi tìm bản sắc qua làng xóm, kiến trúc truyền thống, con người, Nét Đoài, văn hóa Mường và ký ức địa phương.')),
-         jsonb_build_object('heading','Tour #02 · Sắc màu Hòa Lạc · 24–25/10','paragraphs',jsonb_build_array('Đi tìm 6 sắc màu qua kiến trúc, cảnh quan và con người. kientruchoalac.com đồng hành chuyên môn kiến trúc.')),
-         jsonb_build_object('heading','Tour #03 · Làng nghề Hòa Lạc · 31/10–01/11','paragraphs',jsonb_build_array('Đi vào không gian làng nghề, gặp người làm nghề, quan sát vật liệu, kỹ thuật thủ công và ghi lại những câu chuyện về ký ức, sinh kế và sự tiếp nối của nghề truyền thống quanh Hòa Lạc.'))
+         jsonb_build_object('heading','Tour #01 · Đoài · Mường · 25/10','paragraphs',jsonb_build_array('Đi tìm bản sắc qua làng xóm, kiến trúc truyền thống, con người, Nét Đoài, văn hóa Mường và ký ức địa phương.')),
+         jsonb_build_object('heading','Tour #02 · Sắc màu Hòa Lạc · 25/10','paragraphs',jsonb_build_array('Đi tìm 6 sắc màu qua kiến trúc, cảnh quan và con người. kientruchoalac.com đồng hành chuyên môn kiến trúc.')),
+         jsonb_build_object('heading','Tour #03 · Làng nghề Hòa Lạc · 25/10','paragraphs',jsonb_build_array('Đi vào không gian làng nghề, gặp người làm nghề, quan sát vật liệu, kỹ thuật thủ công và ghi lại những câu chuyện về ký ức, sinh kế và sự tiếp nối của nghề truyền thống quanh Hòa Lạc.'))
        )
        ELSE body
      END,
      excerpt = CASE
-       WHEN slug='hola-tour-di-nhin-gap-trai-nghiem-ke' THEN 'Ba hành trình cuối tuần giúp người tham gia chạm vào bản sắc, màu sắc và làng nghề Hòa Lạc bằng trải nghiệm thực tế.'
+       WHEN slug='hola-tour-di-nhin-gap-trai-nghiem-ke' THEN 'Ba hành trình HOLA Tour cùng diễn ra trong một ngày 25/10/2026, giúp người tham gia chạm vào bản sắc, màu sắc và làng nghề Hòa Lạc bằng trải nghiệm thực tế.'
        ELSE excerpt
      END,
      updated_at=NOW()
