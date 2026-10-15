@@ -7,7 +7,6 @@ CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
-TOUR03_LANG_NGHE_MARKER="$ROOT/.tour03-lang-nghe-v1"
 AWARDS_2026_VALUES_MARKER="$ROOT/.awards-2026-values-v1"
 AWARDS_2026_STRUCTURE_V2_MARKER="$ROOT/.awards-2026-structure-v2"
 
@@ -68,13 +67,8 @@ npm run db:seed:showcase:scores --prefix backend
 npm run db:seed:showcase:dates --prefix backend
 npm run db:seed:showcase:public --prefix backend
 
-if [[ ! -f "$TOUR03_LANG_NGHE_MARKER" ]]; then
-  echo "==> Update HOLA Tour #03 to Làng nghề Hòa Lạc"
-  npm run db:content:tour03-langnghe --prefix backend
-  touch "$TOUR03_LANG_NGHE_MARKER"
-else
-  echo "==> Tour #03 craft-village content already applied; keeping CMS edits intact"
-fi
+echo "==> Synchronize authoritative HOLA Tour 2026 data"
+npm run db:content:tours-2026 --prefix backend
 
 if [[ ! -f "$AWARDS_2026_VALUES_MARKER" ]]; then
   echo "==> Update HALO HOLA 2026 prize values"
