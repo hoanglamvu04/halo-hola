@@ -20,11 +20,12 @@ import '../styles/submit-success-receipt.css'
 const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
 const RECEIPT_PREFIX = 'halo_hola_submission_receipt_v1_'
+const TAXONOMY_SEPARATOR = ' • '
 
 const initialForm = {
   name:'', display:'', email:'', phone:'', bio:'',
   title:'', capturedAt:'', externalLink:'', previousAward:false, previousAwardNote:'',
-  type:'Photo', theme:'', color:'',
+  type:'Photo', theme:'', color:'', themes:[], colors:[],
   location:'', locationPlaceId:'', locationPlaceSlug:'', locationLat:'', locationLng:'', locationAddress:'', locationSource:'TEXT', story:'',
   rightsConfirmed:false, imageConsentConfirmed:false,
   isMinor:false, guardianName:'', guardianConsent:false,
@@ -40,6 +41,15 @@ const isValidUrl=value=>{
 const hasCoordinate=value=>value!==''&&value!==null&&value!==undefined&&Number.isFinite(Number(value))
 const normalizeCode=value=>clean(value).toUpperCase()
 const receiptKey=code=>`${RECEIPT_PREFIX}${normalizeCode(code)}`
+const selectionArray=(value,fallback='')=>{
+  const source=Array.isArray(value)?value:(clean(fallback)?clean(fallback).split(TAXONOMY_SEPARATOR):[])
+  return [...new Set(source.map(clean).filter(Boolean))]
+}
+const hydrateTaxonomies=form=>{
+  const themes=selectionArray(form?.themes,form?.theme)
+  const colors=selectionArray(form?.colors,form?.color)
+  return {...form,themes,colors,theme:themes.join(TAXONOMY_SEPARATOR),color:colors.join(TAXONOMY_SEPARATOR)}
+}
 
 function getReceiptCodeFromUrl(){
   if(typeof window==='undefined') return ''
@@ -82,15 +92,15 @@ export default function SubmitPage(){
   const [form,setForm]=useState(()=>{
     try {
       if(restoredReceipt?.form){
-        const merged={...initialForm,...restoredReceipt.form}
+        const merged=hydrateTaxonomies({...initialForm,...restoredReceipt.form})
         if(merged.type==='Ảnh') merged.type='Photo'
         return merged
       }
       const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')
-      const merged=saved ? {...initialForm,...saved} : initialForm
+      const merged=hydrateTaxonomies(saved ? {...initialForm,...saved} : {...initialForm})
       if(merged.type==='Ảnh') merged.type='Photo'
       return merged
-    } catch { return initialForm }
+    } catch { return {...initialForm} }
   })
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
@@ -117,11 +127,19 @@ export default function SubmitPage(){
       const nextThemes=Array.isArray(themeRows)?themeRows:[]
       const nextColors=Array.isArray(colorRows)?colorRows:[]
       setThemes(nextThemes);setColors(nextColors)
-      setForm(current=>({
-        ...current,
-        theme:current.theme||nextThemes[0]?.title||'',
-        color:current.color||nextColors[0]?.name||''
-      }))
+      setForm(current=>{
+        const currentThemes=selectionArray(current.themes,current.theme)
+        const currentColors=selectionArray(current.colors,current.color)
+        const nextThemeValues=currentThemes.length?currentThemes:(nextThemes[0]?.title?[nextThemes[0].title]:[])
+        const nextColorValues=currentColors.length?currentColors:(nextColors[0]?.name?[nextColors[0].name]:[])
+        return {
+          ...current,
+          themes:nextThemeValues,
+          colors:nextColorValues,
+          theme:nextThemeValues.join(TAXONOMY_SEPARATOR),
+          color:nextColorValues.join(TAXONOMY_SEPARATOR)
+        }
+      })
     }).catch(err=>setError(err.message))
   },[])
 
@@ -150,6 +168,15 @@ export default function SubmitPage(){
   const upd=(k,v)=>{
     setError('')
     setForm(s=>({...s,[k]:v}))
+  }
+
+  const toggleTaxonomy=(arrayKey,legacyKey,value)=>{
+    setError('')
+    setForm(current=>{
+      const selected=selectionArray(current[arrayKey],current[legacyKey])
+      const next=selected.includes(value)?selected.filter(item=>item!==value):[...selected,value]
+      return {...current,[arrayKey]:next,[legacyKey]:next.join(TAXONOMY_SEPARATOR)}
+    })
   }
 
   const updateLocation=patch=>{
@@ -219,7 +246,7 @@ export default function SubmitPage(){
     if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên tác phẩm'})
     if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link tác phẩm hợp lệ'})
     if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
-    if(!clean(form.theme)) issues.push({step:4,key:'theme',label:'Chủ đề'})
+    if(!selectionArray(form.themes,form.theme).length) issues.push({step:4,key:'theme',label:'Ít nhất một chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
     if(clean(form.story).length<20) issues.push({step:5,key:'story',label:'Câu chuyện (tối thiểu 20 ký tự)'})
@@ -267,7 +294,9 @@ export default function SubmitPage(){
   const resetDraft=()=>{
     localStorage.removeItem(DRAFT_KEY)
     replaceSubmissionUrl('')
-    setForm({...initialForm,theme:themes[0]?.title||'',color:colors[0]?.name||''})
+    const defaultThemes=themes[0]?.title?[themes[0].title]:[]
+    const defaultColors=colors[0]?.name?[colors[0].name]:[]
+    setForm({...initialForm,themes:defaultThemes,colors:defaultColors,theme:defaultThemes.join(TAXONOMY_SEPARATOR),color:defaultColors.join(TAXONOMY_SEPARATOR)})
     setFiles([])
     setStep(1)
     setResult(null)
@@ -287,6 +316,8 @@ export default function SubmitPage(){
 
     setSubmitting(true)
     try {
+      const selectedThemes=selectionArray(form.themes,form.theme)
+      const selectedColors=selectionArray(form.colors,form.color)
       const data = await submitArtwork({
         fields: {
           ...form,
@@ -297,7 +328,8 @@ export default function SubmitPage(){
           phone:clean(form.phone),
           title:clean(form.title),
           externalLink:clean(form.externalLink),
-          theme:clean(form.theme),
+          theme:selectedThemes.join(TAXONOMY_SEPARATOR),
+          color:selectedColors.join(TAXONOMY_SEPARATOR),
           location:clean(form.location),
           locationPlaceId:clean(form.locationPlaceId),
           locationPlaceSlug:clean(form.locationPlaceSlug),
@@ -308,7 +340,7 @@ export default function SubmitPage(){
         },
         files
       })
-      saveReceipt(data,form)
+      saveReceipt(data,{...form,themes:selectedThemes,colors:selectedColors,theme:selectedThemes.join(TAXONOMY_SEPARATOR),color:selectedColors.join(TAXONOMY_SEPARATOR)})
       replaceSubmissionUrl(data?.code)
       localStorage.removeItem(DRAFT_KEY)
       setStep(7)
@@ -323,7 +355,9 @@ export default function SubmitPage(){
     }
   }
 
-  const heroImage=themes.find(t=>t.title===form.theme)?.image||themes[0]?.image||''
+  const selectedThemes=selectionArray(form.themes,form.theme)
+  const selectedColors=selectionArray(form.colors,form.color)
+  const heroImage=themes.find(t=>selectedThemes.includes(t.title))?.image||themes[0]?.image||''
   const storyLength=clean(form.story).length
   const hasPinnedLocation=hasCoordinate(form.locationLat)&&hasCoordinate(form.locationLng)
 
@@ -378,10 +412,18 @@ export default function SubmitPage(){
           </div>}
 
           {step===4&&<div>
-            <h2>Chủ đề & sắc màu</h2><p>Chọn lớp câu chuyện phù hợp nhất với góc nhìn của bạn.</p>
-            {themes.length?<div className="theme-select-grid">{themes.map(t=><button key={t.id} onClick={()=>upd('theme',t.title)} className={form.theme===t.title?'selected':''}>{t.image?<img src={t.image} alt={t.title}/>:<span className="theme-card-placeholder"/>}<span>{t.title}</span></button>)}</div>:<div className="jw-empty">Đang tải 8 chủ đề từ hệ thống...</div>}
-            <h3 className="form-subtitle">Sắc màu Hòa Lạc</h3>
-            {colors.length?<div className="color-select-grid">{colors.map(c=><button key={c.id||c.slug} onClick={()=>upd('color',c.name)} className={form.color===c.name?'selected':''}><span style={{background:c.color}}/>{form.color===c.name&&<i><Check size={14}/></i>}<b>{c.name}</b><small>{c.story}</small></button>)}</div>:<div className="jw-empty">Đang tải sắc màu từ hệ thống...</div>}
+            <h2>Chủ đề & sắc màu</h2>
+            <p>Bạn có thể chọn <b>nhiều chủ đề</b> và <b>nhiều sắc màu</b> nếu tác phẩm giao thoa nhiều lớp câu chuyện.</p>
+            <h3 className="form-subtitle">Chủ đề · đã chọn {selectedThemes.length}</h3>
+            {themes.length?<div className="theme-select-grid">{themes.map(t=>{
+              const selected=selectedThemes.includes(t.title)
+              return <button type="button" key={t.id} onClick={()=>toggleTaxonomy('themes','theme',t.title)} className={selected?'selected':''}>{t.image?<img src={t.image} alt={t.title}/>:<span className="theme-card-placeholder"/>}<span>{t.title}</span>{selected&&<i><Check size={14}/></i>}</button>
+            })}</div>:<div className="jw-empty">Đang tải 8 chủ đề từ hệ thống...</div>}
+            <h3 className="form-subtitle">Sắc màu Hòa Lạc · đã chọn {selectedColors.length}</h3>
+            {colors.length?<div className="color-select-grid">{colors.map(c=>{
+              const selected=selectedColors.includes(c.name)
+              return <button type="button" key={c.id||c.slug} onClick={()=>toggleTaxonomy('colors','color',c.name)} className={selected?'selected':''}><span style={{background:c.color}}/>{selected&&<i><Check size={14}/></i>}<b>{c.name}</b><small>{c.story}</small></button>
+            })}</div>:<div className="jw-empty">Đang tải sắc màu từ hệ thống...</div>}
           </div>}
 
           {step===5&&<div>
@@ -484,7 +526,8 @@ export default function SubmitPage(){
                 <div><small>Họ tên tác giả</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
                 <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
                 <div><small>Số điện thoại</small><b>{clean(form.phone)||'Chưa nhập'}</b></div>
-                <div><small>Chủ đề</small><b>{clean(form.theme)||'Chưa chọn'}</b></div>
+                <div><small>Chủ đề</small><b>{selectedThemes.length?selectedThemes.join(' · '):'Chưa chọn'}</b></div>
+                <div><small>Sắc màu</small><b>{selectedColors.length?selectedColors.join(' · '):'Chưa chọn'}</b></div>
                 <div><small>File / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':result?'Đã gửi file':'Chưa có'}</b></div>
                 <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
                 <div><small>HOLA Map</small><b>{clean(form.locationPlaceId)?'Đã liên kết địa điểm':hasPinnedLocation?'Đã ghim tọa độ':'Nhập thủ công'}</b></div>
@@ -506,7 +549,7 @@ export default function SubmitPage(){
 
         <aside className="submission-preview">
           <span className="eyebrow">XEM TRƯỚC TÁC PHẨM</span>
-          <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước tác phẩm"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span><span>{form.theme||'Chưa chọn chủ đề'}</span></div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{form.color&&<span>{form.color}</span>}</div></div></div>
+          <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước tác phẩm"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span>{selectedThemes.map(theme=><span key={theme}>{theme}</span>)}</div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{selectedColors.map(color=><span key={color}>{color}</span>)}</div></div></div>
           <div className="submission-code"><small>{result?'Mã tác phẩm':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>copyValue(code,'sidebar-code')}><Copy size={16}/>{copiedAction==='sidebar-code'&&<span>Đã sao chép</span>}</button>}</div>
           <blockquote>“Mỗi góc nhìn của bạn đều góp phần tạo nên một bức tranh Hòa Lạc đa sắc màu.”</blockquote>
           <Link className="text-link" to={result?lookupPath:'/tra-cuu'}>{result?'Tra cứu tác phẩm này →':'Đã gửi trước đó? Tra cứu tác phẩm →'}</Link>
