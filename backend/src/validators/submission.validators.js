@@ -50,10 +50,6 @@ export const submissionSchema = z.object({
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['allowMediaUse'], message: 'Cần đồng ý quyền sử dụng tác phẩm cho hoạt động truyền thông theo thể lệ.' });
   }
 
-  if (!truthy(value.allowNewsletter)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['allowNewsletter'], message: 'Cần xác nhận mục nhận thông tin HALO HOLA để hoàn tất hồ sơ dự thi.' });
-  }
-
   if (truthy(value.isMinor) && (!value.guardianName || !truthy(value.guardianConsent))) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['guardianConsent'], message: 'Người dưới 18 tuổi cần xác nhận của người giám hộ.' });
   }
