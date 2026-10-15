@@ -77,6 +77,7 @@ import './styles/submission-media-guard.css'
 import './styles/submit-upload-step-polish.css'
 import './styles/submit-desktop-complete-polish.css'
 import './styles/theme-card-mobile-flow-final.css'
+import './styles/admin-mobile-sidebar.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import MobileHeroExperience from './components/MobileHeroExperience.jsx'
@@ -96,6 +97,7 @@ import SubmissionReviewRuntime from './components/SubmissionReviewRuntime.jsx'
 import SubmissionEmailValidation from './components/SubmissionEmailValidation.jsx'
 import AdminSubmissionResetRuntime from './components/AdminSubmissionResetRuntime.jsx'
 import AdminSubmissionNotificationRuntime from './components/AdminSubmissionNotificationRuntime.jsx'
+import AdminMobileSidebarRuntime from './components/AdminMobileSidebarRuntime.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -119,6 +121,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <SubmissionEmailValidation />
         <AdminSubmissionResetRuntime />
         <AdminSubmissionNotificationRuntime />
+        <AdminMobileSidebarRuntime />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
