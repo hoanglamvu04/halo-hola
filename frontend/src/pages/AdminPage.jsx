@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
-  Search, CheckCircle2, LogIn, RefreshCw, Download, ShieldCheck,
-  AlertTriangle, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2, Activity, Layers3, Palette, Trophy,
-  ChevronRight
+  LogIn, RefreshCw, ShieldCheck, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2,
+  Activity, Layers3, Palette, Trophy, ChevronRight
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
@@ -18,6 +17,7 @@ import JuryResultsManager from '../components/JuryResultsManager.jsx'
 import PublicationManager from '../components/PublicationManager.jsx'
 import AnalyticsManager from '../components/AnalyticsManager.jsx'
 import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
+import AdminSubmissionOperations from '../components/AdminSubmissionOperations.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -65,11 +65,9 @@ const navGroups=[
   }
 ]
 const nav=navGroups.flatMap(group=>group.items)
-const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
-const statusLabels={PENDING:'Mới nhận',VALID:'Hợp lệ',SHORTLIST:'Shortlist',TOP52:'TOP52',AWARDED:'Đạt giải',REJECTED:'Không hợp lệ'}
 const sectionDescriptions={
   'Tổng quan':'Ưu tiên công việc, theo dõi hồ sơ và tiến độ chương trình.',
-  'Tác phẩm':'Duyệt hồ sơ, kiểm tra file gốc, quyền sử dụng và trạng thái bài thi.',
+  'Tác phẩm':'Theo dõi trọn luồng Đã nhận → Hợp lệ → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
   'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
   'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
@@ -146,9 +144,9 @@ export default function AdminPage(){
 
  const setStatus=async(id,status)=>{
    try{
-     await updateSubmissionStatus(id,status)
-     setSubmissions(v=>v.map(x=>x.id===id?{...x,status}:x))
-     setSelected(v=>v?.id===id?{...v,status}:v)
+     const updated=await updateSubmissionStatus(id,status)
+     setSubmissions(v=>v.map(x=>x.id===id?{...x,...updated}:x))
+     setSelected(v=>v?.id===id?{...v,...updated}:v)
    }catch(err){setError(err.message)}
  }
 
@@ -245,40 +243,21 @@ export default function AdminPage(){
          {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có tác phẩm TOP52. Hãy chốt danh sách từ Kết quả BGK.</p>}
        </div>
      </div>:
-     active==='Tác phẩm'?<div className="admin-workspace">
-       <div className="admin-panel submissions-panel">
-         <div className="admin-toolbar">
-           <div className="admin-search"><Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==='Enter'&&load()} placeholder="Mã, tên tác phẩm, tác giả, email..."/></div>
-           <select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="">Tất cả trạng thái</option>{statuses.map(s=><option key={s} value={s}>{statusLabels[s]}</option>)}</select>
-           <button className="btn btn-outline btn-sm" onClick={load}>Lọc</button>
-         </div>
-         <div className="submission-table-head"><span>Tác phẩm</span><span>File gốc</span><span>Địa điểm</span><span>Trạng thái</span></div>
-         {submissions.length?submissions.map(a=><button className={'submission-admin-row '+(selected?.id===a.id?'selected':'')} key={a.id} onClick={()=>setSelected(a)}>
-           <div><b>{a.code} · {a.title||'Chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.email}</small></div>
-           <div><span>{a.media?.length||0} file</span><small>{a.media?.every(m=>m.provider==='R2')?'R2 Original':'Local/legacy'}</small></div>
-           <div><span>{a.location}</span><small>{new Date(a.created_at||a.createdAt).toLocaleDateString('vi-VN')}</small></div>
-           <select value={a.status} onClick={e=>e.stopPropagation()} onChange={e=>setStatus(a.id,e.target.value)}>{statuses.map(s=><option key={s} value={s}>{statusLabels[s]}</option>)}</select>
-         </button>):<p>Chưa có hồ sơ phù hợp.</p>}
-       </div>
-
-       <aside className="admin-detail">
-         {!selected?<div className="admin-detail-empty"><Images/><h3>Chọn một tác phẩm</h3><p>Metadata, quyền sử dụng và file original sẽ hiện tại đây.</p></div>:<>
-           <span className="eyebrow">{selected.code}</span><h2>{selected.title||'Tác phẩm chưa đặt tên'}</h2>
-           <p className="admin-detail-author">{selected.display_name||selected.name} · {selected.email}</p>
-           <div className="chip-wrap"><span>{selected.type}</span><span>{selected.theme}</span><span>{selected.color}</span></div>
-           {selected.publication_state&&<div className="admin-publication-summary"><Globe2/><div><b>{selected.publication_state==='PUBLISHED'?'Đã công bố':selected.publication_state==='SCHEDULED'?'Đã hẹn giờ':'Đang ẩn'}</b><small>{selected.publish_scheduled_at?`Hẹn: ${new Date(selected.publish_scheduled_at).toLocaleString('vi-VN')}`:'Quản lý tại module Công bố'}</small></div><button onClick={()=>go('Công bố')}>Mở</button></div>}
-           <div className="admin-rights">
-             <div className={selected.rights_confirmed?'ok':'warn'}>{selected.rights_confirmed?<CheckCircle2/>:<AlertTriangle/>}<span>Quyền tác giả</span></div>
-             <div className={selected.image_consent_confirmed?'ok':'warn'}>{selected.image_consent_confirmed?<CheckCircle2/>:<AlertTriangle/>}<span>Quyền hình ảnh</span></div>
-             <div className={!selected.is_minor||selected.guardian_consent?'ok':'warn'}>{!selected.is_minor||selected.guardian_consent?<CheckCircle2/>:<AlertTriangle/>}<span>Guardian consent</span></div>
-           </div>
-           <h3>Original Vault</h3>
-           <div className="media-vault-list">{(selected.media||[]).map(m=><div key={m.id}><div><b>{m.originalName}</b><small>{(Number(m.size||0)/1024/1024).toFixed(2)} MB · {m.provider} · v{m.revision||1}</small><code>SHA256 {m.sha256||'legacy'}</code></div><button onClick={()=>openOriginal(m.id)} title="Tải file gốc"><Download/></button></div>)}</div>
-           {selected.external_link&&<a href={selected.external_link} target="_blank" rel="noreferrer" className="btn btn-outline"><ExternalLink size={16}/> Mở link tác phẩm</a>}
-           <h3>Câu chuyện</h3><p className="admin-story">{selected.story}</p>
-         </>}
-       </aside>
-     </div>:
+     active==='Tác phẩm'?<AdminSubmissionOperations
+       submissions={submissions}
+       selected={selected}
+       setSelected={setSelected}
+       query={query}
+       setQuery={setQuery}
+       statusFilter={statusFilter}
+       setStatusFilter={setStatusFilter}
+       loading={loading}
+       onLoad={load}
+       onSetStatus={setStatus}
+       onOpenOriginal={openOriginal}
+       onNavigate={go}
+       onError={setError}
+     />:
      <div className="admin-panel admin-empty"><h2>{active}</h2><p>Module {active} đã có nền tảng UI; sẽ nối dữ liệu thật theo từng giai đoạn vận hành.</p></div>}
    </section>
  </main>
