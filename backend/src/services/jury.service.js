@@ -1,6 +1,8 @@
 import { pool } from '../database/pool.js';
 
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const TAXONOMY_SEPARATOR=' • ';
+const taxonomyArraySql=(alias,column)=>`string_to_array(COALESCE(${alias}.${column},''),'${TAXONOMY_SEPARATOR}')`;
 
 function jurorUuid(value){
   return uuidPattern.test(String(value||''))?value:null;
@@ -38,8 +40,8 @@ export async function listJurySubmissions({jurorId,filters={}}={}){
   }
   if(filters.status) add(values,conditions,'s.status = ?',filters.status);
   if(filters.type) add(values,conditions,'s.type = ?',filters.type);
-  if(filters.theme) add(values,conditions,'s.theme = ?',filters.theme);
-  if(filters.color) add(values,conditions,'s.color = ?',filters.color);
+  if(filters.theme) add(values,conditions,`? = ANY(${taxonomyArraySql('s','theme')})`,filters.theme);
+  if(filters.color) add(values,conditions,`? = ANY(${taxonomyArraySql('s','color')})`,filters.color);
   if(filters.location) add(values,conditions,'s.location ILIKE ?',`%${filters.location}%`);
 
   if(filters.review==='unscored') conditions.push('mine.id IS NULL');
@@ -152,7 +154,6 @@ export async function getJuryScorecard(submissionId,jurorId){
 export async function saveJuryScore({submissionId,jurorId,input}){
   const currentJuror=jurorUuid(jurorId);
   if(!currentJuror) throw new Error('JUROR_ACCOUNT_REQUIRED');
-
   const {rows:roundRows}=await pool.query(`SELECT status FROM jury_rounds WHERE code='PRELIMINARY' LIMIT 1`);
   if(roundRows[0]?.status==='LOCKED') throw new Error('JURY_ROUND_LOCKED');
 
