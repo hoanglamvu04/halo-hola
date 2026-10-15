@@ -1,17 +1,19 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { Router } from 'express';
-import { upload } from '../middleware/upload.js';
+import { submissionUpload } from '../middleware/upload.js';
 import { lookupRateLimiter, submissionRateLimiter } from '../middleware/rateLimit.js';
 import { AppError } from '../utils/AppError.js';
 import { submissionSchema, lookupSchema } from '../validators/submission.validators.js';
 import { createSubmission, getPublicStats, getHaloPublicMediaUrl } from '../services/submission.service.js';
+import { getOptimizedMediaUrl, storeSubmissionMediaVariants } from '../services/mediaVariants.service.js';
 import { getSubmissionOperationalState } from '../services/submissionOperations.service.js';
 import { confirmFacebookSubmission } from '../services/facebookCompletion.service.js';
 import { sendSubmissionReceived } from '../services/mail.service.js';
 import { logReceivedNotification } from '../services/submissionNotification.service.js';
 import { verifyToken } from '../utils/jwt.js';
 import { pool } from '../database/pool.js';
+import { env } from '../config/env.js';
 
 const router = Router();
 
@@ -21,6 +23,12 @@ const FILE_EXTENSIONS_BY_TYPE = {
   'Story & Creative': new Set(['.pdf','.doc','.docx','.mp3']),
   'Art & Design': new Set(['.jpg','.jpeg','.png','.webp','.tif','.tiff','.pdf','.dng','.cr2','.nef','.arw'])
 };
+
+function uploadedFiles(req){
+  if(Array.isArray(req.files))return req.files;
+  if(req.files&&typeof req.files==='object')return Object.values(req.files).flat();
+  return [];
+}
 
 function hasAdminPreview(req) {
   const header=String(req.headers.authorization||'');
@@ -112,8 +120,8 @@ router.post('/facebook-complete', lookupRateLimiter, async (req, res, next) => {
   }
 });
 
-// Stable public HALO media URL. Media becomes available to HOLA Maps only after
-// moderation + publication, and disappears again when the submission is hidden.
+// Stable public HALO media URL. Prefer the 1600px derivative for map/feed delivery,
+// falling back to the immutable original when the browser could not generate one.
 router.get('/media/:mediaId/halo', async (req, res, next) => {
   try {
     const gate=await pool.query(`
@@ -134,25 +142,39 @@ router.get('/media/:mediaId/halo', async (req, res, next) => {
       LIMIT 1`,[req.params.mediaId]);
     if(!gate.rowCount) throw new AppError('Ảnh này chưa được công bố cho HOLA Maps.',404);
 
-    const item = await getHaloPublicMediaUrl(req.params.mediaId);
+    const optimized=await getOptimizedMediaUrl(req.params.mediaId,{width:Number(req.query.w)||1600,format:req.query.format||'auto'}).catch(()=>null);
+    const item=optimized?.url?optimized:await getHaloPublicMediaUrl(req.params.mediaId);
     if (!item?.url) throw new AppError('Ảnh này chưa sẵn sàng cho HOLA Maps.', 404);
-    res.set('Cache-Control', 'public, max-age=60');
+    res.set('Cache-Control', 'public, max-age=300');
     res.redirect(302, item.url);
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, next) => {
+router.post('/', submissionRateLimiter, submissionUpload.fields([
+  {name:'files',maxCount:env.maxUploadFileCount},
+  {name:'previews',maxCount:env.maxUploadFileCount*6}
+]), async (req, res, next) => {
+  const originals=req.files?.files||[];
+  const previews=req.files?.previews||[];
   try {
     const data = submissionSchema.parse(req.body);
-    if (!(req.files || []).length && !data.externalLink) {
+    if (!originals.length && !data.externalLink) {
       throw new AppError('Cần ít nhất một file gốc hoặc link tác phẩm.', 400);
     }
 
-    validateFilesForArtworkType(data.type, req.files || []);
+    validateFilesForArtworkType(data.type, originals);
 
-    const created = await createSubmission(data, req.files || []);
+    const created = await createSubmission(data, originals);
+    let optimizedMedia={stored:0,skipped:previews.length};
+    if(previews.length){
+      optimizedMedia=await storeSubmissionMediaVariants(created,previews).catch(async(error)=>{
+        console.warn('Submission optimized media skipped:',error.message);
+        await Promise.all(previews.map(file=>fs.unlink(file.path).catch(()=>{})));
+        return {stored:0,skipped:previews.length};
+      });
+    }
 
     // Important: a newly received submission is NOT sent to HOLA Maps here.
     // HOLA Maps synchronization starts only after Admin approval + publication.
@@ -179,6 +201,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       facebookCompletionStatus: created.facebook_completion_status || 'PENDING',
       createdAt: created.created_at,
       holaMapsSyncStatus: 'WAITING_PUBLICATION',
+      optimizedMedia,
       media: created.media.map((m) => ({
         id: m.id,
         originalName: m.original_name,
@@ -189,7 +212,7 @@ router.post('/', submissionRateLimiter, upload.array('files'), async (req, res, 
       }))
     });
   } catch (error) {
-    await Promise.all((req.files || []).map((file) => fs.unlink(file.path).catch(() => {})));
+    await Promise.all(uploadedFiles(req).map((file) => fs.unlink(file.path).catch(() => {})));
 
     if (error?.name === 'ZodError') {
       return next(new AppError('Thông tin tác phẩm chưa hợp lệ.', 400, error.issues));
