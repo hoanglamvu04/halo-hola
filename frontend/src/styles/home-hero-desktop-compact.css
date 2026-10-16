@@ -1,26 +1,19 @@
 /* Desktop homepage hero refinement.
-   Keep the storytelling copy complete and let one large image lead the visual area.
-   Existing hero images are stacked into a calm rotating gallery instead of a busy collage.
-   Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
+   Full storytelling copy on the left, one large manually controlled image gallery on the right.
+   Mobile/tablet continue using the dedicated mobile hero styles. */
 
 .home-hero-reference .hero-stone,
 .home-hero-reference .home-note {
   display: none !important;
 }
 
-@keyframes haloHeroImageCycle {
-  0%, 15% {
-    opacity: 1;
-    transform: translateX(0) scale(1.01);
-  }
-  19%, 96% {
-    opacity: 0;
-    transform: translateX(-1.2%) scale(1.025);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1.01);
-  }
+.hero-desktop-carousel {
+  display: none;
+}
+
+@keyframes haloHeroManualFade {
+  from { opacity: .35; transform: scale(1.015); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @media (min-width: 981px) {
@@ -36,7 +29,6 @@
     padding: 22px 0 118px !important;
   }
 
-  /* Copy: move upward and show the CMS description in full. */
   .home-hero-reference .home-hero-copy {
     align-self: start !important;
     max-width: 760px !important;
@@ -78,11 +70,13 @@
     font-size: clamp(1.55rem, 1.8vw, 1.95rem) !important;
   }
 
+  /* Keep the complete CMS description but soften it so the title remains dominant. */
   .home-hero-reference .home-hero-copy > p {
     max-width: 610px !important;
     margin: 0 0 26px !important;
     font-size: 1.04rem !important;
     line-height: 1.62 !important;
+    color: #88918c !important;
     display: block !important;
     overflow: visible !important;
     -webkit-line-clamp: unset !important;
@@ -103,95 +97,124 @@
     border-radius: 999px !important;
   }
 
-  /* One large feature frame. The existing five images share the same frame and cross-fade. */
   .home-hero-reference .hero-collage {
     position: relative !important;
     height: 535px !important;
     align-self: start !important;
     margin-top: 8px !important;
     transform: none !important;
-    isolation: isolate !important;
     overflow: visible !important;
   }
 
+  /* Keep the original mobile collage markup intact but hide it on desktop. */
   .home-hero-reference .hero-main-frame,
   .home-hero-reference .hero-float,
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
-    position: absolute !important;
-    inset: 22px 1.5% auto 1.5% !important;
-    width: 97% !important;
-    height: 455px !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    background: #fff !important;
-    border: 10px solid rgba(255,255,255,.96) !important;
-    border-radius: 38px !important;
-    box-shadow: 0 28px 64px rgba(23,61,45,.14) !important;
-    opacity: 0;
-    transform: translateX(1.2%) scale(1.015);
-    animation: haloHeroImageCycle 25s infinite ease-in-out both;
-    will-change: opacity, transform;
-  }
-
-  .home-hero-reference .hero-main-frame {
-    z-index: 5 !important;
-    opacity: 1;
-    animation-delay: 0s !important;
-  }
-
-  .home-hero-reference .hero-float-a {
-    z-index: 4 !important;
-    animation-delay: -20s !important;
-  }
-
-  .home-hero-reference .hero-float-b {
-    z-index: 3 !important;
-    animation-delay: -15s !important;
-  }
-
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
-    content: '' !important;
-    display: block !important;
-    background-position: center !important;
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-    pointer-events: none !important;
-  }
-
-  .home-hero-reference .hero-collage::before {
-    z-index: 2 !important;
-    background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=86') !important;
-    animation-delay: -10s !important;
-  }
-
-  .home-hero-reference .hero-collage::after {
-    z-index: 1 !important;
-    background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=86') !important;
-    animation-delay: -5s !important;
-  }
-
-  .home-hero-reference .hero-main-frame .hero-main-img,
-  .home-hero-reference .hero-float img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-    display: block !important;
-  }
-
-  .home-hero-reference .hero-mobile-place {
-    z-index: 9 !important;
-  }
-
-  /* Remove decorative competition around the feature frame. */
   .home-hero-reference .hero-leaf,
   .home-hero-reference .hero-orbit {
     display: none !important;
   }
 
-  /* The four values remain the shared visual base of the hero. */
+  .home-hero-reference .hero-desktop-carousel {
+    display: block !important;
+    position: absolute !important;
+    inset: 22px 1.5% auto 1.5% !important;
+    width: 97% !important;
+    height: 455px !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    border: 10px solid rgba(255,255,255,.96) !important;
+    border-radius: 38px !important;
+    box-shadow: 0 28px 64px rgba(23,61,45,.14) !important;
+  }
+
+  .home-hero-reference .hero-desktop-carousel > img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    animation: haloHeroManualFade .38s ease both;
+  }
+
+  .home-hero-reference .hero-carousel-controls {
+    position: absolute !important;
+    right: 22px !important;
+    bottom: 20px !important;
+    z-index: 5 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 7px !important;
+    border-radius: 999px !important;
+    background: rgba(247,240,226,.94) !important;
+    border: 1px solid rgba(23,61,45,.11) !important;
+    box-shadow: 0 10px 28px rgba(23,61,45,.12) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  .home-hero-reference .hero-carousel-controls button {
+    width: 42px !important;
+    height: 42px !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    color: #174a38 !important;
+    background: #fff !important;
+    cursor: pointer !important;
+    transition: transform .18s ease, background .18s ease, color .18s ease !important;
+  }
+
+  .home-hero-reference .hero-carousel-controls button:hover {
+    transform: translateY(-1px) !important;
+    background: #174a38 !important;
+    color: #fff !important;
+  }
+
+  .home-hero-reference .hero-carousel-controls button svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
+
+  .home-hero-reference .hero-carousel-controls > span {
+    min-width: 54px !important;
+    text-align: center !important;
+    color: #53635b !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+  }
+
+  .home-hero-reference .hero-carousel-dots {
+    position: absolute !important;
+    left: 24px !important;
+    bottom: 28px !important;
+    z-index: 5 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 8px 10px !important;
+    border-radius: 999px !important;
+    background: rgba(23,61,45,.55) !important;
+    backdrop-filter: blur(8px);
+  }
+
+  .home-hero-reference .hero-carousel-dots button {
+    width: 8px !important;
+    height: 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.55) !important;
+    cursor: pointer !important;
+    transition: width .18s ease, background .18s ease !important;
+  }
+
+  .home-hero-reference .hero-carousel-dots button.active {
+    width: 24px !important;
+    background: #fff !important;
+  }
+
   .home-hero-reference .hero-pillar-band {
     left: 50% !important;
     right: auto !important;
@@ -217,14 +240,6 @@
 
   .home-hero-reference .hero-pillar-item:last-child {
     border-right: 0 !important;
-  }
-
-  /* Pause the gallery while the user is looking at it. */
-  .home-hero-reference .hero-collage:hover .hero-main-frame,
-  .home-hero-reference .hero-collage:hover .hero-float,
-  .home-hero-reference .hero-collage:hover::before,
-  .home-hero-reference .hero-collage:hover::after {
-    animation-play-state: paused !important;
   }
 }
 
@@ -256,6 +271,7 @@
     max-width: 525px !important;
     font-size: .98rem !important;
     line-height: 1.58 !important;
+    color: #909994 !important;
   }
 
   .home-hero-reference .hero-collage {
@@ -263,15 +279,22 @@
     margin-top: 4px !important;
   }
 
-  .home-hero-reference .hero-main-frame,
-  .home-hero-reference .hero-float,
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
+  .home-hero-reference .hero-desktop-carousel {
     inset: 18px 1% auto 1% !important;
     width: 98% !important;
     height: 420px !important;
     border-radius: 30px !important;
     border-width: 8px !important;
+  }
+
+  .home-hero-reference .hero-carousel-controls {
+    right: 16px !important;
+    bottom: 16px !important;
+  }
+
+  .home-hero-reference .hero-carousel-dots {
+    left: 18px !important;
+    bottom: 23px !important;
   }
 
   .home-hero-reference .hero-pillar-band {
@@ -300,31 +323,20 @@
   .home-hero-reference .home-hero-copy > p {
     max-width: 625px !important;
     font-size: 1.08rem !important;
+    color: #858f89 !important;
   }
 
   .home-hero-reference .hero-collage {
     height: 560px !important;
   }
 
-  .home-hero-reference .hero-main-frame,
-  .home-hero-reference .hero-float,
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
+  .home-hero-reference .hero-desktop-carousel {
     height: 485px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) and (min-width: 981px) {
-  .home-hero-reference .hero-main-frame {
+  .home-hero-reference .hero-desktop-carousel > img {
     animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .home-hero-reference .hero-float,
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
-    animation: none !important;
-    opacity: 0 !important;
   }
 }
