@@ -1,7 +1,8 @@
-/* Desktop homepage hero refinement: reduce empty canvas and keep the copy/visuals balanced.
+/* Desktop homepage hero refinement.
+   The desktop composition uses one anchor image plus four structured supporting images.
    Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
 
-/* Remove the extra decorative copy from the collage on every breakpoint. */
+/* Remove old decorative copy from the collage on every breakpoint. */
 .home-hero-reference .hero-stone,
 .home-hero-reference .home-note {
   display: none !important;
@@ -9,33 +10,34 @@
 
 @media (min-width: 981px) {
   .home-hero-reference {
-    min-height: 630px !important;
+    min-height: 640px !important;
   }
 
   .home-hero-reference .home-hero-art {
-    width: min(1840px, calc(100% - 72px));
-    min-height: 630px !important;
-    grid-template-columns: 43% 57% !important;
-    column-gap: 24px !important;
-    padding: 18px 0 22px !important;
+    width: min(1640px, calc(100% - 72px)) !important;
+    min-height: 640px !important;
+    grid-template-columns: 41% 59% !important;
+    column-gap: 30px !important;
+    padding: 18px 0 112px !important;
   }
 
-  /* Keep the copy close to the top instead of vertically centering it in a tall hero. */
+  /* Lift the copy and keep it compact so the visual collage owns the right side. */
   .home-hero-reference .home-hero-copy {
     align-self: start !important;
-    max-width: 820px !important;
-    margin-top: 54px !important;
-    padding: 0 0 88px 26px !important;
+    max-width: 760px !important;
+    margin-top: 26px !important;
+    padding: 0 0 0 24px !important;
+    position: relative !important;
+    z-index: 6 !important;
   }
 
   .home-hero-reference .hero-eyebrow-row {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    margin-top: 0 !important;
-    margin-bottom: 10px !important;
-    font-size: clamp(3rem, 3.65vw, 4.35rem) !important;
+    margin: 0 0 10px !important;
+    font-size: clamp(3rem, 3.55vw, 4.25rem) !important;
     line-height: .94 !important;
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -53,52 +55,62 @@
   }
 
   .home-hero-reference .hero-title-stroke {
-    margin: 12px 0 10px !important;
+    margin: 10px 0 10px !important;
   }
 
   .home-hero-reference .home-hero-copy h3 {
-    margin: 0 0 9px !important;
+    margin: 0 0 12px !important;
     font-size: clamp(1.55rem, 1.8vw, 1.95rem) !important;
   }
 
+  /* CMS copy can be longer; keep the hero to three readable lines on desktop. */
   .home-hero-reference .home-hero-copy > p {
-    max-width: 610px !important;
-    margin: 0 0 22px !important;
+    max-width: 585px !important;
+    margin: 0 0 24px !important;
     font-size: 1.05rem !important;
-    line-height: 1.55 !important;
+    line-height: 1.58 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
   }
 
   .home-hero-reference .hero-actions {
-    gap: 12px !important;
+    gap: 14px !important;
     margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
   }
 
   .home-hero-reference .hero-actions .btn {
-    min-height: 52px;
-    padding: 13px 22px !important;
+    min-height: 54px !important;
+    padding: 13px 24px !important;
+    border-radius: 999px !important;
   }
 
-  /* Editorial collage: one anchor image + four smaller slices. */
+  /* Editorial wall: one strong anchor image surrounded by four aligned story slices. */
   .home-hero-reference .hero-collage {
     position: relative !important;
-    height: 560px !important;
+    height: 515px !important;
     align-self: start !important;
-    margin-top: 18px !important;
+    margin-top: 4px !important;
     transform: none !important;
-    isolation: isolate;
+    isolation: isolate !important;
   }
 
   .home-hero-reference .hero-main-frame {
     position: absolute !important;
     z-index: 2 !important;
-    top: 78px !important;
-    left: 15% !important;
-    width: 67% !important;
-    height: 70% !important;
-    border: 10px solid rgba(255,255,255,.92) !important;
-    border-radius: 54px 18px 54px 18px !important;
+    top: 76px !important;
+    left: 16% !important;
+    width: 68% !important;
+    height: 68% !important;
     overflow: hidden !important;
-    box-shadow: 0 24px 54px rgba(23,61,45,.13) !important;
+    background: #fff !important;
+    border: 10px solid rgba(255,255,255,.94) !important;
+    border-radius: 34px !important;
+    box-shadow: 0 26px 58px rgba(23,61,45,.13) !important;
   }
 
   .home-hero-reference .hero-main-frame .hero-main-img,
@@ -114,143 +126,186 @@
     z-index: 4 !important;
     overflow: hidden !important;
     background: #fff !important;
-    border: 8px solid rgba(255,255,255,.96) !important;
-    box-shadow: 0 18px 42px rgba(23,61,45,.14) !important;
+    border: 8px solid rgba(255,255,255,.97) !important;
+    border-radius: 25px !important;
+    box-shadow: 0 18px 42px rgba(23,61,45,.13) !important;
   }
 
+  /* Tri thức — top right. */
   .home-hero-reference .hero-float-a {
     top: 8px !important;
-    right: 0 !important;
+    right: 1% !important;
     left: auto !important;
     bottom: auto !important;
-    width: 30% !important;
-    height: 31% !important;
-    border-radius: 34px 34px 18px 34px !important;
-    transform: rotate(1.2deg) !important;
+    width: 27% !important;
+    height: 29% !important;
+    transform: rotate(.45deg) !important;
   }
 
+  /* Con người — bottom left. */
   .home-hero-reference .hero-float-b {
-    left: 2% !important;
+    left: 1% !important;
     bottom: 6px !important;
     top: auto !important;
     right: auto !important;
-    width: 33% !important;
-    height: 31% !important;
-    border-radius: 30px 18px 34px 30px !important;
-    transform: rotate(-1.4deg) !important;
+    width: 30% !important;
+    height: 30% !important;
+    transform: rotate(-.45deg) !important;
   }
 
-  /* Two extra visual slices keep the collage rich without adding more homepage data fields. */
+  /* Thiên nhiên — top left, generated from the existing shared image library. */
   .home-hero-reference .hero-collage::before,
   .home-hero-reference .hero-collage::after {
-    content: '';
-    position: absolute;
-    z-index: 3;
-    display: block;
-    background-position: center;
-    background-size: cover;
-    border: 7px solid rgba(255,255,255,.95);
-    box-shadow: 0 16px 36px rgba(23,61,45,.12);
-    pointer-events: none;
+    content: '' !important;
+    position: absolute !important;
+    z-index: 4 !important;
+    display: block !important;
+    background-position: center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    border: 8px solid rgba(255,255,255,.97) !important;
+    border-radius: 25px !important;
+    box-shadow: 0 18px 42px rgba(23,61,45,.13) !important;
+    pointer-events: none !important;
   }
 
   .home-hero-reference .hero-collage::before {
-    top: 18px;
-    left: 1%;
-    width: 24%;
-    height: 24%;
-    border-radius: 26px 16px 28px 22px;
-    background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=82');
-    transform: rotate(-2deg);
+    top: 10px !important;
+    left: 1% !important;
+    width: 27% !important;
+    height: 27% !important;
+    background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=82') !important;
+    transform: rotate(-.5deg) !important;
   }
 
+  /* Tương lai — bottom right. */
   .home-hero-reference .hero-collage::after {
-    right: 3%;
-    bottom: 4px;
-    width: 27%;
-    height: 26%;
-    border-radius: 20px 28px 26px 18px;
-    background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=82');
-    transform: rotate(1.4deg);
+    right: 1% !important;
+    bottom: 6px !important;
+    width: 29% !important;
+    height: 29% !important;
+    background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=82') !important;
+    transform: rotate(.5deg) !important;
+  }
+
+  /* Keep the collage clean: contour lines only, no floating leaf competition. */
+  .home-hero-reference .hero-leaf {
+    display: none !important;
   }
 
   .home-hero-reference .hero-orbit {
-    opacity: .5 !important;
+    opacity: .18 !important;
+    z-index: 0 !important;
   }
 
-  .home-hero-reference .hero-leaf {
-    opacity: .72 !important;
-    z-index: 1 !important;
-  }
-
-  /* Keep the four-value strip visually separate from the CTA row above. */
+  /* The four values act as a shared visual base for the whole hero. */
   .home-hero-reference .hero-pillar-band {
-    bottom: 10px !important;
-    margin-top: 0 !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 16px !important;
+    width: min(1320px, 92%) !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    border-radius: 26px !important;
+    overflow: hidden !important;
+    background: rgba(255,252,246,.98) !important;
+    box-shadow: 0 20px 48px rgba(23,61,45,.11) !important;
+    z-index: 8 !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    min-width: 0 !important;
+    padding: 19px 22px !important;
+    border-right: 1px solid rgba(23,61,45,.09) !important;
+  }
+
+  .home-hero-reference .hero-pillar-item:last-child {
+    border-right: 0 !important;
   }
 }
 
 @media (min-width: 981px) and (max-width: 1320px) {
   .home-hero-reference {
-    min-height: 600px !important;
+    min-height: 610px !important;
   }
 
   .home-hero-reference .home-hero-art {
-    min-height: 600px !important;
+    min-height: 610px !important;
     width: min(100% - 40px, 1420px) !important;
-    grid-template-columns: 44% 56% !important;
-    padding: 16px 0 18px !important;
+    grid-template-columns: 42% 58% !important;
+    column-gap: 20px !important;
+    padding: 16px 0 108px !important;
   }
 
   .home-hero-reference .home-hero-copy {
-    margin-top: 46px !important;
-    padding: 0 0 80px 8px !important;
+    margin-top: 18px !important;
+    padding-left: 8px !important;
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    font-size: clamp(2.55rem, 3.75vw, 3.4rem) !important;
-    gap: .06em !important;
+    font-size: clamp(2.5rem, 3.6vw, 3.35rem) !important;
+    gap: .055em !important;
     letter-spacing: -.05em !important;
   }
 
+  .home-hero-reference .home-hero-copy > p {
+    max-width: 520px !important;
+    font-size: 1rem !important;
+  }
+
   .home-hero-reference .hero-collage {
-    height: 520px !important;
-    margin-top: 14px !important;
+    height: 485px !important;
+    margin-top: 2px !important;
   }
 
   .home-hero-reference .hero-main-frame {
     top: 72px !important;
-    left: 14% !important;
-    width: 68% !important;
-    height: 69% !important;
+    left: 15% !important;
+    width: 70% !important;
+    height: 66% !important;
   }
 
-  .home-hero-reference .hero-float-a {
-    width: 31% !important;
-    height: 29% !important;
+  .home-hero-reference .hero-float-a,
+  .home-hero-reference .hero-collage::before {
+    width: 28% !important;
+    height: 27% !important;
   }
 
-  .home-hero-reference .hero-float-b {
-    width: 34% !important;
-    height: 29% !important;
+  .home-hero-reference .hero-float-b,
+  .home-hero-reference .hero-collage::after {
+    width: 30% !important;
+    height: 28% !important;
   }
 
   .home-hero-reference .hero-pillar-band {
-    bottom: 8px !important;
+    width: 95% !important;
+    bottom: 12px !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    padding: 16px 15px !important;
   }
 }
 
 @media (min-width: 1600px) {
   .home-hero-reference .home-hero-copy {
-    margin-top: 60px !important;
+    margin-top: 32px !important;
   }
 
   .home-hero-reference .home-hero-copy > p {
-    max-width: 650px !important;
-    font-size: 1.1rem !important;
+    max-width: 610px !important;
+    font-size: 1.08rem !important;
   }
 
   .home-hero-reference .hero-collage {
-    height: 575px !important;
+    height: 535px !important;
+  }
+
+  .home-hero-reference .hero-main-frame {
+    top: 80px !important;
+    height: 69% !important;
   }
 }
