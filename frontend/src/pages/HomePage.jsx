@@ -73,7 +73,11 @@ export default function HomePage() {
   })
   const toursCopy=sectionData('tours',{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Những hành trình khám phá Hòa Lạc qua trải nghiệm thực tế và những câu chuyện sống động.'})
   const mapCopy=sectionData('map',{eyebrow:'KHÁM PHÁ MỌI HÒA LẠC',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'})
-  const storiesCopy=sectionData('stories',{eyebrow:'NHỮNG CÂU CHUYỆN TRUYỀN CẢM HỨNG',title:'TOP52 / Stories',description:'52 góc nhìn, 52 câu chuyện về Hòa Lạc qua lăng kính cộng đồng.'})
+  const storiesCopy=sectionData('stories',{
+    eyebrow:'TÁC PHẨM · CÂU CHUYỆN · HÒA LẠC',
+    title:'Những góc nhìn đã được kể',
+    description:'Những tác phẩm đã được duyệt và công bố — nơi mỗi bức ảnh, video và câu chuyện lưu lại một Hòa Lạc theo cách riêng.'
+  })
   const community=sectionData('community',{
     eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',
     title:'WE HOLA – Chúng ta là Hòa Lạc',
@@ -366,24 +370,39 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('stories')&&<section className="top52-showcase">
-      <div className="top52-contours"/>
-      <div className="top52-blur top52-blur-right"/>
-      <div className="top52-inner">
-        <header className="top52-head">
-          <div className="top52-title-block"><div className="top52-eyebrow-row"><span className="eyebrow">{storiesCopy.eyebrow}</span><i/></div><h2>TOP52 <span>/ Stories</span></h2><p>{storiesCopy.description}</p></div>
-          <div className="top52-head-side"><p>Những con người, địa điểm và trải nghiệm chân thật tạo nên một Hòa Lạc đầy màu sắc, đang đổi mới mỗi ngày.</p><Link className="top52-all-link" to="/top52">Xem tất cả TOP52 <ArrowRight/></Link></div>
-          <div className="top52-nav"><Link to="/top52" aria-label="Xem TOP52"><ArrowLeft/></Link><Link to="/top52" className="active" aria-label="Xem tất cả TOP52"><ArrowRight/></Link></div>
+    {sectionOn('stories')&&<section className="home-story-showcase">
+      <div className="home-story-inner">
+        <header className="home-story-head">
+          <div className="home-story-title">
+            <div className="home-story-eyebrow-row"><span className="eyebrow">{storiesCopy.eyebrow}</span><i/></div>
+            <h2>Những góc nhìn <em>đã được kể.</em></h2>
+            <p>{storiesCopy.description}</p>
+          </div>
+          <div className="home-story-head-side">
+            <p>Mỗi tác phẩm là một lát cắt thật về con người, cảnh quan và nhịp sống Hòa Lạc — được cộng đồng gửi về và Ban Tổ chức công bố.</p>
+            <Link className="home-story-all-link" to="/kham-pha">Xem tất cả góc nhìn <ArrowRight/></Link>
+          </div>
         </header>
 
-        <div className="top52-card-grid">
-          {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="top52-card" key={a.id||a.slug}>
-            <div className="top52-card-media">{a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}<span className="top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span><span className="top52-heart"><Heart/></span></div>
-            <div className="top52-card-body">
-              <span className="top52-category">{a.theme} · {a.location}</span>
+        <div className="home-story-grid">
+          {artworks.length===0&&<div className="home-story-empty">Các góc nhìn đã công bố sẽ xuất hiện tại đây.</div>}
+          {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="home-story-card" key={a.id||a.slug}>
+            <div className="home-story-media">
+              {a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
+              <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'ĐẠT GIẢI':a.status==='TOP52'?'TOP52':'GÓC NHÌN'}</span>
+              <span className="home-story-heart"><Heart/></span>
+            </div>
+            <div className="home-story-card-body">
+              <span className="home-story-category">{a.theme||'Góc nhìn Hòa Lạc'} · {a.location||'Hòa Lạc'}</span>
               <h3>{a.title||a.code}</h3>
-              <p><b>{a.author}</b><br/>{a.story?.slice(0,90)}{a.story?.length>90?'…':''}</p>
-              <div className="top52-card-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span className="top52-author">{a.image&&<img src={a.image} alt=""/>}{a.author}</span></div>
+              <div className="home-story-author-row">
+                <span className="home-story-avatar">{String(a.author||'?').trim().charAt(0)||'?'}</span>
+                <b>{a.author||'Tác giả HALO HOLA'}</b>
+              </div>
+              <div className="home-story-card-meta">
+                <span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span>
+                <span><MapPin/> {a.location||'Hòa Lạc'}</span>
+              </div>
             </div>
           </Link>)}
         </div>
