@@ -1,0 +1,101 @@
+/* Desktop homepage hero refinement: reduce empty canvas and keep the copy/visuals balanced.
+   Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
+@media (min-width: 981px) {
+  .home-hero-reference {
+    min-height: 610px !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    width: min(1840px, calc(100% - 72px));
+    min-height: 610px !important;
+    grid-template-columns: 42% 58% !important;
+    column-gap: 22px !important;
+    padding: 24px 0 18px !important;
+  }
+
+  .home-hero-reference .home-hero-copy {
+    align-self: center;
+    max-width: 790px !important;
+    padding: 0 0 42px 26px !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row {
+    margin-bottom: 14px;
+  }
+
+  .home-hero-reference .home-hero-copy h1 {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    font-size: clamp(4.25rem, 5.35vw, 6.65rem) !important;
+    line-height: .9 !important;
+  }
+
+  .home-hero-reference .hero-title-stroke {
+    margin: 13px 0 10px !important;
+  }
+
+  .home-hero-reference .home-hero-copy h3 {
+    margin: 0 0 9px !important;
+    font-size: clamp(1.65rem, 2vw, 2.1rem) !important;
+  }
+
+  .home-hero-reference .home-hero-copy > p {
+    max-width: 620px !important;
+    margin: 0 0 24px !important;
+    font-size: 1.08rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .home-hero-reference .hero-actions {
+    gap: 12px !important;
+    margin-top: 0 !important;
+  }
+
+  .home-hero-reference .hero-actions .btn {
+    min-height: 52px;
+    padding: 13px 22px !important;
+  }
+
+  .home-hero-reference .hero-collage {
+    height: 535px !important;
+    align-self: center !important;
+    margin-top: 0 !important;
+    transform: translateY(-4px);
+  }
+
+  .home-hero-reference .hero-pillar-band {
+    margin-top: 8px !important;
+  }
+}
+
+@media (min-width: 981px) and (max-width: 1320px) {
+  .home-hero-reference {
+    min-height: 585px !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    min-height: 585px !important;
+    width: min(100% - 40px, 1420px) !important;
+    grid-template-columns: 42% 58% !important;
+    padding: 22px 0 16px !important;
+  }
+
+  .home-hero-reference .home-hero-copy {
+    padding: 0 0 30px 8px !important;
+  }
+
+  .home-hero-reference .home-hero-copy h1 {
+    font-size: clamp(4rem, 6.15vw, 5.8rem) !important;
+  }
+
+  .home-hero-reference .hero-collage {
+    height: 505px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .home-hero-reference .home-hero-copy > p {
+    max-width: 650px !important;
+    font-size: 1.12rem !important;
+  }
+}
