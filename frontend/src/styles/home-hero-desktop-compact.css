@@ -33,13 +33,14 @@
   .home-hero-reference .home-hero-copy h1 {
     margin-top: 0 !important;
     margin-bottom: 8px !important;
-    font-size: clamp(3.6rem, 4.65vw, 5.45rem) !important;
-    line-height: .92 !important;
+    font-size: clamp(3.05rem, 3.8vw, 4.55rem) !important;
+    line-height: .94 !important;
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: baseline !important;
-    gap: .14em !important;
+    gap: .08em !important;
     white-space: nowrap !important;
+    letter-spacing: -.045em !important;
   }
 
   .home-hero-reference .home-hero-copy h1 span,
@@ -106,8 +107,9 @@
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    font-size: clamp(3rem, 4.75vw, 4.25rem) !important;
-    gap: .12em !important;
+    font-size: clamp(2.7rem, 4.05vw, 3.6rem) !important;
+    gap: .06em !important;
+    letter-spacing: -.05em !important;
   }
 
   .home-hero-reference .hero-collage {
