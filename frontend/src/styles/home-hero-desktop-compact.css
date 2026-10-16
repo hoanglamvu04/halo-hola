@@ -1,5 +1,12 @@
 /* Desktop homepage hero refinement: reduce empty canvas and keep the copy/visuals balanced.
    Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
+
+/* Remove the extra decorative copy from the collage on every breakpoint. */
+.home-hero-reference .hero-stone,
+.home-hero-reference .home-note {
+  display: none !important;
+}
+
 @media (min-width: 981px) {
   .home-hero-reference {
     min-height: 610px !important;
@@ -20,7 +27,7 @@
   }
 
   .home-hero-reference .hero-eyebrow-row {
-    margin-bottom: 14px;
+    margin-bottom: 26px;
   }
 
   .home-hero-reference .home-hero-copy h1 {
