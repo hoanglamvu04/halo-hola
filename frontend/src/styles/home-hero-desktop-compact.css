@@ -1,31 +1,46 @@
 /* Desktop homepage hero refinement.
-   The desktop composition uses one anchor image plus four structured supporting images.
+   Keep the storytelling copy complete and let one large image lead the visual area.
+   Existing hero images are stacked into a calm rotating gallery instead of a busy collage.
    Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
 
-/* Remove old decorative copy from the collage on every breakpoint. */
 .home-hero-reference .hero-stone,
 .home-hero-reference .home-note {
   display: none !important;
 }
 
+@keyframes haloHeroImageCycle {
+  0%, 15% {
+    opacity: 1;
+    transform: translateX(0) scale(1.01);
+  }
+  19%, 96% {
+    opacity: 0;
+    transform: translateX(-1.2%) scale(1.025);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1.01);
+  }
+}
+
 @media (min-width: 981px) {
   .home-hero-reference {
-    min-height: 640px !important;
+    min-height: 690px !important;
   }
 
   .home-hero-reference .home-hero-art {
     width: min(1640px, calc(100% - 72px)) !important;
-    min-height: 640px !important;
-    grid-template-columns: 41% 59% !important;
-    column-gap: 30px !important;
-    padding: 18px 0 112px !important;
+    min-height: 690px !important;
+    grid-template-columns: 42% 58% !important;
+    column-gap: 34px !important;
+    padding: 22px 0 118px !important;
   }
 
-  /* Lift the copy and keep it compact so the visual collage owns the right side. */
+  /* Copy: move upward and show the CMS description in full. */
   .home-hero-reference .home-hero-copy {
     align-self: start !important;
     max-width: 760px !important;
-    margin-top: 26px !important;
+    margin-top: 24px !important;
     padding: 0 0 0 24px !important;
     position: relative !important;
     z-index: 6 !important;
@@ -63,16 +78,15 @@
     font-size: clamp(1.55rem, 1.8vw, 1.95rem) !important;
   }
 
-  /* CMS copy can be longer; keep the hero to three readable lines on desktop. */
   .home-hero-reference .home-hero-copy > p {
-    max-width: 585px !important;
-    margin: 0 0 24px !important;
-    font-size: 1.05rem !important;
-    line-height: 1.58 !important;
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 3 !important;
-    overflow: hidden !important;
+    max-width: 610px !important;
+    margin: 0 0 26px !important;
+    font-size: 1.04rem !important;
+    line-height: 1.62 !important;
+    display: block !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: initial !important;
   }
 
   .home-hero-reference .hero-actions {
@@ -89,28 +103,73 @@
     border-radius: 999px !important;
   }
 
-  /* Editorial wall: one strong anchor image surrounded by four aligned story slices. */
+  /* One large feature frame. The existing five images share the same frame and cross-fade. */
   .home-hero-reference .hero-collage {
     position: relative !important;
-    height: 515px !important;
+    height: 535px !important;
     align-self: start !important;
-    margin-top: 4px !important;
+    margin-top: 8px !important;
     transform: none !important;
     isolation: isolate !important;
+    overflow: visible !important;
+  }
+
+  .home-hero-reference .hero-main-frame,
+  .home-hero-reference .hero-float,
+  .home-hero-reference .hero-collage::before,
+  .home-hero-reference .hero-collage::after {
+    position: absolute !important;
+    inset: 22px 1.5% auto 1.5% !important;
+    width: 97% !important;
+    height: 455px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    border: 10px solid rgba(255,255,255,.96) !important;
+    border-radius: 38px !important;
+    box-shadow: 0 28px 64px rgba(23,61,45,.14) !important;
+    opacity: 0;
+    transform: translateX(1.2%) scale(1.015);
+    animation: haloHeroImageCycle 25s infinite ease-in-out both;
+    will-change: opacity, transform;
   }
 
   .home-hero-reference .hero-main-frame {
-    position: absolute !important;
+    z-index: 5 !important;
+    opacity: 1;
+    animation-delay: 0s !important;
+  }
+
+  .home-hero-reference .hero-float-a {
+    z-index: 4 !important;
+    animation-delay: -20s !important;
+  }
+
+  .home-hero-reference .hero-float-b {
+    z-index: 3 !important;
+    animation-delay: -15s !important;
+  }
+
+  .home-hero-reference .hero-collage::before,
+  .home-hero-reference .hero-collage::after {
+    content: '' !important;
+    display: block !important;
+    background-position: center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    pointer-events: none !important;
+  }
+
+  .home-hero-reference .hero-collage::before {
     z-index: 2 !important;
-    top: 76px !important;
-    left: 16% !important;
-    width: 68% !important;
-    height: 68% !important;
-    overflow: hidden !important;
-    background: #fff !important;
-    border: 10px solid rgba(255,255,255,.94) !important;
-    border-radius: 34px !important;
-    box-shadow: 0 26px 58px rgba(23,61,45,.13) !important;
+    background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=86') !important;
+    animation-delay: -10s !important;
+  }
+
+  .home-hero-reference .hero-collage::after {
+    z-index: 1 !important;
+    background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=86') !important;
+    animation-delay: -5s !important;
   }
 
   .home-hero-reference .hero-main-frame .hero-main-img,
@@ -118,87 +177,21 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    object-position: center !important;
     display: block !important;
   }
 
-  .home-hero-reference .hero-float {
-    position: absolute !important;
-    z-index: 4 !important;
-    overflow: hidden !important;
-    background: #fff !important;
-    border: 8px solid rgba(255,255,255,.97) !important;
-    border-radius: 25px !important;
-    box-shadow: 0 18px 42px rgba(23,61,45,.13) !important;
+  .home-hero-reference .hero-mobile-place {
+    z-index: 9 !important;
   }
 
-  /* Tri thức — top right. */
-  .home-hero-reference .hero-float-a {
-    top: 8px !important;
-    right: 1% !important;
-    left: auto !important;
-    bottom: auto !important;
-    width: 27% !important;
-    height: 29% !important;
-    transform: rotate(.45deg) !important;
-  }
-
-  /* Con người — bottom left. */
-  .home-hero-reference .hero-float-b {
-    left: 1% !important;
-    bottom: 6px !important;
-    top: auto !important;
-    right: auto !important;
-    width: 30% !important;
-    height: 30% !important;
-    transform: rotate(-.45deg) !important;
-  }
-
-  /* Thiên nhiên — top left, generated from the existing shared image library. */
-  .home-hero-reference .hero-collage::before,
-  .home-hero-reference .hero-collage::after {
-    content: '' !important;
-    position: absolute !important;
-    z-index: 4 !important;
-    display: block !important;
-    background-position: center !important;
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-    border: 8px solid rgba(255,255,255,.97) !important;
-    border-radius: 25px !important;
-    box-shadow: 0 18px 42px rgba(23,61,45,.13) !important;
-    pointer-events: none !important;
-  }
-
-  .home-hero-reference .hero-collage::before {
-    top: 10px !important;
-    left: 1% !important;
-    width: 27% !important;
-    height: 27% !important;
-    background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=82') !important;
-    transform: rotate(-.5deg) !important;
-  }
-
-  /* Tương lai — bottom right. */
-  .home-hero-reference .hero-collage::after {
-    right: 1% !important;
-    bottom: 6px !important;
-    width: 29% !important;
-    height: 29% !important;
-    background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=82') !important;
-    transform: rotate(.5deg) !important;
-  }
-
-  /* Keep the collage clean: contour lines only, no floating leaf competition. */
-  .home-hero-reference .hero-leaf {
+  /* Remove decorative competition around the feature frame. */
+  .home-hero-reference .hero-leaf,
+  .home-hero-reference .hero-orbit {
     display: none !important;
   }
 
-  .home-hero-reference .hero-orbit {
-    opacity: .18 !important;
-    z-index: 0 !important;
-  }
-
-  /* The four values act as a shared visual base for the whole hero. */
+  /* The four values remain the shared visual base of the hero. */
   .home-hero-reference .hero-pillar-band {
     left: 50% !important;
     right: auto !important;
@@ -225,59 +218,60 @@
   .home-hero-reference .hero-pillar-item:last-child {
     border-right: 0 !important;
   }
+
+  /* Pause the gallery while the user is looking at it. */
+  .home-hero-reference .hero-collage:hover .hero-main-frame,
+  .home-hero-reference .hero-collage:hover .hero-float,
+  .home-hero-reference .hero-collage:hover::before,
+  .home-hero-reference .hero-collage:hover::after {
+    animation-play-state: paused !important;
+  }
 }
 
 @media (min-width: 981px) and (max-width: 1320px) {
   .home-hero-reference {
-    min-height: 610px !important;
+    min-height: 655px !important;
   }
 
   .home-hero-reference .home-hero-art {
-    min-height: 610px !important;
+    min-height: 655px !important;
     width: min(100% - 40px, 1420px) !important;
-    grid-template-columns: 42% 58% !important;
-    column-gap: 20px !important;
-    padding: 16px 0 108px !important;
+    grid-template-columns: 43% 57% !important;
+    column-gap: 22px !important;
+    padding: 18px 0 112px !important;
   }
 
   .home-hero-reference .home-hero-copy {
-    margin-top: 18px !important;
+    margin-top: 16px !important;
     padding-left: 8px !important;
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    font-size: clamp(2.5rem, 3.6vw, 3.35rem) !important;
+    font-size: clamp(2.45rem, 3.45vw, 3.3rem) !important;
     gap: .055em !important;
     letter-spacing: -.05em !important;
   }
 
   .home-hero-reference .home-hero-copy > p {
-    max-width: 520px !important;
-    font-size: 1rem !important;
+    max-width: 525px !important;
+    font-size: .98rem !important;
+    line-height: 1.58 !important;
   }
 
   .home-hero-reference .hero-collage {
-    height: 485px !important;
-    margin-top: 2px !important;
+    height: 495px !important;
+    margin-top: 4px !important;
   }
 
-  .home-hero-reference .hero-main-frame {
-    top: 72px !important;
-    left: 15% !important;
-    width: 70% !important;
-    height: 66% !important;
-  }
-
-  .home-hero-reference .hero-float-a,
-  .home-hero-reference .hero-collage::before {
-    width: 28% !important;
-    height: 27% !important;
-  }
-
-  .home-hero-reference .hero-float-b,
+  .home-hero-reference .hero-main-frame,
+  .home-hero-reference .hero-float,
+  .home-hero-reference .hero-collage::before,
   .home-hero-reference .hero-collage::after {
-    width: 30% !important;
-    height: 28% !important;
+    inset: 18px 1% auto 1% !important;
+    width: 98% !important;
+    height: 420px !important;
+    border-radius: 30px !important;
+    border-width: 8px !important;
   }
 
   .home-hero-reference .hero-pillar-band {
@@ -291,21 +285,46 @@
 }
 
 @media (min-width: 1600px) {
+  .home-hero-reference {
+    min-height: 720px !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    min-height: 720px !important;
+  }
+
   .home-hero-reference .home-hero-copy {
-    margin-top: 32px !important;
+    margin-top: 30px !important;
   }
 
   .home-hero-reference .home-hero-copy > p {
-    max-width: 610px !important;
+    max-width: 625px !important;
     font-size: 1.08rem !important;
   }
 
   .home-hero-reference .hero-collage {
-    height: 535px !important;
+    height: 560px !important;
   }
 
+  .home-hero-reference .hero-main-frame,
+  .home-hero-reference .hero-float,
+  .home-hero-reference .hero-collage::before,
+  .home-hero-reference .hero-collage::after {
+    height: 485px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 981px) {
   .home-hero-reference .hero-main-frame {
-    top: 80px !important;
-    height: 69% !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .home-hero-reference .hero-float,
+  .home-hero-reference .hero-collage::before,
+  .home-hero-reference .hero-collage::after {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
