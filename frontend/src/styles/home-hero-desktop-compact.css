@@ -218,7 +218,7 @@
   .home-hero-reference .hero-pillar-band {
     left: 50% !important;
     right: auto !important;
-    bottom: 16px !important;
+    bottom: 40px !important;
     width: min(1320px, 92%) !important;
     transform: translateX(-50%) !important;
     margin: 0 !important;
@@ -299,7 +299,7 @@
 
   .home-hero-reference .hero-pillar-band {
     width: 95% !important;
-    bottom: 12px !important;
+    bottom: 32px !important;
   }
 
   .home-hero-reference .hero-pillar-item {
