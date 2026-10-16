@@ -1,7 +1,7 @@
-/* Desktop homepage hero refinement: reduce empty canvas and keep the copy/visuals balanced.
+/* Desktop homepage hero composition inspired by the editorial reference.
    Mobile/tablet layouts remain controlled by the dedicated mobile hero styles. */
 
-/* Remove the extra decorative copy from the collage on every breakpoint. */
+/* Keep the collage clean: these legacy decorative copy blocks are no longer used. */
 .home-hero-reference .hero-stone,
 .home-hero-reference .home-note {
   display: none !important;
@@ -9,38 +9,85 @@
 
 @media (min-width: 981px) {
   .home-hero-reference {
-    min-height: 610px !important;
+    position: relative !important;
+    min-height: 650px !important;
+    margin-bottom: 62px !important;
+    overflow: visible !important;
+    background:
+      radial-gradient(circle at 78% 32%, rgba(228, 238, 217, .42), transparent 30%),
+      radial-gradient(circle at 18% 82%, rgba(240, 222, 195, .34), transparent 28%),
+      linear-gradient(180deg, #fbf8f0 0%, #f8f4e9 100%) !important;
+  }
+
+  .home-hero-reference::before,
+  .home-hero-reference::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    border: 1px solid rgba(205, 111, 61, .16);
+    border-radius: 50%;
+  }
+
+  .home-hero-reference::before {
+    width: 520px;
+    height: 520px;
+    left: -220px;
+    bottom: -270px;
+  }
+
+  .home-hero-reference::after {
+    width: 760px;
+    height: 760px;
+    right: -310px;
+    top: -350px;
   }
 
   .home-hero-reference .home-hero-art {
-    width: min(1840px, calc(100% - 72px));
-    min-height: 610px !important;
-    grid-template-columns: 44% 56% !important;
-    column-gap: 22px !important;
-    padding: 24px 0 18px !important;
+    position: relative !important;
+    z-index: 1;
+    width: min(1760px, calc(100% - 64px)) !important;
+    min-height: 650px !important;
+    margin: 0 auto !important;
+    padding: 28px 0 34px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 40%) minmax(0, 60%) !important;
+    column-gap: 28px !important;
+    align-items: center !important;
+    overflow: visible !important;
   }
 
   .home-hero-reference .home-hero-copy {
-    align-self: center;
-    max-width: 860px !important;
-    padding: 0 0 42px 26px !important;
+    position: relative !important;
+    z-index: 8;
+    align-self: center !important;
+    max-width: 720px !important;
+    padding: 4px 0 72px 24px !important;
   }
 
   .home-hero-reference .hero-eyebrow-row {
-    margin-bottom: 26px;
+    margin: 0 0 24px !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row .eyebrow {
+    font-size: .86rem !important;
+    letter-spacing: .24em !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row i {
+    max-width: 68px !important;
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    margin-top: 0 !important;
-    margin-bottom: 8px !important;
-    font-size: clamp(3.05rem, 3.8vw, 4.55rem) !important;
-    line-height: .94 !important;
+    margin: 0 0 12px !important;
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: baseline !important;
-    gap: .08em !important;
+    gap: .075em !important;
     white-space: nowrap !important;
-    letter-spacing: -.045em !important;
+    font-size: clamp(3.15rem, 3.8vw, 4.65rem) !important;
+    line-height: .93 !important;
+    letter-spacing: -.05em !important;
   }
 
   .home-hero-reference .home-hero-copy h1 span,
@@ -51,79 +98,313 @@
   }
 
   .home-hero-reference .hero-title-stroke {
-    margin: 13px 0 10px !important;
+    width: 145px !important;
+    height: 3px !important;
+    margin: 14px 0 14px !important;
   }
 
   .home-hero-reference .home-hero-copy h3 {
-    margin: 0 0 9px !important;
-    font-size: clamp(1.65rem, 2vw, 2.1rem) !important;
+    margin: 0 0 10px !important;
+    font-size: clamp(1.65rem, 1.95vw, 2.15rem) !important;
+    line-height: 1.08 !important;
   }
 
   .home-hero-reference .home-hero-copy > p {
-    max-width: 620px !important;
+    max-width: 610px !important;
     margin: 0 0 24px !important;
     font-size: 1.08rem !important;
     line-height: 1.55 !important;
   }
 
   .home-hero-reference .hero-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
     gap: 12px !important;
     margin-top: 0 !important;
   }
 
   .home-hero-reference .hero-actions .btn {
-    min-height: 52px;
+    width: auto !important;
+    min-width: 190px !important;
+    min-height: 52px !important;
     padding: 13px 22px !important;
+    border-radius: 999px !important;
   }
 
+  /* Editorial image collage: one dominant frame + two supporting snapshots. */
   .home-hero-reference .hero-collage {
-    height: 535px !important;
+    position: relative !important;
+    z-index: 5;
+    width: 100% !important;
+    height: 545px !important;
     align-self: center !important;
-    margin-top: 0 !important;
-    transform: translateY(-4px);
+    margin: 0 !important;
+    transform: none !important;
+    overflow: visible !important;
   }
 
-  /* Keep the four-value strip visually separate from the CTA row above. */
+  .home-hero-reference .hero-main-frame {
+    position: absolute !important;
+    z-index: 2 !important;
+    left: 10% !important;
+    top: 58px !important;
+    width: 68% !important;
+    height: 405px !important;
+    padding: 9px !important;
+    overflow: hidden !important;
+    border-radius: 52px 24px 54px 26px !important;
+    background: #fff !important;
+    box-shadow: 0 24px 48px rgba(36, 67, 52, .14) !important;
+    transform: rotate(-1.1deg) !important;
+  }
+
+  .home-hero-reference .hero-main-img,
+  .home-hero-reference .hero-main-frame > img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    object-fit: cover !important;
+    border-radius: 43px 17px 45px 19px !important;
+  }
+
+  .home-hero-reference .hero-float {
+    position: absolute !important;
+    overflow: hidden !important;
+    padding: 7px !important;
+    background: #fff !important;
+    box-shadow: 0 18px 38px rgba(36, 67, 52, .15) !important;
+  }
+
+  .home-hero-reference .hero-float img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    object-fit: cover !important;
+    border-radius: inherit !important;
+  }
+
+  .home-hero-reference .hero-float-a {
+    z-index: 5 !important;
+    width: 29% !important;
+    height: 180px !important;
+    right: 1.5% !important;
+    top: 18px !important;
+    border-radius: 32px 18px 34px 18px !important;
+    transform: rotate(2.2deg) !important;
+  }
+
+  .home-hero-reference .hero-float-b {
+    z-index: 6 !important;
+    width: 31% !important;
+    height: 188px !important;
+    left: 2% !important;
+    bottom: 20px !important;
+    border-radius: 30px 18px 32px 18px !important;
+    transform: rotate(1.2deg) !important;
+  }
+
+  .home-hero-reference .hero-mobile-place {
+    display: none !important;
+  }
+
+  .home-hero-reference .hero-orbit {
+    opacity: .45 !important;
+    border-color: rgba(193, 112, 63, .28) !important;
+  }
+
+  .home-hero-reference .leaf-a {
+    left: 4% !important;
+    top: 42% !important;
+    opacity: .7 !important;
+    transform: rotate(-18deg) scale(.92) !important;
+  }
+
+  .home-hero-reference .leaf-b {
+    right: 12% !important;
+    top: 3% !important;
+    opacity: .65 !important;
+    transform: rotate(16deg) scale(.82) !important;
+  }
+
+  /* Floating value band, matching the reference composition. */
   .home-hero-reference .hero-pillar-band {
-    bottom: 8px !important;
-    margin-top: 0 !important;
+    position: absolute !important;
+    z-index: 20 !important;
+    left: 50% !important;
+    bottom: -48px !important;
+    width: calc(100% - 90px) !important;
+    max-width: 1500px !important;
+    min-height: 104px !important;
+    margin: 0 !important;
+    padding: 14px 18px !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    transform: translateX(-50%) !important;
+    border: 1px solid rgba(33, 79, 58, .1) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 253, 247, .96) !important;
+    box-shadow: 0 18px 46px rgba(45, 70, 55, .13) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    min-width: 0 !important;
+    padding: 8px 20px !important;
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .home-hero-reference .hero-pillar-item + .hero-pillar-item {
+    border-left: 1px solid rgba(33, 79, 58, .11) !important;
+  }
+
+  .home-hero-reference .pillar-icon {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 50% !important;
+  }
+
+  .home-hero-reference .hero-pillar-item b {
+    display: block !important;
+    margin-bottom: 3px !important;
+    font-size: 1rem !important;
+  }
+
+  .home-hero-reference .hero-pillar-item small {
+    display: block !important;
+    font-size: .82rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .home-hero-reference .mobile-pillar-arrow {
+    display: block !important;
+    width: 17px !important;
+    height: 17px !important;
+    opacity: .65 !important;
   }
 }
 
 @media (min-width: 981px) and (max-width: 1320px) {
   .home-hero-reference {
-    min-height: 585px !important;
+    min-height: 610px !important;
+    margin-bottom: 56px !important;
   }
 
   .home-hero-reference .home-hero-art {
-    min-height: 585px !important;
-    width: min(100% - 40px, 1420px) !important;
-    grid-template-columns: 45% 55% !important;
-    padding: 22px 0 16px !important;
+    width: min(100% - 36px, 1260px) !important;
+    min-height: 610px !important;
+    grid-template-columns: 43% 57% !important;
+    column-gap: 16px !important;
+    padding: 22px 0 32px !important;
   }
 
   .home-hero-reference .home-hero-copy {
-    padding: 0 0 30px 8px !important;
+    max-width: 560px !important;
+    padding: 0 0 72px 4px !important;
+  }
+
+  .home-hero-reference .hero-eyebrow-row {
+    margin-bottom: 20px !important;
   }
 
   .home-hero-reference .home-hero-copy h1 {
-    font-size: clamp(2.7rem, 4.05vw, 3.6rem) !important;
-    gap: .06em !important;
-    letter-spacing: -.05em !important;
+    font-size: clamp(2.55rem, 3.65vw, 3.45rem) !important;
+    gap: .055em !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .home-hero-reference .home-hero-copy h3 {
+    font-size: clamp(1.35rem, 1.85vw, 1.72rem) !important;
+  }
+
+  .home-hero-reference .home-hero-copy > p {
+    max-width: 500px !important;
+    font-size: .98rem !important;
+  }
+
+  .home-hero-reference .hero-actions .btn {
+    min-width: 164px !important;
+    padding-inline: 18px !important;
   }
 
   .home-hero-reference .hero-collage {
-    height: 505px !important;
+    height: 500px !important;
+  }
+
+  .home-hero-reference .hero-main-frame {
+    left: 9% !important;
+    top: 62px !important;
+    width: 69% !important;
+    height: 365px !important;
+  }
+
+  .home-hero-reference .hero-float-a {
+    width: 31% !important;
+    height: 152px !important;
+  }
+
+  .home-hero-reference .hero-float-b {
+    width: 33% !important;
+    height: 158px !important;
+    bottom: 18px !important;
   }
 
   .home-hero-reference .hero-pillar-band {
-    bottom: 6px !important;
+    width: calc(100% - 34px) !important;
+    min-height: 94px !important;
+    bottom: -43px !important;
+    padding: 11px 10px !important;
+  }
+
+  .home-hero-reference .hero-pillar-item {
+    padding: 7px 12px !important;
+    gap: 10px !important;
+  }
+
+  .home-hero-reference .pillar-icon {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .home-hero-reference .hero-pillar-item b {
+    font-size: .9rem !important;
+  }
+
+  .home-hero-reference .hero-pillar-item small {
+    font-size: .72rem !important;
   }
 }
 
 @media (min-width: 1600px) {
+  .home-hero-reference {
+    min-height: 680px !important;
+  }
+
+  .home-hero-reference .home-hero-art {
+    min-height: 680px !important;
+  }
+
   .home-hero-reference .home-hero-copy > p {
     max-width: 650px !important;
     font-size: 1.12rem !important;
+  }
+
+  .home-hero-reference .hero-collage {
+    height: 575px !important;
+  }
+
+  .home-hero-reference .hero-main-frame {
+    height: 430px !important;
+  }
+
+  .home-hero-reference .hero-float-a {
+    height: 192px !important;
+  }
+
+  .home-hero-reference .hero-float-b {
+    height: 202px !important;
   }
 }
