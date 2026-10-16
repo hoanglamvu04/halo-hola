@@ -37,6 +37,21 @@
     line-height: 1.08 !important;
     white-space: nowrap !important;
   }
+
+  /* Mobile should show enough story context without making the hero too tall. */
+  .home-hero-reference .home-hero-copy > p {
+    margin: 7px 0 0 !important;
+    max-width: 100% !important;
+    font-size: .74rem !important;
+    line-height: 1.5 !important;
+    color: #7f8a84 !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
+  }
 }
 
 @media (max-width: 390px) {
@@ -47,5 +62,11 @@
 
   .home-hero-copy h3 {
     font-size: .98rem !important;
+  }
+
+  .home-hero-reference .home-hero-copy > p {
+    font-size: .71rem !important;
+    line-height: 1.46 !important;
+    -webkit-line-clamp: 3 !important;
   }
 }
