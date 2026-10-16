@@ -63,8 +63,10 @@
     transform: translateY(-4px);
   }
 
+  /* Keep the four-value strip visually separate from the CTA row above. */
   .home-hero-reference .hero-pillar-band {
-    margin-top: 8px !important;
+    bottom: 8px !important;
+    margin-top: 0 !important;
   }
 }
 
@@ -90,6 +92,10 @@
 
   .home-hero-reference .hero-collage {
     height: 505px !important;
+  }
+
+  .home-hero-reference .hero-pillar-band {
+    bottom: 6px !important;
   }
 }
 
