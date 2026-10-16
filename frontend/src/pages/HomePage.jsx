@@ -16,6 +16,7 @@ export default function HomePage() {
   const [tours,setTours]=useState([])
   const [holaMapEmbedUrl,setHolaMapEmbedUrl]=useState('')
   const [artworks,setArtworks]=useState([])
+  const [heroSlide,setHeroSlide]=useState(0)
 
   useEffect(()=>{
     getCampaignStats().then(setStats).catch(()=>{})
@@ -40,6 +41,13 @@ export default function HomePage() {
     floatImageA:img.architecture,
     floatImageB:img.people
   })
+  const heroSlides=[
+    {src:hero.mainImage||img.lake,alt:'Phong cảnh Hòa Lạc'},
+    {src:hero.floatImageA||img.architecture,alt:'Kiến trúc Hòa Lạc'},
+    {src:hero.floatImageB||img.people,alt:'Con người Hòa Lạc'},
+    {src:img.green,alt:'Thiên nhiên Hòa Lạc'},
+    {src:img.sunset,alt:'Nắng Hòa Lạc'}
+  ]
   const campaign=normalizeCampaignConfig(sectionData('campaign',{
     eyebrow:'HALO HOLA ĐANG DIỄN RA',
     title:'Mỗi ngày thêm một góc nhìn mới.',
@@ -95,6 +103,8 @@ export default function HomePage() {
   ]
 
   const milestones=OFFICIAL_CAMPAIGN_MILESTONES
+  const previousHeroSlide=()=>setHeroSlide(current=>(current-1+heroSlides.length)%heroSlides.length)
+  const nextHeroSlide=()=>setHeroSlide(current=>(current+1)%heroSlides.length)
 
   return <main>
     {sectionOn('hero')&&<section className="home-hero home-hero-reference">
@@ -128,6 +138,24 @@ export default function HomePage() {
 
           <div className="hero-float hero-float-a"><img src={hero.floatImageA} alt="Kiến trúc Hòa Lạc"/></div>
           <div className="hero-float hero-float-b"><img src={hero.floatImageB} alt="Con người Hòa Lạc"/></div>
+
+          <div className="hero-desktop-carousel" aria-label="Bộ ảnh Hòa Lạc">
+            <img key={heroSlide} src={heroSlides[heroSlide].src} alt={heroSlides[heroSlide].alt}/>
+            <div className="hero-carousel-controls">
+              <button type="button" onClick={previousHeroSlide} aria-label="Ảnh Hòa Lạc trước"><ArrowLeft/></button>
+              <span>{String(heroSlide+1).padStart(2,'0')} / {String(heroSlides.length).padStart(2,'0')}</span>
+              <button type="button" onClick={nextHeroSlide} aria-label="Ảnh Hòa Lạc tiếp theo"><ArrowRight/></button>
+            </div>
+            <div className="hero-carousel-dots" aria-label="Chọn ảnh Hòa Lạc">
+              {heroSlides.map((slide,index)=><button
+                type="button"
+                key={slide.src+index}
+                className={index===heroSlide?'active':''}
+                onClick={()=>setHeroSlide(index)}
+                aria-label={`Xem ảnh ${index+1}: ${slide.alt}`}
+              />)}
+            </div>
+          </div>
 
           <div className="hero-stone">
             <b>HÒA LẠC</b>
