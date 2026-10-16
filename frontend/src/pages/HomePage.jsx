@@ -106,7 +106,7 @@ export default function HomePage() {
           <p>{hero.description}</p>
 
           <div className="hero-actions">
-            <Link to="/top52" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link>
+            <Link to="/kham-pha" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link>
             <Link to="/hola-map" className="btn btn-outline"><MapPin size={17}/> Xem HOLA Map</Link>
           </div>
         </div>
