@@ -26,11 +26,7 @@ export default function WeHolaPage(){
   }
  },[showForm])
 
- const openRegistration=()=>{
-  setError('')
-  setResult(null)
-  setShowForm(true)
- }
+ const openRegistration=()=>{setError('');setResult(null);setShowForm(true)}
 
  const submit=async event=>{
   event.preventDefault()
@@ -42,10 +38,10 @@ export default function WeHolaPage(){
   finally{setSubmitting(false)}
  }
 
- return <main className="we-hola-page"><PageHero eyebrow="CỘNG ĐỒNG PHI LỢI NHUẬN" title="WE HOLA" accent="Chúng ta là Hòa Lạc" desc="Cùng nhau làm Hòa Lạc tốt đẹp hơn — bằng những việc nhỏ, cụ thể và có ích." image={img.people}><button type="button" className="btn btn-green" onClick={openRegistration}>Tham gia WE HOLA <ArrowRight size={16}/></button></PageHero>
- <section className="container section we-hola-goals"><div className="section-heading"><div><span className="eyebrow">WE HOLA HƯỚNG ĐẾN</span><h2>Một Hòa Lạc tốt đẹp hơn</h2></div><p>Không chỉ nói về một Hòa Lạc tốt đẹp — cùng nhau làm những việc thực tế.</p></div><div className="goal-grid">{goals.map(([t,d,I])=><div key={t}><I/><h3>{t}</h3><p>{d}</p></div>)}</div></section>
- <section className="paper-bg we-hola-action-band"><div className="container section action-story we-hola-action"><div><span className="eyebrow">WE HOLA ACTION</span><h2>100 người · 1 việc tốt cho Hòa Lạc</h2><p>Mỗi hoạt động chọn một vấn đề nhỏ nhưng thực tế và huy động cộng đồng cùng giải quyết.</p><div className="chip-wrap"><span>Trồng cây</span><span>Làm sạch không gian</span><span>Giữ một câu chuyện</span><span>Bản đồ cộng đồng</span><span>Hỗ trợ người yếu thế</span></div><button type="button" className="btn btn-green" onClick={openRegistration}>Đăng ký tham gia <ArrowRight size={16}/></button></div><img src={img.green} alt="Hòa Lạc xanh"/></div></section>
- <section className="container section we-hola-flow-section"><h2>Cùng địa phương · cùng làm</h2><div className="community-flow"><div><b>Địa phương</b><p>Đề xuất nhu cầu thực tế</p></div><span>→</span><div><b>WE HOLA</b><p>Kết nối ý tưởng, con người, nguồn lực</p></div><span>→</span><div><b>Cộng đồng</b><p>Cùng làm</p></div><span>→</span><div><b>Doanh nghiệp</b><p>Đồng hành nguồn lực</p></div></div></section>
+ return <main className="we-hola-page"><PageHero eyebrow="HALO HOLA KỂ · WE HOLA LÀM" title="WE HOLA" accent="Chúng ta là Hòa Lạc" desc="Từ những câu chuyện được HALO HOLA tìm thấy, WE HOLA kết nối cộng đồng để biến điều đáng quan tâm thành những hành động nhỏ, cụ thể và có ích." image={img.people}><button type="button" className="btn btn-green" onClick={openRegistration}>Tham gia WE HOLA <ArrowRight size={16}/></button></PageHero>
+ <section className="container section we-hola-goals"><div className="section-heading"><div><span className="eyebrow">TỪ KỂ ĐẾN LÀM</span><h2>Mỗi câu chuyện có thể mở ra một hành động</h2></div><p>Câu chuyện môi trường có thể thành clean-up hoặc trồng cây; câu chuyện bản sắc có thể thành hoạt động lưu giữ văn hóa; câu chuyện không gian có thể thành một dự án cộng đồng nhỏ.</p></div><div className="goal-grid">{goals.map(([t,d,I])=><div key={t}><I/><h3>{t}</h3><p>{d}</p></div>)}</div></section>
+ <section className="paper-bg we-hola-action-band"><div className="container section action-story we-hola-action"><div><span className="eyebrow">WE HOLA ACTION</span><h2>100 người · 1 việc tốt cho Hòa Lạc</h2><p>Mỗi hoạt động chọn một vấn đề nhỏ nhưng thực tế và huy động cộng đồng cùng giải quyết.</p><div className="chip-wrap"><span>Trồng cây</span><span>Làm sạch không gian</span><span>Giữ một câu chuyện</span><span>Bản đồ cộng đồng</span><span>Hỗ trợ trẻ em</span></div><button type="button" className="btn btn-green" onClick={openRegistration}>Đăng ký tham gia <ArrowRight size={16}/></button></div><img src={img.green} alt="Hòa Lạc xanh"/></div></section>
+ <section className="container section we-hola-flow-section"><h2>Cùng địa phương · cùng làm</h2><div className="community-flow"><div><b>HALO HOLA</b><p>Tìm và kể câu chuyện</p></div><span>→</span><div><b>WE HOLA</b><p>Kết nối ý tưởng, con người, nguồn lực</p></div><span>→</span><div><b>Cộng đồng</b><p>Cùng làm</p></div><span>→</span><div><b>Doanh nghiệp</b><p>Đồng hành nguồn lực</p></div></div></section>
 
  {showForm&&<div className="tour-register-modal" role="dialog" aria-modal="true" aria-label="Đăng ký tham gia WE HOLA" onMouseDown={event=>{if(event.target===event.currentTarget)setShowForm(false)}}>
   <section className="tour-register-panel" onMouseDown={event=>event.stopPropagation()}>
