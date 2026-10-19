@@ -17,7 +17,7 @@ import {
 } from '../utils/facebookShare.js'
 import '../styles/submit-success-receipt.css'
 
-const steps = ['Thông tin tác giả','Tác phẩm','Tải tác phẩm','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
+const steps = ['Thông tin người gửi','Góc nhìn','Tải nội dung','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
 const RECEIPT_PREFIX = 'halo_hola_submission_receipt_v1_'
 const TAXONOMY_SEPARATOR = ' • '
@@ -112,7 +112,7 @@ export default function SubmitPage(){
   const [error,setError]=useState('')
   const [savedAt,setSavedAt]=useState(()=>restoredReceipt?.savedAt?new Date(restoredReceipt.savedAt):null)
   const [copiedAction,setCopiedAction]=useState('')
-  const [shareNotice,setShareNotice]=useState(()=>restoredReceipt?'Đã khôi phục trạng thái theo Mã dự thi. Bạn có thể tiếp tục test bước chia sẻ mà không cần nhập lại từ đầu.':'')
+  const [shareNotice,setShareNotice]=useState(()=>restoredReceipt?'Đã khôi phục trạng thái theo Mã góc nhìn. Bạn có thể tiếp tục bước chia sẻ mà không cần nhập lại từ đầu.':'')
   const inputRef=useRef(null)
   const saveTimer=useRef(null)
   const code=useMemo(()=>result?.code || 'HH26-XXXXX',[result])
@@ -243,16 +243,16 @@ export default function SubmitPage(){
     if(clean(form.name).length<2) issues.push({step:1,key:'name',label:'Họ và tên'})
     if(!isValidEmail(form.email)) issues.push({step:1,key:'email',label:'Email hợp lệ'})
     if(!clean(form.phone)) issues.push({step:1,key:'phone',label:'Số điện thoại'})
-    if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên tác phẩm'})
-    if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link tác phẩm hợp lệ'})
-    if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link tác phẩm'})
+    if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên góc nhìn'})
+    if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link nội dung hợp lệ'})
+    if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link nội dung'})
     if(!selectionArray(form.themes,form.theme).length) issues.push({step:4,key:'theme',label:'Ít nhất một chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
     if(clean(form.story).length<20) issues.push({step:5,key:'story',label:'Câu chuyện (tối thiểu 20 ký tự)'})
     if(!form.rightsConfirmed) issues.push({step:6,key:'rightsConfirmed',label:'Xác nhận quyền tác giả'})
     if(!form.imageConsentConfirmed) issues.push({step:6,key:'imageConsentConfirmed',label:'Xác nhận đồng thuận hình ảnh'})
-    if(!form.allowMediaUse) issues.push({step:6,key:'allowMediaUse',label:'Quyền sử dụng tác phẩm theo thể lệ'})
+    if(!form.allowMediaUse) issues.push({step:6,key:'allowMediaUse',label:'Quyền sử dụng nội dung theo hướng dẫn chương trình'})
     if(form.isMinor&&clean(form.guardianName).length<2) issues.push({step:6,key:'guardianName',label:'Họ tên người giám hộ'})
     if(form.isMinor&&!form.guardianConsent) issues.push({step:6,key:'guardianConsent',label:'Xác nhận của người giám hộ'})
     return issues
@@ -349,7 +349,7 @@ export default function SubmitPage(){
       const detail=Array.isArray(err.details)&&err.details.length
         ? ' ' + err.details.map(item=>item?.message).filter(Boolean).join(' · ')
         : ''
-      setError((err.message || 'Có lỗi xảy ra khi gửi tác phẩm') + detail)
+      setError((err.message || 'Có lỗi xảy ra khi gửi góc nhìn') + detail)
     } finally {
       setSubmitting(false)
     }
@@ -362,7 +362,7 @@ export default function SubmitPage(){
   const hasPinnedLocation=hasCoordinate(form.locationLat)&&hasCoordinate(form.locationLng)
 
   return <main>
-    <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Gửi tác phẩm gốc, câu chuyện và thông tin bản quyền trong một luồng an toàn. File original được giữ nguyên chất lượng." image={heroImage}>
+    <PageHero eyebrow="GÓC NHÌN CỦA BẠN" title="Gửi góc nhìn" accent="của bạn" desc="Đóng góp hình ảnh, video, câu chuyện hoặc sáng tạo để cùng cộng đồng ghi lại Hòa Lạc. File gốc được giữ nguyên chất lượng để lưu trữ và ghi nhận." image={heroImage}>
       <div className="draft-status"><Save size={15}/>{savedAt ? 'Đã lưu nháp lúc ' + savedAt.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}) : 'Tự động lưu nháp'}</div>
     </PageHero>
 
@@ -378,7 +378,7 @@ export default function SubmitPage(){
           <span className="eyebrow">Bước {step} / 7</span>
 
           {step===1&&<div>
-            <h2>Thông tin tác giả</h2><p>Thông tin này dùng để BTC liên hệ và xác minh tác phẩm.</p>
+            <h2>Thông tin người đóng góp</h2><p>Thông tin này giúp Ban Tổ chức liên hệ, xác minh và ghi nhận đúng người gửi góc nhìn.</p>
             <div className="form-grid">
               <label>Họ và tên *<input value={form.name} onChange={e=>upd('name',e.target.value)} placeholder="Nguyễn Minh An"/></label>
               <label>Tên hiển thị<input value={form.display} onChange={e=>upd('display',e.target.value)} placeholder="Minh An"/></label>
@@ -389,18 +389,18 @@ export default function SubmitPage(){
           </div>}
 
           {step===2&&<div>
-            <h2>Thông tin tác phẩm</h2><p>Đặt tên và cho BTC biết tác phẩm được tạo khi nào.</p>
+            <h2>Thông tin góc nhìn</h2><p>Đặt tên cho góc nhìn và cho biết nội dung được ghi lại hoặc thực hiện khi nào.</p>
             <div className="form-grid">
-              <label className="full">Tên tác phẩm *<input value={form.title} onChange={e=>upd('title',e.target.value)} placeholder="Bình minh trên hồ Đồng Mô"/></label>
+              <label className="full">Tên góc nhìn *<input value={form.title} onChange={e=>upd('title',e.target.value)} placeholder="Bình minh trên hồ Đồng Mô"/></label>
               <label>Thời gian chụp / thực hiện<input type="date" value={form.capturedAt} onChange={e=>upd('capturedAt',e.target.value)}/></label>
-              <label>Link tác phẩm (nếu có)<input value={form.externalLink} onChange={e=>upd('externalLink',e.target.value)} placeholder="https://..."/></label>
+              <label>Link nội dung (nếu có)<input value={form.externalLink} onChange={e=>upd('externalLink',e.target.value)} placeholder="https://..."/></label>
             </div>
             <h3 className="form-subtitle">Loại hình</h3>
             <div className="type-grid">{types.map(([value,desc,I])=><button key={value} onClick={()=>upd('type',value)} className={form.type===value?'selected':''}><I/><b>{value}</b><small>{desc}</small></button>)}</div>
           </div>}
 
           {step===3&&<div>
-            <h2>Tải file gốc</h2><p>File original được lưu riêng, không resize và không nén lại.</p>
+            <h2>Tải nội dung gốc</h2><p>File original được lưu riêng, không resize và không nén lại để bảo toàn đóng góp ban đầu.</p>
             <div className="vault-note"><ShieldCheck/><div><b>Original Vault</b><span>Giữ nguyên byte file gốc · checksum SHA-256 · tối đa 10 file</span></div></div>
             <div className="upload-box" onClick={()=>inputRef.current?.click()}>
               <Upload size={34}/><b>Kéo thả tệp vào đây hoặc</b>
@@ -413,7 +413,7 @@ export default function SubmitPage(){
 
           {step===4&&<div>
             <h2>Chủ đề & sắc màu</h2>
-            <p>Bạn có thể chọn <b>nhiều chủ đề</b> và <b>nhiều sắc màu</b> nếu tác phẩm giao thoa nhiều lớp câu chuyện.</p>
+            <p>Bạn có thể chọn <b>nhiều chủ đề</b> và <b>nhiều sắc màu</b> nếu góc nhìn giao thoa nhiều lớp câu chuyện.</p>
             <h3 className="form-subtitle">Chủ đề · đã chọn {selectedThemes.length}</h3>
             {themes.length?<div className="theme-select-grid">{themes.map(t=>{
               const selected=selectedThemes.includes(t.title)
@@ -428,7 +428,7 @@ export default function SubmitPage(){
 
           {step===5&&<div>
             <h2>Địa điểm & câu chuyện</h2>
-            <p>Chọn đúng nơi tác phẩm được thực hiện để BTC đối chiếu địa bàn và có thể gắn tác phẩm lên HOLA Map.</p>
+            <p>Chọn đúng nơi góc nhìn được ghi lại để nội dung có thể trở thành một phần của HOLA Map và kho tư liệu cộng đồng.</p>
             <HolaLocationPicker
               value={{
                 location:form.location,
@@ -442,58 +442,58 @@ export default function SubmitPage(){
               onChange={updateLocation}
             />
             <div className="form-grid location-story-grid">
-              <label className="full">Câu chuyện 50–150 chữ *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Kể câu chuyện đằng sau tác phẩm..."/><small>{storyLength} ký tự · cần tối thiểu 20 ký tự để gửi</small></label>
-              <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Tác phẩm này từng tham gia/đạt giải ở chương trình khác</label>
-              {form.previousAward&&<label className="full">Thông tin giải/chương trình<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, giải thưởng..."/></label>}
+              <label className="full">Câu chuyện phía sau góc nhìn *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Điều gì khiến khoảnh khắc, nơi chốn hoặc câu chuyện này đáng được lưu lại?"/><small>{storyLength} ký tự · cần tối thiểu 20 ký tự để gửi</small></label>
+              <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Nội dung này từng tham gia hoặc được ghi nhận ở chương trình khác</label>
+              {form.previousAward&&<label className="full">Thông tin chương trình / ghi nhận<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, hạng mục ghi nhận..."/></label>}
             </div>
           </div>}
 
           {step===6&&<div>
-            <h2>Quyền tác giả & đồng thuận</h2><p>Những xác nhận này giúp bảo vệ tác giả, người xuất hiện trong tác phẩm và BTC.</p>
+            <h2>Quyền tác giả & đồng thuận</h2><p>Những xác nhận này giúp bảo vệ người đóng góp, người xuất hiện trong nội dung và cộng đồng sử dụng kho tư liệu.</p>
             <div className="confirm-list">
-              <label><input type="checkbox" checked={form.rightsConfirmed} onChange={e=>upd('rightsConfirmed',e.target.checked)}/> <b>Tôi xác nhận mình có quyền gửi và sử dụng tác phẩm này. *</b></label>
+              <label><input type="checkbox" checked={form.rightsConfirmed} onChange={e=>upd('rightsConfirmed',e.target.checked)}/> <b>Tôi xác nhận mình có quyền gửi và sử dụng nội dung này. *</b></label>
               <label><input type="checkbox" checked={form.imageConsentConfirmed} onChange={e=>upd('imageConsentConfirmed',e.target.checked)}/> Tôi xác nhận đã có sự đồng ý phù hợp của người có thể nhận diện trong ảnh/video (nếu có). *</label>
-              <label><input type="checkbox" checked={form.allowMediaUse} onChange={e=>upd('allowMediaUse',e.target.checked)}/> Tôi đồng ý cho HALO HOLA sử dụng tác phẩm cho mục đích truyền thông theo thể lệ. *</label>
+              <label><input type="checkbox" checked={form.allowMediaUse} onChange={e=>upd('allowMediaUse',e.target.checked)}/> Tôi đồng ý cho HALO HOLA sử dụng nội dung cho truyền thông, triển lãm và lưu trữ theo hướng dẫn chương trình. *</label>
               <label><input type="checkbox" checked={form.allowNewsletter} onChange={e=>upd('allowNewsletter',e.target.checked)}/> Tôi đồng ý nhận tin về HALO HOLA và các hoạt động cộng đồng. <small>(không bắt buộc)</small></label>
               <label><input type="checkbox" checked={form.isMinor} onChange={e=>upd('isMinor',e.target.checked)}/> Tôi chưa đủ 18 tuổi.</label>
             </div>
             {form.isMinor&&<div className="guardian-box">
               <label>Họ tên người giám hộ<input value={form.guardianName} onChange={e=>upd('guardianName',e.target.value)} placeholder="Họ và tên"/></label>
-              <label className="check-row"><input type="checkbox" checked={form.guardianConsent} onChange={e=>upd('guardianConsent',e.target.checked)}/> Người giám hộ đồng ý cho tôi tham gia và gửi tác phẩm.</label>
+              <label className="check-row"><input type="checkbox" checked={form.guardianConsent} onChange={e=>upd('guardianConsent',e.target.checked)}/> Người giám hộ đồng ý cho tôi tham gia chương trình và gửi góc nhìn.</label>
             </div>}
           </div>}
 
           {step===7&&<div>
-            <h2>{result?'Gửi tác phẩm thành công':'Kiểm tra lần cuối'}</h2>
+            <h2>{result?'Đóng góp góc nhìn thành công':'Kiểm tra lần cuối'}</h2>
             {result?<div className="success-stack">
               <div className="submit-success-receipt">
                 <div className="submit-success-icon"><Check/></div>
-                <span className="submit-success-kicker">GỬI TÁC PHẨM THÀNH CÔNG</span>
-                <h3>Hãy lưu mã tác phẩm để tra cứu sau này</h3>
-                <p>BTC đã nhận hồ sơ và file của bạn. Mã dưới đây là thông tin quan trọng để theo dõi trạng thái tác phẩm.</p>
+                <span className="submit-success-kicker">ĐÃ GHI NHẬN GÓC NHÌN</span>
+                <h3>Hãy lưu mã góc nhìn để theo dõi hành trình</h3>
+                <p>HALO HOLA đã nhận nội dung và file của bạn. Mã dưới đây giúp bạn theo dõi trạng thái kiểm tra, công bố, HOLA Maps và các bước ghi nhận tiếp theo.</p>
 
                 <div className="submit-success-code">
-                  <small>Mã tác phẩm</small>
+                  <small>Mã góc nhìn</small>
                   <strong>{result.code}</strong>
                   <button type="button" onClick={()=>copyValue(result.code,'code')}><Copy size={17}/>{copiedAction==='code'?'Đã sao chép':'Sao chép mã'}</button>
                 </div>
 
                 <div className="submit-success-link">
-                  <div><small>Liên kết tra cứu</small><code>{lookupLink}</code></div>
+                  <div><small>Liên kết theo dõi</small><code>{lookupLink}</code></div>
                   <button type="button" onClick={()=>copyValue(lookupLink,'link')}><Copy size={17}/>{copiedAction==='link'?'Đã sao chép':'Sao chép liên kết'}</button>
                 </div>
 
                 <div className="submit-success-reminder">
-                  <b>Khi tra cứu:</b> dùng mã <strong>{result.code}</strong> và email đã gửi là <strong>{clean(form.email)}</strong>.
+                  <b>Khi theo dõi:</b> dùng mã <strong>{result.code}</strong> và email đã gửi là <strong>{clean(form.email)}</strong>.
                   {copiedAction==='error'&&<span> Trình duyệt không cho phép sao chép tự động, hãy giữ và sao chép thủ công.</span>}
                 </div>
               </div>
 
               <div className="submit-facebook-share">
                 <div className="submit-facebook-share-head">
-                  <span>CHIA SẺ GÓC NHÌN</span>
-                  <h3>Đăng tiếp lên CHECK IN HOALAC</h3>
-                  <p>Ảnh/video và nội dung được chuẩn bị từ chính tác phẩm vừa gửi. Bạn vẫn là người kiểm tra và bấm Đăng trên Facebook.</p>
+                  <span>KỂ TIẾP GÓC NHÌN</span>
+                  <h3>Chia sẻ cùng cộng đồng CHECK IN HOALAC</h3>
+                  <p>Ảnh/video và nội dung được chuẩn bị từ chính góc nhìn vừa gửi. Bạn vẫn là người kiểm tra và bấm Đăng trên Facebook.</p>
                 </div>
 
                 <div className="submit-facebook-caption">
@@ -505,7 +505,7 @@ export default function SubmitPage(){
                 </div>
 
                 <div className="submit-facebook-actions">
-                  <button type="button" className="btn submit-facebook-primary" onClick={shareOnFacebook}><Share2 size={18}/> Đăng bài lên Facebook</button>
+                  <button type="button" className="btn submit-facebook-primary" onClick={shareOnFacebook}><Share2 size={18}/> Chia sẻ lên Facebook</button>
                   <button type="button" className="btn btn-outline" onClick={openCheckinGroup}><ExternalLink size={18}/> {checkinGroupUrl?'Mở CHECK IN HOALAC':'Tìm CHECK IN HOALAC'}</button>
                 </div>
 
@@ -516,14 +516,14 @@ export default function SubmitPage(){
               </div>
 
               <div className="success-actions">
-                <Link to={lookupPath} className="btn btn-green">Tra cứu tác phẩm ngay</Link>
-                <button className="btn btn-outline" onClick={resetDraft}>Gửi tác phẩm khác</button>
+                <Link to={lookupPath} className="btn btn-green">Theo dõi góc nhìn</Link>
+                <button className="btn btn-outline" onClick={resetDraft}>Đóng góp góc nhìn khác</button>
               </div>
               {result.media?.length>0&&<div className="vault-result"><b>Original Vault</b>{result.media.map(m=><div key={m.id}><span>{m.originalName}</span><small>{m.provider} · SHA256 {m.sha256?.slice(0,12)}…</small></div>)}</div>}
             </div>:<>
               <div className="review-grid">
-                <div><small>Tác phẩm</small><b>{clean(form.title)||'Chưa nhập'}</b></div>
-                <div><small>Họ tên tác giả</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
+                <div><small>Góc nhìn</small><b>{clean(form.title)||'Chưa nhập'}</b></div>
+                <div><small>Người đóng góp</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
                 <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
                 <div><small>Số điện thoại</small><b>{clean(form.phone)||'Chưa nhập'}</b></div>
                 <div><small>Chủ đề</small><b>{selectedThemes.length?selectedThemes.join(' · '):'Chưa chọn'}</b></div>
@@ -543,16 +543,16 @@ export default function SubmitPage(){
 
           {!result&&<div className="wizard-actions">
             <button className="btn btn-outline" onClick={prev} disabled={step===1}><ArrowLeft size={16}/> Quay lại</button>
-            {step<7?<button className="btn btn-terra" onClick={next}>Tiếp tục <ArrowRight size={16}/></button>:<button className="btn btn-terra" disabled={submitting} onClick={submit}>{submitting?<><Loader2 className="spin" size={16}/> Đang lưu original...</>:<>Gửi tác phẩm <ArrowRight size={16}/></>}</button>}
+            {step<7?<button className="btn btn-terra" onClick={next}>Tiếp tục <ArrowRight size={16}/></button>:<button className="btn btn-terra" disabled={submitting} onClick={submit}>{submitting?<><Loader2 className="spin" size={16}/> Đang lưu original...</>:<>Gửi góc nhìn <ArrowRight size={16}/></>}</button>}
           </div>}
         </div>
 
         <aside className="submission-preview">
-          <span className="eyebrow">XEM TRƯỚC TÁC PHẨM</span>
-          <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước tác phẩm"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span>{selectedThemes.map(theme=><span key={theme}>{theme}</span>)}</div><h3>{form.title||'Tên tác phẩm của bạn'}</h3><p>{form.display||form.name||'Tên tác giả'}</p><p>{form.story||'Câu chuyện phía sau tác phẩm sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{selectedColors.map(color=><span key={color}>{color}</span>)}</div></div></div>
-          <div className="submission-code"><small>{result?'Mã tác phẩm':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>copyValue(code,'sidebar-code')}><Copy size={16}/>{copiedAction==='sidebar-code'&&<span>Đã sao chép</span>}</button>}</div>
-          <blockquote>“Mỗi góc nhìn của bạn đều góp phần tạo nên một bức tranh Hòa Lạc đa sắc màu.”</blockquote>
-          <Link className="text-link" to={result?lookupPath:'/tra-cuu'}>{result?'Tra cứu tác phẩm này →':'Đã gửi trước đó? Tra cứu tác phẩm →'}</Link>
+          <span className="eyebrow">XEM TRƯỚC GÓC NHÌN</span>
+          <div className="preview-card">{previewUrl?<img src={previewUrl} alt="Xem trước góc nhìn"/>:<div className="theme-card-placeholder"/>}<div className="preview-body"><div className="preview-tags"><span>{form.type}</span>{selectedThemes.map(theme=><span key={theme}>{theme}</span>)}</div><h3>{form.title||'Tên góc nhìn của bạn'}</h3><p>{form.display||form.name||'Người kể'}</p><p>{form.story||'Câu chuyện phía sau góc nhìn sẽ xuất hiện tại đây...'}</p><div className="preview-tags"><span>{form.location||'Chưa nhập địa điểm'}</span>{selectedColors.map(color=><span key={color}>{color}</span>)}</div></div></div>
+          <div className="submission-code"><small>{result?'Mã góc nhìn':'Mã sẽ tạo sau khi gửi'}</small><strong>{code}</strong>{result&&<button onClick={()=>copyValue(code,'sidebar-code')}><Copy size={16}/>{copiedAction==='sidebar-code'&&<span>Đã sao chép</span>}</button>}</div>
+          <blockquote>“Mỗi góc nhìn của bạn là một đóng góp để cùng cộng đồng xây dựng bức tranh Hòa Lạc đa sắc màu.”</blockquote>
+          <Link className="text-link" to={result?lookupPath:'/tra-cuu'}>{result?'Theo dõi góc nhìn này →':'Đã gửi trước đó? Theo dõi góc nhìn →'}</Link>
         </aside>
       </div>
     </section>
