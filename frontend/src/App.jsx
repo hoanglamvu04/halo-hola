@@ -14,6 +14,7 @@ const Top52Page=lazy(()=>import('./pages/Top52Page.jsx'))
 const ArtworkPage=lazy(()=>import('./pages/ArtworkPage.jsx'))
 const TourPage=lazy(()=>import('./pages/TourPage.jsx'))
 const HolaDayPage=lazy(()=>import('./pages/HolaDayPage.jsx'))
+const Calendar2027Page=lazy(()=>import('./pages/Calendar2027Page.jsx'))
 const StoriesPage=lazy(()=>import('./pages/StoriesPage.jsx'))
 const StoryDetailPage=lazy(()=>import('./pages/StoryDetailPage.jsx'))
 const WeHolaPage=lazy(()=>import('./pages/WeHolaPage.jsx'))
@@ -28,22 +29,23 @@ const JurorWorkspacePage=lazy(()=>import('./pages/JurorWorkspacePage.jsx'))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
 const SITE_URL='https://halohola.vn'
-const DEFAULT_DESCRIPTION='HALO HOLA 2026 là chương trình cộng đồng cùng khám phá, ghi lại và đóng góp những góc nhìn, câu chuyện, địa điểm và trải nghiệm về Hòa Lạc.'
+const DEFAULT_DESCRIPTION='HALO HOLA 2026 là hành trình cộng đồng và dự án biên tập – khám phá – lưu giữ 52 câu chuyện về Hòa Lạc.'
 const DEFAULT_OG_IMAGE='https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=85'
 const SEO_ROUTES={
   '/': ['HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc',DEFAULT_DESCRIPTION],
-  '/chu-de':['8 chủ đề về Hòa Lạc | HALO HOLA','Khám phá 8 chủ đề và cùng đóng góp những lớp câu chuyện về Hòa Lạc trong HALO HOLA 2026.'],
-  '/hola-tour':['HOLA Tour | HALO HOLA','Đi, gặp, trải nghiệm và kể lại Hòa Lạc qua ba hành trình HOLA Tour cùng diễn ra ngày 25/10/2026.'],
+  '/chu-de':['7 mạch nội dung về Hòa Lạc | HALO HOLA','Khám phá 7 mạch: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.'],
+  '/hola-tour':['HOLA Tour | HALO HOLA','Ba hành trình săn câu chuyện: Đi tìm Bản sắc, Đi tìm Màu sắc và Đi tìm Cảm xúc tại Hòa Lạc.'],
   '/hola-map':['HOLA Map | HALO HOLA','Khám phá địa điểm, câu chuyện và những góc nhìn cộng đồng về Hòa Lạc trên bản đồ tương tác.'],
-  '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện cộng đồng về con người, nơi chốn, ký ức và chuyển động của Hòa Lạc.'],
-  '/kham-pha':['Góc nhìn cộng đồng | HALO HOLA 2026','Kho góc nhìn cộng đồng về Hòa Lạc đã được công bố, có thể khám phá theo chủ đề, sắc màu, địa điểm và loại hình.'],
-  '/top52':['TOP52 | HALO HOLA 2026','52 góc nhìn nổi bật được ghi nhận trong hành trình cộng đồng HALO HOLA 2026.'],
-  '/we-hola':['WE HOLA — Chúng ta là Hòa Lạc','Cộng đồng cùng kết nối, đóng góp và làm những việc cụ thể để Hòa Lạc xanh hơn, đẹp hơn và đáng sống hơn.'],
-  '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Đóng góp hình ảnh, câu chuyện, địa điểm và góc nhìn của bạn để cùng xây dựng kho tư liệu cộng đồng về Hòa Lạc.'],
-  '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố, ghi nhận những dấu mốc của HALO HOLA 2026.'],
-  '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác cùng đóng góp, kết nối và xây dựng HALO HOLA.'],
-  '/the-le-giai-thuong':['Cách tham gia & Ghi nhận | HALO HOLA 2026','Hướng dẫn gửi góc nhìn, nguyên tắc đóng góp, mốc thời gian và các hạng mục ghi nhận của chương trình cộng đồng HALO HOLA 2026.'],
-  '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn, mức hoàn thiện, trạng thái công bố và các bước ghi nhận trong HALO HOLA 2026.'],
+  '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện về con người, nơi chốn, ký ức, tri thức, đời sống và tương lai Hòa Lạc.'],
+  '/kham-pha':['Góc nhìn Hòa Lạc | HALO HOLA 2026','Kho những góc nhìn đã được tìm thấy, biên tập và công bố trong hành trình HALO HOLA 2026.'],
+  '/top52':['52 góc nhìn 2026 | HALO HOLA','52 câu chuyện đại diện cho một Hòa Lạc năm 2026 — được Ban Biên tập chủ động tìm, xác minh, biên tập và giới thiệu tại HOLA DAY.'],
+  '/we-hola':['WE HOLA — Chúng ta là Hòa Lạc','HALO HOLA kể. WE HOLA làm — cộng đồng cùng hành động để Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.'],
+  '/gui-goc-nhin':['Gửi một góc nhìn về Hòa Lạc | HALO HOLA 2026','Gửi ảnh, video, câu chuyện hoặc giới thiệu một người, một nơi hay một điều đáng để Ban Biên tập HALO HOLA tìm hiểu.'],
+  '/hola-day':['HOLA DAY 2026 | HALO HOLA','24.11.2026 — Triển lãm · Câu chuyện · Kết nối · công bố 52 góc nhìn và mở ra HALO HOLA 2027.'],
+  '/calendar-2027':['HALO HOLA Calendar 2027','52 tuần · 52 câu chuyện Hòa Lạc — phiên bản vật lý nối mỗi tuần trên lịch với câu chuyện digital qua QR.'],
+  '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho chuyên gia, CLB, trường học, doanh nghiệp, địa phương và đối tác cùng đóng góp nguồn lực, câu chuyện và kết nối.'],
+  '/the-le-giai-thuong':['Cách đóng góp | HALO HOLA 2026','Hướng dẫn gửi một góc nhìn, giới thiệu đầu mối câu chuyện, 7 mạch nội dung, nguyên tắc biên tập và quyền sử dụng nội dung.'],
+  '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn từ lúc gửi, xác minh, biên tập đến công bố và HOLA Maps.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
 
@@ -70,11 +72,11 @@ function isKnownPath(pathname){
 }
 function routeSeo(pathname){
   if(SEO_ROUTES[pathname])return SEO_ROUTES[pathname]
-  if(pathname.startsWith('/chu-de/'))return ['Chủ đề Hòa Lạc | HALO HOLA','Khám phá những góc nhìn và câu chuyện cộng đồng thuộc chủ đề HALO HOLA 2026.']
-  if(pathname.startsWith('/tac-pham/'))return ['Góc nhìn HALO HOLA 2026','Khám phá câu chuyện, địa điểm và góc nhìn được cộng đồng đóng góp cho HALO HOLA 2026.']
-  if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện từ cộng đồng HALO HOLA về Hòa Lạc.']
+  if(pathname.startsWith('/chu-de/'))return ['Mạch nội dung Hòa Lạc | HALO HOLA','Khám phá những góc nhìn và câu chuyện thuộc một trong 7 mạch biên tập HALO HOLA 2026.']
+  if(pathname.startsWith('/tac-pham/'))return ['Góc nhìn HALO HOLA 2026','Khám phá một câu chuyện, địa điểm và góc nhìn được ghi lại trong hành trình HALO HOLA 2026.']
+  if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện do HALO HOLA và cộng đồng cùng tìm, ghi lại và kể tiếp.']
   if(pathname.startsWith('/admin'))return ['Admin | HALO HOLA','Khu vực quản trị HALO HOLA.']
-  if(pathname.startsWith('/jury'))return ['Jury Mode | HALO HOLA','Khu vực Hội đồng giám khảo HALO HOLA.']
+  if(pathname.startsWith('/jury'))return ['Editorial Review | HALO HOLA','Khu vực đánh giá nội bộ HALO HOLA.']
   return ['404 — Không tìm thấy trang | HALO HOLA','Đường dẫn này không tồn tại hoặc nội dung chưa được công bố.']
 }
 
@@ -233,6 +235,7 @@ function SiteShell() {
           <Route path="/tac-pham/:slug" element={<ArtworkPage />} />
           <Route path="/hola-tour" element={<TourPage />} />
           <Route path="/hola-day" element={<HolaDayPage />} />
+          <Route path="/calendar-2027" element={<Calendar2027Page />} />
           <Route path="/stories" element={<StoriesPage />} />
           <Route path="/stories/:slug" element={<StoryDetailPage />} />
           <Route path="/we-hola" element={<WeHolaPage />} />
