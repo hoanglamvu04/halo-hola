@@ -11,7 +11,7 @@ const defaults={
   ctaBg:'#e95f25',ctaTextColor:'#ffffff',timelineBg:'#074c37',timelineTitleColor:'#ffffff',timelineIconColor:'#f2b84b',
   milestoneBg:'#145e49',milestoneBorder:'#4f826f',milestoneDateColor:'#ff9c45',milestoneTextColor:'#ffffff',
   activeMilestoneBg:'#1b684f',activeMilestoneBorder:'#e2b34f',activeMilestoneDateColor:'#ffd15c',
-  journeyTitle:'Hành trình biên tập 2026'
+  journeyTitle:'Hành trình 2026'
 }
 
 const legacy={
