@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react'
 import { getSiteSettings } from '../services/api.js'
 
 const exploreLinks=[
-  ['Chủ đề','/chu-de'],
-  ['TOP52','/top52'],
+  ['7 mạch','/chu-de'],
+  ['52 góc nhìn 2026','/top52'],
   ['Stories','/stories'],
   ['HOLA Tour','/hola-tour'],
   ['HOLA Map','/hola-map'],
+  ['Calendar 2027','/calendar-2027'],
   ['WE HOLA','/we-hola']
 ]
 
 const participateLinks=[
-  ['Cách tham gia & Ghi nhận','/the-le-giai-thuong'],
+  ['Cách đóng góp','/the-le-giai-thuong'],
   ['Theo dõi góc nhìn','/tra-cuu'],
   ['Đồng hành','/dong-hanh'],
   ['HOLA DAY','/hola-day']
@@ -40,7 +41,7 @@ export default function Footer() {
             : <span className="footer-wordmark">HAL<span>O</span> HOLA</span>}
         </Link>
 
-        <p className="footer-brand-copy">{footer.description||brand.tagline||'Nơi cộng đồng cùng khám phá, ghi lại, đóng góp và kể tiếp những câu chuyện về Hòa Lạc.'}</p>
+        <p className="footer-brand-copy">{footer.description||brand.tagline||'HALO HOLA đi tìm, biên tập và kể những câu chuyện đáng được giữ lại về Hòa Lạc.'}</p>
         {footer.address&&<div className="footer-address">{footer.address}</div>}
 
         <a className="footer-email" href={'mailto:'+email}><Mail size={16}/><span>{email}</span></a>
@@ -61,9 +62,9 @@ export default function Footer() {
       </div>
 
       <div className="footer-participate-column">
-        <h4>Đóng góp</h4>
+        <h4>Cùng kể Hòa Lạc</h4>
         <Link to="/gui-goc-nhin" className="footer-submit-cta">
-          <span>Gửi góc nhìn</span><ArrowRight size={18}/>
+          <span>Gửi một góc nhìn</span><ArrowRight size={18}/>
         </Link>
         <div className="footer-participate-links">
           {participateLinks.map(([label,to])=><Link key={to} to={to}>{label}</Link>)}
@@ -72,7 +73,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <span>© 2026 {brand.siteName||'HALO HOLA'}</span>
-        <span className="footer-bottom-note">52 góc nhìn · 1 Hòa Lạc</span>
+        <span className="footer-bottom-note">52 góc nhìn · 1 Hòa Lạc · Mỗi góc nhìn, một câu chuyện.</span>
       </div>
     </div>
   </footer>
