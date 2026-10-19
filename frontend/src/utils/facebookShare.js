@@ -10,7 +10,7 @@ export const CHECKIN_GROUP_URL = 'https://www.facebook.com/share/g/1K1YRBevZw/?m
 export const CHECKIN_GROUP_SEARCH_URL = CHECKIN_GROUP_URL
 
 export function buildSubmissionFacebookCaption({ form = {}, code = '' } = {}) {
-  const author = clean(form.display) || clean(form.name) || 'Tác giả HALO HOLA'
+  const author = clean(form.display) || clean(form.name) || 'Người kể HALO HOLA'
   const title = clean(form.title) || 'Góc nhìn Hòa Lạc'
   const themes = selectedValues(form.themes, form.theme)
   const colors = selectedValues(form.colors, form.color)
@@ -21,7 +21,7 @@ export function buildSubmissionFacebookCaption({ form = {}, code = '' } = {}) {
   return [
     title.toUpperCase(),
     '',
-    `📸 Tác giả: ${author}`,
+    `📸 Người kể: ${author}`,
     themes.length ? `🎨 Chủ đề: ${themes.join(' · ')}` : '',
     colors.length ? `🌈 Sắc màu: ${colors.join(' · ')}` : '',
     type ? `🖼 Loại hình: ${type}` : '',
@@ -29,8 +29,8 @@ export function buildSubmissionFacebookCaption({ form = {}, code = '' } = {}) {
     '',
     story,
     '',
-    'Tôi vừa gửi góc nhìn của mình tới HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc.',
-    code ? `Mã dự thi: ${code}` : '',
+    'Tôi vừa đóng góp một góc nhìn về Hòa Lạc cho HALO HOLA 2026 — cùng cộng đồng ghi lại Hòa Lạc hôm nay và kể tiếp cho mai sau.',
+    code ? `Mã góc nhìn: ${code}` : '',
     '',
     '#HaloHola #52GocNhin1HoaLac #HelloHoaLac'
   ].filter((line, index, rows) => line || (index > 0 && rows[index - 1])).join('\n').trim()
