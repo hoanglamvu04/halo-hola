@@ -175,7 +175,7 @@ INSERT INTO site_sections (section_key,label,enabled,sort_order,content) VALUES
   ('hero','Hero',TRUE,20,'{}'::jsonb),
   ('campaign','HALO HOLA đang diễn ra',TRUE,30,'{}'::jsonb),
   ('change','Hòa Lạc đang thay đổi',TRUE,40,'{}'::jsonb),
-  ('themes','8 chủ đề',TRUE,50,'{}'::jsonb),
+  ('themes','7 chủ đề',TRUE,50,'{}'::jsonb),
   ('colors','Sắc màu Hòa Lạc',TRUE,60,'{}'::jsonb),
   ('tours','HOLA Tour',TRUE,70,'{}'::jsonb),
   ('map','HOLA Map',TRUE,80,'{}'::jsonb),
@@ -247,14 +247,13 @@ CREATE TABLE IF NOT EXISTS themes (
 );
 
 INSERT INTO themes (id,slug,title,description,intro,image,color,location_label,published,sort_order) VALUES
-  (1,'net-doai','Nét Đoài tại Hòa Lạc','Văn hóa, làng xóm, trầm tích Xứ Đoài','Khám phá những dấu ấn Xứ Đoài qua những câu chuyện đời sống, làng xóm, kiến trúc, tập tục và con người Hòa Lạc – nơi quá khứ, hiện tại và tương lai cùng giao hòa.','https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1400&q=85','#9d6c46','Thạch Thất',TRUE,10),
-  (2,'sac-muong','Sắc Mường Hòa Lạc','Bản sắc, con người, đời sống văn hóa','Đi sâu vào đời sống, bản sắc và những lớp văn hóa Mường còn hiện diện trong con người, ký ức và nhịp sống Hòa Lạc hôm nay.','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85','#7d553b','Hòa Lạc',TRUE,20),
-  (3,'kien-truc','Không gian Kiến trúc Hòa Lạc','Công trình, cảnh quan, không gian sống','Quan sát cách kiến trúc, cảnh quan và không gian sống đang tạo nên diện mạo mới của Hòa Lạc mà vẫn đối thoại với thiên nhiên và con người.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85','#b57b4d','Hòa Lạc',TRUE,30),
-  (4,'hoa-lac-xanh','Hòa Lạc xanh','Thiên nhiên, mặt nước, phát triển bền vững','Khám phá những khoảng xanh, mặt nước, triền đồi và cách con người đang gìn giữ một Hòa Lạc phát triển bền vững.','https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85','#557a45','Hòa Lạc',TRUE,40),
-  (5,'nang-hoa-lac','Nắng Hòa Lạc','Ánh sáng, cảm xúc, khoảnh khắc phía Tây','Theo ánh sáng để kể về Hòa Lạc: nắng sớm, chiều vàng, những triền đồi và khoảnh khắc cảm xúc của vùng đất phía Tây.','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85','#e9a541','Phía Tây Hòa Lạc',TRUE,50),
-  (6,'cau-chuyen','Câu chuyện Hòa Lạc','Con người, ký ức, những câu chuyện đáng kể','Những ký ức, lát cắt đời sống và câu chuyện nhỏ giúp Hòa Lạc hiện ra gần gũi, chân thật và nhiều chiều hơn.','https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1400&q=85','#7a5a44','Hòa Lạc',TRUE,60),
-  (7,'uoc-mo','Ước mơ Hòa Lạc','Góc nhìn học sinh – sinh viên về tương lai','Nhìn Hòa Lạc qua góc nhìn của học sinh, sinh viên và người trẻ – những người đang học tập, sáng tạo và hình dung về tương lai nơi đây.','https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=85','#91b653','Hòa Lạc',TRUE,70),
-  (8,'sac-mau','Sắc màu Hòa Lạc','06 đặc trưng sắc màu của vùng đất','Sáu sắc màu đại diện cho thiên nhiên, vật liệu, ánh sáng, tri thức và chuyển động mới của Hòa Lạc.','https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1400&q=85','#c45b32','Hòa Lạc',TRUE,80)
+  (1,'ban-sac','Bản sắc','Xứ Đoài · văn hóa Mường · đá ong · làng · phong tục · nghề · ký ức.','Đi tìm những lớp bản sắc Hòa Lạc qua Xứ Đoài, văn hóa Mường, đá ong, làng, phong tục, nghề và ký ức.','https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1400&q=85','#9d6c46','Hòa Lạc',TRUE,10),
+  (2,'thien-nhien','Thiên nhiên','Ba Vì · hồ · rừng · cây xanh · địa hình · khí hậu · cảnh quan.','Khám phá Hòa Lạc qua Ba Vì, hồ, rừng, cây xanh, địa hình, khí hậu và những lớp cảnh quan tự nhiên.','https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85','#557a45','Hòa Lạc',TRUE,20),
+  (3,'khong-gian','Không gian','Kiến trúc · nhà ở · làng · campus · công trình · không gian công cộng · đô thị mới.','Quan sát Hòa Lạc qua kiến trúc, nhà ở, làng, campus, công trình, không gian công cộng và đô thị mới.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85','#b57b4d','Hòa Lạc',TRUE,30),
+  (4,'con-nguoi','Con người','Người bản địa · người mới đến · người trẻ · chuyên gia · doanh nhân · KTS · công nhân · sinh viên · trẻ em.','Gặp những con người đang tạo nên Hòa Lạc hôm nay: người bản địa, người mới đến, người trẻ, chuyên gia, doanh nhân, KTS, công nhân, sinh viên và trẻ em.','https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85','#7d553b','Hòa Lạc',TRUE,40),
+  (5,'tri-thuc-cong-nghe','Tri thức & Công nghệ','Đại học · nghiên cứu · công nghệ cao · startup · phòng lab · những người đang tạo nên Hòa Lạc mới.','Theo dấu đại học, nghiên cứu, công nghệ cao, startup, phòng lab và những người đang tạo nên một Hòa Lạc mới.','https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=85','#4f6f6a','Hòa Lạc',TRUE,50),
+  (6,'doi-song-cam-xuc','Đời sống & Cảm xúc','Ẩm thực · café · chợ · thể thao · vui chơi · buổi sáng · hoàng hôn · nắng · khoảnh khắc đời thường.','Kể Hòa Lạc từ ẩm thực, café, chợ, thể thao, vui chơi, buổi sáng, hoàng hôn, nắng và những khoảnh khắc đời thường.','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85','#e9a541','Hòa Lạc',TRUE,60),
+  (7,'tuong-lai','Tương lai','Quy hoạch · đô thị · kiến trúc · môi trường · công nghệ · giáo dục · mong muốn và ý tưởng về Hòa Lạc tương lai.','Nhìn về Hòa Lạc tương lai qua quy hoạch, đô thị, kiến trúc, môi trường, công nghệ, giáo dục, những mong muốn và ý tưởng mới.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=85','#91b653','Hòa Lạc',TRUE,70)
 ON CONFLICT (slug) DO NOTHING;
 
 CREATE INDEX IF NOT EXISTS idx_themes_published_sort ON themes(published, sort_order, id);

@@ -16,28 +16,28 @@ export const DEFAULT_AWARDS = [
     name:'Danh hiệu HALO HOLA 2026',
     amount:'10.000.000đ + cúp + chứng nhận',
     quantity:'01 danh hiệu',
-    description:'Chọn từ 07 góc nhìn được vinh danh theo chủ đề 01–07; điểm Danh hiệu gồm 70% Hội đồng giám khảo và 30% bình chọn cộng đồng.',
+    description:'Chọn từ 07 góc nhìn được ghi nhận theo 7 mạch nội dung; điểm Danh hiệu gồm 70% Hội đồng giám khảo và 30% bình chọn cộng đồng.',
     tone:'forest',
     featured:true,
     enabled:true
   },
   {
     code:'THEME_01_07',
-    label:'Ghi nhận theo chủ đề',
-    name:'07 góc nhìn tiêu biểu chủ đề 01–07',
+    label:'Ghi nhận theo mạch nội dung',
+    name:'07 góc nhìn tiêu biểu theo 7 mạch nội dung',
     amount:'5.000.000đ / góc nhìn + chứng nhận',
     quantity:'07 góc nhìn',
-    description:'Mỗi chủ đề từ 01 đến 07 ghi nhận 01 góc nhìn tiêu biểu, trị giá 5.000.000 đồng và chứng nhận.',
+    description:'Mỗi mạch nội dung từ 01 đến 07 ghi nhận 01 góc nhìn tiêu biểu, trị giá 5.000.000 đồng và chứng nhận.',
     tone:'terra',
     enabled:true
   },
   {
     code:'COLOR',
-    label:'Ghi nhận chủ đề 08',
+    label:'Ghi nhận Sắc màu',
     name:'Sắc màu Hòa Lạc · 06 chủ nhân',
     amount:'1.000.000đ / chủ nhân + chứng nhận',
     quantity:'06 chủ nhân',
-    description:'06 chủ nhân đại diện 06 đặc trưng sắc màu; xét trên mọi góc nhìn hợp lệ ở cả 8 chủ đề.',
+    description:'06 chủ nhân đại diện 06 đặc trưng sắc màu; xét trên các góc nhìn phù hợp trong toàn chương trình.',
     tone:'sun',
     enabled:true
   },
@@ -71,14 +71,13 @@ const FORMATS = [
 ]
 
 const THEMES = [
-  ['01','Nét Đoài tại Hòa Lạc'],
-  ['02','Sắc Mường Hòa Lạc'],
-  ['03','Không gian Kiến trúc Hòa Lạc'],
-  ['04','Hòa Lạc xanh'],
-  ['05','Nắng Hòa Lạc'],
-  ['06','Câu chuyện Hòa Lạc'],
-  ['07','Ước mơ Hòa Lạc','HS–SV'],
-  ['08','Sắc màu Hòa Lạc','6 đặc trưng']
+  ['01','Bản sắc'],
+  ['02','Thiên nhiên'],
+  ['03','Không gian'],
+  ['04','Con người'],
+  ['05','Tri thức & Công nghệ'],
+  ['06','Đời sống & Cảm xúc'],
+  ['07','Tương lai']
 ]
 
 const TIMELINE = [
@@ -123,7 +122,7 @@ export default function RulesAwardsPage(){
   const awards=useMemo(()=>mergeAwards(config.awards).filter(item=>item?.enabled!==false),[config.awards])
   const totalPrize=config.totalPrize||'56.000.000đ'
   const totalAwards=Number(config.totalAwards)||11
-  const prizeSummary=config.prizeSummary||'8 ghi nhận chủ đề · 2 ghi nhận cộng đồng · 1 danh hiệu đặc biệt'
+  const prizeSummary=config.prizeSummary||'7 mạch nội dung · Sắc màu · cộng đồng · danh hiệu đặc biệt'
   const pageTitle=config.title||'Cách tham gia & Ghi nhận HALO HOLA 2026'
   const intro=config.intro||'Hướng dẫn gửi góc nhìn, nguyên tắc đóng góp, mốc thời gian và các hạng mục ghi nhận của chương trình cộng đồng HALO HOLA 2026.'
   const officialPdfUrl=(config.officialPdfUrl||'').trim()
@@ -203,13 +202,13 @@ export default function RulesAwardsPage(){
           <section id="chu-de" className="rules4-section">
             <div className="rules4-roman">III.</div>
             <div>
-              <span className="rules4-section-kicker">8 lát cắt Hòa Lạc</span>
+              <span className="rules4-section-kicker">7 mạch nội dung Hòa Lạc</span>
               <h3>Chọn một hoặc nhiều chủ đề để cùng kể</h3>
-              <p className="rules4-lead">Mỗi đóng góp có thể gắn với những chủ đề phù hợp, từ văn hóa bản địa đến thiên nhiên, kiến trúc, con người và tương lai Hòa Lạc.</p>
+              <p className="rules4-lead">Khung biên tập gồm Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.</p>
               <div className="rules4-theme-grid">
                 {THEMES.map(([number,title,badge])=><div className="rules4-theme" key={number}><span className="num">{number}</span><b>{title}</b>{badge&&<small>{badge}</small>}</div>)}
               </div>
-              <div className="rules4-note">Chủ đề 08 “Sắc màu Hòa Lạc” gồm 6 đặc trưng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc. Một góc nhìn có thể khai báo nhiều sắc màu phù hợp để làm giàu thêm cách khám phá Hòa Lạc.</div>
+              <div className="rules4-note">Ba trục xuyên suốt: Bản sắc · Sáng tạo · Tương lai.</div>
             </div>
           </section>
 
@@ -230,8 +229,8 @@ export default function RulesAwardsPage(){
               </table>
               <div className="rules4-award-policy">
                 <div><b>Cách chọn Danh hiệu</b><span>{config.juryWeight??70}% Hội đồng + {config.communityWeight??30}% bình chọn cộng đồng.</span></div>
-                <div><b>Có thể được ghi nhận ở nhiều hạng mục</b><span>Một góc nhìn có thể đồng thời được ghi nhận theo chủ đề, Sắc màu, cộng đồng và Danh hiệu nếu đáp ứng điều kiện.</span></div>
-                <div><b>Chứng nhận</b><span>TOP 3 từng chủ đề và TOP52 nhận chứng nhận của chương trình.</span></div>
+                <div><b>Có thể được ghi nhận ở nhiều hạng mục</b><span>Một góc nhìn có thể đồng thời được ghi nhận theo mạch nội dung, Sắc màu, cộng đồng và Danh hiệu nếu đáp ứng điều kiện.</span></div>
+                <div><b>Chứng nhận</b><span>TOP 3 từng mạch nội dung và TOP52 nhận chứng nhận của chương trình.</span></div>
               </div>
             </div>
           </section>

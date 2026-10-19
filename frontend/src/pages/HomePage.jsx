@@ -65,7 +65,11 @@ export default function HomePage() {
     image2:img.student,
     image3:img.architecture
   })
-  const themesCopy=sectionData('themes',{eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',title:'8 chủ đề về Hòa Lạc',description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc. Khám phá những câu chuyện và vẻ đẹp riêng qua 8 chủ đề.'})
+  const themesCopy=sectionData('themes',{
+    eyebrow:'7 MẠCH NỘI DUNG · 1 HÒA LẠC',
+    title:'7 chủ đề về Hòa Lạc',
+    description:'Bản sắc · Thiên nhiên · Không gian · Con người · Tri thức & Công nghệ · Đời sống & Cảm xúc · Tương lai.'
+  })
   const colorsCopy=sectionData('colors',{
     eyebrow:'SẮC MÀU HÒA LẠC',
     title:'Hòa Lạc trong bạn có màu gì?',
@@ -304,7 +308,7 @@ export default function HomePage() {
               <span className="eyebrow">{themesCopy.eyebrow}</span>
               <i/>
             </div>
-            <h2><span>8 chủ đề về</span><em>Hòa Lạc</em></h2>
+            <h2><span>7 chủ đề về</span><em>Hòa Lạc</em></h2>
             <span className="themes-title-stroke"/>
           </div>
 
@@ -341,7 +345,7 @@ export default function HomePage() {
       </div>
 
       <div className="color-v3-cards">
-        {colors.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.id||c.slug}>
+        {colors.map((c,index)=><Link to="/kham-pha" className="color-v3-card" key={c.id||c.slug}>
           <div className="color-v3-card-head"><span className="color-v3-dot" style={{background:c.color}}/><div><b>{c.name}</b><small>{c.story}</small></div><span className="color-v3-arrow"><ArrowRight/></span></div>
           <img src={colorImages[index%colorImages.length]||c.image||img.lake} alt={c.name} loading="lazy" decoding="async"/>
         </Link>)}

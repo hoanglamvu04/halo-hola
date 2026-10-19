@@ -5,9 +5,9 @@ import { getHomepageContent, updateAdminHomepageSection } from '../services/api.
 import './CatalogManagementManager.css'
 
 const defaults={
-  eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',
-  title:'8 chủ đề về Hòa Lạc',
-  description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc.'
+  eyebrow:'7 MẠCH NỘI DUNG · 1 HÒA LẠC',
+  title:'7 chủ đề về Hòa Lạc',
+  description:'Bản sắc · Thiên nhiên · Không gian · Con người · Tri thức & Công nghệ · Đời sống & Cảm xúc · Tương lai.'
 }
 
 export default function ThemeManagementManager(){
@@ -40,7 +40,7 @@ export default function ThemeManagementManager(){
   return <div className="catalog-management-stack">
     <section className="catalog-section-settings">
       <div className="catalog-section-head">
-        <div><span className="eyebrow">HIỂN THỊ TRÊN TRANG CHỦ</span><h2>Khối Chủ đề</h2><p>Phần tiêu đề giới thiệu ở Home. Danh sách 8 chủ đề bên dưới là dữ liệu dùng chung cho toàn website.</p></div>
+        <div><span className="eyebrow">HIỂN THỊ TRÊN TRANG CHỦ</span><h2>Khối Chủ đề</h2><p>Phần tiêu đề giới thiệu ở Home. Danh sách 7 chủ đề bên dưới là dữ liệu dùng chung cho toàn website.</p></div>
         <button className="btn btn-green btn-sm" onClick={saveSection} disabled={saving}><Save size={16}/>{saving?'Đang lưu...':'Lưu phần Home'}</button>
       </div>
       {message&&<div className="cms-message">{message}</div>}

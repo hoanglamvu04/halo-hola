@@ -76,7 +76,7 @@ export default function ThemeCatalogManager(){
 
   return <div className="theme-admin-shell">
     <aside className="theme-admin-list">
-      <div className="theme-admin-list-head"><div><b>8 chủ đề</b><small>Dữ liệu dùng chung toàn website</small></div><button onClick={()=>load()} title="Tải lại"><RefreshCw size={16}/></button></div>
+      <div className="theme-admin-list-head"><div><b>7 chủ đề</b><small>Dữ liệu dùng chung toàn website</small></div><button onClick={()=>load()} title="Tải lại"><RefreshCw size={16}/></button></div>
       {themes.map((theme,index)=><button key={theme.id} className={activeId===theme.id?'active':''} onClick={()=>setActiveId(theme.id)}>
         <span>{String(index+1).padStart(2,'0')}</span>
         <div><b>{theme.title}</b><small>/{theme.slug}</small></div>

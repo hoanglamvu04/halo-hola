@@ -32,7 +32,7 @@ const DEFAULT_DESCRIPTION='HALO HOLA 2026 là chương trình cộng đồng cù
 const DEFAULT_OG_IMAGE='https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=85'
 const SEO_ROUTES={
   '/': ['HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc',DEFAULT_DESCRIPTION],
-  '/chu-de':['8 chủ đề về Hòa Lạc | HALO HOLA','Khám phá 8 chủ đề và cùng đóng góp những lớp câu chuyện về Hòa Lạc trong HALO HOLA 2026.'],
+  '/chu-de':['7 chủ đề về Hòa Lạc | HALO HOLA','Khám phá 7 mạch nội dung: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.'],
   '/hola-tour':['HOLA Tour | HALO HOLA','Đi, gặp, trải nghiệm và kể lại Hòa Lạc qua ba hành trình HOLA Tour cùng diễn ra ngày 25/10/2026.'],
   '/hola-map':['HOLA Map | HALO HOLA','Khám phá địa điểm, câu chuyện và những góc nhìn cộng đồng về Hòa Lạc trên bản đồ tương tác.'],
   '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện cộng đồng về con người, nơi chốn, ký ức và chuyển động của Hòa Lạc.'],

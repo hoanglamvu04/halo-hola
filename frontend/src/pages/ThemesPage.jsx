@@ -6,19 +6,18 @@ import {
   Leaf,
   Mountain,
   Landmark,
-  Trees,
-  Sun,
+  Users,
   BookOpen,
+  Sun,
   Send,
-  Palette,
   ChevronRight
 } from 'lucide-react'
 import { getThemes } from '../services/api.js'
 import ThemeCard from '../components/ThemeCard.jsx'
 import './ThemesPage.css'
 
-const themeIcons=[Leaf,Mountain,Landmark,Trees,Sun,BookOpen,Send,Palette]
-const compactThemeLabels=['Nét Đoài','Sắc Mường','Kiến trúc','Hòa Lạc xanh','Nắng Hòa Lạc','Câu chuyện','Ước mơ','Sắc màu']
+const themeIcons=[Leaf,Mountain,Landmark,Users,BookOpen,Sun,Send]
+const compactThemeLabels=['Bản sắc','Thiên nhiên','Không gian','Con người','Tri thức & CN','Đời sống & Cảm xúc','Tương lai']
 
 export default function ThemesPage(){
   const [themes,setThemes]=useState([])
@@ -63,12 +62,12 @@ export default function ThemesPage(){
       <div className="stories-contours"/>
       <div className="stories-intro-inner">
         <div>
-          <div className="stories-kicker"><span>8 CHỦ ĐỀ · 1 HÒA LẠC</span><i/></div>
+          <div className="stories-kicker"><span>7 MẠCH NỘI DUNG · 1 HÒA LẠC</span><i/></div>
           <h1>Chủ đề</h1>
           <h2>Chọn góc nhìn bạn muốn khám phá</h2>
         </div>
         <div className="stories-intro-side">
-          <p>Tất cả 8 chủ đề được lấy trực tiếp từ hệ thống HALO HOLA. Chọn một chủ đề để xem nội dung và các tác phẩm đã được công bố.</p>
+          <p>Bảy chủ đề được xây dựng theo khung biên tập HALO HOLA 2026: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.</p>
           <div className="stories-intro-stats"><span><SlidersHorizontal/> {themes.length} chủ đề</span></div>
         </div>
       </div>
