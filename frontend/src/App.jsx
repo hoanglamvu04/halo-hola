@@ -33,7 +33,7 @@ const DEFAULT_DESCRIPTION='HALO HOLA 2026 là hành trình cộng đồng và d�
 const DEFAULT_OG_IMAGE='https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=85'
 const SEO_ROUTES={
   '/': ['HALO HOLA 2026 — 52 góc nhìn · 1 Hòa Lạc',DEFAULT_DESCRIPTION],
-  '/chu-de':['7 mạch nội dung về Hòa Lạc | HALO HOLA','Khám phá 7 mạch: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.'],
+  '/chu-de':['7 chủ đề Hòa Lạc | HALO HOLA','Khám phá 7 chủ đề: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức & Công nghệ, Đời sống & Cảm xúc và Tương lai.'],
   '/hola-tour':['HOLA Tour | HALO HOLA','Ba hành trình săn câu chuyện: Đi tìm Bản sắc, Đi tìm Màu sắc và Đi tìm Cảm xúc tại Hòa Lạc.'],
   '/hola-map':['HOLA Map | HALO HOLA','Khám phá địa điểm, câu chuyện và những góc nhìn cộng đồng về Hòa Lạc trên bản đồ tương tác.'],
   '/stories':['Stories Hòa Lạc | HALO HOLA','Những câu chuyện về con người, nơi chốn, ký ức, tri thức, đời sống và tương lai Hòa Lạc.'],
@@ -44,7 +44,7 @@ const SEO_ROUTES={
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','24.11.2026 — Triển lãm · Câu chuyện · Kết nối · công bố 52 góc nhìn và mở ra HALO HOLA 2027.'],
   '/calendar-2027':['HALO HOLA Calendar 2027','52 tuần · 52 câu chuyện Hòa Lạc — phiên bản vật lý nối mỗi tuần trên lịch với câu chuyện digital qua QR.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho chuyên gia, CLB, trường học, doanh nghiệp, địa phương và đối tác cùng đóng góp nguồn lực, câu chuyện và kết nối.'],
-  '/the-le-giai-thuong':['Cách đóng góp | HALO HOLA 2026','Hướng dẫn gửi một góc nhìn, giới thiệu đầu mối câu chuyện, 7 mạch nội dung, nguyên tắc biên tập và quyền sử dụng nội dung.'],
+  '/the-le-giai-thuong':['Cách đóng góp | HALO HOLA 2026','Hướng dẫn gửi một góc nhìn, giới thiệu đầu mối câu chuyện, 7 chủ đề, nguyên tắc biên tập và quyền sử dụng nội dung.'],
   '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn từ lúc gửi, xác minh, biên tập đến công bố và HOLA Maps.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
@@ -72,7 +72,7 @@ function isKnownPath(pathname){
 }
 function routeSeo(pathname){
   if(SEO_ROUTES[pathname])return SEO_ROUTES[pathname]
-  if(pathname.startsWith('/chu-de/'))return ['Mạch nội dung Hòa Lạc | HALO HOLA','Khám phá những góc nhìn và câu chuyện thuộc một trong 7 mạch biên tập HALO HOLA 2026.']
+  if(pathname.startsWith('/chu-de/'))return ['Chủ đề Hòa Lạc | HALO HOLA','Khám phá những góc nhìn và câu chuyện thuộc một trong 7 chủ đề HALO HOLA 2026.']
   if(pathname.startsWith('/tac-pham/'))return ['Góc nhìn HALO HOLA 2026','Khám phá một câu chuyện, địa điểm và góc nhìn được ghi lại trong hành trình HALO HOLA 2026.']
   if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện do HALO HOLA và cộng đồng cùng tìm, ghi lại và kể tiếp.']
   if(pathname.startsWith('/admin'))return ['Admin | HALO HOLA','Khu vực quản trị HALO HOLA.']
