@@ -8,9 +8,9 @@ const PAGE_SIZE=18
 const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeForItem(item){
-  if(item.status==='AWARDED') return 'ĐẠT GIẢI'
+  if(item.status==='AWARDED') return 'ĐƯỢC VINH DANH'
   if(item.status==='TOP52') return 'TOP52'
-  if(item.status==='SHORTLIST') return 'SHORTLIST'
+  if(item.status==='SHORTLIST') return 'NỔI BẬT'
   return 'GÓC NHÌN CỘNG ĐỒNG'
 }
 
@@ -48,7 +48,7 @@ export default function CommunityGalleryPage(){
       setItems(current=>append?[...current,...next]:next)
       setTotal(Number(next[0]?.totalCount ?? (append?items.length+next.length:next.length)))
     }catch(err){
-      setError(err.message||'Không tải được gallery cộng đồng.')
+      setError(err.message||'Không tải được kho góc nhìn cộng đồng.')
     }finally{
       append?setLoadingMore(false):setLoading(false)
     }
@@ -69,30 +69,30 @@ export default function CommunityGalleryPage(){
     <section className="community-gallery-hero">
       <div className="container community-gallery-hero-inner">
         <div className="community-gallery-copy">
-          <span className="community-gallery-kicker"><Compass/> GÓC NHÌN CỘNG ĐỒNG · HALO HOLA 2026</span>
-          <h1>Mỗi góc nhìn,<br/><em>một Hòa Lạc khác.</em></h1>
-          <p>Những góc nhìn, câu chuyện và khoảnh khắc được cộng đồng gửi về trong hành trình HALO HOLA 2026.</p>
+          <span className="community-gallery-kicker"><Compass/> CÙNG GÓP NHỮNG GÓC NHÌN · HALO HOLA 2026</span>
+          <h1>Mỗi góc nhìn,<br/><em>góp thêm một Hòa Lạc.</em></h1>
+          <p>Những hình ảnh, câu chuyện, địa điểm và trải nghiệm do cộng đồng cùng đóng góp để lưu giữ Hòa Lạc hôm nay và xây dựng một kho tư liệu cho mai sau.</p>
           <div className="community-gallery-hero-actions">
-            <a href="#gallery" className="btn btn-green"><Camera/> Xem gallery</a>
+            <a href="#gallery" className="btn btn-green"><Camera/> Khám phá góc nhìn</a>
             <Link to="/hola-map" className="btn btn-outline"><Map/> Xem trên HOLA Map</Link>
           </div>
         </div>
         <div className="community-gallery-hero-stats">
-          <div><Sparkles/><strong>{total}</strong><span>góc nhìn công khai</span></div>
-          <div><Users/><strong>{new Set(items.map(x=>x.author)).size || '—'}</strong><span>người kể trong trang này</span></div>
-          <div><MapPin/><strong>{new Set(items.map(x=>x.location).filter(Boolean)).size || '—'}</strong><span>địa điểm trong trang này</span></div>
+          <div><Sparkles/><strong>{total}</strong><span>góc nhìn đã công bố</span></div>
+          <div><Users/><strong>{new Set(items.map(x=>x.author)).size || '—'}</strong><span>người cùng kể trong trang này</span></div>
+          <div><MapPin/><strong>{new Set(items.map(x=>x.location).filter(Boolean)).size || '—'}</strong><span>địa điểm được ghi lại</span></div>
         </div>
       </div>
     </section>
 
     <section className="container community-gallery-shell" id="gallery">
       <div className="community-gallery-heading">
-        <div><span>TÁC PHẨM CỘNG ĐỒNG</span><h2>Những góc nhìn đang được kể</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và thiết kế đã được Ban Tổ chức công bố.</p></div>
-        <div className="community-gallery-count"><b>{total}</b> tác phẩm <span>·</span> {themeTitle}</div>
+        <div><span>KHO GÓC NHÌN CỘNG ĐỒNG</span><h2>Những đóng góp đang làm đầy Hòa Lạc</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và sáng tạo do cộng đồng gửi về và Ban Tổ chức công bố.</p></div>
+        <div className="community-gallery-count"><b>{total}</b> góc nhìn <span>·</span> {themeTitle}</div>
       </div>
 
       <div className="community-gallery-filters">
-        <label className="community-gallery-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} placeholder="Tìm tác phẩm, tác giả, mã dự thi, địa điểm..."/></label>
+        <label className="community-gallery-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} placeholder="Tìm góc nhìn, người kể, mã góc nhìn, địa điểm..."/></label>
         <div className="community-gallery-theme-row">
           <span><SlidersHorizontal/> Chủ đề</span>
           <button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>
@@ -109,7 +109,7 @@ export default function CommunityGalleryPage(){
 
       {loading&&<div className="community-gallery-state"><span/>Đang tải những góc nhìn mới...</div>}
       {error&&<div className="form-error">{error}</div>}
-      {!loading&&!error&&!items.length&&<div className="community-gallery-empty"><Compass/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc quay lại sau khi Ban Tổ chức công bố thêm tác phẩm.</p></div>}
+      {!loading&&!error&&!items.length&&<div className="community-gallery-empty"><Compass/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc quay lại sau khi cộng đồng có thêm góc nhìn được công bố.</p></div>}
 
       {!loading&&items.length>0&&<>
         <div className="community-art-grid">{items.map(item=><Link to={'/tac-pham/'+item.slug} className="community-art-card" key={item.id||item.slug}>
@@ -121,8 +121,8 @@ export default function CommunityGalleryPage(){
           <div className="community-art-body">
             <span className="community-art-category">{item.theme}{item.location?` · ${item.location}`:''}</span>
             <h3>{item.title||item.code}</h3>
-            <div className="community-art-author"><span>{String(item.author||'H').charAt(0).toUpperCase()}</span><b>{item.author||'Tác giả HALO HOLA'}</b></div>
-            <div className="community-art-meta"><span><Eye/> {Number(item.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {item.location||'Hòa Lạc'}</span></div>
+            <div className="community-art-author"><span>{String(item.author||'H').charAt(0).toUpperCase()}</span><b>{item.author||'Người kể HALO HOLA'}</b></div>
+            <div className="community-art-meta"><span><Eye/> {item.type||'Góc nhìn cộng đồng'}</span><i/><span><MapPin/> {item.location||'Hòa Lạc'}</span></div>
           </div>
         </Link>)}</div>
         <div className="community-gallery-footer"><span>Đang hiển thị <b>{items.length}</b> / {total} góc nhìn</span>{hasMore&&<button className="btn btn-outline" disabled={loadingMore} onClick={()=>load({append:true})}>{loadingMore?'Đang tải...':'Xem thêm góc nhìn'}</button>}</div>
