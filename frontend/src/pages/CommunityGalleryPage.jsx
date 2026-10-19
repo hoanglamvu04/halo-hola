@@ -8,9 +8,9 @@ const PAGE_SIZE=18
 const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeForItem(item){
-  if(item.status==='AWARDED') return 'ĐƯỢC VINH DANH'
-  if(item.status==='TOP52') return 'TOP52'
-  if(item.status==='SHORTLIST') return 'NỔI BẬT'
+  if(item.status==='AWARDED') return 'ĐƯỢC GHI NHẬN'
+  if(item.status==='TOP52') return '52 GÓC NHÌN'
+  if(item.status==='SHORTLIST') return 'GÓC NHÌN NỔI BẬT'
   return 'GÓC NHÌN CỘNG ĐỒNG'
 }
 
@@ -63,15 +63,15 @@ export default function CommunityGalleryPage(){
   const clearFilters=()=>setFilters({q:'',theme:'',type:'',color:'',location:'',sort:'latest'})
   const hasFilters=Object.entries(filters).some(([key,value])=>key==='sort'?value!=='latest':Boolean(value))
   const hasMore=items.length<total
-  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
+  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả mạch',[themes,filters.theme])
 
   return <main className="community-gallery-page">
     <section className="community-gallery-hero">
       <div className="container community-gallery-hero-inner">
         <div className="community-gallery-copy">
-          <span className="community-gallery-kicker"><Compass/> CÙNG GÓP NHỮNG GÓC NHÌN · HALO HOLA 2026</span>
-          <h1>Mỗi góc nhìn,<br/><em>góp thêm một Hòa Lạc.</em></h1>
-          <p>Những hình ảnh, câu chuyện, địa điểm và trải nghiệm do cộng đồng cùng đóng góp để lưu giữ Hòa Lạc hôm nay và xây dựng một kho tư liệu cho mai sau.</p>
+          <span className="community-gallery-kicker"><Compass/> ĐI · NHÌN · GẶP · NGHE · GHI LẠI</span>
+          <h1>Mỗi góc nhìn,<br/><em>một câu chuyện Hòa Lạc.</em></h1>
+          <p>Những con người, nơi chốn, ký ức, khoảnh khắc và ý tưởng được cộng đồng cùng Ban Biên tập tìm thấy, ghi lại và kể tiếp trong hành trình HALO HOLA 2026.</p>
           <div className="community-gallery-hero-actions">
             <a href="#gallery" className="btn btn-green"><Camera/> Khám phá góc nhìn</a>
             <Link to="/hola-map" className="btn btn-outline"><Map/> Xem trên HOLA Map</Link>
@@ -79,7 +79,7 @@ export default function CommunityGalleryPage(){
         </div>
         <div className="community-gallery-hero-stats">
           <div><Sparkles/><strong>{total}</strong><span>góc nhìn đã công bố</span></div>
-          <div><Users/><strong>{new Set(items.map(x=>x.author)).size || '—'}</strong><span>người cùng kể trong trang này</span></div>
+          <div><Users/><strong>{new Set(items.map(x=>x.author)).size || '—'}</strong><span>người đang cùng kể</span></div>
           <div><MapPin/><strong>{new Set(items.map(x=>x.location).filter(Boolean)).size || '—'}</strong><span>địa điểm được ghi lại</span></div>
         </div>
       </div>
@@ -87,14 +87,14 @@ export default function CommunityGalleryPage(){
 
     <section className="container community-gallery-shell" id="gallery">
       <div className="community-gallery-heading">
-        <div><span>KHO GÓC NHÌN CỘNG ĐỒNG</span><h2>Những đóng góp đang làm đầy Hòa Lạc</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và sáng tạo do cộng đồng gửi về và Ban Tổ chức công bố.</p></div>
+        <div><span>KHO GÓC NHÌN HÒA LẠC</span><h2>Những câu chuyện đang được tìm thấy</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và sáng tạo từ cộng đồng, đối tác và quá trình Ban Biên tập chủ động đi tìm tư liệu.</p></div>
         <div className="community-gallery-count"><b>{total}</b> góc nhìn <span>·</span> {themeTitle}</div>
       </div>
 
       <div className="community-gallery-filters">
         <label className="community-gallery-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} placeholder="Tìm góc nhìn, người kể, mã góc nhìn, địa điểm..."/></label>
         <div className="community-gallery-theme-row">
-          <span><SlidersHorizontal/> Chủ đề</span>
+          <span><SlidersHorizontal/> Mạch nội dung</span>
           <button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>
           {themes.map(theme=><button key={theme.slug||theme.id} className={filters.theme===theme.title?'active':''} onClick={()=>setFilters(v=>({...v,theme:theme.title}))}>{theme.title}</button>)}
         </div>
@@ -102,14 +102,14 @@ export default function CommunityGalleryPage(){
           <select value={filters.type} onChange={e=>setFilters(v=>({...v,type:e.target.value}))}><option value="">Tất cả loại hình</option>{types.map(type=><option key={type} value={type}>{type}</option>)}</select>
           <select value={filters.color} onChange={e=>setFilters(v=>({...v,color:e.target.value}))}><option value="">Mọi sắc màu</option>{colors.map(color=><option key={color.id||color.slug} value={color.name}>{color.name}</option>)}</select>
           <label><MapPin/><input value={filters.location} onChange={e=>setFilters(v=>({...v,location:e.target.value}))} placeholder="Địa điểm"/></label>
-          <select value={filters.sort} onChange={e=>setFilters(v=>({...v,sort:e.target.value}))}><option value="latest">Mới nhất</option><option value="score">Nổi bật</option><option value="oldest">Cũ nhất</option></select>
+          <select value={filters.sort} onChange={e=>setFilters(v=>({...v,sort:e.target.value}))}><option value="latest">Mới nhất</option><option value="oldest">Cũ nhất</option></select>
           {hasFilters&&<button className="community-gallery-clear" onClick={clearFilters}>Xóa bộ lọc</button>}
         </div>
       </div>
 
       {loading&&<div className="community-gallery-state"><span/>Đang tải những góc nhìn mới...</div>}
       {error&&<div className="form-error">{error}</div>}
-      {!loading&&!error&&!items.length&&<div className="community-gallery-empty"><Compass/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc quay lại sau khi cộng đồng có thêm góc nhìn được công bố.</p></div>}
+      {!loading&&!error&&!items.length&&<div className="community-gallery-empty"><Compass/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử bỏ bớt bộ lọc hoặc quay lại sau khi có thêm câu chuyện được công bố.</p></div>}
 
       {!loading&&items.length>0&&<>
         <div className="community-art-grid">{items.map(item=><Link to={'/tac-pham/'+item.slug} className="community-art-card" key={item.id||item.slug}>
@@ -122,7 +122,7 @@ export default function CommunityGalleryPage(){
             <span className="community-art-category">{item.theme}{item.location?` · ${item.location}`:''}</span>
             <h3>{item.title||item.code}</h3>
             <div className="community-art-author"><span>{String(item.author||'H').charAt(0).toUpperCase()}</span><b>{item.author||'Người kể HALO HOLA'}</b></div>
-            <div className="community-art-meta"><span><Eye/> {item.type||'Góc nhìn cộng đồng'}</span><i/><span><MapPin/> {item.location||'Hòa Lạc'}</span></div>
+            <div className="community-art-meta"><span><Eye/> {item.type||'Góc nhìn'}</span><i/><span><MapPin/> {item.location||'Hòa Lạc'}</span></div>
           </div>
         </Link>)}</div>
         <div className="community-gallery-footer"><span>Đang hiển thị <b>{items.length}</b> / {total} góc nhìn</span>{hasMore&&<button className="btn btn-outline" disabled={loadingMore} onClick={()=>load({append:true})}>{loadingMore?'Đang tải...':'Xem thêm góc nhìn'}</button>}</div>
