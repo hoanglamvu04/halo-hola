@@ -14,6 +14,7 @@ const Top52Page=lazy(()=>import('./pages/Top52Page.jsx'))
 const ArtworkPage=lazy(()=>import('./pages/ArtworkPage.jsx'))
 const TourPage=lazy(()=>import('./pages/TourPage.jsx'))
 const HolaDayPage=lazy(()=>import('./pages/HolaDayPage.jsx'))
+const Calendar2027Page=lazy(()=>import('./pages/Calendar2027Page.jsx'))
 const StoriesPage=lazy(()=>import('./pages/StoriesPage.jsx'))
 const StoryDetailPage=lazy(()=>import('./pages/StoryDetailPage.jsx'))
 const WeHolaPage=lazy(()=>import('./pages/WeHolaPage.jsx'))
@@ -24,7 +25,6 @@ const ThemePage=lazy(()=>import('./pages/ThemePage.jsx'))
 const RulesAwardsPage=lazy(()=>import('./pages/RulesAwardsPage.jsx'))
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
-const JurorWorkspacePage=lazy(()=>import('./pages/JurorWorkspacePage.jsx'))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
 const SITE_URL='https://halohola.vn'
@@ -41,6 +41,7 @@ const SEO_ROUTES={
   '/we-hola':['WE HOLA — Chúng ta là Hòa Lạc','Cộng đồng cùng kết nối, đóng góp và làm những việc cụ thể để Hòa Lạc xanh hơn, đẹp hơn và đáng sống hơn.'],
   '/gui-goc-nhin':['Gửi góc nhìn | HALO HOLA 2026','Đóng góp hình ảnh, câu chuyện, địa điểm và góc nhìn của bạn để cùng xây dựng kho tư liệu cộng đồng về Hòa Lạc.'],
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố, ghi nhận những dấu mốc của HALO HOLA 2026.'],
+  '/calendar-2027':['HALO HOLA Calendar 2027 — 52 tuần · 52 câu chuyện Hòa Lạc','Calendar 2027 là phiên bản vật lý của hành trình kể chuyện HALO HOLA 2027, mỗi tuần mở một góc nhìn và dẫn tới câu chuyện đầy đủ bằng QR.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác cùng đóng góp, kết nối và xây dựng HALO HOLA.'],
   '/the-le-giai-thuong':['Cách tham gia & Ghi nhận | HALO HOLA 2026','Hướng dẫn gửi góc nhìn, nguyên tắc đóng góp, mốc thời gian và các hạng mục ghi nhận của chương trình cộng đồng HALO HOLA 2026.'],
   '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn, mức hoàn thiện, trạng thái công bố và các bước ghi nhận trong HALO HOLA 2026.'],
@@ -64,8 +65,7 @@ function isKnownPath(pathname){
     pathname.startsWith('/chu-de/') ||
     pathname.startsWith('/tac-pham/') ||
     pathname.startsWith('/stories/') ||
-    pathname.startsWith('/admin') ||
-    pathname.startsWith('/jury')
+    pathname.startsWith('/admin')
   )
 }
 function routeSeo(pathname){
@@ -74,7 +74,6 @@ function routeSeo(pathname){
   if(pathname.startsWith('/tac-pham/'))return ['Góc nhìn HALO HOLA 2026','Khám phá câu chuyện, địa điểm và góc nhìn được cộng đồng đóng góp cho HALO HOLA 2026.']
   if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện từ cộng đồng HALO HOLA về Hòa Lạc.']
   if(pathname.startsWith('/admin'))return ['Admin | HALO HOLA','Khu vực quản trị HALO HOLA.']
-  if(pathname.startsWith('/jury'))return ['Jury Mode | HALO HOLA','Khu vực Hội đồng giám khảo HALO HOLA.']
   return ['404 — Không tìm thấy trang | HALO HOLA','Đường dẫn này không tồn tại hoặc nội dung chưa được công bố.']
 }
 
@@ -119,7 +118,7 @@ function ScrollToTop() {
 
 function SiteRuntime(){
   const {pathname}=useLocation()
-  const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/jury')||pathname.startsWith('/tac-pham/xem-truoc/')
+  const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/tac-pham/xem-truoc/')
   const knownPage=isKnownPath(pathname)
   const noIndex=privatePage||!knownPage
 
@@ -213,7 +212,7 @@ function RouteFallback(){return <main><div className="jw-empty" role="status">Đ
 
 function SiteShell() {
   const { pathname } = useLocation()
-  const isAdmin = pathname.startsWith('/admin') || pathname.startsWith('/jury')
+  const isAdmin = pathname.startsWith('/admin')
   const showBottomNav = !isAdmin && pathname !== '/gui-goc-nhin'
 
   return (
@@ -233,6 +232,7 @@ function SiteShell() {
           <Route path="/tac-pham/:slug" element={<ArtworkPage />} />
           <Route path="/hola-tour" element={<TourPage />} />
           <Route path="/hola-day" element={<HolaDayPage />} />
+          <Route path="/calendar-2027" element={<Calendar2027Page />} />
           <Route path="/stories" element={<StoriesPage />} />
           <Route path="/stories/:slug" element={<StoryDetailPage />} />
           <Route path="/we-hola" element={<WeHolaPage />} />
@@ -243,8 +243,6 @@ function SiteShell() {
           <Route path="/chu-de/:slug" element={<ThemePage />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/tra-cuu" element={<LookupPage />} />
-          <Route path="/jury" element={<JurorWorkspacePage />} />
-          <Route path="/jury/:submissionId" element={<JurorWorkspacePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
