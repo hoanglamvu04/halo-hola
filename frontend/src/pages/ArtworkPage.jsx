@@ -235,7 +235,7 @@ export default function ArtworkPage({preview=false}){
          <div><MapPin/><span><small>Địa điểm</small><b>{item.location||'Hòa Lạc'}</b></span></div>
          <div><CalendarDays/><span><small>Thời gian ghi lại</small><b>{formatDate(item.capturedAt)}</b></span></div>
          <div><ImageIcon/><span><small>Tư liệu</small><b>{mediaItems.length||0} file</b></span></div>
-         <div><BookOpenIcon/><span><small>Mạch nội dung</small><b>{item.theme||'Hòa Lạc'}</b></span></div>
+         <div><BookOpenIcon/><span><small>Chủ đề</small><b>{item.theme||'Hòa Lạc'}</b></span></div>
        </div>
 
        <div className="artwork-showcase-actions">
@@ -262,7 +262,7 @@ export default function ArtworkPage({preview=false}){
    </section>
 
    {related.length>0&&<section className="container artwork-related-section">
-     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng mạch {item.theme}</h2></div><Link to="/kham-pha">Xem kho góc nhìn <ArrowRight/></Link></header>
+     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng chủ đề {item.theme}</h2></div><Link to="/kham-pha">Xem kho góc nhìn <ArrowRight/></Link></header>
      <div className="art-grid compact artwork-related-grid">{related.map(a=><ArtworkCard key={a.id||a.slug} item={a}/>)}</div>
    </section>}
 
