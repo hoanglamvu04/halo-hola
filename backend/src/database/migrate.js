@@ -7,6 +7,27 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 try {
+  // Rollback compatibility: a later editorial migration reused theme IDs 1..8
+  // with different slugs. The 0205 schema seeds the original slugs with an
+  // ON CONFLICT(slug) guard, so PostgreSQL otherwise stops on themes_pkey
+  // before the restore migration can run. Only clear the known later taxonomy;
+  // once restored, subsequent deploys do not match this condition.
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF to_regclass('public.themes') IS NOT NULL
+         AND EXISTS (
+           SELECT 1 FROM themes
+           WHERE slug IN (
+             'ban-sac','thien-nhien','khong-gian','con-nguoi',
+             'tri-thuc-cong-nghe','doi-song-cam-xuc','tuong-lai'
+           )
+         ) THEN
+        DELETE FROM themes WHERE id BETWEEN 1 AND 8;
+      END IF;
+    END $$;
+  `);
+
   const schema = await fs.readFile(path.join(__dirname, 'schema.sql'), 'utf8');
   await pool.query(schema);
 
