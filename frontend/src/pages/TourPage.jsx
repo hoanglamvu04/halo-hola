@@ -26,9 +26,7 @@ export default function TourPage(){
   useEffect(()=>{
     if(!showForm)return undefined
     const previousOverflow=document.body.style.overflow
-    const closeOnEscape=(event)=>{
-      if(event.key==='Escape')setShowForm(false)
-    }
+    const closeOnEscape=(event)=>{ if(event.key==='Escape')setShowForm(false) }
     document.body.style.overflow='hidden'
     window.addEventListener('keydown',closeOnEscape)
     return ()=>{
@@ -51,10 +49,7 @@ export default function TourPage(){
   ])
   const highlights=Array.isArray(tour?.highlights)?tour.highlights:[]
 
-  const openRegistration=()=>{
-    setError('')
-    setShowForm(true)
-  }
+  const openRegistration=()=>{setError('');setShowForm(true)}
 
   const submit=async(e)=>{
     e.preventDefault()
@@ -72,18 +67,18 @@ export default function TourPage(){
       <div className="tour-page-contours"/>
       <div className="tour-page-inner tour-page-hero-grid">
         <div className="tour-page-copy">
-          <div className="tour-page-kicker">NHỮNG HÀNH TRÌNH CHẠM VÀO HÒA LẠC THẬT</div>
+          <div className="tour-page-kicker">ĐI · GẶP · NGHE · GHI LẠI</div>
           <h1><span>HOLA</span><em>Tour</em></h1>
-          <p>Khám phá Hòa Lạc qua trải nghiệm thực tế – đi, gặp, trải nghiệm và kể lại bằng góc nhìn của bạn.</p>
+          <p>Không còn là tour sáng tác để “đi thi”. HOLA Tour là hành trình săn câu chuyện — chủ động gặp người, nhìn không gian, nghe ký ức và mang về tư liệu có thể phát triển thành những góc nhìn về Hòa Lạc.</p>
           <div className="tour-page-actions">
             <button className="btn btn-green" disabled={!tour} onClick={openRegistration}><Compass size={17}/> Chọn hành trình cho bạn <ArrowRight size={16}/></button>
-            <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch tour</a>
+            <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch trình</a>
           </div>
         </div>
 
         <div className="tour-page-hero-visual">
           <div className="tour-page-hero-image">{tour?.image?<img src={tour.image} alt="HOLA Tour"/>:<div className="theme-card-placeholder"/>}</div>
-          <div className="tour-page-handnote">Hòa Lạc<br/>hôm nay<br/>và mai sau...</div>
+          <div className="tour-page-handnote">Đi tìm<br/>một câu chuyện<br/>đáng giữ lại...</div>
           <Leaf className="tour-page-leaf"/>
         </div>
       </div>
@@ -121,7 +116,7 @@ export default function TourPage(){
     <section className="tour-selected-ref">
       <div className="tour-page-inner tour-selected-grid">
         <div className="tour-selected-copy">
-          <span className="eyebrow">TOUR #{tour.no}</span>
+          <span className="eyebrow">HÀNH TRÌNH #{tour.no}</span>
           <h2>{tour.title}</h2>
           <h3>{tour.kicker}</h3>
           <div className="tour-selected-facts">
@@ -132,7 +127,7 @@ export default function TourPage(){
           <p>{tour.desc}</p>
           <div className="tour-selected-actions">
             <button className="btn btn-terra" onClick={openRegistration}>Đăng ký hành trình <ArrowRight size={16}/></button>
-            <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch tour</a>
+            <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch trình</a>
           </div>
         </div>
 
@@ -157,16 +152,16 @@ export default function TourPage(){
             <span className="eyebrow">ĐĂNG KÝ HOLA TOUR #{tour.no}</span>
             <h2>{tour.title}</h2>
             <p>{tour.dates} · {tour.audienceLabel}.</p>
-            <div className="tour-register-note"><b>Tham gia tour không tạo ưu thế khi chấm giải.</b><span>Tour là hoạt động trải nghiệm và kết nối cộng đồng.</span></div>
+            <div className="tour-register-note"><b>Mục tiêu là mang về câu chuyện và tư liệu có giá trị.</b><span>Tour không tạo lợi thế cạnh tranh; đây là hoạt động khám phá, gặp gỡ và kết nối cộng đồng.</span></div>
           </div>
           {result?<div className="tour-register-success"><CheckCircle2/><h3>Đăng ký thành công</h3><p>Mã đăng ký của bạn:</p><strong>{result.code}</strong><small>BTC sẽ liên hệ qua email/điện thoại để xác nhận.</small></div>:
           <form className="tour-register-form" onSubmit={submit}>
             <label>Họ và tên *<input required value={form.name} onChange={e=>setForm(v=>({...v,name:e.target.value}))}/></label>
             <label>Email *<input required type="email" value={form.email} onChange={e=>setForm(v=>({...v,email:e.target.value}))}/></label>
             <label>Số điện thoại *<input required value={form.phone} onChange={e=>setForm(v=>({...v,phone:e.target.value}))}/></label>
-            <label>Vai trò<select value={form.roleLabel} onChange={e=>setForm(v=>({...v,roleLabel:e.target.value}))}><option value="">Chọn vai trò</option><option>Creator / Nhiếp ảnh</option><option>Sinh viên</option><option>Kiến trúc / Thiết kế</option><option>Người địa phương</option><option>Khác</option></select></label>
-            <label className="full">Thiết bị sử dụng<input value={form.equipment} onChange={e=>setForm(v=>({...v,equipment:e.target.value}))} placeholder="Điện thoại, máy ảnh..."/></label>
-            <label className="full">Lưu ý sức khỏe / ăn uống<textarea value={form.note} onChange={e=>setForm(v=>({...v,note:e.target.value}))}/></label>
+            <label>Vai trò<select value={form.roleLabel} onChange={e=>setForm(v=>({...v,roleLabel:e.target.value}))}><option value="">Chọn vai trò</option><option>Creator / Nhiếp ảnh</option><option>Sinh viên</option><option>Kiến trúc / Thiết kế</option><option>Người địa phương</option><option>Nhà nghiên cứu / Chuyên gia</option><option>Khác</option></select></label>
+            <label className="full">Thiết bị sử dụng<input value={form.equipment} onChange={e=>setForm(v=>({...v,equipment:e.target.value}))} placeholder="Điện thoại, máy ảnh, máy ghi âm..."/></label>
+            <label className="full">Bạn muốn tìm câu chuyện gì?<textarea value={form.note} onChange={e=>setForm(v=>({...v,note:e.target.value}))} placeholder="Nhân vật, nơi chốn, ký ức, màu sắc, cảm xúc..."/></label>
             {error&&<div className="form-error full">{error}</div>}
             <button className="btn btn-terra full" disabled={submitting}>{submitting?'Đang đăng ký...':'Xác nhận tham gia'}</button>
           </form>}
@@ -177,7 +172,7 @@ export default function TourPage(){
     <section id="lich-trinh" className="tour-detail-ref">
       <div className="tour-page-inner tour-detail-grid">
         <div className="tour-itinerary">
-          <h2>Lịch trình trải nghiệm</h2>
+          <h2>Lịch trình săn câu chuyện</h2>
           {currentItinerary.length===0?<p>BTC đang cập nhật lịch trình chi tiết.</p>:<div className="tour-itinerary-list">
             {currentItinerary.map(([time,title,I,desc],index)=><div key={time+title+index}>
               <span className="tour-time">{time}</span>
@@ -194,12 +189,12 @@ export default function TourPage(){
           </div>
 
           <div className="tour-info-ref">
-            <div className="tour-info-title"><FileText/><b>Thông tin tour</b></div>
+            <div className="tour-info-title"><FileText/><b>Đầu ra mong muốn</b></div>
             <div>
               <p><b>Thời gian:</b> {tour.dates}</p>
-              <p><b>Số lượng:</b> {tour.audienceLabel}</p>
+              <p><b>Nhóm tham gia:</b> {tour.audienceLabel}</p>
               <p><b>Địa điểm:</b> {tour.location}</p>
-              <p><b>Nguyên tắc:</b> Tham gia tour không tạo ưu thế khi chấm giải.</p>
+              <p><b>KPI:</b> câu chuyện, nhân vật, ảnh, video và tư liệu có thể đưa vào hệ thống 52 góc nhìn.</p>
             </div>
           </div>
         </div>
