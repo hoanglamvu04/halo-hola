@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
-  LogIn, RefreshCw, ShieldCheck, ExternalLink, Star, Home, FolderOpen, BarChart3, Globe2,
+  LogIn, RefreshCw, ShieldCheck, ExternalLink, Home, FolderOpen, Globe2,
   Activity, Layers3, Palette, Trophy, ChevronRight
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
@@ -13,7 +13,6 @@ import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
 import AwardsManager from '../components/AwardsManager.jsx'
 import JuryBoardManager from '../components/JuryBoardManager.jsx'
-import JuryResultsManager from '../components/JuryResultsManager.jsx'
 import PublicationManager from '../components/PublicationManager.jsx'
 import AnalyticsManager from '../components/AnalyticsManager.jsx'
 import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
@@ -50,8 +49,7 @@ const navGroups=[
     items:[
       {label:'TOP52',icon:Images,path:'/admin/top52'},
       {label:'Giải thưởng',icon:Trophy,path:'/admin/awards'},
-      {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'},
-      {label:'Kết quả BGK',icon:BarChart3,path:'/admin/jury-results'}
+      {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'}
     ]
   },
   {
@@ -76,10 +74,9 @@ const sectionDescriptions={
   'Media Library':'Quản lý hình ảnh và tài nguyên dùng trên website.',
   'Stories':'Quản lý nội dung Stories.',
   'Đối tác':'Quản lý đối tác và nội dung hợp tác.',
-  'TOP52':'Theo dõi danh sách tác phẩm đã vào TOP52.',
+  'TOP52':'Theo dõi danh sách góc nhìn được Ban Biên tập tuyển chọn.',
   'Giải thưởng':'Quản lý cơ cấu và thông tin giải thưởng.',
-  'Hội đồng BGK':'Quản lý tài khoản và phạm vi chấm của hội đồng.',
-  'Kết quả BGK':'Tổng hợp điểm, lựa chọn và khóa kết quả vòng chấm.',
+  'Hội đồng BGK':'Quản lý tài khoản hội đồng đang lưu trên hệ thống.',
   'Analytics':'Theo dõi hoạt động và hiệu quả sử dụng website.',
   'HOLA Map':'Quản lý nội dung liên quan tới bản đồ Hòa Lạc.',
   'HOLA Tour':'Quản lý tour và danh sách đăng ký.',
@@ -180,7 +177,6 @@ export default function AdminPage(){
          <summary>{group.label}<ChevronRight/></summary>{content}
        </details>
      })}</nav>
-     <Link className="admin-jury-link" to="/jury"><Star size={17}/> Jury Mode</Link>
      <button className="admin-logout" onClick={()=>{setAdminToken(null);setToken('')}}>Đăng xuất</button>
    </aside>
 
@@ -214,7 +210,6 @@ export default function AdminPage(){
      active==='Giải thưởng'?<AwardsManager/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Hội đồng BGK'?<JuryBoardManager/>:
-     active==='Kết quả BGK'?<JuryResultsManager/>:
      active==='Analytics'?<AnalyticsManager/>:
      active==='Công bố'?<PublicationManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
@@ -234,13 +229,13 @@ export default function AdminPage(){
      </div>:
      active==='TOP52'?<div className="admin-panel">
        <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
-       <p className="admin-helper">TOP52 là trạng thái kết quả. Việc tác phẩm có xuất hiện ngoài website hay không được kiểm soát riêng tại <button className="text-button" onClick={()=>go('Công bố')}>Công bố</button>.</p>
+       <p className="admin-helper">TOP52 là danh sách góc nhìn được Ban Biên tập tuyển chọn. Việc nội dung có xuất hiện ngoài website hay không được kiểm soát riêng tại <button className="text-button" onClick={()=>go('Công bố')}>Công bố</button>.</p>
        <div className="admin-top52-grid">
          {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Tác phẩm')}}>
            <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
            <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
          </button>)}
-         {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có tác phẩm TOP52. Hãy chốt danh sách từ Kết quả BGK.</p>}
+         {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có góc nhìn TOP52. Hãy tuyển chọn từ danh sách Tác phẩm.</p>}
        </div>
      </div>:
      active==='Tác phẩm'?<AdminSubmissionOperations
