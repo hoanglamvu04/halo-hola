@@ -1,24 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  Search,
-  SlidersHorizontal,
-  LayoutGrid,
-  Leaf,
-  Mountain,
-  Landmark,
-  Trees,
-  Sun,
-  BookOpen,
-  Send,
-  Palette,
-  ChevronRight
-} from 'lucide-react'
+import { Search, SlidersHorizontal, LayoutGrid, Leaf, Mountain, Landmark, Trees, Sun, BookOpen, Send, ChevronRight } from 'lucide-react'
 import { getThemes } from '../services/api.js'
 import ThemeCard from '../components/ThemeCard.jsx'
 import './ThemesPage.css'
 
-const themeIcons=[Leaf,Mountain,Landmark,Trees,Sun,BookOpen,Send,Palette]
-const compactThemeLabels=['Nét Đoài','Sắc Mường','Kiến trúc','Hòa Lạc xanh','Nắng Hòa Lạc','Câu chuyện','Ước mơ','Sắc màu']
+const themeIcons=[Landmark,Mountain,Trees,Leaf,BookOpen,Sun,Send]
+const compactThemeLabels=['Bản sắc','Thiên nhiên','Không gian','Con người','Tri thức & Công nghệ','Đời sống & Cảm xúc','Tương lai']
 
 export default function ThemesPage(){
   const [themes,setThemes]=useState([])
@@ -63,13 +50,13 @@ export default function ThemesPage(){
       <div className="stories-contours"/>
       <div className="stories-intro-inner">
         <div>
-          <div className="stories-kicker"><span>8 CHỦ ĐỀ · 1 HÒA LẠC</span><i/></div>
-          <h1>Chủ đề</h1>
-          <h2>Chọn góc nhìn bạn muốn khám phá</h2>
+          <div className="stories-kicker"><span>7 MẠCH · 1 HÒA LẠC</span><i/></div>
+          <h1>7 mạch nội dung</h1>
+          <h2>Nhìn Hòa Lạc qua nhiều lớp câu chuyện</h2>
         </div>
         <div className="stories-intro-side">
-          <p>Tất cả 8 chủ đề được lấy trực tiếp từ hệ thống HALO HOLA. Chọn một chủ đề để xem nội dung và các tác phẩm đã được công bố.</p>
-          <div className="stories-intro-stats"><span><SlidersHorizontal/> {themes.length} chủ đề</span></div>
+          <p>Bảy mạch giúp 52 góc nhìn không trở thành một bộ ảnh phong cảnh: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức &amp; Công nghệ, Đời sống &amp; Cảm xúc và Tương lai.</p>
+          <div className="stories-intro-stats"><span><SlidersHorizontal/> {themes.length} mạch đang mở</span></div>
         </div>
       </div>
     </section>
@@ -79,7 +66,7 @@ export default function ThemesPage(){
         <div className="theme-index-filters">
           <div className="theme-index-search">
             <Search size={18}/>
-            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề, địa điểm, trải nghiệm..."/>
+            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm mạch, địa điểm, con người, trải nghiệm..."/>
             <kbd><span>⌘</span>K</kbd>
           </div>
 
@@ -95,20 +82,20 @@ export default function ThemesPage(){
                   <span className="theme-chip-thumb">
                     {t.image?<img src={t.image} alt="" loading="lazy" decoding="async"/>:<Icon aria-hidden="true"/>}
                   </span>
-                  <span className="theme-chip-label-short">{String(t.id).padStart(2,'0')} · {compactThemeLabels[index]||t.title}</span>
-                  <span className="theme-chip-label-full">{String(t.id).padStart(2,'0')} · {t.title}</span>
+                  <span className="theme-chip-label-short">{String(index+1).padStart(2,'0')} · {compactThemeLabels[index]||t.title}</span>
+                  <span className="theme-chip-label-full">{String(index+1).padStart(2,'0')} · {t.title}</span>
                 </button>
               })}
             </div>
-            <button type="button" className="theme-index-next" aria-label="Xem thêm chủ đề" onClick={scrollThemes}>
+            <button type="button" className="theme-index-next" aria-label="Xem thêm mạch nội dung" onClick={scrollThemes}>
               <ChevronRight/>
             </button>
           </div>
         </div>
 
-        {loading&&<div className="jw-empty">Đang tải chủ đề từ hệ thống...</div>}
+        {loading&&<div className="jw-empty">Đang tải 7 mạch nội dung từ hệ thống...</div>}
         {error&&<div className="form-error">{error}</div>}
-        {!loading&&!error&&visible.length===0&&<div className="jw-empty">Không có chủ đề phù hợp.</div>}
+        {!loading&&!error&&visible.length===0&&<div className="jw-empty">Không có mạch nội dung phù hợp.</div>}
 
         <div className="themes-card-grid">
           {visible.map((t,index)=><ThemeCard theme={t} index={index} key={t.id||t.slug}/>)}
