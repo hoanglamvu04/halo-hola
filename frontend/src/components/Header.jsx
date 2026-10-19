@@ -11,7 +11,7 @@ const DEFAULT_NAV_LINKS = [
   {label:'HOLA Map',href:'/hola-map'},
   {label:'Stories',href:'/stories'},
   {label:'TOP52',href:'/top52'},
-  {label:'Thể lệ & Giải thưởng',href:'/the-le-giai-thuong'},
+  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
@@ -19,8 +19,8 @@ const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/we-hola'])
 
 const MOBILE_QUICK_LINKS = [
   {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
-  {label:'Thể lệ & Giải thưởng',href:'/the-le-giai-thuong'},
-  {label:'Tra cứu tác phẩm',href:'/tra-cuu'},
+  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
+  {label:'Theo dõi góc nhìn',href:'/tra-cuu'},
   {label:'WE HOLA',href:'/we-hola'},
   {label:'Đồng hành',href:'/dong-hanh'},
   {label:'HOLA DAY',href:'/hola-day'}
@@ -50,7 +50,7 @@ export default function Header() {
     ctaUrl:'/gui-goc-nhin',
     showSearch:true,
     searchUrl:'/tra-cuu',
-    searchLabel:'Tra cứu tác phẩm',
+    searchLabel:'Theo dõi góc nhìn',
     navLinks:DEFAULT_NAV_LINKS,
     logoImage:'',
     favicon:'',
@@ -188,7 +188,7 @@ export default function Header() {
   const desktopPrimaryLinks=navLinks.filter(item=>!PROGRAM_HREFS.has(item.href))
   const closeMenu=()=>setOpen(false)
   const searchUrl=config.searchUrl||'/tra-cuu'
-  const searchLabel=config.searchLabel||'Tra cứu tác phẩm'
+  const searchLabel=config.searchLabel||'Theo dõi góc nhìn'
   const ctaUrl=config.ctaUrl||'/gui-goc-nhin'
 
   return <header className={headerClass}>
