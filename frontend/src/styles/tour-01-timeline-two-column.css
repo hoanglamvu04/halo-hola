@@ -1,0 +1,71 @@
+@media (min-width: 1180px){
+  .tour01-page .tour-itinerary-list{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px 12px!important;
+    padding:0!important;
+  }
+
+  .tour01-page .tour-itinerary-list:before{
+    display:none!important;
+  }
+
+  .tour01-page .tour-itinerary-list>div{
+    display:grid!important;
+    grid-template-columns:88px 34px minmax(0,1fr)!important;
+    gap:10px!important;
+    align-items:start!important;
+    min-height:116px!important;
+    padding:14px 14px!important;
+    border:1px solid var(--tour-line)!important;
+    border-radius:14px!important;
+    background:var(--tour-paper)!important;
+  }
+
+  .tour01-page .tour-itinerary-list>div:last-child{
+    border:1px solid var(--tour-line)!important;
+  }
+
+  .tour01-page .tour-itinerary-list .tour-time{
+    padding-top:6px!important;
+    font-size:11px!important;
+    line-height:1.25!important;
+    white-space:nowrap!important;
+  }
+
+  .tour01-page .tour-itinerary-icon{
+    border:0!important;
+    width:32px!important;
+    height:32px!important;
+  }
+
+  .tour01-page .tour-itinerary-list>div>div b{
+    margin-top:2px!important;
+    font-size:13px!important;
+    line-height:1.28!important;
+  }
+
+  .tour01-page .tour-itinerary-list>div>div p{
+    margin-top:5px!important;
+    font-size:10.5px!important;
+    line-height:1.45!important;
+  }
+}
+
+@media (min-width: 1180px) and (max-width: 1360px){
+  .tour01-page .tour-itinerary-list>div{
+    grid-template-columns:76px 30px minmax(0,1fr)!important;
+    gap:8px!important;
+    padding:12px!important;
+  }
+
+  .tour01-page .tour-itinerary-list .tour-time{
+    font-size:10px!important;
+  }
+}
+
+@media (max-width: 1179px){
+  .tour01-page .tour-itinerary-list{
+    display:block!important;
+  }
+}
