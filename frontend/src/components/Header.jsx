@@ -5,16 +5,18 @@ import { getHomepageContent, getSiteSettings } from '../services/api.js'
 import './Header.css'
 
 const DEFAULT_NAV_LINKS = [
-  {label:'Khám phá',href:'/'},
   {label:'Chủ đề',href:'/chu-de'},
   {label:'HOLA Tour',href:'/hola-tour'},
   {label:'HOLA Map',href:'/hola-map'},
-  {label:'Stories',href:'/stories'},
+  {label:'Câu chuyện',href:'/stories'},
+  {label:'HOLA DAY',href:'/hola-day'},
+  {label:'Calendar 2027',href:'/calendar-2027'},
   {label:'TOP52',href:'/top52'},
   {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
+const EXPLORE_HREFS = new Set(['/chu-de','/hola-tour','/stories'])
 const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/we-hola'])
 
 const MOBILE_QUICK_LINKS = [
@@ -184,8 +186,19 @@ export default function Header() {
   ].filter(Boolean).join(' ')
 
   const navLinks=(Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS).filter(item=>item?.label&&item?.href)
+  const findNavItem=(href,fallbackLabel)=>{
+    const item=navLinks.find(link=>link.href===href)
+    if(!item) return DEFAULT_NAV_LINKS.find(link=>link.href===href)||null
+    return href==='/stories'?{...item,label:'Câu chuyện'}:{...item,label:item.label||fallbackLabel}
+  }
+  const exploreLinks=[
+    findNavItem('/chu-de','Chủ đề'),
+    findNavItem('/hola-tour','HOLA Tour'),
+    findNavItem('/stories','Câu chuyện')
+  ].filter(Boolean)
   const programLinks=navLinks.filter(item=>PROGRAM_HREFS.has(item.href))
-  const desktopPrimaryLinks=navLinks.filter(item=>!PROGRAM_HREFS.has(item.href))
+  const desktopPrimaryLinks=navLinks.filter(item=>item.href!=='/'&&!EXPLORE_HREFS.has(item.href)&&!PROGRAM_HREFS.has(item.href))
+  const mobilePrimaryLinks=navLinks.filter(item=>item.href!=='/')
   const closeMenu=()=>setOpen(false)
   const searchUrl=config.searchUrl||'/tra-cuu'
   const searchLabel=config.searchLabel||'Theo dõi góc nhìn'
@@ -206,6 +219,14 @@ export default function Header() {
         </div>
 
         <div className="desktop-nav-list" aria-label="Điều hướng chính">
+          {exploreLinks.length>0&&<div className="desktop-nav-more desktop-nav-explore">
+            <button className="desktop-nav-more-trigger" type="button" aria-haspopup="true">
+              Khám phá <ChevronDown aria-hidden="true" />
+            </button>
+            <div className="desktop-nav-dropdown">
+              {exploreLinks.map((item,index)=><HeaderNavLink key={(item.href||'explore')+'-'+index} item={item}/>)}
+            </div>
+          </div>}
           {desktopPrimaryLinks.map((item,index)=><HeaderNavLink key={(item.href||'link')+'-desktop-'+index} item={item}/>)}
           {programLinks.length>0&&<div className="desktop-nav-more">
             <button className="desktop-nav-more-trigger" type="button" aria-haspopup="true">
@@ -219,7 +240,7 @@ export default function Header() {
 
         <div className="mobile-nav-primary-label">Khám phá</div>
         <div className="mobile-nav-primary-list">
-          {navLinks.map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
+          {mobilePrimaryLinks.map((item,index)=><HeaderNavLink key={(item.href||'link')+'-'+index} item={item} onClick={closeMenu}/>)}
         </div>
 
         <div className="mobile-nav-actions">
