@@ -9,7 +9,7 @@ import '../styles/rules-awards-desktop-reading.css'
 const NAV=[
   ['I.','HALO HOLA đang tìm gì','tim-gi'],
   ['II.','Ai có thể đóng góp','tham-gia'],
-  ['III.','7 mạch nội dung','mach-noi-dung'],
+  ['III.','7 chủ đề','chu-de'],
   ['IV.','Gửi một góc nhìn','gui-goc-nhin'],
   ['V.','Ban Biên tập làm gì','bien-tap'],
   ['VI.','Quyền nội dung','quyen'],
@@ -104,12 +104,12 @@ export default function RulesAwardsPage(){
             </div>
           </section>
 
-          <section id="mach-noi-dung" className="rules4-section">
+          <section id="chu-de" className="rules4-section">
             <div className="rules4-roman">III.</div>
             <div>
-              <span className="rules4-section-kicker">Khung biên tập</span>
-              <h3>7 mạch nội dung · 3 trục xuyên suốt</h3>
-              <p className="rules4-lead">Bảy mạch giúp 52 góc nhìn không lệch thành một bộ ảnh phong cảnh. Một câu chuyện có thể giao thoa nhiều mạch. Ba trục xuyên suốt là <b>Bản sắc · Sáng tạo · Tương lai</b>.</p>
+              <span className="rules4-section-kicker">Khung nội dung</span>
+              <h3>7 chủ đề · 3 trục xuyên suốt</h3>
+              <p className="rules4-lead">Bảy chủ đề giúp 52 góc nhìn giữ được sự đa dạng và không lệch thành một bộ ảnh phong cảnh. Một câu chuyện có thể giao thoa nhiều chủ đề. Ba trục xuyên suốt là <b>Bản sắc · Sáng tạo · Tương lai</b>.</p>
               <div className="rules4-awards-grid">{streams.map(([no,name,desc])=><article key={no} className="rules4-award-card"><span>{no}</span><h4>{name}</h4><p>{desc}</p></article>)}</div>
             </div>
           </section>
