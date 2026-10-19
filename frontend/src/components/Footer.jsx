@@ -13,8 +13,8 @@ const exploreLinks=[
 ]
 
 const participateLinks=[
-  ['Thể lệ & Giải thưởng','/the-le-giai-thuong'],
-  ['Tra cứu tác phẩm','/tra-cuu'],
+  ['Cách tham gia & Ghi nhận','/the-le-giai-thuong'],
+  ['Theo dõi góc nhìn','/tra-cuu'],
   ['Đồng hành','/dong-hanh'],
   ['HOLA DAY','/hola-day']
 ]
@@ -40,7 +40,7 @@ export default function Footer() {
             : <span className="footer-wordmark">HAL<span>O</span> HOLA</span>}
         </Link>
 
-        <p className="footer-brand-copy">{footer.description||brand.tagline||'Nơi những câu chuyện về Hòa Lạc được khám phá, ghi lại và kể tiếp.'}</p>
+        <p className="footer-brand-copy">{footer.description||brand.tagline||'Nơi cộng đồng cùng khám phá, ghi lại, đóng góp và kể tiếp những câu chuyện về Hòa Lạc.'}</p>
         {footer.address&&<div className="footer-address">{footer.address}</div>}
 
         <a className="footer-email" href={'mailto:'+email}><Mail size={16}/><span>{email}</span></a>
@@ -61,7 +61,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-participate-column">
-        <h4>Tham gia</h4>
+        <h4>Đóng góp</h4>
         <Link to="/gui-goc-nhin" className="footer-submit-cta">
           <span>Gửi góc nhìn</span><ArrowRight size={18}/>
         </Link>
