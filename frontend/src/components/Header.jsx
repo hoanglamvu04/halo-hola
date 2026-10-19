@@ -6,21 +6,25 @@ import './Header.css'
 
 const DEFAULT_NAV_LINKS = [
   {label:'Khám phá',href:'/'},
-  {label:'Chủ đề',href:'/chu-de'},
+  {label:'7 mạch',href:'/chu-de'},
   {label:'HOLA Tour',href:'/hola-tour'},
   {label:'HOLA Map',href:'/hola-map'},
   {label:'Stories',href:'/stories'},
-  {label:'TOP52',href:'/top52'},
-  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
+  {label:'HOLA DAY',href:'/hola-day'},
+  {label:'52 góc nhìn',href:'/top52'},
+  {label:'Cách đóng góp',href:'/the-le-giai-thuong'},
+  {label:'Calendar 2027',href:'/calendar-2027'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
-const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/we-hola'])
+const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/calendar-2027','/we-hola'])
 
 const MOBILE_QUICK_LINKS = [
-  {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
-  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
+  {label:'Gửi một góc nhìn',href:'/gui-goc-nhin'},
+  {label:'Cách đóng góp',href:'/the-le-giai-thuong'},
   {label:'Theo dõi góc nhìn',href:'/tra-cuu'},
+  {label:'52 góc nhìn 2026',href:'/top52'},
+  {label:'Calendar 2027',href:'/calendar-2027'},
   {label:'WE HOLA',href:'/we-hola'},
   {label:'Đồng hành',href:'/dong-hanh'},
   {label:'HOLA DAY',href:'/hola-day'}
@@ -46,7 +50,7 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const [config,setConfig]=useState({
     enabled:true,
-    ctaText:'GỬI GÓC NHÌN',
+    ctaText:'GỬI MỘT GÓC NHÌN',
     ctaUrl:'/gui-goc-nhin',
     showSearch:true,
     searchUrl:'/tra-cuu',
@@ -224,7 +228,7 @@ export default function Header() {
 
         <div className="mobile-nav-actions">
           {config.showSearch!==false&&<HeaderActionLink href={searchUrl} onClick={closeMenu}><Search/> {searchLabel}</HeaderActionLink>}
-          <HeaderActionLink className="mobile-nav-cta" href={ctaUrl} newTab={Boolean(config.ctaNewTab)} onClick={closeMenu}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight/></HeaderActionLink>
+          <HeaderActionLink className="mobile-nav-cta" href={ctaUrl} newTab={Boolean(config.ctaNewTab)} onClick={closeMenu}>{config.ctaText||'GỬI MỘT GÓC NHÌN'} <ArrowRight/></HeaderActionLink>
         </div>
 
         <div className="mobile-nav-quick">
@@ -245,7 +249,7 @@ export default function Header() {
       </nav>
       <div className="header-actions">
         {config.showSearch!==false&&<HeaderActionLink className="icon-btn search-btn" href={searchUrl} ariaLabel={searchLabel} title={searchLabel}><Search size={18}/></HeaderActionLink>}
-        <HeaderActionLink className="btn btn-terra btn-sm" href={ctaUrl} newTab={Boolean(config.ctaNewTab)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight size={16}/></HeaderActionLink>
+        <HeaderActionLink className="btn btn-terra btn-sm" href={ctaUrl} newTab={Boolean(config.ctaNewTab)}>{config.ctaText||'GỬI MỘT GÓC NHÌN'} <ArrowRight size={16}/></HeaderActionLink>
         <button className="menu-btn" onClick={() => setOpen(v => !v)} aria-label="Menu">{open ? <X/> : <Menu/>}</button>
       </div>
     </div>
