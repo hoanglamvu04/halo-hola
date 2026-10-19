@@ -6,7 +6,7 @@ import './Header.css'
 
 const DEFAULT_NAV_LINKS = [
   {label:'Khám phá',href:'/'},
-  {label:'7 mạch',href:'/chu-de'},
+  {label:'Chủ đề',href:'/chu-de'},
   {label:'HOLA Tour',href:'/hola-tour'},
   {label:'HOLA Map',href:'/hola-map'},
   {label:'Stories',href:'/stories'},
