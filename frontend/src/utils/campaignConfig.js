@@ -1,9 +1,9 @@
 export const OFFICIAL_CAMPAIGN_MILESTONES=[
-  ['11.10','Mở nhận tác phẩm'],
+  ['11.10','Mở nhận góc nhìn'],
   ['25.10','HOLA Tour #01 · #02 · #03'],
-  ['10.11 · 10:11','Đóng nhận tác phẩm'],
-  ['16.11','Công bố TOP52 · mở bình chọn'],
-  ['24.11','HOLA DAY']
+  ['10.11 · 10:11','Đóng đợt nhận góc nhìn'],
+  ['16.11','Công bố TOP52 · mở bình chọn cộng đồng'],
+  ['24.11','HOLA DAY · triển lãm · vinh danh']
 ]
 
 const defaults={
