@@ -1,9 +1,8 @@
 export const OFFICIAL_CAMPAIGN_MILESTONES=[
-  ['11.10','Mở nhận góc nhìn'],
-  ['25.10','HOLA Tour #01 · #02 · #03'],
-  ['10.11 · 10:11','Đóng đợt nhận góc nhìn'],
-  ['16.11','Công bố TOP52 · mở bình chọn cộng đồng'],
-  ['24.11','HOLA DAY · triển lãm · vinh danh']
+  ['17.10–05.11','DISCOVER · đi tìm nguyên liệu'],
+  ['05.11–15.11','CURATE · chọn và biên tập 52 góc nhìn'],
+  ['15.11–23.11','BUILD · triển lãm · Calendar · HOLA DAY'],
+  ['24.11','REVEAL · HOLA DAY · mở ra HALO HOLA 2027']
 ]
 
 const defaults={
@@ -12,7 +11,7 @@ const defaults={
   ctaBg:'#e95f25',ctaTextColor:'#ffffff',timelineBg:'#074c37',timelineTitleColor:'#ffffff',timelineIconColor:'#f2b84b',
   milestoneBg:'#145e49',milestoneBorder:'#4f826f',milestoneDateColor:'#ff9c45',milestoneTextColor:'#ffffff',
   activeMilestoneBg:'#1b684f',activeMilestoneBorder:'#e2b34f',activeMilestoneDateColor:'#ffd15c',
-  journeyTitle:'Hành trình 2026'
+  journeyTitle:'Hành trình biên tập 2026'
 }
 
 const legacy={
