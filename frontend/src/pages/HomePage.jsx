@@ -66,14 +66,14 @@ export default function HomePage() {
     image3:img.architecture
   })
   const themesCopy=sectionData('themes',{
-    eyebrow:'BẢY MẠCH · BA TRỤC XUYÊN SUỐT',
-    title:'7 mạch kể Hòa Lạc',
+    eyebrow:'7 CHỦ ĐỀ · BA TRỤC XUYÊN SUỐT',
+    title:'7 chủ đề Hòa Lạc',
     description:'Bản sắc · Thiên nhiên · Không gian · Con người · Tri thức & Công nghệ · Đời sống & Cảm xúc · Tương lai. Ba trục xuyên suốt: Bản sắc · Sáng tạo · Tương lai.'
   })
   const colorsCopy=sectionData('colors',{
     eyebrow:'SẮC MÀU HÒA LẠC',
     title:'Hòa Lạc trong bạn có màu gì?',
-    description:'Sắc màu là một lớp nhận diện xuyên suốt, không phải một mạch nội dung riêng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc.',
+    description:'Sắc màu là một lớp nhận diện xuyên suốt, không phải một chủ đề riêng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc.',
     storyImagePrimary:img.hills,
     storyImageSecondary:img.lake,
     colorImage1:img.village,
@@ -312,13 +312,13 @@ export default function HomePage() {
               <span className="eyebrow">{themesCopy.eyebrow}</span>
               <i/>
             </div>
-            <h2><span>7 mạch kể</span><em>Hòa Lạc</em></h2>
+            <h2><span>7 chủ đề</span><em>Hòa Lạc</em></h2>
             <span className="themes-title-stroke"/>
           </div>
 
           <div className="themes-showcase-side">
             <p>{themesCopy.description}</p>
-            <Link className="themes-all-link" to="/chu-de">Khám phá 7 mạch <ArrowRight size={17}/></Link>
+            <Link className="themes-all-link" to="/chu-de">Khám phá 7 chủ đề <ArrowRight size={17}/></Link>
           </div>
         </header>
 
