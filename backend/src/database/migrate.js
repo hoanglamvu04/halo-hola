@@ -7,6 +7,26 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 try {
+  // One-time compatibility for databases that still contain the retired eight-theme
+  // taxonomy. schema.sql now seeds the seven editorial themes using the same IDs,
+  // so clear only the known legacy rows before applying the schema. Once converted,
+  // later deploys no longer match this condition.
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF to_regclass('public.themes') IS NOT NULL
+         AND EXISTS (
+           SELECT 1 FROM themes
+           WHERE slug IN (
+             'net-doai','sac-muong','kien-truc','hoa-lac-xanh',
+             'nang-hoa-lac','cau-chuyen','uoc-mo','sac-mau'
+           )
+         ) THEN
+        DELETE FROM themes WHERE id BETWEEN 1 AND 8;
+      END IF;
+    END $$;
+  `);
+
   const schema = await fs.readFile(path.join(__dirname, 'schema.sql'), 'utf8');
   await pool.query(schema);
 
