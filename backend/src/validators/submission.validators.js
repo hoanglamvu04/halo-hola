@@ -40,15 +40,15 @@ export const submissionSchema = z.object({
   const truthy = (x) => x === true || String(x).toLowerCase() === 'true';
 
   if (!truthy(value.rightsConfirmed)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rightsConfirmed'], message: 'Cần xác nhận quyền tác giả.' });
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rightsConfirmed'], message: 'Cần xác nhận quyền tác giả đối với nội dung đóng góp.' });
   }
 
   if (!truthy(value.imageConsentConfirmed)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['imageConsentConfirmed'], message: 'Cần xác nhận đồng thuận hình ảnh/người xuất hiện trong tác phẩm.' });
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['imageConsentConfirmed'], message: 'Cần xác nhận đồng thuận hình ảnh/người xuất hiện trong góc nhìn.' });
   }
 
   if (!truthy(value.allowMediaUse)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['allowMediaUse'], message: 'Cần đồng ý quyền sử dụng tác phẩm cho hoạt động truyền thông theo thể lệ.' });
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['allowMediaUse'], message: 'Cần đồng ý quyền sử dụng nội dung cho hoạt động truyền thông, triển lãm và lưu trữ theo hướng dẫn chương trình.' });
   }
 
   if (truthy(value.isMinor) && (!value.guardianName || !truthy(value.guardianConsent))) {
