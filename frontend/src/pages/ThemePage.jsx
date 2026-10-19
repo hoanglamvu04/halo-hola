@@ -111,8 +111,8 @@ export default function ThemePage(){
     }
   }
 
-  if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải mạch nội dung từ hệ thống...</div></main>
-  if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy mạch nội dung.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 7 mạch</Link></div></main>
+  if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
+  if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 7 chủ đề</Link></div></main>
 
   const visibleCount=Number(theme.artworkCount ?? totalCount ?? 0)
 
@@ -122,15 +122,15 @@ export default function ThemePage(){
       <div className="theme-hero-leaf"/>
       <div className="theme-hero-inner">
         <div className="theme-hero-copy">
-          <Link className="story-back-link" to="/chu-de"><ArrowLeft/> 7 mạch nội dung</Link>
-          <div className="theme-kicker"><span>MẠCH {String(theme.id).padStart(2,'0')}</span><i/></div>
+          <Link className="story-back-link" to="/chu-de"><ArrowLeft/> 7 chủ đề</Link>
+          <div className="theme-kicker"><span>CHỦ ĐỀ {String(theme.id).padStart(2,'0')}</span><i/></div>
           <h1>{theme.title}</h1>
           <h3>{theme.description}</h3>
           <p>{theme.intro}</p>
 
           <div className="theme-hero-actions">
             <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi một góc nhìn <ArrowRight size={17}/></Link>
-            <a className="theme-explore-link" href="#kham-pha"><span><Play/></span>Khám phá mạch này</a>
+            <a className="theme-explore-link" href="#kham-pha"><span><Play/></span>Khám phá chủ đề này</a>
           </div>
 
           <div className="theme-hero-stats">
@@ -153,7 +153,7 @@ export default function ThemePage(){
         <div className="theme-story-copy">
           <div className="theme-kicker"><span>GỢI Ý KHÁM PHÁ</span><i/></div>
           <h2>Đi tìm một câu chuyện, không chỉ một khung hình</h2>
-          <p>Mỗi mạch là một khung biên tập để team và cộng đồng tìm người, nơi chốn, ký ức, khoảnh khắc và ý tưởng đáng được giữ lại. Một góc nhìn có thể giao thoa nhiều mạch.</p>
+          <p>Mỗi chủ đề là một khung biên tập để team và cộng đồng tìm người, nơi chốn, ký ức, khoảnh khắc và ý tưởng đáng được giữ lại. Một góc nhìn có thể giao thoa nhiều chủ đề.</p>
         </div>
 
         <div className="theme-tip-panel">
