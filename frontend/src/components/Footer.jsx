@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { getSiteSettings } from '../services/api.js'
 
 const exploreLinks=[
-  ['7 mạch','/chu-de'],
+  ['Chủ đề','/chu-de'],
   ['52 góc nhìn 2026','/top52'],
   ['Stories','/stories'],
   ['HOLA Tour','/hola-tour'],
