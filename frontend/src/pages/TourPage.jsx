@@ -1,12 +1,56 @@
 import { useEffect, useState } from 'react'
 import {
   CalendarDays, MapPin, Users, Bus, Utensils, Flag, ArrowRight, ArrowLeft,
-  CheckCircle2, Compass, Leaf, Camera, Heart, FileText, X
+  CheckCircle2, Compass, Leaf, Camera, Heart, FileText, X, Eye,
+  MessageCircle, Quote, Video, Image as ImageIcon, UserRound, Route
 } from 'lucide-react'
 import { getTours, registerTour } from '../services/api.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
 
 const itineraryIcons=[Bus,MapPin,Utensils,Users,Camera,Flag]
+
+const tour01Lenses=[
+  {
+    label:'BUỔI SÁNG · ĐOÀI',
+    title:'Điều gì làm nên chất Đoài?',
+    flow:['Đất','Làng','Nghề','Con người','Ký ức'],
+    text:'Bắt đầu từ không gian và vật liệu, rồi đi sâu dần tới con người và những ký ức đang sống trong làng.'
+  },
+  {
+    label:'BUỔI CHIỀU · MƯỜNG',
+    title:'Điều gì làm nên bản sắc Mường?',
+    flow:['Cộng đồng','Nếp sống','Văn hóa','Con người','Ký ức'],
+    text:'Một hành trình mới, kể văn hóa Mường bằng chính đời sống và câu chuyện của người Mường — không ép nối với phần Đoài.'
+  }
+]
+
+const tour01Outputs=[
+  ['5–8','Nhân vật tiếp xúc',UserRound],
+  ['3–5','Phỏng vấn tương đối sâu',MessageCircle],
+  ['5–7','Lead câu chuyện',FileText],
+  ['2–4','Góc nhìn mạnh để shortlist',Eye],
+  ['≥5','Hero Image tiềm năng',ImageIcon],
+  ['≥5','Quote đáng giữ',Quote],
+  ['≥3','Video interview',Video],
+]
+
+const tour01StoryKit=[
+  'Tên nhân vật / nguồn',
+  'Tên câu chuyện tạm',
+  'Hero Image',
+  'Ảnh phụ',
+  'Story / ghi chú đủ để biên tập',
+  'Quote',
+  'Video hoặc B-roll nếu có',
+  'Contact + thông tin quyền sử dụng'
+]
+
+const tour01Principles=[
+  'Không biến tour thành chuyến check-in hoặc cố chạy thật nhiều địa điểm.',
+  'Không dựng trước kết luận rồi tìm người nói theo; câu chuyện phải đi từ điều thực sự gặp được.',
+  'Không biến người dân thành đạo cụ văn hóa, không yêu cầu biểu diễn hoặc mặc trang phục chỉ để quay đẹp.',
+  'Ưu tiên một cuộc trò chuyện tốt và asset bắt buộc trước B-roll, texture hay ảnh phụ.'
+]
 
 export default function TourPage(){
   const [selected,setSelected]=useState(0)
@@ -38,6 +82,7 @@ export default function TourPage(){
   },[showForm])
 
   const tour=tours[selected]||tours[0]||null
+  const isTour01=String(tour?.no||'').padStart(2,'0')==='01'
   const currentItinerary=(tour?.itinerary||[]).map((item,index)=>[
     item.time||item[0]||'',
     item.title||item[1]||'Điểm dừng',
@@ -122,8 +167,8 @@ export default function TourPage(){
       <div className="tour-page-inner tour-selected-grid">
         <div className="tour-selected-copy">
           <span className="eyebrow">TOUR #{tour.no}</span>
-          <h2>{tour.title}</h2>
-          <h3>{tour.kicker}</h3>
+          <h2>{isTour01?'Đoài · Mường':tour.title}</h2>
+          <h3>{isTour01?'ĐI TÌM BẢN SẮC':tour.kicker}</h3>
           <div className="tour-selected-facts">
             <span><MapPin/> {tour.location}</span>
             <span><CalendarDays/> {tour.durationLabel}</span>
@@ -143,6 +188,39 @@ export default function TourPage(){
       </div>
     </section>
 
+    {isTour01&&<>
+      <section className="tour01-concept-section">
+        <div className="tour-page-inner">
+          <div className="tour01-section-head">
+            <div><span>TOUR #01 · CONCEPT</span><h2>Hai lớp bản sắc.<br/>Hai hành trình khám phá trong một ngày.</h2></div>
+            <p>Không cố tạo một mối liên hệ trực tiếp giữa Đoài và Mường. Mỗi phần được khám phá bằng chính câu chuyện của vùng đó, rồi đặt cạnh nhau ở cuối ngày.</p>
+          </div>
+          <div className="tour01-lens-grid">
+            {tour01Lenses.map((lens,index)=><article key={lens.label}>
+              <div className="tour01-lens-top"><span>{lens.label}</span><b>{String(index+1).padStart(2,'0')}</b></div>
+              <h3>{lens.title}</h3>
+              <div className="tour01-flow">{lens.flow.map((item,i)=><span key={item}>{item}{i<lens.flow.length-1&&<ArrowRight/>}</span>)}</div>
+              <p>{lens.text}</p>
+            </article>)}
+          </div>
+          <div className="tour01-merge-line"><span>ĐOÀI</span><b>×</b><span>MƯỜNG</span><p>những bản sắc vẫn đang sống trong đời sống hôm nay.</p></div>
+        </div>
+      </section>
+
+      <section className="tour01-method-section">
+        <div className="tour-page-inner tour01-method-grid">
+          <div>
+            <span className="eyebrow">CÁCH CHÚNG TÔI KHÁM PHÁ</span>
+            <h2>Đi → Nhìn → Gặp → Nghe → Ghi lại.</h2>
+            <p>Không đo hành trình bằng số địa điểm đã đi qua. Mục tiêu là gặp được người, nghe được điều đáng nhớ và tìm thấy câu chuyện đủ tốt để tiếp tục biên tập.</p>
+          </div>
+          <div className="tour01-method-steps">
+            {[[Route,'ĐI'],[Eye,'NHÌN'],[Users,'GẶP'],[MessageCircle,'NGHE'],[Camera,'GHI LẠI']].map(([Icon,label],index)=><div key={label}><span>{String(index+1).padStart(2,'0')}</span><Icon/><b>{label}</b></div>)}
+          </div>
+        </div>
+      </section>
+    </>}
+
     {showForm&&<div
       className="tour-register-modal"
       role="dialog"
@@ -155,9 +233,9 @@ export default function TourPage(){
         <div className="tour-register-modal-grid">
           <div>
             <span className="eyebrow">ĐĂNG KÝ HOLA TOUR #{tour.no}</span>
-            <h2>{tour.title}</h2>
+            <h2>{isTour01?'Đoài · Mường':tour.title}</h2>
             <p>{tour.dates} · {tour.audienceLabel}.</p>
-            <div className="tour-register-note"><b>Tham gia tour không tạo ưu thế khi chấm giải.</b><span>Tour là hoạt động trải nghiệm và kết nối cộng đồng.</span></div>
+            <div className="tour-register-note"><b>HOLA Tour là hành trình săn câu chuyện.</b><span>Đi, gặp, quan sát và ghi lại những câu chuyện thật để tiếp tục biên tập trong hệ thống HALO HOLA.</span></div>
           </div>
           {result?<div className="tour-register-success"><CheckCircle2/><h3>Đăng ký thành công</h3><p>Mã đăng ký của bạn:</p><strong>{result.code}</strong><small>BTC sẽ liên hệ qua email/điện thoại để xác nhận.</small></div>:
           <form className="tour-register-form" onSubmit={submit}>
@@ -177,7 +255,8 @@ export default function TourPage(){
     <section id="lich-trinh" className="tour-detail-ref">
       <div className="tour-page-inner tour-detail-grid">
         <div className="tour-itinerary">
-          <h2>Lịch trình trải nghiệm</h2>
+          <h2>{isTour01?'Timeline một ngày':'Lịch trình trải nghiệm'}</h2>
+          {isTour01&&<p className="tour01-timeline-intro">07:30, 16:15 và 17:00 là các mốc tương đối cứng. Thời gian bên trong từng cụm có thể linh hoạt theo câu chuyện thực tế và các khoảng buffer.</p>}
           {currentItinerary.length===0?<p>BTC đang cập nhật lịch trình chi tiết.</p>:<div className="tour-itinerary-list">
             {currentItinerary.map(([time,title,I,desc],index)=><div key={time+title+index}>
               <span className="tour-time">{time}</span>
@@ -197,15 +276,15 @@ export default function TourPage(){
             <div className="tour-info-title"><FileText/><b>Thông tin tour</b></div>
             <div>
               <p><b>Thời gian:</b> {tour.dates}</p>
-              <p><b>Số lượng:</b> {tour.audienceLabel}</p>
+              <p><b>Hình thức:</b> {tour.audienceLabel}</p>
               <p><b>Địa điểm:</b> {tour.location}</p>
-              <p><b>Nguyên tắc:</b> Tham gia tour không tạo ưu thế khi chấm giải.</p>
+              <p><b>Nguyên tắc:</b> Ưu tiên câu chuyện và nhân vật thật; không chạy địa điểm chỉ để đủ số lượng.</p>
             </div>
           </div>
         </div>
 
         {currentStops.length>0&&<div className="tour-stops">
-          <div className="tour-stops-head"><h2>Các điểm dừng nổi bật</h2></div>
+          <div className="tour-stops-head"><h2>{isTour01?'03 cụm khám phá':'Các điểm dừng nổi bật'}</h2></div>
           <div className="tour-stop-grid">
             {currentStops.map(([name,image,desc],index)=><div className="tour-stop-card" key={name+index}>
               {image?<img src={image} alt={name}/>:<div className="theme-card-placeholder"/>}
@@ -215,6 +294,57 @@ export default function TourPage(){
         </div>}
       </div>
     </section>
+
+    {isTour01&&<>
+      <section className="tour01-output-section">
+        <div className="tour-page-inner">
+          <div className="tour01-section-head">
+            <div><span>ĐẦU RA MONG MUỐN</span><h2>Mang về ít hơn,<br/>nhưng đủ sâu để kể tiếp.</h2></div>
+            <p>KPI không đo bằng số người tham gia hay số điểm check-in, mà bằng số câu chuyện, nhân vật, ảnh, video và tư liệu có thể đi tiếp vào hệ thống 52 góc nhìn.</p>
+          </div>
+          <div className="tour01-output-grid">
+            {tour01Outputs.map(([value,label,Icon])=><article key={label}><Icon/><b>{value}</b><span>{label}</span></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="tour01-storykit-section">
+        <div className="tour-page-inner tour01-storykit-grid">
+          <div>
+            <span className="eyebrow">KHI GẶP MỘT CÂU CHUYỆN MẠNH</span>
+            <h2>Thu đủ để câu chuyện không bị mất sau chuyến đi.</h2>
+            <p>Một góc nhìn không nhất thiết chỉ là một bức ảnh. Nó có thể bắt đầu từ một con người, một nơi chốn, món ăn, nghề, ký ức, câu nói hay khoảnh khắc.</p>
+          </div>
+          <div className="tour01-storykit-list">
+            {tour01StoryKit.map((item,index)=><div key={item}><span>{String(index+1).padStart(2,'0')}</span><b>{item}</b><CheckCircle2/></div>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="tour01-ethics-section">
+        <div className="tour-page-inner">
+          <div className="tour01-section-head compact">
+            <div><span>NGUYÊN TẮC GHI LẠI</span><h2>Không lấy một hình ảnh đẹp bằng cách làm sai câu chuyện.</h2></div>
+          </div>
+          <div className="tour01-principle-grid">
+            {tour01Principles.map((item,index)=><article key={item}><span>{String(index+1).padStart(2,'0')}</span><p>{item}</p></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="tour01-confluence-section">
+        <div className="tour-page-inner tour01-confluence-card">
+          <div>
+            <span>17:00 · BA HÀNH TRÌNH HỘI TỤ</span>
+            <h2>Không báo cáo đã đi đâu.<br/>Kể điều mình đã tìm thấy.</h2>
+            <p>Tour #01 · Bản sắc gặp Tour #02 · Màu sắc và Tour #03 · Cảm xúc để đặt ba lát cắt cạnh nhau thành một bức tranh rộng hơn về Hòa Lạc.</p>
+          </div>
+          <div className="tour01-confluence-assets">
+            {['03 ảnh','01 nhân vật','01 quote','01 câu chuyện','01 điều mới phát hiện'].map(item=><span key={item}><CheckCircle2/>{item}</span>)}
+          </div>
+        </div>
+      </section>
+    </>}
     </>}
   </main>
 }
