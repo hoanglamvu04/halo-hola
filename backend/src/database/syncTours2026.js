@@ -58,7 +58,10 @@ try{
      SET content=COALESCE(content,'{}'::jsonb) || $2::jsonb,
          updated_at=NOW()
      WHERE section_key=$1`,
-    ['tours',JSON.stringify({description:'Ba hành trình HOLA Tour cùng diễn ra trong một ngày 25/10/2026 — ba hướng khám phá khác nhau về Hòa Lạc.'})]
+    ['tours',JSON.stringify({
+      eyebrow:'HÀNH TRÌNH SĂN CÂU CHUYỆN',
+      description:'Ba hành trình HOLA Tour: Đi tìm Bản sắc · Đi tìm Màu sắc · Đi tìm Cảm xúc — tập trung tạo ra câu chuyện, nhân vật, ảnh, video và tư liệu cho hệ thống 52 góc nhìn.'
+    })]
   );
 
   await client.query('COMMIT');
