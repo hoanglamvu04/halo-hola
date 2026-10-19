@@ -58,7 +58,7 @@ export default function Top52Page(){
   const hasMore=items.length<total
   const statusText=selectedCount?`${publishedCount||total}/${selectedCount} góc nhìn đã công bố`:`${total} góc nhìn đã công bố`
   const statusDetail=meta?.round?.status==='LOCKED'?'Bộ 52 góc nhìn đã được Ban Biên tập chốt':'52 góc nhìn · 1 Hòa Lạc'
-  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả mạch',[themes,filters.theme])
+  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
   const clearFilters=()=>setFilters({q:'',theme:'',type:''})
   const hasFilters=filters.q||filters.theme||filters.type
 
@@ -95,7 +95,7 @@ export default function Top52Page(){
 
       <div className="top52-live-filters">
         <label className="top52-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} placeholder="Tìm mã góc nhìn, câu chuyện, người kể..."/></label>
-        <div className="top52-filter-row"><SlidersHorizontal/><b>Mạch nội dung</b><button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>{themes.map(t=><button key={t.slug} className={filters.theme===t.title?'active':''} onClick={()=>setFilters(v=>({...v,theme:t.title}))}>{t.title}</button>)}</div>
+        <div className="top52-filter-row"><SlidersHorizontal/><b>Chủ đề</b><button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>{themes.map(t=><button key={t.slug} className={filters.theme===t.title?'active':''} onClick={()=>setFilters(v=>({...v,theme:t.title}))}>{t.title}</button>)}</div>
         <div className="top52-filter-controls">
           <select value={filters.type} onChange={e=>setFilters(v=>({...v,type:e.target.value}))}><option value="">Tất cả loại hình</option>{types.map(type=><option key={type} value={type}>{type}</option>)}</select>
           {hasFilters&&<button onClick={clearFilters}>Xóa bộ lọc</button>}
