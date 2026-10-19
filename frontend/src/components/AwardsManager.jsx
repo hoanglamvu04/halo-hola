@@ -1,32 +1,35 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp, Eye, EyeOff, Plus, Save, Trash2, Trophy } from 'lucide-react'
 import { getAdminCmsSettings, updateAdminCmsSetting } from '../services/api.js'
-import { DEFAULT_AWARDS } from '../pages/RulesAwardsPage.jsx'
 import './AwardsManager.css'
 
+// Legacy recognition configuration stays available to admins for historical data,
+// but the public /the-le-giai-thuong page no longer renders an awards structure.
+const DEFAULT_AWARDS=[]
+
 const DEFAULT_CONFIG={
-  enabled:true,
-  title:'Thể lệ & Giải thưởng HALO HOLA 2026',
-  intro:'Điều kiện tham gia, cách gửi tác phẩm, mốc thời gian và cơ cấu giải thưởng chính thức của HALO HOLA 2026.',
+  enabled:false,
+  title:'Ghi nhận nội bộ HALO HOLA 2026',
+  intro:'Cấu hình tương thích cho dữ liệu cũ. Website public hiện vận hành theo mô hình biên tập – khám phá – lưu giữ câu chuyện.',
   officialPdfUrl:'',
-  totalPrize:'29.000.000đ',
-  totalAwards:11,
-  prizeSummary:'8 chủ đề · 11 giải',
-  juryWeight:70,
-  communityWeight:30,
+  totalPrize:'',
+  totalAwards:0,
+  prizeSummary:'Không hiển thị cơ cấu giải trên public',
+  juryWeight:0,
+  communityWeight:0,
   awards:DEFAULT_AWARDS
 }
 
 const blankAward=()=>({
-  code:'AWARD_'+Date.now(),
-  label:'Giải thưởng',
-  name:'Giải mới',
+  code:'RECOGNITION_'+Date.now(),
+  label:'Ghi nhận',
+  name:'Hạng mục mới',
   amount:'',
-  quantity:'01 giải',
+  quantity:'',
   description:'',
   tone:'forest',
   featured:false,
-  enabled:true
+  enabled:false
 })
 
 export default function AwardsManager(){
@@ -43,7 +46,7 @@ export default function AwardsManager(){
       setDraft({
         ...DEFAULT_CONFIG,
         ...current,
-        awards:Array.isArray(current.awards)&&current.awards.length?current.awards:DEFAULT_AWARDS
+        awards:Array.isArray(current.awards)?current.awards:DEFAULT_AWARDS
       })
     }).catch(err=>setMessage(err.message)).finally(()=>alive&&setLoading(false))
     return()=>{alive=false}
@@ -69,19 +72,19 @@ export default function AwardsManager(){
     try{
       const result=await updateAdminCmsSetting('rulesAwards',draft)
       setDraft(v=>({...v,...result.value,awards:Array.isArray(result.value?.awards)?result.value.awards:v.awards}))
-      setMessage('Đã lưu cơ cấu giải thưởng và áp dụng lên trang public.')
+      setMessage('Đã lưu cấu hình ghi nhận nội bộ. Trang public “Cách đóng góp” không hiển thị cơ cấu giải.')
     }catch(err){setMessage(err.message)}
     finally{setSaving(false)}
   }
 
-  if(loading) return <div className="admin-panel"><p>Đang tải cấu hình giải thưởng…</p></div>
+  if(loading) return <div className="admin-panel"><p>Đang tải cấu hình ghi nhận…</p></div>
 
   return <div className="awards-admin">
     <div className="awards-admin-head">
       <div>
-        <span className="eyebrow">THỂ LỆ & GIẢI THƯỞNG</span>
-        <h2><Trophy/> Quản lý giải thưởng</h2>
-        <p>Chỉnh nội dung hiển thị tại <b>/the-le-giai-thuong</b>. Thay đổi ở đây không ảnh hưởng dữ liệu chấm giải hay trạng thái tác phẩm.</p>
+        <span className="eyebrow">CẤU HÌNH TƯƠNG THÍCH</span>
+        <h2><Trophy/> Ghi nhận nội bộ</h2>
+        <p>Dữ liệu này được giữ để tương thích với trạng thái và lịch sử cũ. Trang public <b>/the-le-giai-thuong</b> hiện là hướng dẫn “Cách đóng góp” và không còn trình bày HALO HOLA như một cuộc thi.</p>
       </div>
       <button className="btn btn-green" onClick={save} disabled={saving}><Save/>{saving?'Đang lưu…':'Lưu thay đổi'}</button>
     </div>
@@ -89,19 +92,19 @@ export default function AwardsManager(){
     {message&&<div className="cms-message">{message}</div>}
 
     <div className="awards-admin-summary">
-      <label className="awards-switch"><input type="checkbox" checked={draft.enabled!==false} onChange={e=>patch('enabled',e.target.checked)}/><span><b>Hiển thị khối giải thưởng</b><small>Có thể tạm ẩn toàn bộ giải thưởng trên trang public.</small></span></label>
-      <label><span>Tiêu đề trang</span><input value={draft.title||''} onChange={e=>patch('title',e.target.value)}/></label>
-      <label className="wide"><span>Mô tả đầu trang</span><textarea rows="3" value={draft.intro||''} onChange={e=>patch('intro',e.target.value)}/></label>
-      <label className="wide"><span>URL bản thể lệ PDF</span><input value={draft.officialPdfUrl||''} onChange={e=>patch('officialPdfUrl',e.target.value)} placeholder="https://.../the-le-halo-hola-2026.pdf"/><small>Để trống nếu chưa có file chính thức. Khi có URL, trang public sẽ tự hiện nút “Bản PDF”.</small></label>
-      <label><span>Tổng tiền thưởng</span><input value={draft.totalPrize||''} onChange={e=>patch('totalPrize',e.target.value)} placeholder="29.000.000đ"/></label>
-      <label><span>Tổng số giải</span><input type="number" min="0" value={draft.totalAwards??11} onChange={e=>patch('totalAwards',Number(e.target.value))}/></label>
-      <label className="wide"><span>Tóm tắt cơ cấu</span><input value={draft.prizeSummary||''} onChange={e=>patch('prizeSummary',e.target.value)} placeholder="8 chủ đề · 11 giải"/></label>
-      <label><span>Tỷ trọng Hội đồng (%)</span><input type="number" min="0" max="100" value={draft.juryWeight??70} onChange={e=>patch('juryWeight',Number(e.target.value))}/></label>
-      <label><span>Tỷ trọng cộng đồng (%)</span><input type="number" min="0" max="100" value={draft.communityWeight??30} onChange={e=>patch('communityWeight',Number(e.target.value))}/></label>
+      <label className="awards-switch"><input type="checkbox" checked={draft.enabled!==false} onChange={e=>patch('enabled',e.target.checked)}/><span><b>Bật dữ liệu ghi nhận legacy</b><small>Không điều khiển trang public “Cách đóng góp”.</small></span></label>
+      <label><span>Tiêu đề nội bộ</span><input value={draft.title||''} onChange={e=>patch('title',e.target.value)}/></label>
+      <label className="wide"><span>Ghi chú</span><textarea rows="3" value={draft.intro||''} onChange={e=>patch('intro',e.target.value)}/></label>
+      <label className="wide"><span>URL tài liệu tham khảo</span><input value={draft.officialPdfUrl||''} onChange={e=>patch('officialPdfUrl',e.target.value)} placeholder="https://..."/></label>
+      <label><span>Giá trị legacy</span><input value={draft.totalPrize||''} onChange={e=>patch('totalPrize',e.target.value)}/></label>
+      <label><span>Số hạng mục legacy</span><input type="number" min="0" value={draft.totalAwards??0} onChange={e=>patch('totalAwards',Number(e.target.value))}/></label>
+      <label className="wide"><span>Tóm tắt</span><input value={draft.prizeSummary||''} onChange={e=>patch('prizeSummary',e.target.value)}/></label>
+      <label><span>Trọng số legacy 1 (%)</span><input type="number" min="0" max="100" value={draft.juryWeight??0} onChange={e=>patch('juryWeight',Number(e.target.value))}/></label>
+      <label><span>Trọng số legacy 2 (%)</span><input type="number" min="0" max="100" value={draft.communityWeight??0} onChange={e=>patch('communityWeight',Number(e.target.value))}/></label>
     </div>
 
     <div className="awards-admin-list-head">
-      <div><h3>Cơ cấu giải thưởng</h3><p>{awards.length} nhóm giải · {visibleCount} đang hiển thị</p></div>
+      <div><h3>Các hạng mục dữ liệu cũ</h3><p>{awards.length} hạng mục · {visibleCount} đang bật</p></div>
       <button className="btn btn-outline btn-sm" onClick={addAward}><Plus/> Thêm hạng mục</button>
     </div>
 
@@ -110,19 +113,19 @@ export default function AwardsManager(){
         <div className="award-admin-index">{String(index+1).padStart(2,'0')}</div>
         <div className="award-admin-fields">
           <div className="award-admin-row three">
-            <label><span>Nhãn</span><input value={award.label||''} onChange={e=>patchAward(index,'label',e.target.value)} placeholder="Giải đặc biệt"/></label>
-            <label><span>Tên giải</span><input value={award.name||''} onChange={e=>patchAward(index,'name',e.target.value)} placeholder="Danh hiệu HALO HOLA 2026"/></label>
-            <label><span>Mã nội bộ</span><input value={award.code||''} onChange={e=>patchAward(index,'code',e.target.value)} placeholder="SPECIAL"/></label>
+            <label><span>Nhãn</span><input value={award.label||''} onChange={e=>patchAward(index,'label',e.target.value)}/></label>
+            <label><span>Tên hạng mục</span><input value={award.name||''} onChange={e=>patchAward(index,'name',e.target.value)}/></label>
+            <label><span>Mã nội bộ</span><input value={award.code||''} onChange={e=>patchAward(index,'code',e.target.value)}/></label>
           </div>
           <div className="award-admin-row three">
-            <label><span>Giá trị</span><input value={award.amount||''} onChange={e=>patchAward(index,'amount',e.target.value)} placeholder="5.000.000đ + cúp + quà"/></label>
-            <label><span>Số lượng</span><input value={award.quantity||''} onChange={e=>patchAward(index,'quantity',e.target.value)} placeholder="01 giải"/></label>
+            <label><span>Giá trị</span><input value={award.amount||''} onChange={e=>patchAward(index,'amount',e.target.value)}/></label>
+            <label><span>Số lượng</span><input value={award.quantity||''} onChange={e=>patchAward(index,'quantity',e.target.value)}/></label>
             <label><span>Phong cách màu</span><select value={award.tone||'forest'} onChange={e=>patchAward(index,'tone',e.target.value)}><option value="forest">Xanh đậm</option><option value="terra">Cam đất</option><option value="sun">Vàng nắng</option><option value="green">Xanh non</option><option value="beige">Be</option></select></label>
           </div>
-          <label className="award-admin-description"><span>Mô tả / điều kiện</span><textarea rows="3" value={award.description||''} onChange={e=>patchAward(index,'description',e.target.value)}/></label>
+          <label className="award-admin-description"><span>Mô tả</span><textarea rows="3" value={award.description||''} onChange={e=>patchAward(index,'description',e.target.value)}/></label>
           <div className="award-admin-toggles">
-            <label><input type="checkbox" checked={award.enabled!==false} onChange={e=>patchAward(index,'enabled',e.target.checked)}/><span>{award.enabled!==false?<><Eye/> Đang hiển thị</>:<><EyeOff/> Đang ẩn</>}</span></label>
-            <label><input type="checkbox" checked={Boolean(award.featured)} onChange={e=>patchAward(index,'featured',e.target.checked)}/><span>Nổi bật dòng giải</span></label>
+            <label><input type="checkbox" checked={award.enabled!==false} onChange={e=>patchAward(index,'enabled',e.target.checked)}/><span>{award.enabled!==false?<><Eye/> Đang bật</>:<><EyeOff/> Đang tắt</>}</span></label>
+            <label><input type="checkbox" checked={Boolean(award.featured)} onChange={e=>patchAward(index,'featured',e.target.checked)}/><span>Nổi bật nội bộ</span></label>
           </div>
         </div>
         <div className="award-admin-actions">
@@ -134,7 +137,7 @@ export default function AwardsManager(){
     </div>
 
     <div className="awards-admin-footer">
-      <p><b>Cơ cấu chính thức:</b> Danh hiệu HALO HOLA 2026: 5 triệu + cúp + quà; 07 giải chủ đề 01–07: 2 triệu/giải + quà; 06 giải Sắc màu (01 là giải chủ đề 08): 1 triệu/giải + quà; Góc nhìn được yêu thích: 2 triệu + quà; Giải Lan tỏa: 2 triệu + quà. Tổng tiền mặt 29.000.000đ.</p>
+      <p><b>Lưu ý:</b> HALO HOLA 2026 public vận hành theo định hướng chương trình sáng tạo cộng đồng và dự án biên tập. Các trường ở đây chỉ phục vụ tương thích dữ liệu lịch sử nếu cần.</p>
       <button className="btn btn-green" onClick={save} disabled={saving}><Save/>{saving?'Đang lưu…':'Lưu thay đổi'}</button>
     </div>
   </div>
