@@ -17,7 +17,7 @@ import {
 } from '../utils/facebookShare.js'
 import '../styles/submit-success-receipt.css'
 
-const steps = ['Cách đóng góp','Góc nhìn','Tư liệu','7 mạch & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
+const steps = ['Cách đóng góp','Góc nhìn','Tư liệu','7 chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v3'
 const RECEIPT_PREFIX = 'halo_hola_submission_receipt_v1_'
 const TAXONOMY_SEPARATOR = ' • '
@@ -227,7 +227,7 @@ export default function SubmitPage(){
     if(clean(form.title).length<2) issues.push({step:2,key:'title',label:isTip?'Tên câu chuyện / đầu mối':'Tên góc nhìn'})
     if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link nội dung hợp lệ'})
     if(!isTip&&!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'Tư liệu gốc hoặc link nội dung'})
-    if(!selectionArray(form.themes,form.theme).length) issues.push({step:4,key:'theme',label:'Ít nhất một mạch nội dung'})
+    if(!selectionArray(form.themes,form.theme).length) issues.push({step:4,key:'theme',label:'Ít nhất một chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
     if(clean(form.story).length<20) issues.push({step:5,key:'story',label:isTip?'Mô tả đầu mối (tối thiểu 20 ký tự)':'Câu chuyện (tối thiểu 20 ký tự)'})
@@ -387,13 +387,13 @@ export default function SubmitPage(){
           </div>}
 
           {step===4&&<div>
-            <h2>7 mạch nội dung & sắc màu</h2>
-            <p>Chọn một hoặc nhiều <b>mạch nội dung</b> mà câu chuyện có thể thuộc về. Sắc màu là lớp nhận diện bổ sung, không phải mạch số 8.</p>
-            <h3 className="form-subtitle">7 mạch · đã chọn {selectedThemes.length}</h3>
+            <h2>7 chủ đề & sắc màu</h2>
+            <p>Chọn một hoặc nhiều <b>chủ đề</b> mà câu chuyện có thể thuộc về. Sắc màu là lớp nhận diện bổ sung, không phải chủ đề số 8.</p>
+            <h3 className="form-subtitle">7 chủ đề · đã chọn {selectedThemes.length}</h3>
             {themes.length?<div className="theme-select-grid">{themes.map(t=>{
               const selected=selectedThemes.includes(t.title)
               return <button type="button" key={t.id} onClick={()=>toggleTaxonomy('themes','theme',t.title)} className={selected?'selected':''}>{t.image?<img src={t.image} alt={t.title}/>:<span className="theme-card-placeholder"/>}<span>{t.title}</span>{selected&&<i><Check size={14}/></i>}</button>
-            })}</div>:<div className="jw-empty">Đang tải 7 mạch nội dung từ hệ thống...</div>}
+            })}</div>:<div className="jw-empty">Đang tải 7 chủ đề từ hệ thống...</div>}
             <h3 className="form-subtitle">Sắc màu Hòa Lạc · đã chọn {selectedColors.length}</h3>
             {colors.length?<div className="color-select-grid">{colors.map(c=>{
               const selected=selectedColors.includes(c.name)
@@ -474,7 +474,7 @@ export default function SubmitPage(){
                 <div><small>Góc nhìn</small><b>{clean(form.title)||'Chưa nhập'}</b></div>
                 <div><small>Người đóng góp</small><b>{clean(form.name)||'Chưa nhập'}</b></div>
                 <div><small>Email</small><b>{clean(form.email)||'Chưa nhập'}</b></div>
-                <div><small>Mạch nội dung</small><b>{selectedThemes.length?selectedThemes.join(' · '):'Chưa chọn'}</b></div>
+                <div><small>Chủ đề</small><b>{selectedThemes.length?selectedThemes.join(' · '):'Chưa chọn'}</b></div>
                 <div><small>Sắc màu</small><b>{selectedColors.length?selectedColors.join(' · '):'Chưa chọn'}</b></div>
                 <div><small>Tư liệu / link</small><b>{files.length?`${files.length} file`:clean(form.externalLink)?'Đã có link':isTip?'Không bắt buộc':'Chưa có'}</b></div>
                 <div><small>Địa điểm</small><b>{clean(form.location)||'Chưa nhập'}</b></div>
