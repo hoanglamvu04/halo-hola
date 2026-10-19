@@ -30,6 +30,13 @@ function normalizePage(rows,offset=0){
   }
 }
 
+function publicBadge(item){
+  if(item?.status==='AWARDED') return 'ĐƯỢC GHI NHẬN'
+  if(item?.status==='TOP52') return '52 GÓC NHÌN'
+  if(item?.status==='SHORTLIST') return 'GÓC NHÌN NỔI BẬT'
+  return 'ĐÃ CÔNG BỐ'
+}
+
 export default function ThemePage(){
   const {slug}=useParams()
   const [theme,setTheme]=useState(null)
@@ -104,8 +111,8 @@ export default function ThemePage(){
     }
   }
 
-  if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
-  if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
+  if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải mạch nội dung từ hệ thống...</div></main>
+  if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy mạch nội dung.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 7 mạch</Link></div></main>
 
   const visibleCount=Number(theme.artworkCount ?? totalCount ?? 0)
 
@@ -115,28 +122,28 @@ export default function ThemePage(){
       <div className="theme-hero-leaf"/>
       <div className="theme-hero-inner">
         <div className="theme-hero-copy">
-          <Link className="story-back-link" to="/chu-de"><ArrowLeft/> 8 chủ đề</Link>
-          <div className="theme-kicker"><span>CHỦ ĐỀ {String(theme.id).padStart(2,'0')}</span><i/></div>
+          <Link className="story-back-link" to="/chu-de"><ArrowLeft/> 7 mạch nội dung</Link>
+          <div className="theme-kicker"><span>MẠCH {String(theme.id).padStart(2,'0')}</span><i/></div>
           <h1>{theme.title}</h1>
           <h3>{theme.description}</h3>
           <p>{theme.intro}</p>
 
           <div className="theme-hero-actions">
-            <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi tác phẩm <ArrowRight size={17}/></Link>
-            <a className="theme-explore-link" href="#kham-pha"><span><Play/></span>Khám phá chủ đề</a>
+            <Link className="btn btn-terra" to="/gui-goc-nhin">Gửi một góc nhìn <ArrowRight size={17}/></Link>
+            <a className="theme-explore-link" href="#kham-pha"><span><Play/></span>Khám phá mạch này</a>
           </div>
 
           <div className="theme-hero-stats">
-            <div><span><Users/></span><b>{visibleCount}</b><small>Tác phẩm cộng đồng</small></div>
-            <div><span><BookOpen/></span><b>Câu chuyện</b><small>Góc nhìn cộng đồng</small></div>
-            <div><span><ImageIcon/></span><b>4 loại hình</b><small>Ảnh · Video · Story · Art</small></div>
+            <div><span><Users/></span><b>{visibleCount}</b><small>Góc nhìn đã công bố</small></div>
+            <div><span><BookOpen/></span><b>Câu chuyện</b><small>Người · nơi · ký ức · ý tưởng</small></div>
+            <div><span><ImageIcon/></span><b>Đa định dạng</b><small>Ảnh · Video · Story · Art</small></div>
           </div>
         </div>
 
         <div className="theme-hero-visual">
           <div className="theme-hero-image-wrap">{theme.image?<img src={theme.image} alt={theme.title}/>:<div className="theme-card-placeholder"/>}</div>
           <div className="theme-location-card"><MapPin/><div><b>{theme.locationLabel||'Hòa Lạc'}</b><small>HÒA LẠC, HÀ NỘI</small></div></div>
-          <div className="theme-hero-note">Hòa Lạc<br/>hôm nay<br/>và mai sau...<i/></div>
+          <div className="theme-hero-note">Đi<br/>Gặp<br/>Nghe<br/>Kể<i/></div>
         </div>
       </div>
     </section>
@@ -145,17 +152,17 @@ export default function ThemePage(){
       <div className="theme-story-inner">
         <div className="theme-story-copy">
           <div className="theme-kicker"><span>GỢI Ý KHÁM PHÁ</span><i/></div>
-          <h2>Nhìn Hòa Lạc qua một lớp câu chuyện riêng</h2>
-          <p>Mỗi chủ đề mở ra những góc nhìn từ con người, không gian, ký ức và sự chuyển mình của vùng đất. Người tham gia có thể tiếp cận bằng ảnh, video, story hoặc art &amp; design theo thể lệ.</p>
+          <h2>Đi tìm một câu chuyện, không chỉ một khung hình</h2>
+          <p>Mỗi mạch là một khung biên tập để team và cộng đồng tìm người, nơi chốn, ký ức, khoảnh khắc và ý tưởng đáng được giữ lại. Một góc nhìn có thể giao thoa nhiều mạch.</p>
         </div>
 
         <div className="theme-tip-panel">
-          <div className="theme-tip-head"><i/><div><h3>Gợi ý góc nhìn</h3><p>Đi chậm, quan sát và cảm nhận. Hãy bắt đầu từ những điều gần gũi nhất quanh bạn.</p></div></div>
+          <div className="theme-tip-head"><i/><div><h3>Gợi ý cách tìm</h3><p>Đi chậm, quan sát, gặp người thật và nghe câu chuyện phía sau điều mình nhìn thấy.</p></div></div>
           <div className="theme-tip-list">
-            <div><span><Eye/></span><div><b>Quan sát chi tiết</b><small>Những điều nhỏ bé tạo nên bản sắc Hòa Lạc.</small></div></div>
-            <div><span><Users/></span><div><b>Trò chuyện với người địa phương</b><small>Lắng nghe câu chuyện từ những người gắn bó với vùng đất này.</small></div></div>
-            <div><span><ImageIcon/></span><div><b>Ghi lại không khí</b><small>Nhịp sống, thiên nhiên, không gian và sự thay đổi qua thời gian.</small></div></div>
-            <div><span><BookOpen/></span><div><b>Tìm dấu ấn ký ức</b><small>Những ký ức, câu chuyện xưa và nay của Hòa Lạc.</small></div></div>
+            <div><span><Eye/></span><div><b>Nhìn kỹ</b><small>Tìm chi tiết nhỏ cho thấy bản sắc hoặc sự thay đổi.</small></div></div>
+            <div><span><Users/></span><div><b>Gặp người</b><small>Nhân vật giúp một nơi chốn trở thành câu chuyện.</small></div></div>
+            <div><span><ImageIcon/></span><div><b>Ghi lại</b><small>Ảnh, video, audio, tư liệu và thông tin nguồn đều có giá trị.</small></div></div>
+            <div><span><BookOpen/></span><div><b>Kể vừa đủ</b><small>Tên câu chuyện, hero image, short story và một quote là cấu trúc cốt lõi.</small></div></div>
           </div>
         </div>
       </div>
@@ -165,11 +172,11 @@ export default function ThemePage(){
       <div className="theme-related-inner">
         <header className="theme-related-head">
           <div>
-            <div className="theme-kicker"><span>TÁC PHẨM CỘNG ĐỒNG</span><i/></div>
-            <h2>Tác phẩm thuộc {theme.title}</h2>
-            <p>Những góc nhìn, câu chuyện và khoảnh khắc được cộng đồng gửi về trong hành trình HALO HOLA 2026.</p>
+            <div className="theme-kicker"><span>GÓC NHÌN ĐÃ CÔNG BỐ</span><i/></div>
+            <h2>Những câu chuyện thuộc {theme.title}</h2>
+            <p>Các góc nhìn đã được công bố trong hành trình HALO HOLA 2026 — từ cộng đồng, đối tác và quá trình Ban Biên tập chủ động đi tìm Hòa Lạc.</p>
           </div>
-          <div className="theme-related-actions"><Link className="theme-view-all" to="/top52">Xem TOP52 <ArrowRight/></Link></div>
+          <div className="theme-related-actions"><Link className="theme-view-all" to="/top52">Xem 52 góc nhìn <ArrowRight/></Link></div>
         </header>
 
         <div className="theme-gallery-toolbar">
@@ -182,37 +189,37 @@ export default function ThemePage(){
               disabled={galleryLoading}
             ><Icon/>{label}</button>)}
           </div>
-          <div className="theme-gallery-count"><b>{totalCount}</b> tác phẩm <span>·</span> đang hiển thị <b>{related.length}</b></div>
+          <div className="theme-gallery-count"><b>{totalCount}</b> góc nhìn <span>·</span> đang hiển thị <b>{related.length}</b></div>
         </div>
 
         {collectionError&&<div className="theme-gallery-error">{collectionError}</div>}
-        {galleryLoading?<div className="theme-gallery-loading">Đang tải tác phẩm...</div>:
+        {galleryLoading?<div className="theme-gallery-loading">Đang tải góc nhìn...</div>:
           related.length===0?<div className="theme-gallery-empty">
             <span className="theme-gallery-empty-icon"><ImageIcon/></span>
             <div>
-              <h3>{activeType?'Chưa có tác phẩm ở loại hình này':'Chưa có tác phẩm công khai'}</h3>
-              <p>{activeType?'Bạn có thể thử một loại hình khác hoặc xem lại tất cả tác phẩm.':'Hãy là người đầu tiên gửi một góc nhìn cho chủ đề này.'}</p>
+              <h3>{activeType?'Chưa có góc nhìn ở loại hình này':'Chưa có góc nhìn công khai'}</h3>
+              <p>{activeType?'Bạn có thể thử một loại hình khác hoặc xem lại tất cả.':'Bạn có thể gửi một góc nhìn hoặc giới thiệu câu chuyện để Ban Biên tập tìm hiểu.'}</p>
             </div>
-            {activeType?<button type="button" onClick={()=>loadCollection('')}>Xem tất cả</button>:<Link to="/gui-goc-nhin">Gửi tác phẩm đầu tiên <ArrowRight/></Link>}
+            {activeType?<button type="button" onClick={()=>loadCollection('')}>Xem tất cả</button>:<Link to="/gui-goc-nhin">Gửi một góc nhìn <ArrowRight/></Link>}
           </div>:<>
             <div className="theme-related-grid theme-gallery-grid theme-gallery-visible">
               {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.id||a.slug}>
                 <div className="theme-related-media">
                   {a.image?<img loading="lazy" decoding="async" src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
-                  <span className="theme-top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span>
+                  <span className="theme-top52-badge">{publicBadge(a)}</span>
                   <span className="theme-related-heart"><Heart/></span>
                 </div>
                 <div className="theme-related-body">
                   <span className="theme-related-category">{a.theme} · {a.location}</span>
                   <h3>{a.title||a.code}</h3>
-                  <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author}</b></div>
-                  <div className="theme-related-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {a.location}</span></div>
+                  <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author||'HALO HOLA Editorial'}</b></div>
+                  <div className="theme-related-meta"><span><Eye/> {a.type||'Góc nhìn'}</span><i/><span><MapPin/> {a.location}</span></div>
                 </div>
               </Link>)}
             </div>
 
             {hasMore&&<div className="theme-gallery-more">
-              <button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Đang tải...':`Xem thêm ${Math.min(PAGE_SIZE,Math.max(0,totalCount-related.length))} tác phẩm`} <ArrowRight/></button>
+              <button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Đang tải...':`Xem thêm ${Math.min(PAGE_SIZE,Math.max(0,totalCount-related.length))} góc nhìn`} <ArrowRight/></button>
             </div>}
           </>}
       </div>
