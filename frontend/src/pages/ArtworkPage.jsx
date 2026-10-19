@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, CalendarDays, ChevronLeft, ChevronRight,
-  ExternalLink, Eye, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles, X
+  ExternalLink, Image as ImageIcon, MapPin, Maximize2, Play, Share2, Sparkles, X
 } from 'lucide-react'
 import {
   getPublicArtwork,
@@ -21,9 +21,9 @@ function isVideoMedia(media,item){
 }
 
 function formatDate(value){
-  if(!value)return 'Theo hồ sơ tác phẩm'
+  if(!value)return 'Theo tư liệu câu chuyện'
   const date=new Date(value)
-  return Number.isNaN(date.getTime())?'Theo hồ sơ tác phẩm':date.toLocaleDateString('vi-VN')
+  return Number.isNaN(date.getTime())?'Theo tư liệu câu chuyện':date.toLocaleDateString('vi-VN')
 }
 
 function safeHttpUrl(value){
@@ -47,10 +47,10 @@ function setCanonical(url){
 }
 
 function publicBadge(status){
-  if(status==='AWARDED')return'ĐẠT GIẢI'
-  if(status==='TOP52')return'TOP52'
-  if(status==='SHORTLIST')return'SHORTLIST'
-  return'GÓC NHÌN CỘNG ĐỒNG'
+  if(status==='AWARDED')return'ĐƯỢC GHI NHẬN'
+  if(status==='TOP52')return'52 GÓC NHÌN · 2026'
+  if(status==='SHORTLIST')return'GÓC NHÌN NỔI BẬT'
+  return'GÓC NHÌN HÒA LẠC'
 }
 
 export default function ArtworkPage({preview=false}){
@@ -84,7 +84,7 @@ export default function ArtworkPage({preview=false}){
    if(preview||!item)return undefined
    const canonical=`${SITE_URL}/tac-pham/${item.slug||String(item.code||'').toLowerCase()}`
    const story=String(item.story||'').replace(/\s+/g,' ').trim()
-   const description=(story||`Khám phá tác phẩm ${item.title||item.code} trong HALO HOLA 2026.`).slice(0,180)
+   const description=(story||`Khám phá góc nhìn ${item.title||item.code} trong hành trình HALO HOLA 2026.`).slice(0,180)
    const title=`${item.title||item.code} · ${item.author||'HALO HOLA'} | HALO HOLA 2026`
    const image=item.image?new URL(item.image,window.location.origin).href:''
    document.title=title
@@ -106,14 +106,14 @@ export default function ArtworkPage({preview=false}){
      url:canonical,
      name:item.title||item.code,
      description,
-     creator:{'@type':'Person',name:item.author||'Tác giả HALO HOLA'},
+     creator:{'@type':'Person',name:item.author||'Người kể HALO HOLA'},
      genre:item.type||undefined,
      keywords:[item.theme,item.color,item.location].filter(Boolean).join(', '),
      dateCreated:item.capturedAt||item.createdAt||undefined,
      datePublished:item.publishedAt||undefined,
      contentLocation:item.location?{'@type':'Place',name:item.location}:undefined,
      image:image?{'@type':'ImageObject',contentUrl:image,name:item.title||item.code}:undefined,
-     isPartOf:{'@type':'CreativeWorkSeries',name:'HALO HOLA 2026',url:SITE_URL}
+     isPartOf:{'@type':'CreativeWorkSeries',name:'HALO HOLA 2026 · 52 góc nhìn · 1 Hòa Lạc',url:SITE_URL}
    }
    let node=document.getElementById('artwork-structured-data')
    if(!node){node=document.createElement('script');node.id='artwork-structured-data';node.type='application/ld+json';document.head.appendChild(node)}
@@ -162,20 +162,17 @@ export default function ArtworkPage({preview=false}){
    }catch{}
  }
 
- const openMedia=()=>{
-   if(activeMedia?.url)window.open(activeMedia.url,'_blank','noopener,noreferrer')
- }
+ const openMedia=()=>{ if(activeMedia?.url)window.open(activeMedia.url,'_blank','noopener,noreferrer') }
 
- if(loading)return <main className="artwork-showcase"><div className="artwork-showcase-state">Đang tải tác phẩm từ hệ thống...</div></main>
- if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy tác phẩm.'}</div><Link className="btn btn-outline" to="/kham-pha"><ArrowLeft/> Quay lại Góc nhìn cộng đồng</Link></div></main>
+ if(loading)return <main className="artwork-showcase"><div className="artwork-showcase-state">Đang tải góc nhìn từ hệ thống...</div></main>
+ if(error||!item)return <main className="artwork-showcase"><div className="container artwork-showcase-error"><div className="form-error">{error||'Không tìm thấy góc nhìn.'}</div><Link className="btn btn-outline" to="/kham-pha"><ArrowLeft/> Quay lại kho góc nhìn</Link></div></main>
 
  const badge=publicBadge(item.status)
  const isCurated=['TOP52','AWARDED'].includes(item.status)
  const backPath=isCurated?'/top52':'/kham-pha'
- const backLabel=isCurated?'TOP52':'Góc nhìn cộng đồng'
- const story=String(item.story||'').trim()||'Tác phẩm được công bố trong hành trình HALO HOLA 2026.'
+ const backLabel=isCurated?'52 góc nhìn 2026':'Kho góc nhìn'
+ const story=String(item.story||'').trim()||'Góc nhìn được công bố trong hành trình HALO HOLA 2026.'
  const lead=story.split(/\n+/)[0]
- const score=Number(item.juryScore||0)
  const facebookUrl=safeHttpUrl(item.facebookPostUrl)
 
  return <main className="artwork-showcase">
@@ -219,13 +216,13 @@ export default function ArtworkPage({preview=false}){
      </div>
 
      <aside className="artwork-showcase-info">
-       <span className="artwork-showcase-kicker">{item.code}</span>
+       <span className="artwork-showcase-kicker">{item.code} · MỘT CÂU CHUYỆN HÒA LẠC</span>
        <h1>{item.title||item.code}</h1>
        <p className="artwork-showcase-lead">{lead}</p>
 
        <div className="artwork-author-card">
          <span>{item.author?.charAt(0)?.toUpperCase()||'H'}</span>
-         <div><b>{item.author||'Tác giả HALO HOLA'}</b><small>Tác giả · HALO HOLA 2026</small></div>
+         <div><b>{item.author||'HALO HOLA Editorial'}</b><small>Người kể / nguồn đóng góp · HALO HOLA 2026</small></div>
        </div>
 
        <div className="artwork-showcase-chips">
@@ -236,15 +233,15 @@ export default function ArtworkPage({preview=false}){
 
        <div className="artwork-facts">
          <div><MapPin/><span><small>Địa điểm</small><b>{item.location||'Hòa Lạc'}</b></span></div>
-         <div><CalendarDays/><span><small>Thời gian thực hiện</small><b>{formatDate(item.capturedAt)}</b></span></div>
-         <div><ImageIcon/><span><small>Media</small><b>{mediaItems.length||0} file</b></span></div>
-         <div><Eye/><span><small>Điểm TB Hội đồng</small><b>{score.toFixed(1)}/100</b></span></div>
+         <div><CalendarDays/><span><small>Thời gian ghi lại</small><b>{formatDate(item.capturedAt)}</b></span></div>
+         <div><ImageIcon/><span><small>Tư liệu</small><b>{mediaItems.length||0} file</b></span></div>
+         <div><BookOpenIcon/><span><small>Mạch nội dung</small><b>{item.theme||'Hòa Lạc'}</b></span></div>
        </div>
 
        <div className="artwork-showcase-actions">
          <Link className="btn btn-green" to="/hola-map"><MapPin size={17}/> Mở HOLA Map</Link>
          <button className="btn btn-outline" type="button" onClick={share}><Share2 size={17}/> {shareLabel}</button>
-         {facebookUrl&&<a className="btn btn-outline artwork-facebook-link" href={facebookUrl} target="_blank" rel="noopener noreferrer" style={{gridColumn:'1 / -1'}}><ExternalLink size={17}/> Xem bài đăng Facebook</a>}
+         {facebookUrl&&<a className="btn btn-outline artwork-facebook-link" href={facebookUrl} target="_blank" rel="noopener noreferrer" style={{gridColumn:'1 / -1'}}><ExternalLink size={17}/> Xem bài chia sẻ</a>}
        </div>
      </aside>
    </section>
@@ -252,31 +249,31 @@ export default function ArtworkPage({preview=false}){
    <section className="artwork-story-band">
      <div className="container artwork-story-layout">
        <article>
-         <span className="artwork-showcase-kicker"><Sparkles/> CÂU CHUYỆN PHÍA SAU TÁC PHẨM</span>
+         <span className="artwork-showcase-kicker"><Sparkles/> CÂU CHUYỆN PHÍA SAU GÓC NHÌN</span>
          <h2>{item.title||item.code}</h2>
          <p>{story}</p>
        </article>
        <aside>
          <span>{item.code}</span>
-         <blockquote>“Mỗi góc nhìn góp phần kể câu chuyện chung về Hòa Lạc.”</blockquote>
+         <blockquote>“Mỗi góc nhìn, một câu chuyện. Mỗi câu chuyện góp phần giữ lại một Hòa Lạc đang chuyển mình.”</blockquote>
          <small>— {item.author||'HALO HOLA 2026'}</small>
        </aside>
      </div>
    </section>
 
    {related.length>0&&<section className="container artwork-related-section">
-     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng chủ đề {item.theme}</h2></div><Link to="/kham-pha">Xem góc nhìn cộng đồng <ArrowRight/></Link></header>
+     <header><div><span className="artwork-showcase-kicker">KHÁM PHÁ TIẾP</span><h2>Cùng mạch {item.theme}</h2></div><Link to="/kham-pha">Xem kho góc nhìn <ArrowRight/></Link></header>
      <div className="art-grid compact artwork-related-grid">{related.map(a=><ArtworkCard key={a.id||a.slug} item={a}/>)}</div>
    </section>}
 
    <section className="container artwork-showcase-bottom">
      <Link to={backPath} className="btn btn-outline"><ArrowLeft size={16}/> Xem {backLabel}</Link>
-     <Link to="/gui-goc-nhin" className="btn btn-terra">Gửi góc nhìn của bạn <ArrowRight size={16}/></Link>
+     <Link to="/gui-goc-nhin" className="btn btn-terra">Gửi một góc nhìn <ArrowRight size={16}/></Link>
    </section>
 
    {viewerOpen&&activeMedia&&<div className="artwork-media-viewer" role="dialog" aria-modal="true" aria-label={`Xem media ${item.title||item.code}`}>
      <div className="artwork-viewer-topbar">
-       <div className="artwork-viewer-heading"><span>BỘ ẢNH / Ý TƯỞNG</span><strong>{item.title||item.code}</strong></div>
+       <div className="artwork-viewer-heading"><span>TƯ LIỆU CÂU CHUYỆN</span><strong>{item.title||item.code}</strong></div>
        <button className="artwork-viewer-close" type="button" onClick={()=>setViewerOpen(false)} aria-label="Đóng trình xem"><X/></button>
      </div>
 
@@ -306,4 +303,8 @@ export default function ArtworkPage({preview=false}){
      </div>
    </div>}
  </main>
+}
+
+function BookOpenIcon(){
+ return <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
 }
