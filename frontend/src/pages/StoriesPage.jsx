@@ -21,16 +21,16 @@ export default function StoriesPage(){
       <div className="stories-contours"/>
       <div className="stories-intro-inner">
         <div>
-          <div className="stories-kicker"><span>CÂU CHUYỆN HÒA LẠC</span><i/></div>
+          <div className="stories-kicker"><span>ĐI · GẶP · NGHE · GHI LẠI · KỂ</span><i/></div>
           <h1>Stories</h1>
-          <h2>Những điều đáng được kể</h2>
+          <h2>Những câu chuyện đáng được giữ lại</h2>
         </div>
         <div className="stories-intro-side">
-          <p>Con người, nơi chốn, ký ức và những đổi thay đang diễn ra từng ngày ở Hòa Lạc.</p>
+          <p>Con người, nơi chốn, ký ức, tri thức, đời sống và những thay đổi đang tạo nên Hòa Lạc — được Ban Biên tập cùng cộng đồng tìm thấy và kể sâu hơn.</p>
           <div className="stories-intro-stats">
             <span><BookOpen/> {stories.length} câu chuyện</span>
-            <span><Users/> Góc nhìn cộng đồng</span>
-            <span><Leaf/> Hòa Lạc 2026</span>
+            <span><Users/> Ban Biên tập + cộng đồng</span>
+            <span><Leaf/> Hòa Lạc 2026 → 2027</span>
           </div>
         </div>
       </div>
