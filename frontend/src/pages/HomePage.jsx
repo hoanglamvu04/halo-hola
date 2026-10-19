@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart, Eye } from 'lucide-react'
+import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHandshake, CalendarDays, Camera, FileText, Heart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ThemeCard from '../components/ThemeCard.jsx'
 import { img } from '../data/siteData.js'
@@ -32,27 +32,27 @@ export default function HomePage() {
   const sectionData=(key,defaults)=>({...defaults,...(homepage[key]?.content||{})})
 
   const hero=sectionData('hero',{
-    eyebrow:'NƠI NHỮNG CÂU CHUYỆN HÒA LẠC ĐƯỢC KỂ LẠI',
+    eyebrow:'CHÚNG TA ĐI TÌM HÒA LẠC',
     titleLine1:'HELLO',
     titleAccent:'HÒA LẠC',
     tagline:'52 góc nhìn · 1 Hòa Lạc',
-    description:'Mỗi tuần một góc nhìn. Mỗi góc nhìn một câu chuyện.',
+    description:'Cùng đi, nhìn, gặp, nghe và ghi lại những con người, không gian, ký ức, khoảnh khắc và ý tưởng đáng được giữ lại về Hòa Lạc.',
     mainImage:img.lake,
     floatImageA:img.architecture,
     floatImageB:img.people
   })
   const heroSlides=[
     {src:hero.mainImage||img.lake,alt:'Phong cảnh Hòa Lạc'},
-    {src:hero.floatImageA||img.architecture,alt:'Kiến trúc Hòa Lạc'},
+    {src:hero.floatImageA||img.architecture,alt:'Không gian Hòa Lạc'},
     {src:hero.floatImageB||img.people,alt:'Con người Hòa Lạc'},
     {src:img.green,alt:'Thiên nhiên Hòa Lạc'},
-    {src:img.sunset,alt:'Nắng Hòa Lạc'}
+    {src:img.sunset,alt:'Đời sống và cảm xúc Hòa Lạc'}
   ]
   const campaign=normalizeCampaignConfig(sectionData('campaign',{
-    eyebrow:'HALO HOLA ĐANG DIỄN RA',
+    eyebrow:'ĐI → NHÌN → GẶP → NGHE → GHI LẠI → BIÊN TẬP → KỂ → LAN TỎA',
     title:'Mỗi ngày thêm một góc nhìn mới.',
-    description:'Cùng nhau khám phá, chia sẻ và lưu giữ những câu chuyện, địa điểm và tác phẩm đặc biệt về Hòa Lạc qua lăng kính cộng đồng.',
-    ctaText:'Gửi góc nhìn',
+    description:'HALO HOLA cùng cộng đồng chủ động tìm những câu chuyện đáng được giữ lại — từ người dân, chuyên gia, trường học, sinh viên, doanh nghiệp, CLB và những người yêu Hòa Lạc.',
+    ctaText:'Gửi một góc nhìn',
     backgroundImage:img.sunset,
     discoverImage:img.hills,
     keepImage:img.architecture,
@@ -60,16 +60,20 @@ export default function HomePage() {
   }))
   const change=sectionData('change',{
     title:'Hòa Lạc đang thay đổi',
-    description:'Từ Xứ Đoài trầm tích, làng xóm yên bình và những viên đá ong mộc mạc, Hòa Lạc hôm nay đang vươn mình thành trung tâm tri thức, công nghệ và đổi mới sáng tạo.',
+    description:'Từ Xứ Đoài trầm tích, văn hóa Mường, làng xóm và đá ong đến tri thức, công nghệ, kiến trúc và những cộng đồng mới — Hòa Lạc đang lớn lên bằng nhiều lớp thời gian cùng tồn tại.',
     image1:img.village,
     image2:img.student,
     image3:img.architecture
   })
-  const themesCopy=sectionData('themes',{eyebrow:'KHÁM PHÁ ĐA DẠNG GÓC NHÌN',title:'8 chủ đề về Hòa Lạc',description:'Tám mảnh ghép, một bức tranh Hòa Lạc đa sắc. Khám phá những câu chuyện và vẻ đẹp riêng qua 8 chủ đề.'})
+  const themesCopy=sectionData('themes',{
+    eyebrow:'BẢY MẠCH · BA TRỤC XUYÊN SUỐT',
+    title:'7 mạch kể Hòa Lạc',
+    description:'Bản sắc · Thiên nhiên · Không gian · Con người · Tri thức & Công nghệ · Đời sống & Cảm xúc · Tương lai. Ba trục xuyên suốt: Bản sắc · Sáng tạo · Tương lai.'
+  })
   const colorsCopy=sectionData('colors',{
     eyebrow:'SẮC MÀU HÒA LẠC',
     title:'Hòa Lạc trong bạn có màu gì?',
-    description:'Mỗi màu sắc là một lát cắt của Hòa Lạc. Cùng khám phá và tạo nên sắc màu của riêng bạn.',
+    description:'Sắc màu là một lớp nhận diện xuyên suốt, không phải một mạch nội dung riêng: Đá ong · Nắng · Xanh rêu · Xanh non · Be · Sắc Hòa Lạc.',
     storyImagePrimary:img.hills,
     storyImageSecondary:img.lake,
     colorImage1:img.village,
@@ -79,17 +83,21 @@ export default function HomePage() {
     colorImage5:img.village,
     colorImage6:img.lake
   })
-  const toursCopy=sectionData('tours',{eyebrow:'CÙNG ĐI · CÙNG CẢM · CÙNG KỂ CHUYỆN',title:'HOLA Tour',description:'Những hành trình khám phá Hòa Lạc qua trải nghiệm thực tế và những câu chuyện sống động.'})
-  const mapCopy=sectionData('map',{eyebrow:'KHÁM PHÁ MỌI HÒA LẠC',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'})
+  const toursCopy=sectionData('tours',{
+    eyebrow:'ĐI · GẶP · NGHE · GHI LẠI',
+    title:'HOLA Tour',
+    description:'Ba hành trình săn câu chuyện: Đi tìm Bản sắc · Đi tìm Màu sắc · Đi tìm Cảm xúc. KPI không phải số người tham gia mà là số câu chuyện, nhân vật, ảnh, video và tư liệu có thể phát triển tiếp.'
+  })
+  const mapCopy=sectionData('map',{eyebrow:'NHỮNG CÂU CHUYỆN GẮN VỚI NƠI CHỐN',title:'HOLA Map',description:'Khám phá địa điểm, câu chuyện và góc nhìn trên bản đồ tương tác.'})
   const storiesCopy=sectionData('stories',{
-    eyebrow:'TÁC PHẨM · CÂU CHUYỆN · HÒA LẠC',
-    title:'Những góc nhìn đã được kể',
-    description:'Những tác phẩm đã được duyệt và công bố — nơi mỗi bức ảnh, video và câu chuyện lưu lại một Hòa Lạc theo cách riêng.'
+    eyebrow:'GÓC NHÌN · CÂU CHUYỆN · HÒA LẠC',
+    title:'Những câu chuyện đáng được giữ lại',
+    description:'Mỗi góc nhìn là một câu chuyện được tìm thấy, xác minh, biên tập và kể lại để cùng tạo nên chân dung Hòa Lạc năm 2026.'
   })
   const community=sectionData('community',{
-    eyebrow:'CỘNG ĐỒNG · KẾT NỐI · HÀNH ĐỘNG',
+    eyebrow:'HALO HOLA KỂ · WE HOLA LÀM',
     title:'WE HOLA – Chúng ta là Hòa Lạc',
-    description:'Cùng nhau kể chuyện, lan tỏa giá trị, chung tay làm Hòa Lạc xanh hơn, đẹp hơn và giàu bản sắc hơn.',
+    description:'Từ những câu chuyện được kể, cộng đồng cùng biến điều đáng quan tâm thành những hành động nhỏ, cụ thể và có ích cho Hòa Lạc.',
     backgroundImage:img.people
   })
 
@@ -120,8 +128,8 @@ export default function HomePage() {
           <p>{hero.description}</p>
 
           <div className="hero-actions">
-            <Link to="/kham-pha" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link>
-            <Link to="/hola-map" className="btn btn-outline"><MapPin size={17}/> Xem HOLA Map</Link>
+            <Link to="/kham-pha" className="btn btn-green">Khám phá Hòa Lạc <ArrowRight size={17}/></Link>
+            <Link to="/gui-goc-nhin" className="btn btn-outline"><Camera size={17}/> Gửi một góc nhìn</Link>
           </div>
         </div>
 
@@ -136,7 +144,7 @@ export default function HomePage() {
             <span className="hero-mobile-place"><MapPin/> <b>Hòa Lạc</b><small>hôm nay</small></span>
           </div>
 
-          <div className="hero-float hero-float-a"><img src={hero.floatImageA} alt="Kiến trúc Hòa Lạc"/></div>
+          <div className="hero-float hero-float-a"><img src={hero.floatImageA} alt="Không gian Hòa Lạc"/></div>
           <div className="hero-float hero-float-b"><img src={hero.floatImageB} alt="Con người Hòa Lạc"/></div>
 
           <div className="hero-desktop-carousel" aria-label="Bộ ảnh Hòa Lạc">
@@ -159,27 +167,27 @@ export default function HomePage() {
 
           <div className="hero-stone">
             <b>HÒA LẠC</b>
-            <span>NƠI NHỮNG ƯỚC MƠ BẮT ĐẦU</span>
+            <span>NƠI NHỮNG CÂU CHUYỆN ĐƯỢC TÌM THẤY</span>
             <i/>
           </div>
 
-          <span className="hand-note home-note">Hòa Lạc<br/>hôm nay<br/>và mai sau...</span>
+          <span className="hand-note home-note">Đi<br/>Gặp<br/>Nghe<br/>Kể...</span>
         </div>
 
         <div className="hero-pillar-band">
           <div className="hero-pillar-item">
             <span className="pillar-icon green"><Leaf/></span>
-            <div><b>Thiên nhiên</b><small>Màu xanh bền vững</small></div>
+            <div><b>Bản sắc</b><small>Xứ Đoài · Mường · ký ức</small></div>
             <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
             <span className="pillar-icon terra"><BookOpen/></span>
-            <div><b>Tri thức</b><small>Nơi ươm mầm tương lai</small></div>
+            <div><b>Tri thức</b><small>Đại học · nghiên cứu · công nghệ</small></div>
             <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
             <span className="pillar-icon green"><Users/></span>
-            <div><b>Con người</b><small>Những câu chuyện thật</small></div>
+            <div><b>Con người</b><small>Những người tạo nên Hòa Lạc</small></div>
             <ArrowRight className="mobile-pillar-arrow"/>
           </div>
           <div className="hero-pillar-item">
@@ -199,17 +207,17 @@ export default function HomePage() {
           <span className="campaign-accent-line"/>
           <p className="campaign-desc">{campaign.description}</p>
           <div className="live-stats">
-            <Link to="/kham-pha" className="live-stat stat-camera" aria-label="Xem các góc nhìn cộng đồng đã công bố"><Camera/><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></Link>
-            <Link to="/stories" className="live-stat stat-people" aria-label="Xem các câu chuyện cộng đồng"><Users/><b>{stats.creators}</b><small>Người kể chuyện</small></Link>
+            <Link to="/kham-pha" className="live-stat stat-camera" aria-label="Xem các góc nhìn đã công bố"><Camera/><b>{stats.submissions}</b><small>Góc nhìn đã gửi</small></Link>
+            <Link to="/stories" className="live-stat stat-people" aria-label="Xem các câu chuyện"><Users/><b>{stats.creators}</b><small>Người cùng kể</small></Link>
             <Link to="/hola-map" className="live-stat stat-place" aria-label="Khám phá các địa điểm trên HOLA Map"><MapPin/><b>{stats.locations}</b><small>Địa điểm được ghi lại</small></Link>
-            <Link to="/top52" className="live-stat stat-top52" aria-label="Xem triển lãm TOP52"><FileText/><b>{stats.top52}</b><small>Tác phẩm TOP52</small></Link>
+            <Link to="/top52" className="live-stat stat-top52" aria-label="Xem 52 góc nhìn 2026"><FileText/><b>{stats.top52}</b><small>Góc nhìn trong bộ 52</small></Link>
           </div>
           <Link className="campaign-cta" to="/gui-goc-nhin">{campaign.ctaText} <ArrowRight size={22}/></Link>
-          <div className="campaign-signature">52 góc nhìn · 1 Hòa Lạc · cùng nhau lưu giữ một vùng đất đang chuyển mình</div>
+          <div className="campaign-signature">Không tìm người thắng · Tìm những câu chuyện đáng được giữ lại</div>
         </div>
 
         <div className="campaign-timeline">
-          <div className="timeline-title"><CalendarDays/><b>{campaign.journeyTitle||'Hành trình 2026'}</b></div>
+          <div className="timeline-title"><CalendarDays/><b>{campaign.journeyTitle||'Hành trình biên tập 2026'}</b></div>
           <div className="campaign-milestones">
             {milestones.map(([date,label],i)=><div className="campaign-milestone" key={date}>
               <span>{date}</span><i className={i===0?'active':''}/><b>{label}</b>
@@ -226,19 +234,19 @@ export default function HomePage() {
 
           <div className="campaign-photo-main">
             <img src={campaign.discoverImage} alt="Khám phá Hòa Lạc"/>
-            <span>Khám phá</span>
+            <span>Đi tìm</span>
           </div>
 
           <div className="campaign-photo-secondary">
             <img src={campaign.keepImage} alt="Lưu giữ Hòa Lạc"/>
-            <span>Lưu giữ</span>
+            <span>Ghi lại</span>
           </div>
 
           <div className="campaign-note-card">
-            <img src={campaign.shareImage} alt="Chia sẻ Hòa Lạc"/>
+            <img src={campaign.shareImage} alt="Kể chuyện Hòa Lạc"/>
             <div>
-              <small>Góc nhìn cộng đồng</small>
-              <b>Chia sẻ một Hòa Lạc đang chuyển mình</b>
+              <small>Ban Biên tập + cộng đồng</small>
+              <b>Biên tập · kể · lan tỏa</b>
             </div>
           </div>
         </div>
@@ -251,12 +259,12 @@ export default function HomePage() {
       <div className="change-grid">
         <div className="change-copy">
           <div className="change-eyebrow-row">
-            <span className="eyebrow">HÒA LẠC – HÀNH TRÌNH KIẾN TẠO TƯƠNG LAI</span>
+            <span className="eyebrow">BẢN SẮC · SÁNG TẠO · TƯƠNG LAI</span>
             <i/>
           </div>
           <h2>{change.title}</h2>
           <p>{change.description}</p>
-          <Link to="/stories" className="change-cta">Xem câu chuyện hành trình <ArrowRight size={17}/></Link>
+          <Link to="/stories" className="change-cta">Đọc những câu chuyện Hòa Lạc <ArrowRight size={17}/></Link>
         </div>
 
         <Link to="/stories" className="era-card era-card-reference">
@@ -265,7 +273,7 @@ export default function HomePage() {
           <span className="era-content">
             <b>Cội nguồn</b>
             <i/>
-            <small>Xứ Đoài · Làng xóm · Đá ong</small>
+            <small>Xứ Đoài · Mường · Làng · Đá ong</small>
           </span>
           <span className="era-arrow"><ArrowRight/></span>
         </Link>
@@ -276,7 +284,7 @@ export default function HomePage() {
           <span className="era-content">
             <b>Hôm nay</b>
             <i/>
-            <small>Tri thức · Kiến trúc · Con người</small>
+            <small>Con người · Tri thức · Công nghệ</small>
           </span>
           <span className="era-arrow"><ArrowRight/></span>
         </Link>
@@ -287,7 +295,7 @@ export default function HomePage() {
           <span className="era-content">
             <b>Tương lai</b>
             <i/>
-            <small>Đô thị sáng tạo · Kết nối</small>
+            <small>Quy hoạch · Môi trường · Giáo dục · Ý tưởng</small>
           </span>
           <span className="era-arrow"><ArrowRight/></span>
         </Link>
@@ -304,13 +312,13 @@ export default function HomePage() {
               <span className="eyebrow">{themesCopy.eyebrow}</span>
               <i/>
             </div>
-            <h2><span>8 chủ đề về</span><em>Hòa Lạc</em></h2>
+            <h2><span>7 mạch kể</span><em>Hòa Lạc</em></h2>
             <span className="themes-title-stroke"/>
           </div>
 
           <div className="themes-showcase-side">
             <p>{themesCopy.description}</p>
-            <Link className="themes-all-link" to="/chu-de">Xem tất cả chủ đề <ArrowRight size={17}/></Link>
+            <Link className="themes-all-link" to="/chu-de">Khám phá 7 mạch <ArrowRight size={17}/></Link>
           </div>
         </header>
 
@@ -336,12 +344,12 @@ export default function HomePage() {
           <span className="color-v3-script">Hòa Lạc</span>
           <div className="color-v3-window color-v3-window-a"><img src={colorsCopy.storyImagePrimary||colors[0]?.image||themes[0]?.image||img.hills} alt="Phong cảnh Hòa Lạc" loading="lazy" decoding="async"/></div>
           <div className="color-v3-window color-v3-window-b"><img src={colorsCopy.storyImageSecondary||colors[1]?.image||themes[4]?.image||img.lake} alt="Không gian Hòa Lạc" loading="lazy" decoding="async"/></div>
-          <div className="color-v3-note"><MapPin/><span>Thiên nhiên<br/>Con người<br/>Trí thức<br/>Đổi mới</span><i/></div>
+          <div className="color-v3-note"><MapPin/><span>Đá ong<br/>Nắng<br/>Xanh rêu<br/>Be</span><i/></div>
         </div>
       </div>
 
       <div className="color-v3-cards">
-        {colors.map((c,index)=><Link to="/chu-de/sac-mau" className="color-v3-card" key={c.id||c.slug}>
+        {colors.map((c,index)=><Link to="/kham-pha" className="color-v3-card" key={c.id||c.slug}>
           <div className="color-v3-card-head"><span className="color-v3-dot" style={{background:c.color}}/><div><b>{c.name}</b><small>{c.story}</small></div><span className="color-v3-arrow"><ArrowRight/></span></div>
           <img src={colorImages[index%colorImages.length]||c.image||img.lake} alt={c.name} loading="lazy" decoding="async"/>
         </Link>)}
@@ -364,10 +372,10 @@ export default function HomePage() {
           {tours.map(t => <Link to="/hola-tour" className="home-tour-card" key={t.id||t.no}>
             <div className="home-tour-media">{t.image?<img src={t.image} alt={t.title}/>:<div className="theme-card-placeholder"/>}<span className="home-tour-image-shade"/></div>
             <div className="home-tour-card-body">
-              <div className="home-tour-card-top"><span>Tour #{t.no}</span><Leaf/></div>
+              <div className="home-tour-card-top"><span>Hành trình #{t.no}</span><Leaf/></div>
               <h3>{t.title}</h3><span className="home-tour-card-line"/><p>{t.desc}</p>
               <div className="home-tour-date"><CalendarDays/><b>{t.dates}</b></div>
-              <div className="home-tour-card-footer"><span>Khám phá tour <i>⟶</i></span><b><ArrowRight/></b></div>
+              <div className="home-tour-card-footer"><span>Đi tìm câu chuyện <i>⟶</i></span><b><ArrowRight/></b></div>
             </div>
           </Link>)}
         </div>
@@ -380,7 +388,7 @@ export default function HomePage() {
           <span className="eyebrow">{mapCopy.eyebrow}</span>
           <h2>{mapCopy.title}</h2>
           <p>{mapCopy.description}</p>
-          <div className="home-map-live-meta"><MapPin size={15}/><span>Địa điểm thật · dữ liệu trực tiếp từ Hola Maps</span></div>
+          <div className="home-map-live-meta"><MapPin size={15}/><span>Địa điểm thật · câu chuyện thật · dữ liệu trực tiếp từ Hola Maps</span></div>
           <Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link>
         </div>
 
@@ -407,7 +415,7 @@ export default function HomePage() {
             <p>{storiesCopy.description}</p>
           </div>
           <div className="home-story-head-side">
-            <p>Mỗi tác phẩm là một lát cắt thật về con người, cảnh quan và nhịp sống Hòa Lạc — được cộng đồng gửi về và Ban Tổ chức công bố.</p>
+            <p>Mỗi góc nhìn có thể đến từ cộng đồng, chuyên gia, đối tác hoặc quá trình Ban Biên tập chủ động đi tìm — điều quan trọng là câu chuyện đủ thật và đủ đáng để giữ lại.</p>
             <Link className="home-story-all-link" to="/kham-pha">Xem tất cả góc nhìn <ArrowRight/></Link>
           </div>
         </header>
@@ -417,7 +425,7 @@ export default function HomePage() {
           {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="home-story-card" key={a.id||a.slug}>
             <div className="home-story-media">
               {a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
-              <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'ĐẠT GIẢI':a.status==='TOP52'?'TOP52':'GÓC NHÌN'}</span>
+              <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'ĐƯỢC GHI NHẬN':a.status==='TOP52'?'52 GÓC NHÌN':'GÓC NHÌN'}</span>
               <span className="home-story-heart"><Heart/></span>
             </div>
             <div className="home-story-card-body">
@@ -425,10 +433,10 @@ export default function HomePage() {
               <h3>{a.title||a.code}</h3>
               <div className="home-story-author-row">
                 <span className="home-story-avatar">{String(a.author||'?').trim().charAt(0)||'?'}</span>
-                <b>{a.author||'Tác giả HALO HOLA'}</b>
+                <b>{a.author||'HALO HOLA Editorial'}</b>
               </div>
               <div className="home-story-card-meta">
-                <span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span>
+                <span><FileText/> {a.type||'Góc nhìn'}</span>
                 <span><MapPin/> {a.location||'Hòa Lạc'}</span>
               </div>
             </div>
@@ -437,6 +445,8 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('community')&&<section className="we-banner"><img src={community.backgroundImage}/><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><span className="hand-note">Nhiều góc nhìn<br/>Một cộng đồng<br/>Một Hòa Lạc</span></div></section>}
+    <section className="we-banner"><img src={img.sunset} alt="HALO HOLA 2027"/><div className="container we-overlay"><div><span className="eyebrow">WHAT'S NEXT?</span><h2>HALO HOLA 2027 · 52 tuần · 52 câu chuyện Hòa Lạc</h2><p>24.11 là điểm chuyển từ chiến dịch khám phá 2026 sang hành trình kể chuyện đều đặn trong năm 2027. Mỗi tuần một câu chuyện; Calendar là cánh cửa vật lý dẫn trở lại HALO HOLA.</p><Link className="btn btn-green" to="/calendar-2027"><CalendarDays size={17}/> Khám phá Calendar 2027</Link></div><span className="hand-note">Mỗi tuần<br/>một câu chuyện.</span></div></section>
+
+    {sectionOn('community')&&<section className="we-banner"><img src={community.backgroundImage} alt="WE HOLA"/><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia WE HOLA</Link></div><span className="hand-note">HALO HOLA kể.<br/>WE HOLA làm.</span></div></section>}
   </main>
 }
