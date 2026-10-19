@@ -50,13 +50,13 @@ export default function ThemesPage(){
       <div className="stories-contours"/>
       <div className="stories-intro-inner">
         <div>
-          <div className="stories-kicker"><span>7 MẠCH · 1 HÒA LẠC</span><i/></div>
-          <h1>7 mạch nội dung</h1>
+          <div className="stories-kicker"><span>7 CHỦ ĐỀ · 1 HÒA LẠC</span><i/></div>
+          <h1>7 chủ đề Hòa Lạc</h1>
           <h2>Nhìn Hòa Lạc qua nhiều lớp câu chuyện</h2>
         </div>
         <div className="stories-intro-side">
-          <p>Bảy mạch giúp 52 góc nhìn không trở thành một bộ ảnh phong cảnh: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức &amp; Công nghệ, Đời sống &amp; Cảm xúc và Tương lai.</p>
-          <div className="stories-intro-stats"><span><SlidersHorizontal/> {themes.length} mạch đang mở</span></div>
+          <p>Bảy chủ đề giúp 52 góc nhìn không trở thành một bộ ảnh phong cảnh: Bản sắc, Thiên nhiên, Không gian, Con người, Tri thức &amp; Công nghệ, Đời sống &amp; Cảm xúc và Tương lai.</p>
+          <div className="stories-intro-stats"><span><SlidersHorizontal/> {themes.length} chủ đề đang mở</span></div>
         </div>
       </div>
     </section>
@@ -66,7 +66,7 @@ export default function ThemesPage(){
         <div className="theme-index-filters">
           <div className="theme-index-search">
             <Search size={18}/>
-            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm mạch, địa điểm, con người, trải nghiệm..."/>
+            <input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm chủ đề, địa điểm, con người, trải nghiệm..."/>
             <kbd><span>⌘</span>K</kbd>
           </div>
 
@@ -87,15 +87,15 @@ export default function ThemesPage(){
                 </button>
               })}
             </div>
-            <button type="button" className="theme-index-next" aria-label="Xem thêm mạch nội dung" onClick={scrollThemes}>
+            <button type="button" className="theme-index-next" aria-label="Xem thêm chủ đề" onClick={scrollThemes}>
               <ChevronRight/>
             </button>
           </div>
         </div>
 
-        {loading&&<div className="jw-empty">Đang tải 7 mạch nội dung từ hệ thống...</div>}
+        {loading&&<div className="jw-empty">Đang tải 7 chủ đề từ hệ thống...</div>}
         {error&&<div className="form-error">{error}</div>}
-        {!loading&&!error&&visible.length===0&&<div className="jw-empty">Không có mạch nội dung phù hợp.</div>}
+        {!loading&&!error&&visible.length===0&&<div className="jw-empty">Không có chủ đề phù hợp.</div>}
 
         <div className="themes-card-grid">
           {visible.map((t,index)=><ThemeCard theme={t} index={index} key={t.id||t.slug}/>)}
