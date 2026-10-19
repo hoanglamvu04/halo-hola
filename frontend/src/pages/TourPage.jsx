@@ -95,6 +95,9 @@ export default function TourPage(){
     item.description||item.desc||''
   ])
   const highlights=Array.isArray(tour?.highlights)?tour.highlights:[]
+  const displayHighlights=isTour01
+    ? [...highlights,{title:'Trải nghiệm thực tế',description:'Đi qua không gian thật, gặp con người thật và chạm vào những lớp văn hóa còn sống.'}]
+    : highlights
 
   const openRegistration=()=>{
     setError('')
@@ -112,7 +115,7 @@ export default function TourPage(){
     finally{setSubmitting(false)}
   }
 
-  return <main className="tour-page-ref">
+  return <main className={`tour-page-ref ${isTour01?'tour01-page':''}`}>
     <section className="tour-page-hero">
       <div className="tour-page-contours"/>
       <div className="tour-page-inner tour-page-hero-grid">
@@ -166,12 +169,12 @@ export default function TourPage(){
     <section className="tour-selected-ref">
       <div className="tour-page-inner tour-selected-grid">
         <div className="tour-selected-copy">
-          <span className="eyebrow">TOUR #{tour.no}</span>
+          <span className="eyebrow">HOLA TOUR · #{tour.no}</span>
           <h2>{isTour01?'Đoài · Mường':tour.title}</h2>
-          <h3>{isTour01?'ĐI TÌM BẢN SẮC':tour.kicker}</h3>
+          <h3>{isTour01?'Đi tìm Bản sắc':tour.kicker}</h3>
           <div className="tour-selected-facts">
-            <span><MapPin/> {tour.location}</span>
             <span><CalendarDays/> {tour.durationLabel}</span>
+            <span><MapPin/> {tour.location}</span>
             <span><Users/> {tour.audienceLabel}</span>
           </div>
           <p>{tour.desc}</p>
@@ -179,11 +182,16 @@ export default function TourPage(){
             <button className="btn btn-terra" onClick={openRegistration}>Đăng ký hành trình <ArrowRight size={16}/></button>
             <a href="#lich-trinh" className="btn btn-outline"><CalendarDays size={16}/> Xem lịch tour</a>
           </div>
+          {isTour01&&<div className="tour01-tour-links" aria-label="Chọn HOLA Tour">
+            {tours.map((item,index)=><button key={item.id||item.no} className={selected===index?'active':''} onClick={()=>setSelected(index)}>
+              <small>#{String(item.no).padStart(2,'0')}</small><span>{item.title}</span>
+            </button>)}
+          </div>}
         </div>
 
         <div className="tour-selected-visual">
           {tour.image?<img src={tour.image} alt={tour.title}/>:<div className="theme-card-placeholder"/>}
-          <div className="tour-selected-note"><MapPin/><span>{tour.location}</span></div>
+          <div className="tour-selected-note"><span>Hòa Lạc<br/>những câu chuyện<br/>vẫn tiếp tục...</span></div>
         </div>
       </div>
     </section>
@@ -192,26 +200,26 @@ export default function TourPage(){
       <section className="tour01-concept-section">
         <div className="tour-page-inner">
           <div className="tour01-section-head">
-            <div><span>TOUR #01 · CONCEPT</span><h2>Hai lớp bản sắc.<br/>Hai hành trình khám phá trong một ngày.</h2></div>
-            <p>Không cố tạo một mối liên hệ trực tiếp giữa Đoài và Mường. Mỗi phần được khám phá bằng chính câu chuyện của vùng đó, rồi đặt cạnh nhau ở cuối ngày.</p>
+            <div><span>HAI MẠCH BẢN SẮC</span><h2>Hai lớp bản sắc.<br/>Hai hành trình khám phá trong một ngày.</h2></div>
+            <p>Từ không gian làng, nghề và ký ức của Xứ Đoài đến nếp sống, văn hóa và con người Mường — mỗi phần được kể bằng chính câu chuyện của vùng đó.</p>
           </div>
           <div className="tour01-lens-grid">
             {tour01Lenses.map((lens,index)=><article key={lens.label}>
-              <div className="tour01-lens-top"><span>{lens.label}</span><b>{String(index+1).padStart(2,'0')}</b></div>
+              <div className="tour01-lens-image">{currentStops[index]?.[1]?<img src={currentStops[index][1]} alt={lens.label}/>:<div className="theme-card-placeholder"/>}</div>
+              <div className="tour01-lens-top"><span>{lens.label}</span><b><ArrowRight/></b></div>
               <h3>{lens.title}</h3>
-              <div className="tour01-flow">{lens.flow.map((item,i)=><span key={item}>{item}{i<lens.flow.length-1&&<ArrowRight/>}</span>)}</div>
               <p>{lens.text}</p>
+              <div className="tour01-flow">{lens.flow.map(item=><span key={item}>{item}</span>)}</div>
             </article>)}
           </div>
-          <div className="tour01-merge-line"><span>ĐOÀI</span><b>×</b><span>MƯỜNG</span><p>những bản sắc vẫn đang sống trong đời sống hôm nay.</p></div>
         </div>
       </section>
 
       <section className="tour01-method-section">
         <div className="tour-page-inner tour01-method-grid">
-          <div>
-            <span className="eyebrow">CÁCH CHÚNG TÔI KHÁM PHÁ</span>
-            <h2>Đi → Nhìn → Gặp → Nghe → Ghi lại.</h2>
+          <div className="tour01-method-copy">
+            <span className="eyebrow">PHƯƠNG PHÁP TRẢI NGHIỆM</span>
+            <h2>Đi · Nhìn · Gặp · Nghe · Ghi lại</h2>
             <p>Không đo hành trình bằng số địa điểm đã đi qua. Mục tiêu là gặp được người, nghe được điều đáng nhớ và tìm thấy câu chuyện đủ tốt để tiếp tục biên tập.</p>
           </div>
           <div className="tour01-method-steps">
@@ -267,9 +275,9 @@ export default function TourPage(){
         </div>
 
         <div className="tour-highlights">
-          <h2>Điểm nhấn của hành trình</h2>
+          <div className="tour01-block-title"><h2>Điểm nhấn của hành trình</h2><span>Đi sâu · gặp thật · nghe thật</span></div>
           <div className="tour-highlight-grid">
-            {highlights.map((h,index)=><div key={h.title||index}><span>{index%2===0?<Leaf/>:<Heart/>}</span><b>{h.title}</b><p>{h.description}</p></div>)}
+            {displayHighlights.map((h,index)=><div key={h.title||index}><span>{index%2===0?<Leaf/>:<Heart/>}</span><b>{h.title}</b><p>{h.description}</p></div>)}
           </div>
 
           <div className="tour-info-ref">
@@ -288,7 +296,7 @@ export default function TourPage(){
           <div className="tour-stop-grid">
             {currentStops.map(([name,image,desc],index)=><div className="tour-stop-card" key={name+index}>
               {image?<img src={image} alt={name}/>:<div className="theme-card-placeholder"/>}
-              <div><h3>{name}</h3><p>{desc}</p><span><ArrowRight/></span></div>
+              <div><small>{String(index+1).padStart(2,'0')}</small><h3>{name}</h3><p>{desc}</p><span><ArrowRight/></span></div>
             </div>)}
           </div>
         </div>}
