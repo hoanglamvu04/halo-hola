@@ -13,10 +13,10 @@ const tiers=[
 ]
 
 const principles=[
-  ['01','Nội dung độc lập','Không can thiệp nội dung, kết quả và Hội đồng giám khảo.'],
-  ['02','Nhận diện vừa đủ','Logo đối tác không lấn át HALO HOLA.'],
-  ['03','Tôn trọng dữ liệu','Không chia sẻ dữ liệu cá nhân người tham gia.'],
-  ['04','Giữ chuẩn tuyển chọn','Không đánh đổi chất lượng tuyển chọn lấy quyền lợi thương mại.']
+  ['01','Editorial độc lập','Đối tác đồng hành bằng nguồn lực; Ban Biên tập quyết định câu chuyện, hình ảnh, câu chữ và cách trình bày.'],
+  ['02','Nhận diện vừa đủ','Logo đối tác không lấn át HALO HOLA và trải nghiệm câu chuyện.'],
+  ['03','Tôn trọng dữ liệu','Không chia sẻ dữ liệu cá nhân của người đóng góp, nhân vật và người tham dự trái phạm vi cho phép.'],
+  ['04','Chất lượng trước số lượng','Không đánh đổi chất lượng câu chuyện để lấy quyền lợi thương mại hay lấp đủ con số 52.']
 ]
 
 export default function PartnersPage(){
@@ -27,17 +27,17 @@ export default function PartnersPage(){
     <section className="partners-hero-modern">
       <div className="container partners-hero-grid">
         <div className="partners-hero-copy">
-          <span className="eyebrow">HỒ SƠ MỜI HỢP TÁC · HALO HOLA 2026</span>
-          <h1>Cùng kể <em>câu chuyện Hòa Lạc</em></h1>
-          <p>Đồng hành cùng HALO HOLA bằng nguồn lực phù hợp, hiện diện đúng điểm chạm và vẫn bảo vệ tính độc lập của nội dung, tác giả và quá trình tuyển chọn.</p>
+          <span className="eyebrow">HỆ ĐỐI TÁC · HALO HOLA 2026</span>
+          <h1>Cùng tìm và kể <em>câu chuyện Hòa Lạc</em></h1>
+          <p>Chuyên gia, CLB, trường học, địa phương và doanh nghiệp có thể đồng hành bằng câu chuyện, nhân vật, địa điểm, tư liệu, chuyên môn, không gian hoặc nguồn lực — trong khi quyền quyết định editorial vẫn thuộc Ban Biên tập HALO HOLA.</p>
           <div className="partners-hero-actions">
             <a href="#hang-dong-hanh" className="partner-btn partner-btn-primary">Xem các hạng đồng hành <ArrowRight/></a>
             {partners.length>0&&<a href="#doi-tac" className="partner-btn partner-btn-light">Đối tác hiện tại</a>}
           </div>
           <div className="partners-hero-facts">
             <div><b>05</b><span>Hạng đồng hành</span></div>
-            <div><PackageOpen/><span>Tiền mặt · hiện vật · dịch vụ</span></div>
-            <div><ShieldCheck/><span>Giữ độc lập nội dung</span></div>
+            <div><PackageOpen/><span>Câu chuyện · chuyên môn · nguồn lực</span></div>
+            <div><ShieldCheck/><span>Giữ độc lập editorial</span></div>
           </div>
         </div>
 
@@ -46,8 +46,8 @@ export default function PartnersPage(){
           <div className="partners-hero-shade"/>
           <div className="partners-hero-card">
             <span>HALO HOLA 2026</span>
-            <b>Đồng hành đúng cách.<br/>Lan tỏa đúng giá trị.</b>
-            <p>Tài trợ không chỉ là hiện diện thương hiệu, mà là cùng tạo điều kiện để những câu chuyện Hòa Lạc được kể tốt hơn.</p>
+            <b>Đồng hành đúng cách.<br/>Giúp câu chuyện được kể tốt hơn.</b>
+            <p>Đối tác không mua quyền can thiệp nội dung; đối tác tạo điều kiện để team đi xa hơn, gặp đúng người hơn và lưu giữ tư liệu tốt hơn.</p>
           </div>
         </div>
       </div>
@@ -55,35 +55,27 @@ export default function PartnersPage(){
 
     <section className="partners-intro-strip">
       <div className="container partners-intro-grid">
-        <div><Building2/><b>Địa điểm</b><span>Không gian tổ chức, trải nghiệm và kết nối</span></div>
-        <div><PackageOpen/><b>Hậu cần</b><span>Vật phẩm, thiết bị và dịch vụ quy đổi</span></div>
-        <div><Handshake/><b>Nguồn lực</b><span>Đóng góp tài chính theo hạng đồng hành</span></div>
+        <div><Building2/><b>Địa điểm & câu chuyện</b><span>Giới thiệu nhân vật, công trình, nơi chốn và không gian đáng khám phá</span></div>
+        <div><PackageOpen/><b>Hậu cần & sản xuất</b><span>Thiết bị, di chuyển, in ấn, Calendar, triển lãm và HOLA DAY</span></div>
+        <div><Handshake/><b>Nguồn lực</b><span>Tài chính, chuyên môn, kết nối và truyền thông phù hợp</span></div>
       </div>
     </section>
 
     <section id="hang-dong-hanh" className="partners-tier-section">
       <div className="container">
         <header className="partners-section-head">
-          <div>
-            <span className="eyebrow">CÁC HẠNG ĐỒNG HÀNH</span>
-            <h2>Chọn mức đồng hành phù hợp</h2>
-          </div>
-          <p>Đóng góp bằng tiền hoặc quy đổi tương đương bằng địa điểm, hậu cần, vật phẩm và dịch vụ.</p>
+          <div><span className="eyebrow">CÁC HẠNG ĐỒNG HÀNH</span><h2>Chọn mức đồng hành phù hợp</h2></div>
+          <p>Đóng góp có thể bằng tài chính hoặc quy đổi tương đương bằng địa điểm, hậu cần, vật phẩm, dịch vụ và nguồn lực sản xuất.</p>
         </header>
 
         <div className="partners-tier-grid">
           {tiers.map(({name,price,Icon,featured},index)=><article className={'partner-tier-card '+(featured?'is-featured':'')} key={name}>
-            <div className="partner-tier-top">
-              <span className="partner-tier-icon"><Icon/></span>
-              <span className="partner-tier-index">0{index+1}</span>
-            </div>
+            <div className="partner-tier-top"><span className="partner-tier-icon"><Icon/></span><span className="partner-tier-index">0{index+1}</span></div>
             <div className="partner-tier-body">
-              <span className="partner-tier-label">HẠNG ĐỒNG HÀNH</span>
-              <h3>{name}</h3>
-              <strong>{price}</strong>
-              <p>Hiện diện tại các điểm chạm phù hợp của HALO HOLA 2026.</p>
+              <span className="partner-tier-label">HẠNG ĐỒNG HÀNH</span><h3>{name}</h3><strong>{price}</strong>
+              <p>Hiện diện tại các điểm chạm phù hợp của HALO HOLA, Calendar và HOLA DAY 2026.</p>
             </div>
-            <div className="partner-tier-meta"><CheckCircle2/><span>Tiền mặt hoặc quy đổi tương đương</span></div>
+            <div className="partner-tier-meta"><CheckCircle2/><span>Tài chính hoặc nguồn lực quy đổi tương đương</span></div>
           </article>)}
         </div>
       </div>
@@ -92,7 +84,7 @@ export default function PartnersPage(){
     {partners.length>0&&<section id="doi-tac" className="partners-live-section">
       <div className="container">
         <header className="partners-section-head partners-section-head-light">
-          <div><span className="eyebrow">ĐỐI TÁC ĐỒNG HÀNH</span><h2>Những đơn vị đang cùng HALO HOLA kể chuyện</h2></div>
+          <div><span className="eyebrow">ĐỐI TÁC ĐỒNG HÀNH</span><h2>Những đơn vị đang cùng HALO HOLA tìm và kể Hòa Lạc</h2></div>
           <p>Danh sách được cập nhật trực tiếp từ hệ thống quản trị.</p>
         </header>
         <div className="partners-live-grid-modern">
@@ -109,23 +101,21 @@ export default function PartnersPage(){
       <div className="container partners-principles-grid">
         <div className="partners-principles-copy">
           <span className="eyebrow">NGUYÊN TẮC ĐỒNG HÀNH</span>
-          <h2>Thương hiệu hiện diện,<br/>giá trị vẫn nguyên vẹn.</h2>
-          <p>HALO HOLA ưu tiên các mối quan hệ hợp tác minh bạch, tôn trọng người tham gia và giữ đúng tinh thần của chương trình.</p>
+          <h2>Thương hiệu hiện diện,<br/>editorial vẫn độc lập.</h2>
+          <p>HALO HOLA ưu tiên quan hệ hợp tác minh bạch và không để sponsor can thiệp vào việc lựa chọn, biên tập hay cách kể câu chuyện.</p>
         </div>
         <div className="partners-principles-list">
-          {principles.map(([num,title,desc])=><div className="partner-principle-row" key={num}>
-            <span>{num}</span><div><b>{title}</b><p>{desc}</p></div>
-          </div>)}
+          {principles.map(([num,title,desc])=><div className="partner-principle-row" key={num}><span>{num}</span><div><b>{title}</b><p>{desc}</p></div></div>)}
         </div>
       </div>
     </section>
 
     <section className="partners-final-cta">
       <div className="container partners-final-card">
-        <div><span className="eyebrow">HALO HOLA 2026</span><h2>Cùng góp một phần vào câu chuyện Hòa Lạc.</h2></div>
+        <div><span className="eyebrow">HALO HOLA 2026</span><h2>Cùng góp nguồn lực để những câu chuyện Hòa Lạc được tìm thấy.</h2></div>
         <div className="partners-final-actions">
           <a href="#hang-dong-hanh" className="partner-btn partner-btn-primary">Xem hạng đồng hành <ArrowRight/></a>
-          <Link to="/" className="partner-btn partner-btn-light">Khám phá chương trình</Link>
+          <Link to="/calendar-2027" className="partner-btn partner-btn-light">Calendar 2027</Link>
         </div>
       </div>
     </section>
