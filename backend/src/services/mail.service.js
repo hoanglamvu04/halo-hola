@@ -4,38 +4,38 @@ const STATUS_COPY = {
   PENDING: {
     label: 'Đã nhận',
     subject: 'HALO HOLA đã nhận góc nhìn của bạn',
-    headline: 'Góc nhìn của bạn đã được ghi nhận.',
-    message: 'Ban Tổ chức đang tiếp nhận và kiểm tra nội dung đóng góp. Bạn có thể dùng Mã góc nhìn để theo dõi tiến trình bất cứ lúc nào.'
+    headline: 'Câu chuyện của bạn đã đến với HALO HOLA.',
+    message: 'Ban Biên tập đang đọc nội dung và kiểm tra những thông tin cơ bản. Bạn có thể dùng Mã góc nhìn để theo dõi hành trình bất cứ lúc nào.'
   },
   VALID: {
-    label: 'Hợp lệ',
-    subject: 'Góc nhìn của bạn đã được xác nhận hợp lệ',
-    headline: 'Góc nhìn đã hoàn tất bước kiểm tra.',
-    message: 'Nội dung đóng góp của bạn đã đủ điều kiện để tiếp tục trong hành trình công bố và ghi nhận của HALO HOLA 2026.'
+    label: 'Đã xác minh',
+    subject: 'Góc nhìn của bạn đã hoàn tất bước xác minh',
+    headline: 'Thông tin cơ bản đã được xác minh.',
+    message: 'Nguồn và thông tin chính của góc nhìn đã đủ để Ban Biên tập tiếp tục phát triển câu chuyện trong hành trình HALO HOLA 2026.'
   },
   SHORTLIST: {
-    label: 'Nổi bật',
-    subject: 'Góc nhìn của bạn được ghi nhận trong nhóm nổi bật HALO HOLA',
-    headline: 'Một cột mốc mới cho góc nhìn của bạn.',
-    message: 'Góc nhìn đã được đưa vào nhóm nổi bật và tiếp tục bước đánh giá để lựa chọn những đóng góp tiêu biểu của HALO HOLA 2026.'
+    label: 'Đang biên tập',
+    subject: 'Góc nhìn của bạn đang được HALO HOLA biên tập',
+    headline: 'Câu chuyện đang được phát triển sâu hơn.',
+    message: 'Ban Biên tập đang hoàn thiện cách kể, tư liệu, hình ảnh và thông tin nguồn để xem xét công bố góc nhìn trong hệ thống HALO HOLA.'
   },
   TOP52: {
-    label: 'TOP52',
-    subject: 'Chúc mừng! Góc nhìn của bạn được ghi nhận trong TOP52 HALO HOLA 2026',
-    headline: 'Bạn đã có mặt trong TOP52.',
-    message: 'Góc nhìn của bạn đã được lựa chọn vào TOP52 HALO HOLA 2026 — nhóm những đóng góp nổi bật được chương trình ghi nhận và giới thiệu tới cộng đồng.'
+    label: 'Trong 52 góc nhìn',
+    subject: 'Góc nhìn của bạn có mặt trong 52 góc nhìn HALO HOLA 2026',
+    headline: 'Một câu chuyện của bạn đã trở thành một phần của 52 góc nhìn.',
+    message: 'Góc nhìn đã được Ban Biên tập lựa chọn vào bộ 52 câu chuyện đại diện cho một Hòa Lạc năm 2026 và sẽ được giới thiệu trong hành trình công bố của chương trình.'
   },
   AWARDED: {
-    label: 'Được vinh danh',
-    subject: 'Chúc mừng! Góc nhìn của bạn được vinh danh tại HALO HOLA 2026',
-    headline: 'Góc nhìn của bạn đã được vinh danh.',
-    message: 'Góc nhìn đã được ghi nhận ở hạng mục vinh danh của HALO HOLA 2026. Ban Tổ chức sẽ liên hệ thêm qua thông tin bạn đã cung cấp.'
+    label: 'Đã ghi nhận',
+    subject: 'HALO HOLA cập nhật ghi nhận cho góc nhìn của bạn',
+    headline: 'Góc nhìn của bạn đã được ghi nhận.',
+    message: 'Câu chuyện đã được ghi nhận trong hành trình HALO HOLA 2026. Ban Biên tập sẽ liên hệ thêm nếu có hoạt động triển lãm, Calendar hoặc nội dung tiếp nối cần sự phối hợp của bạn.'
   },
   REJECTED: {
     label: 'Cần bổ sung',
-    subject: 'Cập nhật hồ sơ góc nhìn HALO HOLA 2026',
-    headline: 'Hồ sơ góc nhìn cần được kiểm tra lại.',
-    message: 'Nội dung hiện chưa đủ điều kiện để công bố. Nếu cần bổ sung hoặc làm rõ thông tin, Ban Tổ chức sẽ liên hệ với bạn qua email hoặc số điện thoại đã đăng ký.'
+    subject: 'HALO HOLA cần bổ sung thông tin cho góc nhìn của bạn',
+    headline: 'Góc nhìn cần thêm thông tin trước khi tiếp tục.',
+    message: 'Ban Biên tập chưa có đủ dữ liệu để xác minh hoặc công bố câu chuyện. Nếu cần bổ sung nguồn, quyền sử dụng hoặc chi tiết nhân vật/địa điểm, chúng tôi sẽ liên hệ qua thông tin bạn đã cung cấp.'
   }
 };
 
@@ -93,7 +93,7 @@ function statusEmailHtml({ name, code, title, status }) {
   <body style="margin:0;background:#f7f3ea;font-family:Arial,sans-serif;color:#173d2d">
     <div style="max-width:620px;margin:0 auto;padding:32px 18px">
       <div style="background:#ffffff;border:1px solid #e8dfd0;border-radius:24px;padding:30px;box-shadow:0 12px 36px rgba(23,61,45,.08)">
-        <div style="font-size:12px;letter-spacing:.12em;font-weight:700;color:#c45b32">HALO HOLA 2026 · GÓC NHÌN CỘNG ĐỒNG</div>
+        <div style="font-size:12px;letter-spacing:.12em;font-weight:700;color:#c45b32">HALO HOLA 2026 · 52 GÓC NHÌN · 1 HÒA LẠC</div>
         <h1 style="font-size:28px;line-height:1.2;margin:10px 0 8px">${escapeHtml(copy.headline)}</h1>
         <p style="font-size:16px;line-height:1.7;margin:0 0 22px">Xin chào ${escapeHtml(name || 'bạn')},</p>
         <p style="font-size:16px;line-height:1.7;margin:0 0 22px">${escapeHtml(copy.message)}</p>
@@ -101,10 +101,10 @@ function statusEmailHtml({ name, code, title, status }) {
           <div style="font-size:12px;color:#6d766f;margin-bottom:5px">MÃ GÓC NHÌN</div>
           <div style="font-size:22px;font-weight:800;letter-spacing:.04em">${escapeHtml(code)}</div>
           <div style="margin-top:12px;font-size:14px;line-height:1.5"><b>${escapeHtml(title || 'Góc nhìn HALO HOLA')}</b></div>
-          <div style="margin-top:8px;font-size:14px">Trạng thái hiện tại: <b>${escapeHtml(copy.label)}</b></div>
+          <div style="margin-top:8px;font-size:14px">Hành trình hiện tại: <b>${escapeHtml(copy.label)}</b></div>
         </div>
-        <a href="${escapeHtml(url)}" style="display:inline-block;background:#173d2d;color:#fff;text-decoration:none;padding:13px 20px;border-radius:999px;font-weight:700">Theo dõi góc nhìn</a>
-        <p style="font-size:13px;color:#69736d;line-height:1.6;margin:24px 0 0">Bạn có thể mở trang theo dõi bất cứ lúc nào bằng Mã góc nhìn và email đã dùng khi gửi nội dung.</p>
+        <a href="${escapeHtml(url)}" style="display:inline-block;background:#173d2d;color:#fff;text-decoration:none;padding:13px 20px;border-radius:999px;font-weight:700">Theo dõi hành trình</a>
+        <p style="font-size:13px;color:#69736d;line-height:1.6;margin:24px 0 0">Bạn có thể mở trang theo dõi bất cứ lúc nào bằng Mã góc nhìn và email đã dùng khi gửi. HALO HOLA không tìm người thắng — chúng tôi tìm những câu chuyện đáng được giữ lại.</p>
       </div>
     </div>
   </body>
@@ -126,11 +126,11 @@ export async function sendSubmissionReceived({ to, name, code, title }) {
 HALO HOLA đã nhận góc nhìn "${title}" của bạn.
 
 Mã góc nhìn: ${code}
-Trạng thái hiện tại: Đã nhận
+Hành trình hiện tại: Đã nhận
 
-Theo dõi góc nhìn: ${url}
+Theo dõi hành trình: ${url}
 
-Cảm ơn bạn đã đóng góp một góc nhìn về Hòa Lạc.
+Cảm ơn bạn đã kể cho HALO HOLA một điều đáng được giữ lại về Hòa Lạc.
 HALO HOLA 2026`,
     html: statusEmailHtml({ name, code, title, status: 'PENDING' })
   });
@@ -155,9 +155,9 @@ ${copy.message}
 
 Góc nhìn: ${title || 'Góc nhìn HALO HOLA'}
 Mã góc nhìn: ${code}
-Trạng thái hiện tại: ${copy.label}
+Hành trình hiện tại: ${copy.label}
 
-Theo dõi góc nhìn: ${url}
+Theo dõi hành trình: ${url}
 
 HALO HOLA 2026`,
     html: statusEmailHtml({ name, code, title, status })
