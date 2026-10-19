@@ -255,7 +255,7 @@ INSERT INTO themes (id,slug,title,description,intro,image,color,location_label,p
   (6,'cau-chuyen','Câu chuyện Hòa Lạc','Con người, ký ức, những câu chuyện đáng kể','Những ký ức, lát cắt đời sống và câu chuyện nhỏ giúp Hòa Lạc hiện ra gần gũi, chân thật và nhiều chiều hơn.','https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1400&q=85','#7a5a44','Hòa Lạc',TRUE,60),
   (7,'uoc-mo','Ước mơ Hòa Lạc','Góc nhìn học sinh – sinh viên về tương lai','Nhìn Hòa Lạc qua góc nhìn của học sinh, sinh viên và người trẻ – những người đang học tập, sáng tạo và hình dung về tương lai nơi đây.','https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=85','#91b653','Hòa Lạc',TRUE,70),
   (8,'sac-mau','Sắc màu Hòa Lạc','06 đặc trưng sắc màu của vùng đất','Sáu sắc màu đại diện cho thiên nhiên, vật liệu, ánh sáng, tri thức và chuyển động mới của Hòa Lạc.','https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1400&q=85','#c45b32','Hòa Lạc',TRUE,80)
-ON CONFLICT (slug) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 CREATE INDEX IF NOT EXISTS idx_themes_published_sort ON themes(published, sort_order, id);
 
