@@ -63,7 +63,7 @@ export default function CommunityGalleryPage(){
   const clearFilters=()=>setFilters({q:'',theme:'',type:'',color:'',location:'',sort:'latest'})
   const hasFilters=Object.entries(filters).some(([key,value])=>key==='sort'?value!=='latest':Boolean(value))
   const hasMore=items.length<total
-  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả mạch',[themes,filters.theme])
+  const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
 
   return <main className="community-gallery-page">
     <section className="community-gallery-hero">
@@ -94,7 +94,7 @@ export default function CommunityGalleryPage(){
       <div className="community-gallery-filters">
         <label className="community-gallery-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} placeholder="Tìm góc nhìn, người kể, mã góc nhìn, địa điểm..."/></label>
         <div className="community-gallery-theme-row">
-          <span><SlidersHorizontal/> Mạch nội dung</span>
+          <span><SlidersHorizontal/> Chủ đề</span>
           <button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>
           {themes.map(theme=><button key={theme.slug||theme.id} className={filters.theme===theme.title?'active':''} onClick={()=>setFilters(v=>({...v,theme:theme.title}))}>{theme.title}</button>)}
         </div>
