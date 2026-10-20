@@ -130,6 +130,11 @@
   font-size:14px!important;
 }
 
+/* Hero removed by product decision: start the page directly with tour selection. */
+.tour-page-ref .tour-page-hero{
+  display:none!important;
+}
+
 @media(max-width:720px){
   .tour-page-ref section h2,
   .tour-page-ref .tour01-block-title h2,
