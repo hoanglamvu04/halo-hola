@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   CalendarDays, MapPin, Users, Bus, Utensils, Flag, ArrowRight, ArrowLeft,
   CheckCircle2, Compass, Leaf, Camera, Heart, FileText, X, Eye,
-  MessageCircle, Quote, Video, Image as ImageIcon, UserRound, Route
+  MessageCircle, Quote, Video, Image as ImageIcon, UserRound, Route, Sun, Sunset
 } from 'lucide-react'
 import { getTours, registerTour } from '../services/api.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
@@ -98,6 +98,11 @@ export default function TourPage(){
   const displayHighlights=isTour01
     ? [...highlights,{title:'Trải nghiệm thực tế',description:'Đi qua không gian thật, gặp con người thật và chạm vào những lớp văn hóa còn sống.'}]
     : highlights
+
+  const afternoonStartIndex=currentItinerary.findIndex(([time])=>/^(12:45|13:)/.test(String(time)))
+  const tour01SplitIndex=afternoonStartIndex>0?afternoonStartIndex:Math.ceil(currentItinerary.length/2)
+  const tour01MorningItinerary=currentItinerary.slice(0,tour01SplitIndex)
+  const tour01AfternoonItinerary=currentItinerary.slice(tour01SplitIndex)
 
   const openRegistration=()=>{
     setError('')
@@ -262,9 +267,52 @@ export default function TourPage(){
 
     <section id="lich-trinh" className="tour-detail-ref">
       <div className="tour-page-inner tour-detail-grid">
-        <div className="tour-itinerary">
-          <h2>{isTour01?'Timeline một ngày':'Lịch trình trải nghiệm'}</h2>
-          {isTour01&&<p className="tour01-timeline-intro">07:30, 16:15 và 17:00 là các mốc tương đối cứng. Thời gian bên trong từng cụm có thể linh hoạt theo câu chuyện thực tế và các khoảng buffer.</p>}
+        {isTour01?<>
+          <div className="tour01-reference-timeline">
+            <article className="tour01-reference-card morning">
+              <header className="tour01-reference-card-head">
+                <div className="tour01-reference-head-icon"><Sun/></div>
+                <div>
+                  <span>BUỔI SÁNG</span>
+                  <h2>ĐOÀI</h2>
+                  <p>Khám phá không gian, kiến trúc và văn hoá Xứ Đoài</p>
+                  <i/>
+                </div>
+              </header>
+              <div className="tour01-reference-list">
+                {tour01MorningItinerary.map(([time,title,I,desc],index)=><div className="tour01-reference-item" key={time+title+index}>
+                  <div className="tour01-reference-rail"><span>{String(index+1).padStart(2,'0')}</span></div>
+                  <div className="tour01-reference-time">{time}</div>
+                  <div className="tour01-reference-icon"><I/></div>
+                  <div className="tour01-reference-copy"><b>{title}</b><p>{desc}</p></div>
+                  <div className="tour01-reference-arrow"><ArrowRight/></div>
+                </div>)}
+              </div>
+            </article>
+
+            <article className="tour01-reference-card afternoon">
+              <header className="tour01-reference-card-head">
+                <div className="tour01-reference-head-icon"><Sunset/></div>
+                <div>
+                  <span>BUỔI CHIỀU</span>
+                  <h2>MƯỜNG</h2>
+                  <p>Khám phá cộng đồng, nếp sống và hành trình văn hoá bản địa</p>
+                  <i/>
+                </div>
+              </header>
+              <div className="tour01-reference-list">
+                {tour01AfternoonItinerary.map(([time,title,I,desc],index)=><div className="tour01-reference-item" key={time+title+index}>
+                  <div className="tour01-reference-rail"><span>{String(tour01SplitIndex+index+1).padStart(2,'0')}</span></div>
+                  <div className="tour01-reference-time">{time}</div>
+                  <div className="tour01-reference-icon"><I/></div>
+                  <div className="tour01-reference-copy"><b>{title}</b><p>{desc}</p></div>
+                  <div className="tour01-reference-arrow"><ArrowRight/></div>
+                </div>)}
+              </div>
+            </article>
+          </div>
+        </>:<div className="tour-itinerary">
+          <h2>Lịch trình trải nghiệm</h2>
           {currentItinerary.length===0?<p>BTC đang cập nhật lịch trình chi tiết.</p>:<div className="tour-itinerary-list">
             {currentItinerary.map(([time,title,I,desc],index)=><div key={time+title+index}>
               <span className="tour-time">{time}</span>
@@ -272,7 +320,7 @@ export default function TourPage(){
               <div><b>{title}</b><p>{desc}</p></div>
             </div>)}
           </div>}
-        </div>
+        </div>}
 
         <div className="tour-highlights">
           <div className="tour01-block-title"><h2>Điểm nhấn của hành trình</h2><span>Đi sâu · gặp thật · nghe thật</span></div>
