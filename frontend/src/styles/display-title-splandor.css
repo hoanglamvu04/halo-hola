@@ -1,0 +1,117 @@
+/* HALO HOLA — display title font layer.
+   Splandor is a commercial typeface. This stylesheet prefers an installed or
+   properly licensed webfont named "Splandor" / "EFCO Splandor"; serif fallbacks
+   keep Vietnamese headings readable when the webfont is unavailable. */
+
+:root{
+  --halo-display-font:'Splandor','EFCO Splandor','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+
+  /* Reuse the two existing shared title systems instead of restyling every
+     homepage/public-page heading independently. */
+  --home-title-font-family:var(--halo-display-font);
+  --page-title-font-family:var(--halo-display-font);
+  --home-title-font-weight:400;
+  --page-title-font-weight:400;
+  --home-title-letter-spacing:-.02em;
+  --page-title-letter-spacing:-.02em;
+}
+
+/* Major homepage display titles are already routed through
+   home-shared-titles.css; these selectors keep the intended font even where
+   older patch styles set a font directly. */
+.home-hero-copy h1,
+.campaign-live .live-counter h2,
+.change-band .change-copy h2,
+.themes-showcase .themes-showcase-title h2,
+.color-section .color-copy h2,
+.home-tour-section .home-tour-title h2,
+.home-map-live-copy h2,
+.top52-showcase .top52-title-block h2,
+.we-banner .we-overlay h2{
+  font-family:var(--halo-display-font)!important;
+  font-weight:400!important;
+  letter-spacing:-.02em!important;
+}
+
+/* Main titles on public pages covered by page-shared-titles.css. */
+.page-hero-copy h1,
+.tour-page-copy h1,
+.stories-intro-inner>div:first-child>h1,
+.top52-live-copy h1,
+.theme-hero-copy h1,
+.story-detail-copy h1,
+.artwork-showcase-info h1,
+.hello-card h1{
+  font-family:var(--halo-display-font)!important;
+  font-weight:400!important;
+  letter-spacing:-.02em!important;
+}
+
+/* Public-page heroes that currently live outside the shared title system. */
+.calendar2027-hero-copy h1,
+.partners-hero-copy h1,
+.lookup-modern-copy h1,
+.rules4-hero h1,
+.hola-day-hero--editorial h1{
+  font-family:var(--halo-display-font)!important;
+  font-weight:400!important;
+  letter-spacing:-.02em!important;
+}
+
+/* Keep accent fragments in the same face rather than falling back to older
+   page-specific serif/sans declarations. */
+.home-hero-copy h1>span,
+.home-hero-copy h1>em,
+.themes-showcase .themes-showcase-title h2>span,
+.themes-showcase .themes-showcase-title h2>em,
+.color-section .color-copy h2>span,
+.color-section .color-copy h2>em,
+.page-hero-copy h1>span,
+.page-hero-copy h1>em,
+.tour-page-copy h1>span,
+.tour-page-copy h1>em,
+.calendar2027-hero-copy h1>em,
+.partners-hero-copy h1>em,
+.lookup-modern-copy h1>em{
+  font-family:inherit!important;
+  font-weight:inherit!important;
+  letter-spacing:inherit!important;
+}
+
+/* Tour has a later typography cleanup layer with strong direct selectors.
+   Restrict this override to the large hero title only; itinerary/body type is
+   intentionally left untouched. */
+.tour-page-ref .tour-page-copy h1,
+.tour-page-ref .tour-page-copy h1>span,
+.tour-page-ref .tour-page-copy h1>em{
+  font-family:var(--halo-display-font)!important;
+  font-weight:400!important;
+  letter-spacing:-.02em!important;
+}
+
+@media(max-width:760px){
+  .home-hero-copy h1,
+  .campaign-live .live-counter h2,
+  .change-band .change-copy h2,
+  .themes-showcase .themes-showcase-title h2,
+  .color-section .color-copy h2,
+  .home-tour-section .home-tour-title h2,
+  .home-map-live-copy h2,
+  .top52-showcase .top52-title-block h2,
+  .we-banner .we-overlay h2,
+  .page-hero-copy h1,
+  .tour-page-copy h1,
+  .stories-intro-inner>div:first-child>h1,
+  .top52-live-copy h1,
+  .theme-hero-copy h1,
+  .story-detail-copy h1,
+  .artwork-showcase-info h1,
+  .hello-card h1,
+  .calendar2027-hero-copy h1,
+  .partners-hero-copy h1,
+  .lookup-modern-copy h1,
+  .rules4-hero h1,
+  .hola-day-hero--editorial h1{
+    letter-spacing:-.015em!important;
+  }
+}
