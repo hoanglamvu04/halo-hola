@@ -1,0 +1,152 @@
+/* HOLA DAY: compact section rhythm and the existing Hoa Lac color palette.
+   Load after hola-day-modern.css and hola-day-hero-editorial.css.
+   The approved hero, shared chrome, and other pages are not restyled here. */
+.hola-day-page{
+  --hd-stone:#9c643d;
+  --hd-sun:#efb54f;
+  --hd-moss:#405c36;
+  --hd-sprout:#9cbd58;
+  --hd-beige:#dccdaf;
+  --hd-harmony:#b64e2b;
+  --hd-sage-paper:#edf1e5;
+  --hd-sand-paper:#f1e7d6;
+}
+
+/* The former floating status rail is gone; its 150px clearance is not needed. */
+.hola-day-page .hola-day-agenda-section{padding:48px 0 52px}
+.hola-day-page .hola-day-touch-section,
+.hola-day-page .hola-day-experience-section,
+.hola-day-page .hola-day-final-section{padding:52px 0}
+.hola-day-page .hola-day-agenda-section{scroll-margin-top:90px}
+.hola-day-page .hola-day-touch-head,
+.hola-day-page .hola-day-experience-head{margin-bottom:28px}
+.hola-day-page .hola-day-agenda-intro>p,
+.hola-day-page .hola-day-final-copy>p{margin-top:18px}
+.hola-day-page .hola-day-agenda-note{margin-top:22px;padding-top:16px}
+.hola-day-page .hola-day-final-facts{margin-block:22px}
+
+/* Warm paper, soft green, and sand replace the repeated dark-green panels. */
+.hola-day-page .hola-day-agenda-section{background:var(--hd-cream)}
+.hola-day-page .hola-day-agenda-intro .hola-day-section-label,
+.hola-day-page .hola-day-agenda-note>svg{color:var(--hd-stone)}
+.hola-day-page .hola-day-touch-section{background:var(--hd-sage-paper);color:var(--hd-ink)}
+.hola-day-page .hola-day-touch-head .hola-day-section-label{color:var(--hd-moss)}
+.hola-day-page .hola-day-touch-head h2,
+.hola-day-page .hola-day-touch-list h3{color:var(--hd-green)}
+.hola-day-page .hola-day-touch-head>p,
+.hola-day-page .hola-day-touch-list p{color:#58664f}
+.hola-day-page .hola-day-touch-list{border-top-color:rgba(64,92,54,.24)}
+.hola-day-page .hola-day-touch-list article{min-height:76px;padding-block:12px;border-bottom-color:rgba(64,92,54,.18)}
+.hola-day-page .hola-day-touch-list article>b{color:var(--hd-moss)}
+.hola-day-page .hola-day-touch-list article:hover>b{color:var(--hd-green)}
+.hola-day-page .hola-day-touch-image{min-height:0;overflow:hidden;border-radius:8px}
+.hola-day-page .hola-day-touch-image>img{position:absolute;inset:0}
+.hola-day-page .hola-day-touch-image-note svg{color:var(--hd-sun)}
+.hola-day-page .hola-day-experience-section{background:var(--hd-paper)}
+.hola-day-page .hola-day-experience-head .hola-day-section-label{color:var(--hd-stone)}
+.hola-day-page .hola-day-final-section{background:var(--hd-sand-paper);color:var(--hd-ink)}
+.hola-day-page .hola-day-final-copy .hola-day-section-label{color:#925532}
+.hola-day-page .hola-day-final-copy h2,
+.hola-day-page .hola-day-info-lines h3{color:var(--hd-green)}
+.hola-day-page .hola-day-final-copy>p,
+.hola-day-page .hola-day-info-lines p{color:#665f51}
+.hola-day-page .hola-day-final-facts span{color:var(--hd-green)}
+.hola-day-page .hola-day-final-facts svg{color:#925532}
+.hola-day-page .hola-day-info-lines{border-top-color:rgba(156,100,61,.28)}
+.hola-day-page .hola-day-info-lines article{padding-block:18px;border-bottom-color:rgba(156,100,61,.2)}
+.hola-day-page .hola-day-info-lines small{color:#75624d}
+.hola-day-page .hola-day-final-section .hola-day-primary{
+  background:#b64e2b;
+  color:#fff;
+  box-shadow:none;
+  min-height:46px;
+}
+.hola-day-page .hola-day-final-section .hola-day-primary:hover{background:#9d4123;color:#fff}
+.hola-day-page .hola-day-final-section .hola-day-primary:focus-visible{outline-color:var(--hd-moss)}
+
+/* Small numbered swatches echo the homepage colors without adding cards. */
+.hola-day-page :is(.hola-day-agenda-row,.hola-day-touch-list article,.hola-day-experience-card,.hola-day-info-lines article){
+  --hd-item-color:var(--hd-stone);
+  --hd-item-ink:#fff;
+}
+.hola-day-page :is(.hola-day-agenda-row,.hola-day-touch-list article,.hola-day-experience-card,.hola-day-info-lines article):nth-child(2){
+  --hd-item-color:var(--hd-sun);
+  --hd-item-ink:#173d2d;
+}
+.hola-day-page :is(.hola-day-agenda-row,.hola-day-touch-list article,.hola-day-info-lines article):nth-child(3){--hd-item-color:var(--hd-moss)}
+.hola-day-page :is(.hola-day-agenda-row,.hola-day-touch-list article):nth-child(4),
+.hola-day-page .hola-day-experience-card:nth-child(3){
+  --hd-item-color:var(--hd-sprout);
+  --hd-item-ink:#173d2d;
+}
+.hola-day-page :is(.hola-day-agenda-row,.hola-day-touch-list article):nth-child(5){
+  --hd-item-color:var(--hd-beige);
+  --hd-item-ink:#173d2d;
+}
+.hola-day-page .hola-day-touch-list article:nth-child(6){--hd-item-color:var(--hd-harmony)}
+.hola-day-page .hola-day-agenda-index,
+.hola-day-page .hola-day-touch-list article>span,
+.hola-day-page .hola-day-info-lines article>span{
+  display:grid;
+  place-items:center;
+  align-self:center;
+  width:30px;
+  height:30px;
+  padding:0;
+  border-radius:50%;
+  background:var(--hd-item-color);
+  color:var(--hd-item-ink);
+  font-size:10px;
+  font-weight:750;
+  line-height:1;
+}
+.hola-day-page .hola-day-agenda-row{min-height:108px;padding-block:14px}
+.hola-day-page .hola-day-agenda-row:hover{padding-inline:0}
+.hola-day-page .hola-day-agenda-thumb{border-radius:5px}
+.hola-day-page .hola-day-experience-media{height:205px;border-radius:7px}
+.hola-day-page .hola-day-experience-body{padding-top:16px}
+.hola-day-page .hola-day-experience-label{color:var(--hd-moss);gap:10px}
+.hola-day-page .hola-day-experience-label svg{
+  box-sizing:content-box;
+  width:17px;
+  height:17px;
+  padding:8px;
+  flex:none;
+  border-radius:50%;
+  background:var(--hd-item-color);
+  color:var(--hd-item-ink);
+}
+.hola-day-page .hola-day-experience-card p{color:#606c62}
+
+@media(max-width:960px){
+  .hola-day-page .hola-day-agenda-section{padding:40px 0}
+  .hola-day-page .hola-day-touch-section,
+  .hola-day-page .hola-day-experience-section,
+  .hola-day-page .hola-day-final-section{padding:44px 0}
+  .hola-day-page .hola-day-agenda-layout,
+  .hola-day-page .hola-day-touch-grid{gap:26px}
+  .hola-day-page .hola-day-touch-image{aspect-ratio:16/9;max-height:320px}
+  .hola-day-page .hola-day-experience-body{padding-top:8px}
+}
+@media(max-width:680px){
+  .hola-day-page .hola-day-agenda-section{padding:32px 0 36px}
+  .hola-day-page .hola-day-touch-section,
+  .hola-day-page .hola-day-experience-section,
+  .hola-day-page .hola-day-final-section{padding:36px 0}
+  .hola-day-page .hola-day-touch-head,
+  .hola-day-page .hola-day-experience-head{margin-bottom:22px;gap:18px}
+  .hola-day-page .hola-day-agenda-layout,
+  .hola-day-page .hola-day-touch-grid,
+  .hola-day-page .hola-day-final-grid{gap:22px}
+  .hola-day-page .hola-day-agenda-note{margin-top:18px;padding-top:14px}
+  .hola-day-page .hola-day-agenda-row{min-height:94px;padding-block:12px}
+  .hola-day-page .hola-day-agenda-index,
+  .hola-day-page .hola-day-touch-list article>span,
+  .hola-day-page .hola-day-info-lines article>span{width:27px;height:27px}
+  .hola-day-page .hola-day-touch-image{max-height:240px}
+  .hola-day-page .hola-day-touch-list article{min-height:70px;gap:10px}
+  .hola-day-page .hola-day-experience-media{height:185px}
+  .hola-day-page .hola-day-experience-body{padding:14px 0 2px}
+  .hola-day-page .hola-day-final-facts{margin-block:18px}
+  .hola-day-page .hola-day-info-lines article{padding-block:16px}
+}
