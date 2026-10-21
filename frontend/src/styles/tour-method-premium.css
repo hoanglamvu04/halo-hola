@@ -79,8 +79,7 @@
 
 .tour-page-ref .tour01-output-grid article{
   position:relative!important;
-  min-height:170px!important;
-  padding:20px 19px 18px!important;
+  min-height:auto!important;
   border:1px solid rgba(73,89,78,.11)!important;
   border-radius:16px!important;
   background:rgba(255,251,244,.94)!important;
@@ -204,8 +203,6 @@
     gap:9px!important;
   }
   .tour-page-ref .tour01-output-grid article{
-    min-height:142px!important;
-    padding:17px!important;
     border-radius:15px!important;
   }
   .tour-page-ref .tour01-output-grid article:before{
