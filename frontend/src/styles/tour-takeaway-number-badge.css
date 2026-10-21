@@ -1,0 +1,30 @@
+/* Match takeaway-card number badges to the compact orange corner badges used by the principles cards. */
+.tour-page-ref .tour01-output-grid article:before{
+  top:14px!important;
+  right:14px!important;
+  width:34px!important;
+  height:28px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fffaf3!important;
+  border:1px solid rgba(216,95,43,.18)!important;
+  box-shadow:0 4px 12px rgba(63,51,40,.035)!important;
+  color:var(--t-orange)!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:.05em!important;
+}
+
+@media(max-width:720px){
+  .tour-page-ref .tour01-output-grid article:before{
+    top:12px!important;
+    right:12px!important;
+    width:32px!important;
+    height:26px!important;
+    font-size:9px!important;
+  }
+}
