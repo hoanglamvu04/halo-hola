@@ -100,6 +100,18 @@
   letter-spacing:-.035em!important;
 }
 
+/* Campaign participation title: poster treatment. Keep Fraunces, but make this
+   one section more graphic, compact and intentional. */
+.campaign-live .live-counter h2{
+  font-size:clamp(2.25rem,3.35vw,3.65rem)!important;
+  font-weight:900!important;
+  line-height:.92!important;
+  letter-spacing:.005em!important;
+  text-transform:uppercase!important;
+  text-wrap:balance!important;
+  max-width:12ch!important;
+}
+
 @media(max-width:760px){
   .home-hero-copy h1,
   .campaign-live .live-counter h2,
@@ -125,5 +137,12 @@
   .hola-day-hero--editorial h1{
     letter-spacing:-.03em!important;
     line-height:.98!important;
+  }
+
+  .campaign-live .live-counter h2{
+    font-size:clamp(2rem,10.5vw,2.75rem)!important;
+    line-height:.94!important;
+    letter-spacing:.005em!important;
+    max-width:11ch!important;
   }
 }
