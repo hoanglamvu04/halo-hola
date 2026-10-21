@@ -164,6 +164,146 @@
   opacity:1!important;
 }
 
+/* Theme hero — horizontal community artwork carousel.
+   Public submission images take priority in ThemePage.jsx; when none are
+   available the existing theme image is used as the fallback slide. */
+.theme-page-ref .theme-hero-visual{
+  position:relative!important;
+  min-height:0!important;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  border-radius:32px;
+  touch-action:pan-y;
+}
+.theme-page-ref .theme-hero-image-wrap{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+  border:8px solid rgba(255,251,244,.97)!important;
+  border-radius:32px!important;
+  background:#e7e6dc;
+  box-shadow:0 24px 58px rgba(66,52,32,.12)!important;
+}
+.theme-page-ref .theme-hero-image-wrap:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,38,29,.02) 54%,rgba(8,38,29,.24) 100%);
+}
+.theme-page-ref .theme-hero-image-wrap img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:saturate(.97) contrast(.99)!important;
+  animation:theme-hero-slide-in .28s ease both;
+}
+@keyframes theme-hero-slide-in{
+  from{opacity:.55;transform:scale(1.008)}
+  to{opacity:1;transform:scale(1)}
+}
+.theme-hero-artwork-credit{
+  position:absolute;
+  z-index:5;
+  left:22px;
+  top:22px;
+  max-width:min(360px,52%);
+  display:grid;
+  gap:3px;
+  padding:10px 13px;
+  border:1px solid rgba(255,255,255,.48);
+  border-radius:13px;
+  background:rgba(15,66,49,.76);
+  color:#fff;
+  backdrop-filter:blur(9px);
+  box-shadow:0 9px 24px rgba(16,37,29,.12);
+}
+.theme-hero-artwork-credit span{
+  font-size:.52rem;
+  font-weight:800;
+  letter-spacing:.13em;
+  color:#f2c6a8;
+}
+.theme-hero-artwork-credit b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:.74rem;
+  line-height:1.2;
+}
+.theme-hero-slider-dots{
+  position:absolute;
+  z-index:6;
+  left:22px;
+  bottom:22px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(15,66,49,.72);
+  backdrop-filter:blur(9px);
+}
+.theme-hero-slider-dots button{
+  width:8px;
+  height:8px;
+  padding:0;
+  border:0;
+  border-radius:999px;
+  background:rgba(255,255,255,.5);
+  cursor:pointer;
+  transition:width .18s ease,background .18s ease;
+}
+.theme-hero-slider-dots button.active{
+  width:30px;
+  background:#fff;
+}
+.theme-hero-slider-controls{
+  position:absolute;
+  z-index:6;
+  right:22px;
+  bottom:20px;
+  display:grid;
+  grid-template-columns:46px auto 46px;
+  align-items:center;
+  gap:8px;
+  padding:7px;
+  border-radius:999px;
+  background:rgba(255,251,244,.95);
+  box-shadow:0 12px 28px rgba(29,45,37,.16);
+  backdrop-filter:blur(10px);
+}
+.theme-hero-slider-controls button{
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#174a38;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,color .18s ease;
+}
+.theme-hero-slider-controls button:hover{
+  transform:translateY(-1px);
+  background:#174a38;
+  color:#fff;
+}
+.theme-hero-slider-controls svg{width:19px;height:19px}
+.theme-hero-slider-controls span{
+  min-width:58px;
+  color:#52645b;
+  font-size:.72rem;
+  font-weight:800;
+  text-align:center;
+  letter-spacing:.04em;
+}
+
 @media(max-width:1100px){
   .theme-related-grid.theme-gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
