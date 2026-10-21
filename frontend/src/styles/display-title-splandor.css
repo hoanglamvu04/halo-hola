@@ -129,7 +129,13 @@
   line-height:1.08!important;
   letter-spacing:.005em!important;
   text-transform:uppercase!important;
-  text-wrap:balance!important;
+  text-wrap:wrap!important;
+  white-space:normal!important;
+  width:100%!important;
+  max-width:none!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  hyphens:none!important;
 }
 
 /* Homepage section titles: one step smaller than before. */
@@ -162,10 +168,31 @@
   font-size:clamp(2.4rem,3.75vw,3.95rem)!important;
 }
 
-/* Keep the campaign headline on a controlled poster measure, but use the same
-   global title size and line-height as the other major section headings. */
-.campaign-live .live-counter h2{
-  max-width:13ch!important;
+/* Do not force editorial line breaks: every major title should use all
+   available width and wrap only when its real container runs out of space. */
+.home-hero-copy h1>br,
+.campaign-live .live-counter h2>br,
+.change-band .change-copy h2>br,
+.themes-showcase .themes-showcase-title h2>br,
+.color-section .color-copy h2>br,
+.home-tour-section .home-tour-title h2>br,
+.home-map-live-copy h2>br,
+.top52-showcase .top52-title-block h2>br,
+.we-banner .we-overlay h2>br,
+.page-hero-copy h1>br,
+.tour-page-copy h1>br,
+.stories-intro-inner>div:first-child>h1>br,
+.top52-live-copy h1>br,
+.theme-hero-copy h1>br,
+.story-detail-copy h1>br,
+.artwork-showcase-info h1>br,
+.hello-card h1>br,
+.calendar2027-hero-copy h1>br,
+.partners-hero-copy h1>br,
+.lookup-modern-copy h1>br,
+.rules4-hero h1>br,
+.hola-day-hero--editorial h1>br{
+  display:none!important;
 }
 
 @media(max-width:760px){
@@ -227,5 +254,5 @@
     letter-spacing:.002em!important;
   }
 
-  .campaign-live .live-counter h2{max-width:12ch!important;}
+  .campaign-live .live-counter h2{max-width:none!important;}
 }
