@@ -126,7 +126,7 @@
 .rules4-hero h1,
 .hola-day-hero--editorial h1{
   font-weight:900!important;
-  line-height:1.02!important;
+  line-height:1.08!important;
   letter-spacing:.005em!important;
   text-transform:uppercase!important;
   text-wrap:balance!important;
@@ -210,7 +210,7 @@
   .rules4-hero h1,
   .hola-day-hero--editorial h1{
     font-size:clamp(2rem,8.7vw,2.6rem)!important;
-    line-height:1.03!important;
+    line-height:1.09!important;
     letter-spacing:.002em!important;
   }
 
@@ -223,7 +223,7 @@
   .top52-showcase .top52-title-block h2,
   .we-banner .we-overlay h2{
     font-size:clamp(1.8rem,7.8vw,2.35rem)!important;
-    line-height:1.03!important;
+    line-height:1.09!important;
     letter-spacing:.002em!important;
   }
 
