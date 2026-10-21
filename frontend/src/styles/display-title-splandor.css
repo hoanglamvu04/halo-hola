@@ -164,7 +164,9 @@
 
 /* The campaign title benefits from an intentionally narrow poster measure. */
 .campaign-live .live-counter h2{
-  max-width:12ch!important;
+  max-width:13ch!important;
+  font-size:clamp(2.05rem,3vw,3.3rem)!important;
+  line-height:1.02!important;
 }
 
 @media(max-width:760px){
@@ -226,5 +228,9 @@
     letter-spacing:.002em!important;
   }
 
-  .campaign-live .live-counter h2{max-width:11ch!important;}
+  .campaign-live .live-counter h2{
+    max-width:12ch!important;
+    font-size:clamp(1.8rem,8vw,2.35rem)!important;
+    line-height:1.02!important;
+  }
 }
