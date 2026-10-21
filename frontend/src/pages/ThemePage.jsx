@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, MapPin, Users, BookOpen, Eye, Play,
@@ -30,10 +30,58 @@ function normalizePage(rows,offset=0){
   }
 }
 
+const HERO_SLIDE_LIMIT=5
+
+function buildThemeHeroSlides(theme,artworks){
+  const slides=[]
+  const seen=new Set()
+  const source=Array.isArray(artworks)?artworks:[]
+
+  const addSlide=(src,artwork,mediaIndex=0)=>{
+    if(!src||seen.has(src)||slides.length>=HERO_SLIDE_LIMIT)return
+    seen.add(src)
+    slides.push({
+      src,
+      alt:artwork?.title||artwork?.code||theme?.title||'Hòa Lạc',
+      artwork,
+      mediaIndex
+    })
+  }
+
+  // First pass: prefer one real image from each public submission so the
+  // carousel represents as many community viewpoints as possible.
+  source.forEach(artwork=>{
+    const imageMedia=Array.isArray(artwork?.media)
+      ? artwork.media.filter(media=>String(media?.mimeType||'').toLowerCase().startsWith('image/'))
+      : []
+    addSlide(imageMedia[0]?.url||(artwork?.type==='Photo'?artwork?.image:null),artwork,0)
+  })
+
+  // Second pass: if there are fewer than five submissions with images, fill the
+  // remaining slots with additional photos from those same public submissions.
+  if(slides.length<HERO_SLIDE_LIMIT){
+    source.forEach(artwork=>{
+      const imageMedia=Array.isArray(artwork?.media)
+        ? artwork.media.filter(media=>String(media?.mimeType||'').toLowerCase().startsWith('image/'))
+        : []
+      imageMedia.slice(1).forEach((media,index)=>addSlide(media?.url,artwork,index+1))
+    })
+  }
+
+  // No public submission image yet: fall back to the theme artwork that the old
+  // hero already used instead of showing an empty carousel.
+  if(slides.length===0&&theme?.image)addSlide(theme.image,null,0)
+
+  return slides.slice(0,HERO_SLIDE_LIMIT)
+}
+
 export default function ThemePage(){
   const {slug}=useParams()
   const [theme,setTheme]=useState(null)
   const [related,setRelated]=useState([])
+  const [heroArtworks,setHeroArtworks]=useState([])
+  const [heroSlide,setHeroSlide]=useState(0)
+  const heroTouchStartX=useRef(null)
   const [activeType,setActiveType]=useState('')
   const [totalCount,setTotalCount]=useState(0)
   const [hasMore,setHasMore]=useState(false)
@@ -50,6 +98,8 @@ export default function ThemePage(){
     setCollectionError('')
     setActiveType('')
     setRelated([])
+    setHeroArtworks([])
+    setHeroSlide(0)
 
     getTheme(slug).then(async data=>{
       if(!alive)return
@@ -58,6 +108,8 @@ export default function ThemePage(){
       if(!alive)return
       const page=normalizePage(rows,0)
       setRelated(page.items)
+      setHeroArtworks(page.items)
+      setHeroSlide(0)
       setTotalCount(page.total)
       setHasMore(page.hasMore)
     }).catch(err=>{if(alive)setError(err.message)}).finally(()=>{if(alive)setLoading(false)})
@@ -108,6 +160,25 @@ export default function ThemePage(){
   if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
 
   const visibleCount=Number(theme.artworkCount ?? totalCount ?? 0)
+  const heroSlides=buildThemeHeroSlides(theme,heroArtworks)
+  const activeHeroIndex=heroSlides.length?Math.min(heroSlide,heroSlides.length-1):0
+  const activeHero=heroSlides[activeHeroIndex]
+  const showHeroSlide=(index)=>{
+    if(heroSlides.length<2)return
+    const next=(index+heroSlides.length)%heroSlides.length
+    setHeroSlide(next)
+  }
+  const handleHeroTouchStart=(event)=>{
+    heroTouchStartX.current=event.touches?.[0]?.clientX??null
+  }
+  const handleHeroTouchEnd=(event)=>{
+    if(heroSlides.length<2||heroTouchStartX.current===null)return
+    const endX=event.changedTouches?.[0]?.clientX
+    const delta=typeof endX==='number'?endX-heroTouchStartX.current:0
+    heroTouchStartX.current=null
+    if(Math.abs(delta)<42)return
+    showHeroSlide(activeHeroIndex+(delta<0?1:-1))
+  }
 
   return <main className="theme-page-ref">
     <section className="theme-hero-ref">
@@ -133,10 +204,32 @@ export default function ThemePage(){
           </div>
         </div>
 
-        <div className="theme-hero-visual">
-          <div className="theme-hero-image-wrap">{theme.image?<img src={theme.image} alt={theme.title}/>:<div className="theme-card-placeholder"/>}</div>
-          <div className="theme-location-card"><MapPin/><div><b>{theme.locationLabel||'Hòa Lạc'}</b><small>HÒA LẠC, HÀ NỘI</small></div></div>
-          <div className="theme-hero-note">Hòa Lạc<br/>hôm nay<br/>và mai sau...<i/></div>
+        <div className="theme-hero-visual" onTouchStart={handleHeroTouchStart} onTouchEnd={handleHeroTouchEnd}>
+          <div className="theme-hero-image-wrap">
+            {activeHero?<img key={activeHero.src} src={activeHero.src} alt={activeHero.alt}/>:<div className="theme-card-placeholder"/>}
+          </div>
+
+          {activeHero?.artwork&&<Link className="theme-hero-artwork-credit" to={'/tac-pham/'+activeHero.artwork.slug}>
+            <span>GÓC NHÌN CỘNG ĐỒNG</span>
+            <b>{activeHero.artwork.title||activeHero.artwork.code}</b>
+          </Link>}
+
+          {heroSlides.length>1&&<>
+            <div className="theme-hero-slider-dots" aria-label="Chọn ảnh chủ đề">
+              {heroSlides.map((slide,index)=><button
+                type="button"
+                key={slide.src}
+                className={index===activeHeroIndex?'active':''}
+                onClick={()=>showHeroSlide(index)}
+                aria-label={'Xem ảnh '+String(index+1).padStart(2,'0')}
+              />)}
+            </div>
+            <div className="theme-hero-slider-controls" aria-label="Điều hướng ảnh chủ đề">
+              <button type="button" onClick={()=>showHeroSlide(activeHeroIndex-1)} aria-label="Ảnh trước"><ArrowLeft/></button>
+              <span>{String(activeHeroIndex+1).padStart(2,'0')} / {String(heroSlides.length).padStart(2,'0')}</span>
+              <button type="button" onClick={()=>showHeroSlide(activeHeroIndex+1)} aria-label="Ảnh tiếp theo"><ArrowRight/></button>
+            </div>
+          </>}
         </div>
       </div>
     </section>
