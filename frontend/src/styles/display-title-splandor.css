@@ -1,24 +1,22 @@
-/* HALO HOLA — display title font layer.
-   Splandor is a commercial typeface. This stylesheet prefers an installed or
-   properly licensed webfont named "Splandor" / "EFCO Splandor"; serif fallbacks
-   keep Vietnamese headings readable when the webfont is unavailable. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+
+/* HALO HOLA — major display title layer.
+   Reference direction: bold geometric sans, close to the Montserrat treatment
+   in the supplied visual. Body copy, navigation, buttons and small card text
+   intentionally keep their existing typography. */
 
 :root{
-  --halo-display-font:'Splandor','EFCO Splandor','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  --halo-display-font:'Montserrat',Inter,'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
-  /* Reuse the two existing shared title systems instead of restyling every
-     homepage/public-page heading independently. */
   --home-title-font-family:var(--halo-display-font);
   --page-title-font-family:var(--halo-display-font);
-  --home-title-font-weight:400;
-  --page-title-font-weight:400;
-  --home-title-letter-spacing:-.02em;
-  --page-title-letter-spacing:-.02em;
+  --home-title-font-weight:800;
+  --page-title-font-weight:800;
+  --home-title-letter-spacing:-.045em;
+  --page-title-letter-spacing:-.045em;
 }
 
-/* Major homepage display titles are already routed through
-   home-shared-titles.css; these selectors keep the intended font even where
-   older patch styles set a font directly. */
+/* Major homepage display titles. */
 .home-hero-copy h1,
 .campaign-live .live-counter h2,
 .change-band .change-copy h2,
@@ -29,11 +27,11 @@
 .top52-showcase .top52-title-block h2,
 .we-banner .we-overlay h2{
   font-family:var(--halo-display-font)!important;
-  font-weight:400!important;
-  letter-spacing:-.02em!important;
+  font-weight:800!important;
+  letter-spacing:-.045em!important;
 }
 
-/* Main titles on public pages covered by page-shared-titles.css. */
+/* Main titles on public pages already covered by page-shared-titles.css. */
 .page-hero-copy h1,
 .tour-page-copy h1,
 .stories-intro-inner>div:first-child>h1,
@@ -43,23 +41,22 @@
 .artwork-showcase-info h1,
 .hello-card h1{
   font-family:var(--halo-display-font)!important;
-  font-weight:400!important;
-  letter-spacing:-.02em!important;
+  font-weight:800!important;
+  letter-spacing:-.045em!important;
 }
 
-/* Public-page heroes that currently live outside the shared title system. */
+/* Public-page heroes that live outside the shared title system. */
 .calendar2027-hero-copy h1,
 .partners-hero-copy h1,
 .lookup-modern-copy h1,
 .rules4-hero h1,
 .hola-day-hero--editorial h1{
   font-family:var(--halo-display-font)!important;
-  font-weight:400!important;
-  letter-spacing:-.02em!important;
+  font-weight:800!important;
+  letter-spacing:-.045em!important;
 }
 
-/* Keep accent fragments in the same face rather than falling back to older
-   page-specific serif/sans declarations. */
+/* Accent fragments keep page colors but use the same bold display face. */
 .home-hero-copy h1>span,
 .home-hero-copy h1>em,
 .themes-showcase .themes-showcase-title h2>span,
@@ -78,15 +75,14 @@
   letter-spacing:inherit!important;
 }
 
-/* Tour has a later typography cleanup layer with strong direct selectors.
-   Restrict this override to the large hero title only; itinerary/body type is
-   intentionally left untouched. */
+/* Tour has strong page-specific typography rules; keep this override scoped to
+   its main hero title so itinerary and editorial subheads remain untouched. */
 .tour-page-ref .tour-page-copy h1,
 .tour-page-ref .tour-page-copy h1>span,
 .tour-page-ref .tour-page-copy h1>em{
   font-family:var(--halo-display-font)!important;
-  font-weight:400!important;
-  letter-spacing:-.02em!important;
+  font-weight:800!important;
+  letter-spacing:-.045em!important;
 }
 
 @media(max-width:760px){
@@ -112,6 +108,7 @@
   .lookup-modern-copy h1,
   .rules4-hero h1,
   .hola-day-hero--editorial h1{
-    letter-spacing:-.015em!important;
+    font-weight:800!important;
+    letter-spacing:-.04em!important;
   }
 }
