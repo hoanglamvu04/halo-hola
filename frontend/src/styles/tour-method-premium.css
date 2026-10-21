@@ -178,6 +178,112 @@
   text-transform:uppercase!important;
 }
 
+/* Tour #01 — replace the internal production checklist with a public inspiration block. */
+.tour-page-ref .tour01-storykit-section{
+  padding:64px 0!important;
+  background:
+    radial-gradient(circle at 84% 22%,rgba(255,255,255,.035),transparent 26%),
+    #0e4a3d!important;
+}
+.tour-page-ref .tour01-storykit-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.45fr)!important;
+  gap:72px!important;
+  align-items:center!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child .eyebrow{
+  font-size:0!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child .eyebrow:after{
+  content:'MỖI NGƯỜI SẼ NHÌN HÒA LẠC THEO MỘT CÁCH';
+  display:block;
+  color:#f28b56!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.3!important;
+  letter-spacing:.14em!important;
+  text-transform:uppercase!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child h2{
+  font-size:0!important;
+  line-height:1!important;
+  margin:22px 0 16px!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child h2:after{
+  content:'Bạn có thể bắt đầu từ bất cứ điều gì khiến mình dừng lại.';
+  display:block;
+  max-width:560px;
+  color:#fffdf7!important;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
+  font-size:clamp(36px,3.6vw,54px)!important;
+  font-weight:760!important;
+  line-height:1.04!important;
+  letter-spacing:-.04em!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child>p{
+  font-size:0!important;
+  line-height:1!important;
+}
+.tour-page-ref .tour01-storykit-grid>div:first-child>p:after{
+  content:'Một người bạn gặp, một mái nhà cũ, một nghề đang được giữ, một món ăn, một câu nói, một ký ức hay chỉ là một khoảnh khắc rất riêng — tất cả đều có thể trở thành góc nhìn của bạn về Hòa Lạc.';
+  display:block;
+  max-width:600px;
+  color:rgba(255,255,255,.76)!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:15px!important;
+  font-weight:420!important;
+  line-height:1.72!important;
+  letter-spacing:0!important;
+}
+.tour-page-ref .tour01-storykit-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:34px!important;
+  row-gap:0!important;
+}
+.tour-page-ref .tour01-storykit-list>div{
+  min-height:68px!important;
+  padding:16px 0!important;
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  border-bottom:1px solid rgba(255,255,255,.14)!important;
+}
+.tour-page-ref .tour01-storykit-list>div svg{
+  display:none!important;
+}
+.tour-page-ref .tour01-storykit-list>div>span{
+  color:#f39a66!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:.04em!important;
+}
+.tour-page-ref .tour01-storykit-list>div>b{
+  font-size:0!important;
+  line-height:1!important;
+}
+.tour-page-ref .tour01-storykit-list>div>b:after{
+  display:block;
+  color:#fffdf8!important;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
+  font-size:16px!important;
+  font-weight:680!important;
+  line-height:1.25!important;
+  letter-spacing:-.01em!important;
+}
+.tour-page-ref .tour01-storykit-list>div:nth-child(1)>b:after{content:'Con người'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(2)>b:after{content:'Nơi chốn'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(3)>b:after{content:'Làng & nghề'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(4)>b:after{content:'Kiến trúc'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(5)>b:after{content:'Món ăn'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(6)>b:after{content:'Ký ức'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(7)>b:after{content:'Một câu nói'}
+.tour-page-ref .tour01-storykit-list>div:nth-child(8)>b:after{content:'Một khoảnh khắc'}
+
 @media(max-width:1180px){
   .tour-page-ref .tour01-output-section .tour01-section-head{
     grid-template-columns:1fr!important;
@@ -185,6 +291,10 @@
   }
   .tour-page-ref .tour01-output-grid{
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .tour-page-ref .tour01-storykit-grid{
+    grid-template-columns:1fr!important;
+    gap:34px!important;
   }
 }
 
@@ -225,5 +335,24 @@
     margin-top:20px!important;
     font-size:10px!important;
     line-height:1.55!important;
+  }
+  .tour-page-ref .tour01-storykit-section{
+    padding:48px 0!important;
+  }
+  .tour-page-ref .tour01-storykit-grid{
+    gap:28px!important;
+  }
+  .tour-page-ref .tour01-storykit-grid>div:first-child h2:after{
+    font-size:36px!important;
+  }
+  .tour-page-ref .tour01-storykit-grid>div:first-child>p:after{
+    font-size:14px!important;
+  }
+  .tour-page-ref .tour01-storykit-list{
+    grid-template-columns:1fr!important;
+  }
+  .tour-page-ref .tour01-storykit-list>div{
+    min-height:58px!important;
+    padding:13px 0!important;
   }
 }
