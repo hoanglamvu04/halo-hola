@@ -1,18 +1,18 @@
 /* HOLA TOUR #01 — public-facing values / principles section. */
 .tour-page-ref .tour01-ethics-section{
   position:relative!important;
-  padding:68px 0 74px!important;
+  padding:48px 0 52px!important;
   background:
-    radial-gradient(circle at 90% 18%,rgba(216,95,43,.045),transparent 24%),
+    radial-gradient(circle at 90% 18%,rgba(216,95,43,.04),transparent 24%),
     #f7f2e9!important;
 }
 
 .tour-page-ref .tour01-ethics-section .tour01-section-head.compact{
-  margin-bottom:28px!important;
+  margin-bottom:20px!important;
 }
 
 .tour-page-ref .tour01-ethics-section .tour01-section-head.compact>div{
-  max-width:980px!important;
+  max-width:900px!important;
 }
 
 .tour-page-ref .tour01-ethics-section .tour01-section-head.compact>div>span{
@@ -24,7 +24,7 @@
   display:block!important;
   color:var(--t-orange)!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
-  font-size:11px!important;
+  font-size:10.5px!important;
   font-weight:800!important;
   line-height:1.25!important;
   letter-spacing:.15em!important;
@@ -32,7 +32,7 @@
 }
 
 .tour-page-ref .tour01-ethics-section .tour01-section-head.compact h2{
-  margin:18px 0 0!important;
+  margin:14px 0 0!important;
   font-size:0!important;
   line-height:1!important;
 }
@@ -40,12 +40,12 @@
 .tour-page-ref .tour01-ethics-section .tour01-section-head.compact h2:after{
   content:'Đi để hiểu hơn, không chỉ để có thêm một bức ảnh.';
   display:block!important;
-  max-width:920px!important;
+  max-width:840px!important;
   color:var(--t-green)!important;
   font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
-  font-size:clamp(38px,4vw,60px)!important;
+  font-size:clamp(34px,3.5vw,50px)!important;
   font-weight:780!important;
-  line-height:1.04!important;
+  line-height:1.03!important;
   letter-spacing:-.042em!important;
 }
 
@@ -57,12 +57,12 @@
 
 .tour-page-ref .tour01-principle-grid article{
   position:relative!important;
-  min-height:190px!important;
-  padding:24px 22px 22px!important;
+  min-height:auto!important;
+  padding:22px 22px 20px!important;
   border:1px solid rgba(64,84,72,.10)!important;
-  border-radius:18px!important;
-  background:rgba(255,252,247,.9)!important;
-  box-shadow:0 10px 26px rgba(44,54,47,.035)!important;
+  border-radius:17px!important;
+  background:rgba(255,252,247,.92)!important;
+  box-shadow:0 8px 22px rgba(44,54,47,.03)!important;
   overflow:hidden!important;
 }
 
@@ -74,15 +74,21 @@
   background:linear-gradient(180deg,#de6c38,#f2a36f)!important;
 }
 
+/* Number becomes a compact corner badge, like the public gallery cards. */
 .tour-page-ref .tour01-principle-grid article>span{
-  display:inline-flex!important;
+  position:absolute!important;
+  top:14px!important;
+  right:14px!important;
+  width:34px!important;
+  height:28px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  display:flex!important;
   align-items:center!important;
   justify-content:center!important;
-  width:34px!important;
-  height:34px!important;
-  margin-bottom:26px!important;
-  border-radius:999px!important;
-  background:rgba(216,95,43,.075)!important;
+  background:#fffaf3!important;
+  border:1px solid rgba(216,95,43,.18)!important;
+  box-shadow:0 4px 12px rgba(63,51,40,.035)!important;
   color:var(--t-orange)!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
   font-size:10px!important;
@@ -93,18 +99,19 @@
 
 .tour-page-ref .tour01-principle-grid article>p{
   margin:0!important;
+  padding-right:30px!important;
   font-size:0!important;
   line-height:1!important;
 }
 
 .tour-page-ref .tour01-principle-grid article>p:before{
   display:block!important;
-  margin-bottom:9px!important;
+  margin:2px 0 8px!important;
   color:var(--t-green)!important;
   font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
-  font-size:18px!important;
+  font-size:17px!important;
   font-weight:760!important;
-  line-height:1.2!important;
+  line-height:1.18!important;
   letter-spacing:-.018em!important;
 }
 
@@ -112,9 +119,9 @@
   display:block!important;
   color:#68756e!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
-  font-size:13px!important;
+  font-size:12.5px!important;
   font-weight:410!important;
-  line-height:1.62!important;
+  line-height:1.55!important;
   letter-spacing:0!important;
 }
 
@@ -138,10 +145,13 @@
 
 @media(max-width:720px){
   .tour-page-ref .tour01-ethics-section{
-    padding:50px 0 56px!important;
+    padding:40px 0 44px!important;
+  }
+  .tour-page-ref .tour01-ethics-section .tour01-section-head.compact{
+    margin-bottom:16px!important;
   }
   .tour-page-ref .tour01-ethics-section .tour01-section-head.compact h2:after{
-    font-size:36px!important;
+    font-size:32px!important;
   }
   .tour-page-ref .tour01-principle-grid{
     grid-template-columns:1fr!important;
@@ -149,16 +159,24 @@
   }
   .tour-page-ref .tour01-principle-grid article{
     min-height:auto!important;
-    padding:19px 18px 18px!important;
+    padding:18px 18px 17px!important;
     border-radius:15px!important;
   }
   .tour-page-ref .tour01-principle-grid article>span{
-    margin-bottom:16px!important;
+    top:12px!important;
+    right:12px!important;
+    width:32px!important;
+    height:26px!important;
+    font-size:9px!important;
+  }
+  .tour-page-ref .tour01-principle-grid article>p{
+    padding-right:34px!important;
   }
   .tour-page-ref .tour01-principle-grid article>p:before{
-    font-size:17px!important;
+    font-size:16px!important;
   }
   .tour-page-ref .tour01-principle-grid article>p:after{
-    font-size:12.5px!important;
+    font-size:12px!important;
+    line-height:1.5!important;
   }
 }
