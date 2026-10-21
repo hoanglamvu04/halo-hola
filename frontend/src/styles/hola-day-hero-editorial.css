@@ -1,0 +1,233 @@
+/* HOLA DAY hero only. The modifier keeps other sections and Tour untouched. */
+.hola-day-page .hola-day-hero--editorial{
+  min-height:0;
+  background:var(--forest,#173d2d);
+  color:var(--cream,#fbf7ef);
+}
+
+.hola-day-hero--editorial .hola-day-editorial-shell{
+  width:min(1280px,calc(100% - 64px));
+  margin-inline:auto;
+}
+.hola-day-hero--editorial .hola-day-editorial-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  align-items:center;
+  gap:clamp(32px,4.5vw,64px);
+  padding-block:40px 32px;
+}
+.hola-day-hero--editorial .hola-day-editorial-copy{min-width:0}
+.hola-day-hero--editorial .hola-day-editorial-kicker{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 14px;
+  margin:0 0 18px;
+  color:#cdd9cf;
+  font-size:10px;
+  font-weight:650;
+  line-height:1.5;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.hola-day-hero--editorial .hola-day-editorial-kicker>span:first-child{color:#f1b28e}
+.hola-day-hero--editorial .hola-day-editorial-kicker>i{
+  width:24px;
+  height:1px;
+  background:rgba(251,247,239,.35);
+}
+.hola-day-page .hola-day-hero--editorial h1{
+  display:block;
+  width:auto;
+  margin:0;
+  color:var(--cream,#fbf7ef);
+  font-size:clamp(56px,6.5vw,88px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.06em;
+  text-shadow:none;
+}
+.hola-day-hero--editorial .hola-day-editorial-deck{
+  margin:18px 0 0;
+  color:var(--cream,#fbf7ef);
+  font-size:clamp(25px,2.4vw,32px);
+  font-weight:500;
+  line-height:1.2;
+  letter-spacing:-.035em;
+}
+.hola-day-hero--editorial .hola-day-editorial-description{
+  max-width:48ch;
+  margin:16px 0 0;
+  color:#d0dcd2;
+  font-size:15px;
+  line-height:1.65;
+}
+.hola-day-hero--editorial .hola-day-editorial-facts{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 20px;
+  margin-top:22px;
+  font-size:13px;
+  font-weight:550;
+  line-height:1.5;
+}
+.hola-day-hero--editorial .hola-day-editorial-facts>span{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+}
+.hola-day-hero--editorial .hola-day-editorial-facts svg{
+  flex:none;
+  width:16px;
+  height:16px;
+  color:#edaa84;
+  stroke-width:1.6;
+}
+.hola-day-hero--editorial .hola-day-editorial-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:12px 24px;
+  margin-top:24px;
+}
+.hola-day-hero--editorial .hola-day-editorial-register,
+.hola-day-hero--editorial .hola-day-editorial-schedule{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:46px;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.4;
+  text-decoration:none;
+}
+.hola-day-hero--editorial .hola-day-editorial-register{
+  padding:11px 20px;
+  border:1px solid transparent;
+  border-radius:6px;
+  background:#b64e2b;
+  color:#fff;
+  box-shadow:none;
+  transition:background .2s ease;
+}
+.hola-day-hero--editorial .hola-day-editorial-register:hover{background:#9d4123}
+.hola-day-hero--editorial .hola-day-editorial-schedule{
+  padding:8px 0;
+  color:var(--cream,#fbf7ef);
+  text-underline-offset:5px;
+}
+.hola-day-hero--editorial .hola-day-editorial-schedule:hover{text-decoration:underline}
+.hola-day-hero--editorial .hola-day-editorial-actions svg{width:17px;height:17px;flex:none}
+.hola-day-hero--editorial .hola-day-editorial-actions :focus-visible{
+  outline:2px solid var(--cream,#fbf7ef);
+  outline-offset:5px;
+}
+.hola-day-hero--editorial .hola-day-editorial-visual{min-width:0;margin:0}
+.hola-day-hero--editorial .hola-day-editorial-photo{
+  aspect-ratio:3/2;
+  overflow:hidden;
+  border-radius:5px;
+  background:#315340;
+}
+.hola-day-hero--editorial .hola-day-editorial-photo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.hola-day-hero--editorial .hola-day-editorial-visual figcaption{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:6px 18px;
+  padding-top:14px;
+  color:#c7d4ca;
+  font-size:12px;
+  line-height:1.5;
+}
+.hola-day-hero--editorial .hola-day-editorial-visual figcaption>span:first-child{
+  color:#f1b28e;
+  font-size:10px;
+  font-weight:650;
+  letter-spacing:.12em;
+}
+.hola-day-hero--editorial .hola-day-editorial-foot{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px 24px;
+  padding-block:17px;
+  border-top:1px solid rgba(251,247,239,.2);
+}
+.hola-day-hero--editorial .hola-day-editorial-program{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 14px;
+  margin:0;
+  color:#d3ded4;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.6;
+  letter-spacing:.06em;
+}
+.hola-day-hero--editorial .hola-day-editorial-program>i{
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#e3a07c;
+}
+.hola-day-hero--editorial .hola-day-editorial-countdown{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px;
+  color:#c7d4ca;
+  font-size:12px;
+  line-height:1.5;
+  font-variant-numeric:tabular-nums;
+}
+.hola-day-hero--editorial .hola-day-editorial-countdown strong{
+  color:var(--cream,#fbf7ef);
+  font-size:18px;
+  font-weight:650;
+}
+.hola-day-hero--editorial .hola-day-editorial-countdown small{font-size:12px;font-weight:500}
+.hola-day-hero--editorial .hola-day-editorial-countdown-clock{min-width:8ch;text-align:right}
+
+@media(max-width:1100px) and (min-width:761px){
+  .hola-day-hero--editorial .hola-day-editorial-layout{gap:30px}
+  .hola-day-hero--editorial .hola-day-editorial-facts{gap:9px 14px;font-size:12px}
+}
+@media(max-width:760px){
+  .hola-day-hero--editorial .hola-day-editorial-shell{width:calc(100% - 40px)}
+  .hola-day-hero--editorial .hola-day-editorial-layout{grid-template-columns:1fr;gap:28px;padding-block:32px 26px}
+  .hola-day-hero--editorial .hola-day-editorial-copy{max-width:620px}
+  .hola-day-page .hola-day-hero--editorial h1{font-size:clamp(46px,10vw,76px)}
+  .hola-day-hero--editorial .hola-day-editorial-description{max-width:55ch}
+  .hola-day-hero--editorial .hola-day-editorial-photo{aspect-ratio:2/1}
+}
+@media(max-width:480px){
+  .hola-day-hero--editorial .hola-day-editorial-layout{gap:24px;padding-top:28px}
+  .hola-day-hero--editorial .hola-day-editorial-kicker{gap:8px;font-size:9px;letter-spacing:.08em;margin-bottom:16px}
+  .hola-day-hero--editorial .hola-day-editorial-kicker>i{width:16px}
+  .hola-day-hero--editorial .hola-day-editorial-deck{font-size:25px;margin-top:14px}
+  .hola-day-hero--editorial .hola-day-editorial-description{font-size:14px;line-height:1.6;margin-top:14px}
+  .hola-day-hero--editorial .hola-day-editorial-facts{gap:10px 16px;margin-top:20px;font-size:12px}
+  .hola-day-hero--editorial .hola-day-editorial-actions{gap:10px 18px;margin-top:22px}
+  .hola-day-hero--editorial .hola-day-editorial-register{padding-inline:16px}
+  .hola-day-hero--editorial .hola-day-editorial-photo{aspect-ratio:16/9}
+  .hola-day-hero--editorial .hola-day-editorial-visual figcaption{padding-top:10px;font-size:11px;gap:4px 12px}
+  .hola-day-hero--editorial .hola-day-editorial-foot{align-items:flex-start;flex-direction:column;gap:10px;padding-block:14px}
+}
+@media(max-width:360px){
+  .hola-day-hero--editorial .hola-day-editorial-actions{display:grid;grid-template-columns:1fr}
+  .hola-day-hero--editorial .hola-day-editorial-register,
+  .hola-day-hero--editorial .hola-day-editorial-schedule{width:100%}
+}
