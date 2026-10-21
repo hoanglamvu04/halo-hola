@@ -311,7 +311,6 @@ export default function HomePage() {
           </div>
 
           <div className="themes-showcase-side">
-            <p>{themesCopy.description}</p>
             <Link className="themes-all-link" to="/chu-de">Xem tất cả chủ đề <ArrowRight size={17}/></Link>
           </div>
         </header>
