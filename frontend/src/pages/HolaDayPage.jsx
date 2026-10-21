@@ -109,28 +109,50 @@ export default function HolaDayPage(){
       <div className="hola-day-hero-media" aria-hidden="true">
         <img src={img.sunset} alt=""/>
       </div>
+
       <div className="container hola-day-hero-layout">
         <div className="hola-day-hero-copy">
-          <div className="hola-day-overline"><span>HALO HOLA 2026</span><i/>SỰ KIỆN CỘNG ĐỒNG</div>
-          <h1><span>HOLA</span><span>DAY</span></h1>
+          <div className="hola-day-overline"><span>HOLA HOLA 2026</span><i/>SỰ KIỆN CỘNG ĐỒNG</div>
+
+          <div className="hola-day-title-wrap">
+            <h1><span>HOLA</span><span>DAY</span></h1>
+            <svg className="hola-day-hero-swoosh" viewBox="0 0 520 150" aria-hidden="true">
+              <path d="M9 118c48-61 74-91 88-78 13 13-17 102 19 90 42-14 74-73 104-66 26 6 35 50 66 49 62-2 116-45 224-51"/>
+            </svg>
+            <div className="hola-day-manifesto" aria-label="Tinh thần HOLA DAY">
+              <span>KẾT NỐI</span>
+              <span>CON NGƯỜI</span>
+              <span>LAN TỎA</span>
+              <span>ĐIỀU TỬ TẾ</span>
+              <i/>
+            </div>
+          </div>
+
           <div className="hola-day-date-lockup"><strong>28.11</strong><em>2026</em></div>
           <p>Ngày hội sáng tạo & khám phá Hòa Lạc — nơi những góc nhìn bước ra khỏi khung hình để gặp nhau, trò chuyện và kể tiếp câu chuyện về vùng đất này.</p>
           <div className="hola-day-hero-actions">
             <button type="button" className="hola-day-primary" onClick={openRegistration}>Đăng ký tham dự <ArrowRight/></button>
-            <a href="#lich-trinh" className="hola-day-secondary">Xem lịch trình <span>↘</span></a>
+            <a href="#lich-trinh" className="hola-day-secondary">Xem lịch trình <CalendarDays/></a>
           </div>
         </div>
 
         <aside className="hola-day-ticket" aria-label="Thông tin HOLA DAY 2026">
-          <div className="hola-day-ticket-head"><span><Ticket/> EVENT PASS</span><b>01</b></div>
+          <div className="hola-day-ticket-media">
+            <img src={img.event} alt="Không khí sự kiện HOLA DAY"/>
+            <span className="hola-day-ticket-featured"><Sparkles/> SỰ KIỆN NỔI BẬT</span>
+          </div>
+          <div className="hola-day-ticket-head"><span><Ticket/> EVENT PASS</span><b>01 / 05</b></div>
           <div className="hola-day-ticket-body">
             <span>ĐIỂM HẸN CỦA 52 GÓC NHÌN</span>
-            <h2>Một buổi chiều để gặp Hòa Lạc ngoài những khung hình.</h2>
+            <div className="hola-day-ticket-title-row">
+              <h2>Một buổi chiều để gặp Hòa Lạc ngoài những khung hình.</h2>
+              <button type="button" aria-label="Đăng ký tham dự HOLA DAY" onClick={openRegistration}><ArrowRight/></button>
+            </div>
           </div>
           <div className="hola-day-ticket-meta">
-            <div><small>DATE</small><b>28.11.2026</b></div>
-            <div><small>TIME</small><b>15:00—19:00</b></div>
-            <div><small>PLACE</small><b>Hòa Lạc</b></div>
+            <div><CalendarDays/><span><small>NGÀY</small><b>28.11.2026</b></span></div>
+            <div><Clock3/><span><small>THỜI GIAN</small><b>15:00 – 19:00</b></span></div>
+            <div><MapPin/><span><small>ĐỊA ĐIỂM</small><b>Hòa Lạc</b></span></div>
           </div>
         </aside>
       </div>
@@ -138,15 +160,14 @@ export default function HolaDayPage(){
 
     <section className="hola-day-status" aria-label="Thông tin và đếm ngược HOLA DAY 2026">
       <div className="container hola-day-status-inner">
-        <div className="hola-day-status-date"><span>28</span><div><b>NOV</b><small>2026</small></div></div>
-        <div className="hola-day-status-fact"><Clock3/><span><small>THỜI GIAN</small><b>15:00—19:00</b></span></div>
+        <div className="hola-day-status-fact"><CalendarDays/><span><small>THỨ BẢY</small><b>28.11.2026</b></span></div>
+        <div className="hola-day-status-fact"><Clock3/><span><small>THỜI GIAN</small><b>15:00 – 19:00</b></span></div>
         <div className="hola-day-status-fact"><MapPin/><span><small>ĐỊA ĐIỂM</small><b>Hòa Lạc</b></span></div>
         <div className="hola-day-status-count">
-          <small>CÒN</small>
-          <b>{two(countdown.days)}<span>ngày</span></b>
-          <em>{two(countdown.hours)}:{two(countdown.minutes)}:{two(countdown.seconds)}</em>
+          <Users/>
+          <span><small>ĐẾM NGƯỢC</small><b>{two(countdown.days)} <i>NGÀY</i></b><em>{two(countdown.hours)}:{two(countdown.minutes)}:{two(countdown.seconds)}</em></span>
         </div>
-        <button type="button" onClick={openRegistration}>Giữ chỗ <ArrowRight/></button>
+        <button type="button" onClick={openRegistration}><i/>Đang mở đăng ký <ArrowRight/></button>
       </div>
     </section>
 
