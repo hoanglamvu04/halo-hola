@@ -126,7 +126,7 @@
 .rules4-hero h1,
 .hola-day-hero--editorial h1{
   font-weight:900!important;
-  line-height:.92!important;
+  line-height:1.02!important;
   letter-spacing:.005em!important;
   text-transform:uppercase!important;
   text-wrap:balance!important;
@@ -141,7 +141,7 @@
 .home-map-live-copy h2,
 .top52-showcase .top52-title-block h2,
 .we-banner .we-overlay h2{
-  font-size:clamp(2.2rem,3.25vw,3.55rem)!important;
+  font-size:clamp(2rem,2.9vw,3.2rem)!important;
 }
 
 /* Main page heroes can stay slightly larger than section headings. */
@@ -159,14 +159,13 @@
 .lookup-modern-copy h1,
 .rules4-hero h1,
 .hola-day-hero--editorial h1{
-  font-size:clamp(2.65rem,4.15vw,4.35rem)!important;
+  font-size:clamp(2.4rem,3.75vw,3.95rem)!important;
 }
 
-/* The campaign title benefits from an intentionally narrow poster measure. */
+/* Keep the campaign headline on a controlled poster measure, but use the same
+   global title size and line-height as the other major section headings. */
 .campaign-live .live-counter h2{
   max-width:13ch!important;
-  font-size:clamp(2.05rem,3vw,3.3rem)!important;
-  line-height:1.02!important;
 }
 
 @media(max-width:760px){
@@ -210,8 +209,8 @@
   .lookup-modern-copy h1,
   .rules4-hero h1,
   .hola-day-hero--editorial h1{
-    font-size:clamp(2.1rem,9.4vw,2.8rem)!important;
-    line-height:.94!important;
+    font-size:clamp(2rem,8.7vw,2.6rem)!important;
+    line-height:1.03!important;
     letter-spacing:.002em!important;
   }
 
@@ -223,14 +222,10 @@
   .home-map-live-copy h2,
   .top52-showcase .top52-title-block h2,
   .we-banner .we-overlay h2{
-    font-size:clamp(1.9rem,8.5vw,2.55rem)!important;
-    line-height:.94!important;
+    font-size:clamp(1.8rem,7.8vw,2.35rem)!important;
+    line-height:1.03!important;
     letter-spacing:.002em!important;
   }
 
-  .campaign-live .live-counter h2{
-    max-width:12ch!important;
-    font-size:clamp(1.8rem,8vw,2.35rem)!important;
-    line-height:1.02!important;
-  }
+  .campaign-live .live-counter h2{max-width:12ch!important;}
 }
