@@ -1,19 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700..900&display=swap');
 
 /* HALO HOLA — major display title layer.
-   Reference direction: bold geometric sans, close to the Montserrat treatment
-   in the supplied visual. Body copy, navigation, buttons and small card text
-   intentionally keep their existing typography. */
+   Direction: thick, expressive editorial serif. Body copy, navigation, buttons
+   and small card text intentionally keep their existing typography. */
 
 :root{
-  --halo-display-font:'Montserrat',Inter,'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --halo-display-font:'Fraunces',Georgia,'Times New Roman',serif;
 
   --home-title-font-family:var(--halo-display-font);
   --page-title-font-family:var(--halo-display-font);
   --home-title-font-weight:800;
   --page-title-font-weight:800;
-  --home-title-letter-spacing:-.045em;
-  --page-title-letter-spacing:-.045em;
+  --home-title-letter-spacing:-.035em;
+  --page-title-letter-spacing:-.035em;
 }
 
 /* Major homepage display titles. */
@@ -28,7 +27,9 @@
 .we-banner .we-overlay h2{
   font-family:var(--halo-display-font)!important;
   font-weight:800!important;
-  letter-spacing:-.045em!important;
+  font-optical-sizing:auto;
+  letter-spacing:-.035em!important;
+  line-height:.96!important;
 }
 
 /* Main titles on public pages already covered by page-shared-titles.css. */
@@ -42,7 +43,9 @@
 .hello-card h1{
   font-family:var(--halo-display-font)!important;
   font-weight:800!important;
-  letter-spacing:-.045em!important;
+  font-optical-sizing:auto;
+  letter-spacing:-.035em!important;
+  line-height:.97!important;
 }
 
 /* Public-page heroes that live outside the shared title system. */
@@ -53,10 +56,21 @@
 .hola-day-hero--editorial h1{
   font-family:var(--halo-display-font)!important;
   font-weight:800!important;
-  letter-spacing:-.045em!important;
+  font-optical-sizing:auto;
+  letter-spacing:-.035em!important;
+  line-height:.96!important;
 }
 
-/* Accent fragments keep page colors but use the same bold display face. */
+/* Short, poster-like titles can carry the heaviest cut. */
+.home-hero-copy h1,
+.home-tour-section .home-tour-title h2,
+.home-map-live-copy h2,
+.hola-day-hero--editorial h1,
+.tour-page-ref .tour-page-copy h1{
+  font-weight:900!important;
+}
+
+/* Accent fragments keep page colors but use the same display face. */
 .home-hero-copy h1>span,
 .home-hero-copy h1>em,
 .themes-showcase .themes-showcase-title h2>span,
@@ -81,8 +95,9 @@
 .tour-page-ref .tour-page-copy h1>span,
 .tour-page-ref .tour-page-copy h1>em{
   font-family:var(--halo-display-font)!important;
-  font-weight:800!important;
-  letter-spacing:-.045em!important;
+  font-weight:900!important;
+  font-optical-sizing:auto;
+  letter-spacing:-.035em!important;
 }
 
 @media(max-width:760px){
@@ -108,7 +123,7 @@
   .lookup-modern-copy h1,
   .rules4-hero h1,
   .hola-day-hero--editorial h1{
-    font-weight:800!important;
-    letter-spacing:-.04em!important;
+    letter-spacing:-.03em!important;
+    line-height:.98!important;
   }
 }
