@@ -100,15 +100,70 @@
   letter-spacing:-.035em!important;
 }
 
-/* Campaign participation title: poster treatment. Keep Fraunces, but make this
-   one section more graphic, compact and intentional. */
-.campaign-live .live-counter h2{
-  font-size:clamp(2.25rem,3.35vw,3.65rem)!important;
+/* Shared poster treatment for major titles: uppercase, compact and graphic.
+   Size is deliberately pulled back from the previous oversized system so the
+   page feels editorial rather than shouty. */
+.home-hero-copy h1,
+.campaign-live .live-counter h2,
+.change-band .change-copy h2,
+.themes-showcase .themes-showcase-title h2,
+.color-section .color-copy h2,
+.home-tour-section .home-tour-title h2,
+.home-map-live-copy h2,
+.top52-showcase .top52-title-block h2,
+.we-banner .we-overlay h2,
+.page-hero-copy h1,
+.tour-page-copy h1,
+.stories-intro-inner>div:first-child>h1,
+.top52-live-copy h1,
+.theme-hero-copy h1,
+.story-detail-copy h1,
+.artwork-showcase-info h1,
+.hello-card h1,
+.calendar2027-hero-copy h1,
+.partners-hero-copy h1,
+.lookup-modern-copy h1,
+.rules4-hero h1,
+.hola-day-hero--editorial h1{
   font-weight:900!important;
   line-height:.92!important;
   letter-spacing:.005em!important;
   text-transform:uppercase!important;
   text-wrap:balance!important;
+}
+
+/* Homepage section titles: one step smaller than before. */
+.campaign-live .live-counter h2,
+.change-band .change-copy h2,
+.themes-showcase .themes-showcase-title h2,
+.color-section .color-copy h2,
+.home-tour-section .home-tour-title h2,
+.home-map-live-copy h2,
+.top52-showcase .top52-title-block h2,
+.we-banner .we-overlay h2{
+  font-size:clamp(2.2rem,3.25vw,3.55rem)!important;
+}
+
+/* Main page heroes can stay slightly larger than section headings. */
+.home-hero-copy h1,
+.page-hero-copy h1,
+.tour-page-copy h1,
+.stories-intro-inner>div:first-child>h1,
+.top52-live-copy h1,
+.theme-hero-copy h1,
+.story-detail-copy h1,
+.artwork-showcase-info h1,
+.hello-card h1,
+.calendar2027-hero-copy h1,
+.partners-hero-copy h1,
+.lookup-modern-copy h1,
+.rules4-hero h1,
+.hola-day-hero--editorial h1{
+  font-size:clamp(2.65rem,4.15vw,4.35rem)!important;
+}
+
+/* The campaign title benefits from an intentionally narrow poster measure. */
+.campaign-live .live-counter h2{
   max-width:12ch!important;
 }
 
@@ -139,10 +194,37 @@
     line-height:.98!important;
   }
 
-  .campaign-live .live-counter h2{
-    font-size:clamp(2rem,10.5vw,2.75rem)!important;
+  .home-hero-copy h1,
+  .page-hero-copy h1,
+  .tour-page-copy h1,
+  .stories-intro-inner>div:first-child>h1,
+  .top52-live-copy h1,
+  .theme-hero-copy h1,
+  .story-detail-copy h1,
+  .artwork-showcase-info h1,
+  .hello-card h1,
+  .calendar2027-hero-copy h1,
+  .partners-hero-copy h1,
+  .lookup-modern-copy h1,
+  .rules4-hero h1,
+  .hola-day-hero--editorial h1{
+    font-size:clamp(2.1rem,9.4vw,2.8rem)!important;
     line-height:.94!important;
-    letter-spacing:.005em!important;
-    max-width:11ch!important;
+    letter-spacing:.002em!important;
   }
+
+  .campaign-live .live-counter h2,
+  .change-band .change-copy h2,
+  .themes-showcase .themes-showcase-title h2,
+  .color-section .color-copy h2,
+  .home-tour-section .home-tour-title h2,
+  .home-map-live-copy h2,
+  .top52-showcase .top52-title-block h2,
+  .we-banner .we-overlay h2{
+    font-size:clamp(1.9rem,8.5vw,2.55rem)!important;
+    line-height:.94!important;
+    letter-spacing:.002em!important;
+  }
+
+  .campaign-live .live-counter h2{max-width:11ch!important;}
 }
