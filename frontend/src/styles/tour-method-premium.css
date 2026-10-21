@@ -1,4 +1,205 @@
-/* HOLA TOUR — experience-method section removed from the public page. */
+/* HOLA TOUR — public-facing polish loaded after the legacy tour stylesheet. */
 .tour-page-ref .tour01-method-section{
   display:none!important;
+}
+
+/* Tour #01 output: remove internal KPI language from the public experience. */
+.tour-page-ref .tour01-output-section{
+  position:relative!important;
+  padding:76px 0 82px!important;
+  background:
+    radial-gradient(circle at 90% 12%,rgba(216,95,43,.055),transparent 25%),
+    radial-gradient(circle at 8% 88%,rgba(25,86,65,.045),transparent 28%),
+    #f2ede3!important;
+}
+
+.tour-page-ref .tour01-output-section .tour01-section-head{
+  grid-template-columns:1.05fr .95fr!important;
+  gap:72px!important;
+  align-items:end!important;
+  margin-bottom:36px!important;
+}
+
+.tour-page-ref .tour01-output-section .tour01-section-head>div>span{
+  font-size:0!important;
+}
+.tour-page-ref .tour01-output-section .tour01-section-head>div>span:after{
+  content:'SAU MỖI HÀNH TRÌNH';
+  display:block;
+  color:var(--t-orange)!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+
+.tour-page-ref .tour01-output-section .tour01-section-head h2{
+  font-size:0!important;
+  line-height:1!important;
+}
+.tour-page-ref .tour01-output-section .tour01-section-head h2:after{
+  content:'Mang về những điều đáng được giữ lại.';
+  display:block;
+  max-width:760px;
+  color:var(--t-green)!important;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
+  font-size:clamp(40px,4.3vw,64px)!important;
+  font-weight:780!important;
+  line-height:1.02!important;
+  letter-spacing:-.045em!important;
+}
+
+.tour-page-ref .tour01-output-section .tour01-section-head>p{
+  font-size:0!important;
+  line-height:1!important;
+  max-width:610px!important;
+}
+.tour-page-ref .tour01-output-section .tour01-section-head>p:after{
+  content:'Không chạy theo số lượng điểm đến. Mỗi hành trình hướng tới những câu chuyện, con người và lát cắt đời sống đủ chân thật để tiếp tục được kể trong HALO HOLA.';
+  display:block;
+  color:#5e6e65!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:15px!important;
+  font-weight:420!important;
+  line-height:1.75!important;
+  letter-spacing:0!important;
+}
+
+.tour-page-ref .tour01-output-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+.tour-page-ref .tour01-output-grid article:nth-child(n+6){
+  display:none!important;
+}
+
+.tour-page-ref .tour01-output-grid article{
+  min-height:205px!important;
+  padding:22px!important;
+  border:1px solid rgba(73,89,78,.12)!important;
+  border-radius:18px!important;
+  background:rgba(255,251,244,.9)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  box-shadow:0 12px 34px rgba(48,52,45,.035)!important;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+}
+.tour-page-ref .tour01-output-grid article:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(216,95,43,.24)!important;
+  box-shadow:0 16px 40px rgba(48,52,45,.06)!important;
+}
+
+.tour-page-ref .tour01-output-grid svg{
+  width:22px!important;
+  height:22px!important;
+  margin:0!important;
+  padding:0!important;
+  color:var(--t-orange)!important;
+  flex:0 0 auto!important;
+}
+
+.tour-page-ref .tour01-output-grid b{
+  margin:34px 0 9px!important;
+  font-size:0!important;
+  line-height:1!important;
+}
+.tour-page-ref .tour01-output-grid b:after{
+  display:block;
+  color:var(--t-green)!important;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
+  font-size:18px!important;
+  font-weight:760!important;
+  line-height:1.22!important;
+  letter-spacing:-.02em!important;
+}
+
+.tour-page-ref .tour01-output-grid span{
+  font-size:0!important;
+  line-height:1!important;
+}
+.tour-page-ref .tour01-output-grid span:after{
+  display:block;
+  color:#68766e!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:12.5px!important;
+  font-weight:410!important;
+  line-height:1.55!important;
+  letter-spacing:0!important;
+}
+
+.tour-page-ref .tour01-output-grid article:nth-child(1) b:after{content:'Con người đáng nhớ'}
+.tour-page-ref .tour01-output-grid article:nth-child(1) span:after{content:'Những nhân vật giúp mở ra một góc nhìn mới về Hòa Lạc.'}
+
+.tour-page-ref .tour01-output-grid article:nth-child(2) b:after{content:'Câu chuyện thật'}
+.tour-page-ref .tour01-output-grid article:nth-child(2) span:after{content:'Những câu chuyện được tìm thấy từ chính con người và đời sống địa phương.'}
+
+.tour-page-ref .tour01-output-grid article:nth-child(3) b:after{content:'Tư liệu để kể tiếp'}
+.tour-page-ref .tour01-output-grid article:nth-child(3) span:after{content:'Ảnh, video và ghi chép có thể tiếp tục phát triển thành các góc nhìn HALO HOLA.'}
+
+.tour-page-ref .tour01-output-grid article:nth-child(4) b:after{content:'Góc nhìn có chiều sâu'}
+.tour-page-ref .tour01-output-grid article:nth-child(4) span:after{content:'Những lát cắt có bối cảnh, cảm xúc và một câu chuyện đủ sức ở lại.'}
+
+.tour-page-ref .tour01-output-grid article:nth-child(5) b:after{content:'Hình ảnh có câu chuyện'}
+.tour-page-ref .tour01-output-grid article:nth-child(5) span:after{content:'Không chỉ là ảnh đẹp, mà là hình ảnh gắn với con người, nơi chốn và ký ức.'}
+
+.tour-page-ref .tour01-output-section .tour-page-inner:after{
+  content:'Đi ít hơn · gặp thật hơn · nghe kỹ hơn · kể sâu hơn.';
+  display:block;
+  margin-top:28px;
+  color:var(--t-orange)!important;
+  font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.3!important;
+  letter-spacing:.13em!important;
+  text-transform:uppercase!important;
+}
+
+@media(max-width:1180px){
+  .tour-page-ref .tour01-output-section .tour01-section-head{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+  }
+  .tour-page-ref .tour01-output-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:720px){
+  .tour-page-ref .tour01-output-section{
+    padding:54px 0 60px!important;
+  }
+  .tour-page-ref .tour01-output-section .tour01-section-head h2:after{
+    font-size:38px!important;
+  }
+  .tour-page-ref .tour01-output-section .tour01-section-head>p:after{
+    font-size:14px!important;
+  }
+  .tour-page-ref .tour01-output-grid{
+    grid-template-columns:1fr 1fr!important;
+    gap:10px!important;
+  }
+  .tour-page-ref .tour01-output-grid article{
+    min-height:190px!important;
+    padding:18px!important;
+  }
+  .tour-page-ref .tour01-output-grid b{
+    margin-top:28px!important;
+  }
+  .tour-page-ref .tour01-output-grid b:after{
+    font-size:16px!important;
+  }
+  .tour-page-ref .tour01-output-grid span:after{
+    font-size:11.5px!important;
+  }
+  .tour-page-ref .tour01-output-section .tour-page-inner:after{
+    margin-top:22px!important;
+    font-size:10px!important;
+    line-height:1.55!important;
+  }
 }
