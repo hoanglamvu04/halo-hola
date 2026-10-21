@@ -14,7 +14,7 @@ import {
 import { agenda, img } from '../data/siteData.js'
 import { registerHolaDay } from '../services/communityApi.js'
 
-const TARGET_DATE = new Date('2026-11-28T15:00:00+07:00').getTime()
+const TARGET_DATE = new Date('2026-11-24T15:00:00+07:00').getTime()
 const initialForm={name:'',email:'',phone:'',roleLabel:'',interest:'',note:'',allowUpdates:false}
 
 const touchpoints=[
@@ -113,7 +113,7 @@ export default function HolaDayPage(){
             <p className="hola-day-editorial-deck">Một buổi chiều.<br/>Gặp nhau ở Hòa Lạc.</p>
             <p className="hola-day-editorial-description">Cùng xem TOP52, nghe những câu chuyện phía sau mỗi góc nhìn và gặp những người cùng yêu Hòa Lạc.</p>
             <div className="hola-day-editorial-facts" aria-label="Thời gian và địa điểm">
-              <span><CalendarDays aria-hidden="true"/><time dateTime="2026-11-28">28.11.2026</time></span>
+              <span><CalendarDays aria-hidden="true"/><time dateTime="2026-11-24">24.11.2026</time></span>
               <span><Clock3 aria-hidden="true"/>15:00 – 19:00</span>
               <span><MapPin aria-hidden="true"/>Hòa Lạc</span>
             </div>
@@ -148,7 +148,7 @@ export default function HolaDayPage(){
           <span className="hola-day-section-label">01 · LỊCH TRÌNH</span>
           <h2>Một buổi chiều.<br/>Năm nhịp trải nghiệm.</h2>
           <p>Từ check-in, triển lãm, trò chuyện đến khoảnh khắc hoàng hôn và phần gặp gỡ cuối ngày — lịch trình được giữ đủ gọn để bạn có thời gian thực sự ở trong từng trải nghiệm.</p>
-          <div className="hola-day-agenda-note"><CalendarDays/><span><b>Thứ Bảy · 28.11.2026</b><small>15:00 bắt đầu · 19:00 khép lại</small></span></div>
+          <div className="hola-day-agenda-note"><CalendarDays/><span><b>Thứ Ba · 24.11.2026</b><small>15:00 bắt đầu · 19:00 khép lại</small></span></div>
         </header>
 
         <div className="hola-day-agenda-list">
@@ -211,7 +211,7 @@ export default function HolaDayPage(){
           <h2>Đến với một góc nhìn.<br/>Rời đi với một kết nối mới.</h2>
           <p>Đăng ký trước để BTC có thông tin phục vụ check-in và gửi cập nhật chính thức về địa điểm, chương trình và những lưu ý cần thiết.</p>
           <div className="hola-day-final-facts">
-            <span><CalendarDays/>28.11.2026</span>
+            <span><CalendarDays/>24.11.2026</span>
             <span><Clock3/>15:00—19:00</span>
             <span><MapPin/>Hòa Lạc</span>
           </div>
@@ -232,7 +232,7 @@ export default function HolaDayPage(){
         <div className="tour-register-modal-grid">
           <div>
             <span className="eyebrow">ĐĂNG KÝ HOLA DAY 2026</span>
-            <h2>28.11 · 15:00–19:00</h2>
+            <h2>24.11 · 15:00–19:00</h2>
             <p>Đăng ký trước để quá trình check-in tại sự kiện nhanh hơn và BTC có thể gửi cập nhật cần thiết.</p>
             <div className="tour-register-note"><b>HOLA DAY là ngày hội sáng tạo & khám phá Hòa Lạc.</b><span>Thông tin đăng ký được lưu trên hệ thống HALO HOLA và không chia sẻ cho đối tác.</span></div>
           </div>
