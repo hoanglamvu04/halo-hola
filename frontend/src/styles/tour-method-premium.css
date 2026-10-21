@@ -6,7 +6,7 @@
 /* Tour #01 — what participants take home after the journey. */
 .tour-page-ref .tour01-output-section{
   position:relative!important;
-  padding:78px 0 86px!important;
+  padding:72px 0 78px!important;
   background:
     radial-gradient(circle at 88% 12%,rgba(216,95,43,.05),transparent 25%),
     radial-gradient(circle at 8% 86%,rgba(25,86,65,.045),transparent 28%),
@@ -17,7 +17,7 @@
   grid-template-columns:1.02fr .98fr!important;
   gap:76px!important;
   align-items:end!important;
-  margin-bottom:38px!important;
+  margin-bottom:30px!important;
 }
 
 .tour-page-ref .tour01-output-section .tour01-section-head>div>span{
@@ -70,7 +70,8 @@
 .tour-page-ref .tour01-output-grid{
   display:grid!important;
   grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  gap:14px!important;
+  gap:12px!important;
+  counter-reset:tour-takeaway!important;
 }
 .tour-page-ref .tour01-output-grid article:nth-child(n+6){
   display:none!important;
@@ -78,49 +79,51 @@
 
 .tour-page-ref .tour01-output-grid article{
   position:relative!important;
-  min-height:220px!important;
-  padding:24px!important;
-  border:1px solid rgba(73,89,78,.12)!important;
-  border-radius:20px!important;
-  background:rgba(255,251,244,.92)!important;
+  min-height:170px!important;
+  padding:20px 19px 18px!important;
+  border:1px solid rgba(73,89,78,.11)!important;
+  border-radius:16px!important;
+  background:rgba(255,251,244,.94)!important;
   display:flex!important;
   flex-direction:column!important;
   justify-content:flex-start!important;
-  box-shadow:0 12px 34px rgba(48,52,45,.035)!important;
+  box-shadow:0 10px 26px rgba(48,52,45,.032)!important;
+  overflow:hidden!important;
   transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important;
 }
 .tour-page-ref .tour01-output-grid article:before{
   content:counter(tour-takeaway, decimal-leading-zero);
   counter-increment:tour-takeaway;
   position:absolute!important;
-  top:22px!important;
-  right:22px!important;
-  color:rgba(13,68,55,.34)!important;
+  top:13px!important;
+  right:13px!important;
+  width:32px!important;
+  height:32px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  background:rgba(13,68,55,.065)!important;
+  border:1px solid rgba(13,68,55,.08)!important;
+  color:rgba(13,68,55,.54)!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
   font-size:10px!important;
   font-weight:800!important;
-  letter-spacing:.08em!important;
-}
-.tour-page-ref .tour01-output-grid{
-  counter-reset:tour-takeaway!important;
+  line-height:1!important;
+  letter-spacing:.05em!important;
 }
 .tour-page-ref .tour01-output-grid article:hover{
-  transform:translateY(-3px)!important;
-  border-color:rgba(216,95,43,.24)!important;
-  box-shadow:0 16px 40px rgba(48,52,45,.06)!important;
+  transform:translateY(-2px)!important;
+  border-color:rgba(216,95,43,.2)!important;
+  box-shadow:0 14px 30px rgba(48,52,45,.055)!important;
 }
 
+/* Remove visual icons: the corner number is now the only marker. */
 .tour-page-ref .tour01-output-grid svg{
-  width:24px!important;
-  height:24px!important;
-  margin:0!important;
-  padding:0!important;
-  color:var(--t-orange)!important;
-  flex:0 0 auto!important;
+  display:none!important;
 }
 
 .tour-page-ref .tour01-output-grid b{
-  margin:38px 0 10px!important;
+  margin:18px 42px 8px 0!important;
   font-size:0!important;
   line-height:1!important;
 }
@@ -128,9 +131,9 @@
   display:block;
   color:var(--t-green)!important;
   font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
-  font-size:18px!important;
+  font-size:17px!important;
   font-weight:760!important;
-  line-height:1.22!important;
+  line-height:1.2!important;
   letter-spacing:-.02em!important;
 }
 
@@ -142,9 +145,9 @@
   display:block;
   color:#68766e!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
-  font-size:12.5px!important;
+  font-size:12px!important;
   font-weight:410!important;
-  line-height:1.58!important;
+  line-height:1.52!important;
   letter-spacing:0!important;
 }
 
@@ -166,7 +169,7 @@
 .tour-page-ref .tour01-output-section .tour-page-inner:after{
   content:'Đi để thấy · Gặp để hiểu · Và mang về một Hòa Lạc rất riêng của bạn.';
   display:block;
-  margin-top:30px;
+  margin-top:24px;
   color:var(--t-orange)!important;
   font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif!important;
   font-size:11px!important;
@@ -188,7 +191,7 @@
 
 @media(max-width:720px){
   .tour-page-ref .tour01-output-section{
-    padding:54px 0 60px!important;
+    padding:50px 0 56px!important;
   }
   .tour-page-ref .tour01-output-section .tour01-section-head h2:after{
     font-size:38px!important;
@@ -198,27 +201,31 @@
   }
   .tour-page-ref .tour01-output-grid{
     grid-template-columns:1fr!important;
-    gap:10px!important;
+    gap:9px!important;
   }
   .tour-page-ref .tour01-output-grid article{
-    min-height:174px!important;
-    padding:18px!important;
+    min-height:142px!important;
+    padding:17px!important;
+    border-radius:15px!important;
   }
   .tour-page-ref .tour01-output-grid article:before{
-    top:17px!important;
-    right:18px!important;
+    top:12px!important;
+    right:12px!important;
+    width:29px!important;
+    height:29px!important;
+    font-size:9px!important;
   }
   .tour-page-ref .tour01-output-grid b{
-    margin-top:26px!important;
+    margin:13px 38px 7px 0!important;
   }
   .tour-page-ref .tour01-output-grid b:after{
-    font-size:17px!important;
+    font-size:16px!important;
   }
   .tour-page-ref .tour01-output-grid span:after{
-    font-size:12px!important;
+    font-size:11.5px!important;
   }
   .tour-page-ref .tour01-output-section .tour-page-inner:after{
-    margin-top:22px!important;
+    margin-top:20px!important;
     font-size:10px!important;
     line-height:1.55!important;
   }
