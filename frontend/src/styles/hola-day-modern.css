@@ -1,10 +1,10 @@
 .hola-day-page{
   --hd-green:#123d2d;
-  --hd-green-deep:#0b2f23;
+  --hd-green-deep:#082b20;
   --hd-green-soft:#245542;
-  --hd-orange:#cf6038;
+  --hd-orange:#dd5b28;
   --hd-cream:#f7f2e8;
-  --hd-paper:#fcfaf5;
+  --hd-paper:#fbf6ed;
   --hd-ink:#17382b;
   --hd-muted:#68766e;
   --hd-line:rgba(18,61,45,.14);
@@ -31,10 +31,10 @@
 }
 .hola-day-section-label.light{color:#efaa86}
 
-/* HERO */
+/* HERO — premium editorial event */
 .hola-day-hero{
   position:relative;
-  min-height:650px;
+  min-height:820px;
   isolation:isolate;
   background:var(--hd-green-deep);
   color:#fff;
@@ -44,202 +44,301 @@
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 58%;
-  filter:saturate(.72) contrast(1.02);
-  transform:scale(1.015);
+  object-position:center 54%;
+  filter:saturate(.78) contrast(1.04) brightness(.84);
+  transform:scale(1.02);
+}
+.hola-day-hero-media:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(circle at 84% 12%,rgba(255,198,124,.16),transparent 28%),
+    linear-gradient(90deg,rgba(5,35,25,.98) 0%,rgba(5,35,25,.92) 31%,rgba(5,35,25,.67) 56%,rgba(5,35,25,.18) 82%,rgba(5,35,25,.1) 100%),
+    linear-gradient(180deg,rgba(3,20,15,.03),rgba(3,20,15,.42));
 }
 .hola-day-hero-media:after{
   content:"";
   position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg,rgba(8,42,31,.98) 0%,rgba(8,42,31,.94) 32%,rgba(8,42,31,.72) 55%,rgba(8,42,31,.25) 78%,rgba(8,42,31,.12) 100%),
-    linear-gradient(180deg,rgba(3,20,15,.05),rgba(3,20,15,.38));
+  inset:auto 0 0;
+  z-index:2;
+  height:44%;
+  background:linear-gradient(180deg,transparent,rgba(3,24,17,.52));
 }
 .hola-day-hero-layout{
-  min-height:650px;
+  min-height:820px;
   display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(330px,.62fr);
-  align-items:end;
+  grid-template-columns:minmax(0,1.08fr) minmax(360px,.72fr);
+  align-items:center;
   gap:70px;
-  padding-top:70px;
-  padding-bottom:64px;
+  padding-top:86px;
+  padding-bottom:150px;
 }
-.hola-day-hero-copy{max-width:820px;padding-bottom:4px}
+.hola-day-hero-copy{max-width:780px;position:relative;z-index:2}
 .hola-day-overline{
   display:flex;
   align-items:center;
-  gap:13px;
-  margin-bottom:24px;
-  color:#efd4bd;
+  gap:15px;
+  margin-bottom:28px;
+  color:#efe8da;
   font-size:11px;
   font-weight:900;
-  letter-spacing:.18em;
+  letter-spacing:.24em;
   text-transform:uppercase;
 }
 .hola-day-overline span{color:#fff}
-.hola-day-overline i{display:block;width:52px;height:1px;background:rgba(255,255,255,.38)}
+.hola-day-overline i{display:block;width:58px;height:1px;background:rgba(255,255,255,.62)}
+
+.hola-day-title-wrap{position:relative;width:min(100%,660px);padding-bottom:6px}
 .hola-day-hero h1{
+  position:relative;
+  z-index:2;
   display:grid;
   width:max-content;
   margin:0;
-  color:#fff;
-  font-family:'DM Sans',system-ui,sans-serif;
-  font-size:clamp(72px,7.2vw,118px);
-  font-weight:900;
-  line-height:.78;
+  color:#f8f2e7;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(104px,10.1vw,168px);
+  font-weight:600;
+  line-height:.76;
   letter-spacing:-.075em;
+  text-shadow:0 1px 0 rgba(255,255,255,.06);
 }
-.hola-day-hero h1 span:last-child{margin-left:112px}
+.hola-day-hero h1 span:last-child{margin-left:4px}
+.hola-day-hero-swoosh{
+  position:absolute;
+  z-index:3;
+  left:-18px;
+  top:70px;
+  width:min(92%,530px);
+  height:auto;
+  overflow:visible;
+  pointer-events:none;
+}
+.hola-day-hero-swoosh path{
+  fill:none;
+  stroke:#ff641f;
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+.hola-day-manifesto{
+  position:absolute;
+  z-index:4;
+  right:2%;
+  bottom:12%;
+  display:grid;
+  gap:3px;
+  color:rgba(255,255,255,.88);
+  font-size:10px;
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:.25em;
+}
+.hola-day-manifesto i{display:block;width:22px;height:3px;margin-top:9px;background:#ff641f}
+
 .hola-day-date-lockup{
   display:flex;
   align-items:flex-end;
-  gap:13px;
-  margin-top:24px;
+  gap:16px;
   width:max-content;
+  margin-top:25px;
 }
 .hola-day-date-lockup strong{
-  color:#ff7a46;
-  font-size:clamp(46px,4.2vw,68px);
+  color:#ff6425;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(48px,5.1vw,78px);
   line-height:.88;
-  letter-spacing:-.06em;
+  letter-spacing:-.055em;
+  font-weight:700;
 }
 .hola-day-date-lockup em{
-  padding-bottom:4px;
-  color:rgba(255,255,255,.82);
-  font-size:18px;
+  padding-bottom:7px;
+  color:#eee7da;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:26px;
   font-style:normal;
-  font-weight:800;
-  letter-spacing:.08em;
+  font-weight:500;
 }
 .hola-day-hero-copy>p{
-  max-width:680px;
-  margin:27px 0 0;
-  color:rgba(255,255,255,.8);
-  font-size:18px;
-  line-height:1.72;
+  max-width:620px;
+  margin:24px 0 0;
+  color:rgba(255,255,255,.88);
+  font-size:17px;
+  line-height:1.65;
 }
-.hola-day-hero-actions{display:flex;align-items:center;gap:24px;margin-top:30px}
+.hola-day-hero-actions{display:flex;align-items:center;gap:18px;margin-top:28px}
 .hola-day-primary{
-  min-height:50px;
+  min-height:52px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  padding:0 22px;
+  gap:12px;
+  padding:0 25px;
   border:1px solid transparent;
-  border-radius:4px;
-  background:var(--hd-orange);
+  border-radius:5px;
+  background:linear-gradient(135deg,#e7632d,#c9481e);
   color:#fff;
   font-weight:850;
-  box-shadow:none;
-  transition:transform .2s ease,background .2s ease;
+  box-shadow:0 13px 30px rgba(116,34,11,.2);
+  transition:transform .2s ease,background .2s ease,border-color .2s ease;
 }
-.hola-day-primary:hover{transform:translateY(-2px);background:#b94e2a}
+.hola-day-primary:hover{transform:translateY(-2px);background:linear-gradient(135deg,#ee6a31,#bd421b)}
 .hola-day-primary svg{width:18px;height:18px}
 .hola-day-secondary{
+  min-height:52px;
   display:inline-flex;
   align-items:center;
-  gap:9px;
-  padding-bottom:4px;
-  border-bottom:1px solid rgba(255,255,255,.45);
+  justify-content:center;
+  gap:12px;
+  padding:0 24px;
+  border:1px solid rgba(255,255,255,.58);
+  border-radius:5px;
   color:#fff;
   font-weight:800;
   font-size:14px;
+  transition:background .2s ease,border-color .2s ease;
 }
-.hola-day-secondary span{font-size:18px;transition:transform .2s ease}
-.hola-day-secondary:hover span{transform:translate(3px,3px)}
+.hola-day-secondary svg{width:17px;height:17px}
+.hola-day-secondary:hover{background:rgba(255,255,255,.1);border-color:#fff}
 
+/* Event pass */
 .hola-day-ticket{
   position:relative;
-  width:min(100%,410px);
+  width:min(100%,430px);
   justify-self:end;
+  align-self:center;
   background:var(--hd-paper);
   color:var(--hd-ink);
-  border-radius:6px;
-  box-shadow:0 24px 60px rgba(4,25,18,.24);
+  border:1px solid rgba(255,255,255,.46);
+  border-radius:12px;
+  box-shadow:0 28px 70px rgba(3,22,15,.28);
   overflow:hidden;
 }
-.hola-day-ticket:before,
-.hola-day-ticket:after{
-  content:"";
+.hola-day-ticket-media{position:relative;height:208px;margin:8px 8px 0;overflow:hidden;border-radius:9px 9px 6px 6px;background:#173d2d}
+.hola-day-ticket-media:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,34,24,.04),rgba(7,34,24,.28))}
+.hola-day-ticket-media img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.02)}
+.hola-day-ticket-featured{
   position:absolute;
-  top:68%;
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  background:#123d2d;
-  transform:translateY(-50%);
+  z-index:2;
+  right:12px;
+  top:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 11px;
+  border-radius:999px;
+  background:rgba(9,56,40,.92);
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.11em;
+  backdrop-filter:blur(8px);
 }
-.hola-day-ticket:before{left:-11px}.hola-day-ticket:after{right:-11px}
+.hola-day-ticket-featured svg{width:14px;height:14px}
 .hola-day-ticket-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:20px 22px;
-  border-bottom:1px solid var(--hd-line);
+  padding:16px 22px 14px;
+  border-bottom:1px solid rgba(18,61,45,.14);
 }
-.hola-day-ticket-head span{display:flex;align-items:center;gap:8px;color:#607168;font-size:10px;font-weight:900;letter-spacing:.14em}
-.hola-day-ticket-head svg{width:16px;height:16px;color:var(--hd-orange)}
-.hola-day-ticket-head b{font-size:12px;color:var(--hd-orange)}
-.hola-day-ticket-body{padding:27px 22px 30px;border-bottom:1px dashed rgba(18,61,45,.22)}
-.hola-day-ticket-body>span{font-size:10px;letter-spacing:.15em;font-weight:900;color:var(--hd-orange)}
+.hola-day-ticket-head span{display:flex;align-items:center;gap:8px;color:#607168;font-size:9px;font-weight:900;letter-spacing:.13em}
+.hola-day-ticket-head svg{width:15px;height:15px;color:var(--hd-orange)}
+.hola-day-ticket-head b{font-size:10px;color:var(--hd-orange);letter-spacing:.08em}
+.hola-day-ticket-body{padding:16px 22px 22px;border-bottom:1px solid rgba(18,61,45,.13)}
+.hola-day-ticket-body>span{font-size:9px;letter-spacing:.15em;font-weight:900;color:var(--hd-orange)}
+.hola-day-ticket-title-row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:18px;align-items:end;margin-top:9px}
 .hola-day-ticket-body h2{
-  margin:12px 0 0;
-  color:var(--hd-green);
-  font-family:'DM Sans',system-ui,sans-serif;
-  font-size:30px;
-  line-height:1.1;
-  letter-spacing:-.04em;
-  font-weight:850;
+  margin:0;
+  color:#15372a;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:31px;
+  line-height:1.03;
+  letter-spacing:-.038em;
+  font-weight:700;
 }
-.hola-day-ticket-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;padding:20px 22px 24px}
-.hola-day-ticket-meta div{display:grid;gap:4px}
-.hola-day-ticket-meta small{color:#89938d;font-size:9px;font-weight:900;letter-spacing:.13em}
-.hola-day-ticket-meta b{font-size:12px;color:var(--hd-green);white-space:nowrap}
-
-/* EVENT STRIP */
-.hola-day-status{background:var(--hd-paper);border-bottom:1px solid var(--hd-line)}
-.hola-day-status-inner{
-  min-height:104px;
-  display:grid;
-  grid-template-columns:150px 1fr 1fr 1.15fr auto;
-  align-items:stretch;
-}
-.hola-day-status-inner>*{border-right:1px solid var(--hd-line)}
-.hola-day-status-inner>*:first-child{border-left:1px solid var(--hd-line)}
-.hola-day-status-date{display:flex;align-items:center;justify-content:center;gap:9px}
-.hola-day-status-date>span{font-size:44px;line-height:1;font-weight:900;letter-spacing:-.06em;color:var(--hd-green)}
-.hola-day-status-date div{display:grid;gap:1px}
-.hola-day-status-date b{font-size:11px;letter-spacing:.12em;color:var(--hd-orange)}
-.hola-day-status-date small{font-size:10px;color:#819087;font-weight:800}
-.hola-day-status-fact{display:flex;align-items:center;justify-content:center;gap:12px;padding:0 22px}
-.hola-day-status-fact>svg{width:20px;height:20px;color:var(--hd-orange)}
-.hola-day-status-fact span{display:grid;gap:3px}
-.hola-day-status-fact small{font-size:9px;letter-spacing:.12em;color:#89938e;font-weight:900}
-.hola-day-status-fact b{font-size:14px;color:var(--hd-green)}
-.hola-day-status-count{display:flex;align-items:baseline;justify-content:center;gap:10px;padding:0 22px}
-.hola-day-status-count>small{font-size:9px;font-weight:900;letter-spacing:.12em;color:#89938e}
-.hola-day-status-count>b{font-size:34px;letter-spacing:-.05em;color:var(--hd-green)}
-.hola-day-status-count>b span{margin-left:4px;font-size:10px;letter-spacing:0;color:#75827b}
-.hola-day-status-count em{font-size:11px;font-style:normal;color:#8c9690;font-variant-numeric:tabular-nums}
-.hola-day-status-inner>button{
-  min-width:150px;
+.hola-day-ticket-title-row>button{
+  width:43px;
+  height:43px;
   border:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--hd-orange);
+  color:#fff;
+  transition:transform .2s ease,background .2s ease;
+}
+.hola-day-ticket-title-row>button:hover{transform:translate(2px,-2px);background:#b94720}
+.hola-day-ticket-title-row svg{width:18px;height:18px}
+.hola-day-ticket-meta{display:grid;grid-template-columns:repeat(3,1fr);padding:17px 22px 21px}
+.hola-day-ticket-meta>div{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start;padding:0 12px;border-right:1px solid rgba(18,61,45,.12)}
+.hola-day-ticket-meta>div:first-child{padding-left:0}.hola-day-ticket-meta>div:last-child{padding-right:0;border-right:0}
+.hola-day-ticket-meta svg{width:15px;height:15px;color:var(--hd-orange);margin-top:1px}
+.hola-day-ticket-meta span{display:grid;gap:4px}
+.hola-day-ticket-meta small{color:#74817a;font-size:8px;font-weight:900;letter-spacing:.12em}
+.hola-day-ticket-meta b{font-size:10px;color:var(--hd-green);white-space:nowrap}
+
+/* Floating event information rail */
+.hola-day-status{
+  position:relative;
+  z-index:8;
+  margin-top:-94px;
   background:transparent;
-  color:var(--hd-green);
+  pointer-events:none;
+}
+.hola-day-status-inner{
+  min-height:92px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1.12fr 1.05fr;
+  align-items:center;
+  padding:0 14px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:14px;
+  background:rgba(7,50,36,.78);
+  box-shadow:0 24px 60px rgba(2,19,13,.2);
+  backdrop-filter:blur(14px);
+  pointer-events:auto;
+}
+.hola-day-status-inner>*{min-height:60px;border-right:1px solid rgba(255,255,255,.16)}
+.hola-day-status-inner>*:last-child{border-right:0}
+.hola-day-status-fact,
+.hola-day-status-count{display:flex;align-items:center;gap:12px;padding:0 20px;color:#fff}
+.hola-day-status-fact>svg,
+.hola-day-status-count>svg{width:21px;height:21px;color:#fff;flex:0 0 auto}
+.hola-day-status-fact>svg,
+.hola-day-status-count>svg{padding:9px;box-sizing:content-box;border-radius:50%;background:rgba(205,105,38,.46)}
+.hola-day-status-fact span,
+.hola-day-status-count span{display:grid;gap:4px;min-width:0}
+.hola-day-status-fact small,
+.hola-day-status-count small{font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.65);font-weight:900}
+.hola-day-status-fact b{font-size:13px;color:#fff;white-space:nowrap}
+.hola-day-status-count b{display:flex;align-items:baseline;gap:5px;font-size:25px;line-height:1;color:#fff;letter-spacing:-.04em}
+.hola-day-status-count b i{font-style:normal;font-size:8px;letter-spacing:.12em;color:rgba(255,255,255,.58)}
+.hola-day-status-count em{font-size:9px;font-style:normal;color:rgba(255,255,255,.55);font-variant-numeric:tabular-nums}
+.hola-day-status-inner>button{
+  margin:0 10px;
+  min-height:50px;
+  border:1px solid rgba(255,255,255,.19);
+  border-radius:6px;
+  background:rgba(255,255,255,.025);
+  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:10px;
-  font-weight:900;
-  transition:background .2s ease,color .2s ease;
+  font-size:11px;
+  font-weight:850;
+  transition:background .2s ease,border-color .2s ease;
 }
-.hola-day-status-inner>button:hover{background:var(--hd-green);color:#fff}
-.hola-day-status-inner>button svg{width:17px}
+.hola-day-status-inner>button>i{width:8px;height:8px;border-radius:50%;background:#42e28d;box-shadow:0 0 0 4px rgba(66,226,141,.08)}
+.hola-day-status-inner>button:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.35)}
+.hola-day-status-inner>button svg{width:16px;height:16px;margin-left:auto;margin-right:12px;color:rgba(255,255,255,.7)}
 
 /* AGENDA */
-.hola-day-agenda-section{padding:108px 0 118px;background:var(--hd-cream)}
+.hola-day-agenda-section{padding:150px 0 118px;background:var(--hd-cream)}
 .hola-day-agenda-layout{display:grid;grid-template-columns:minmax(300px,.72fr) minmax(0,1.28fr);gap:82px;align-items:start}
 .hola-day-agenda-intro{position:sticky;top:110px}
 .hola-day-agenda-intro h2{
@@ -258,6 +357,7 @@
 .hola-day-agenda-note span{display:grid;gap:3px}
 .hola-day-agenda-note b{font-size:13px;color:var(--hd-green)}
 .hola-day-agenda-note small{font-size:11px;color:#7e8983}
+
 .hola-day-agenda-list{border-top:1px solid rgba(18,61,45,.28)}
 .hola-day-agenda-row{
   display:grid;
@@ -373,7 +473,7 @@
 .hola-day-final-facts{display:flex;flex-wrap:wrap;gap:18px;margin:30px 0}
 .hola-day-final-facts span{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.86);font-size:13px;font-weight:800}
 .hola-day-final-facts svg{width:17px;height:17px;color:#efaa86}
-.hola-day-primary.light-button{background:var(--hd-paper);color:var(--hd-green)}
+.hola-day-primary.light-button{background:var(--hd-paper);color:var(--hd-green);box-shadow:none}
 .hola-day-primary.light-button:hover{background:#fff;color:var(--hd-green)}
 .hola-day-info-lines{border-top:1px solid rgba(255,255,255,.28)}
 .hola-day-info-lines article{display:grid;grid-template-columns:42px minmax(0,1fr);gap:16px;padding:24px 0;border-bottom:1px solid rgba(255,255,255,.18)}
@@ -383,27 +483,35 @@
 .hola-day-info-lines p{margin:0;color:rgba(255,255,255,.58);font-size:12px;line-height:1.55}
 
 .hola-day-page button:focus-visible,
-.hola-day-page a:focus-visible{outline:3px solid rgba(207,96,56,.4);outline-offset:3px}
+.hola-day-page a:focus-visible{outline:3px solid rgba(221,91,40,.44);outline-offset:3px}
 
-@media(max-width:1120px){
-  .hola-day-hero-layout{grid-template-columns:minmax(0,1fr) 340px;gap:40px}
-  .hola-day-ticket-body h2{font-size:26px}
-  .hola-day-status-inner{grid-template-columns:130px 1fr 1fr 1.15fr auto}
+@media(max-width:1180px){
+  .hola-day-hero-layout{grid-template-columns:minmax(0,1fr) 380px;gap:42px}
+  .hola-day-hero h1{font-size:clamp(98px,10vw,136px)}
+  .hola-day-manifesto{right:0}
+  .hola-day-ticket-body h2{font-size:27px}
+  .hola-day-ticket-meta{padding-inline:17px}.hola-day-ticket-meta>div{padding-inline:8px}
+  .hola-day-status-inner{grid-template-columns:1fr 1fr 1fr 1.06fr .96fr}
+  .hola-day-status-fact,.hola-day-status-count{padding-inline:13px}
   .hola-day-agenda-layout{gap:50px}
   .hola-day-touch-grid{grid-template-columns:1fr 1fr;gap:32px}
   .hola-day-touch-image{min-height:500px}
   .hola-day-final-grid{gap:54px}
 }
 
-@media(max-width:900px){
+@media(max-width:960px){
   .hola-day-hero{min-height:auto}
-  .hola-day-hero-layout{min-height:auto;grid-template-columns:1fr;align-items:start;padding-top:76px;padding-bottom:58px}
+  .hola-day-hero-layout{min-height:auto;grid-template-columns:1fr;align-items:start;padding-top:70px;padding-bottom:150px;gap:46px}
   .hola-day-hero-copy{max-width:720px}
+  .hola-day-title-wrap{width:min(100%,620px)}
+  .hola-day-hero h1{font-size:clamp(98px,17vw,148px)}
   .hola-day-ticket{justify-self:start;width:min(100%,560px)}
-  .hola-day-status-inner{grid-template-columns:repeat(2,1fr)}
-  .hola-day-status-inner>*{min-height:78px;border-bottom:1px solid var(--hd-line)}
-  .hola-day-status-date,.hola-day-status-count{border-left:1px solid var(--hd-line)}
-  .hola-day-status-inner>button{grid-column:1/-1;min-height:58px;border-left:1px solid var(--hd-line)}
+  .hola-day-ticket-media{height:245px}
+  .hola-day-status{margin-top:-96px}
+  .hola-day-status-inner{display:grid;grid-template-columns:repeat(2,1fr);padding:0}
+  .hola-day-status-inner>*{min-height:78px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14)}
+  .hola-day-status-inner>button{grid-column:1/-1;margin:10px;min-height:54px}
+  .hola-day-agenda-section{padding-top:128px}
   .hola-day-agenda-layout{grid-template-columns:1fr;gap:42px}
   .hola-day-agenda-intro{position:static}
   .hola-day-touch-head,.hola-day-experience-head,.hola-day-final-grid{grid-template-columns:1fr;gap:28px}
@@ -417,24 +525,29 @@
 }
 
 @media(max-width:680px){
-  .hola-day-page .container{width:min(100% - 32px,1440px)}
-  .hola-day-hero-layout{padding-top:48px;padding-bottom:38px;gap:32px}
-  .hola-day-overline{font-size:9px;letter-spacing:.13em;gap:8px;margin-bottom:18px}.hola-day-overline i{width:28px}
-  .hola-day-hero h1{font-size:clamp(58px,20vw,82px);line-height:.8}.hola-day-hero h1 span:last-child{margin-left:52px}
-  .hola-day-date-lockup{margin-top:20px}.hola-day-date-lockup strong{font-size:46px}.hola-day-date-lockup em{font-size:14px}
-  .hola-day-hero-copy>p{margin-top:20px;font-size:14px;line-height:1.66}
-  .hola-day-hero-actions{margin-top:24px;gap:16px;align-items:flex-start;flex-direction:column}
-  .hola-day-primary{min-height:46px;padding:0 18px;font-size:13px}.hola-day-secondary{font-size:12px}
-  .hola-day-ticket{width:100%}.hola-day-ticket-body{padding:22px 18px 26px}.hola-day-ticket-body h2{font-size:23px}.hola-day-ticket-head,.hola-day-ticket-meta{padding-left:18px;padding-right:18px}.hola-day-ticket-meta{grid-template-columns:1fr 1fr;gap:14px}.hola-day-ticket-meta div:last-child{grid-column:1/-1}
+  .hola-day-page .container{width:min(100% - 28px,1440px)}
+  .hola-day-hero-layout{padding-top:42px;padding-bottom:118px;gap:34px}
+  .hola-day-overline{font-size:8px;letter-spacing:.14em;gap:8px;margin-bottom:18px}.hola-day-overline i{width:28px}
+  .hola-day-title-wrap{width:100%}
+  .hola-day-hero h1{font-size:clamp(70px,24vw,100px);line-height:.78}
+  .hola-day-hero-swoosh{left:-8px;top:45px;width:92%}
+  .hola-day-manifesto{right:2px;bottom:6%;font-size:7px;letter-spacing:.18em}
+  .hola-day-date-lockup{margin-top:18px;gap:10px}.hola-day-date-lockup strong{font-size:44px}.hola-day-date-lockup em{font-size:17px;padding-bottom:4px}
+  .hola-day-hero-copy>p{margin-top:18px;font-size:14px;line-height:1.62}
+  .hola-day-hero-actions{margin-top:22px;gap:10px;align-items:stretch;display:grid;grid-template-columns:1fr 1fr}
+  .hola-day-primary,.hola-day-secondary{min-height:46px;padding:0 12px;font-size:12px}
+  .hola-day-ticket{width:100%;border-radius:10px}.hola-day-ticket-media{height:185px;margin:6px 6px 0}.hola-day-ticket-featured{top:9px;right:9px;font-size:7px;padding:7px 9px}
+  .hola-day-ticket-head{padding:13px 16px 11px}.hola-day-ticket-body{padding:14px 16px 18px}.hola-day-ticket-body h2{font-size:24px}.hola-day-ticket-title-row{grid-template-columns:minmax(0,1fr) 40px;gap:10px}.hola-day-ticket-title-row>button{width:38px;height:38px}
+  .hola-day-ticket-meta{grid-template-columns:1fr 1fr;padding:14px 16px 16px;gap:12px}.hola-day-ticket-meta>div{padding:0;border:0}.hola-day-ticket-meta>div:last-child{grid-column:1/-1}.hola-day-ticket-meta b{font-size:10px}
 
-  .hola-day-status-inner{display:flex;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;background:var(--hd-paper);border-block:1px solid var(--hd-line)}
+  .hola-day-status{margin-top:-72px}
+  .hola-day-status-inner{display:flex;overflow-x:auto;scrollbar-width:none;border-radius:10px;padding:0 4px}
   .hola-day-status-inner::-webkit-scrollbar{display:none}
-  .hola-day-status-inner>*{flex:0 0 auto;min-height:78px;border:0!important;border-right:1px solid var(--hd-line)!important}
-  .hola-day-status-date{width:130px}.hola-day-status-date>span{font-size:36px}
-  .hola-day-status-fact{width:180px;justify-content:flex-start}.hola-day-status-count{width:205px;justify-content:flex-start}.hola-day-status-count>b{font-size:28px}
-  .hola-day-status-inner>button{width:130px;min-width:130px}
+  .hola-day-status-inner>*{flex:0 0 auto;min-height:70px;border-bottom:0;border-right:1px solid rgba(255,255,255,.14)}
+  .hola-day-status-fact{width:178px;padding:0 12px}.hola-day-status-count{width:205px;padding:0 12px}.hola-day-status-fact>svg,.hola-day-status-count>svg{width:17px;height:17px;padding:7px}
+  .hola-day-status-count b{font-size:22px}.hola-day-status-inner>button{grid-column:auto;width:174px;margin:8px;min-height:48px;font-size:10px;white-space:nowrap}
 
-  .hola-day-agenda-section{padding:72px 0 78px}
+  .hola-day-agenda-section{padding:105px 0 78px}
   .hola-day-agenda-intro h2,.hola-day-touch-head h2,.hola-day-experience-head h2,.hola-day-final-copy h2{font-size:40px;line-height:1.02}
   .hola-day-agenda-intro>p,.hola-day-touch-head>p,.hola-day-final-copy>p{font-size:14px;line-height:1.7}
   .hola-day-agenda-note{margin-top:24px}
