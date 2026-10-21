@@ -299,8 +299,6 @@ export default function HomePage() {
     </section>}
 
     {sectionOn('themes')&&<section className="themes-showcase">
-      <div className="themes-decor themes-decor-left"><Leaf/></div>
-      <div className="themes-decor themes-decor-right"><Leaf/></div>
       <div className="themes-showcase-inner">
         <header className="themes-showcase-head">
           <div className="themes-showcase-title">
