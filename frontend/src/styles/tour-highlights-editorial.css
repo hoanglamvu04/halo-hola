@@ -1,0 +1,177 @@
+/* HOLA Tour — cleaner public-facing journey highlights. */
+.tour-page-ref .tour-highlights{
+  margin-top:24px!important;
+  padding:26px 0 8px!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+}
+
+.tour-page-ref .tour01-block-title{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:end!important;
+  gap:28px!important;
+  margin:0 0 20px!important;
+  padding:0 0 16px!important;
+  border-bottom:1px solid rgba(13,68,55,.12)!important;
+}
+
+.tour-page-ref .tour01-block-title h2{
+  margin:0!important;
+  font-family:"Segoe UI Variable Display","Segoe UI",Arial,sans-serif!important;
+  font-size:clamp(34px,3.2vw,52px)!important;
+  font-weight:780!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+  color:var(--t-green)!important;
+}
+
+.tour-page-ref .tour01-block-title>span{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:30px!important;
+  margin:0!important;
+  padding:0 12px!important;
+  border:1px solid rgba(216,95,43,.18)!important;
+  border-radius:999px!important;
+  background:#fff8ef!important;
+  color:var(--t-orange)!important;
+  font-size:9px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  letter-spacing:.14em!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+}
+
+.tour-page-ref .tour-highlight-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+
+.tour-page-ref .tour-highlight-grid>div{
+  position:relative!important;
+  display:block!important;
+  min-height:136px!important;
+  padding:20px 58px 18px 20px!important;
+  overflow:hidden!important;
+  background:#fffdf8!important;
+  border:1px solid rgba(124,107,82,.14)!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 28px rgba(47,43,34,.035)!important;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+}
+
+.tour-page-ref .tour-highlight-grid>div:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(216,95,43,.24)!important;
+  box-shadow:0 14px 34px rgba(47,43,34,.055)!important;
+}
+
+.tour-page-ref .tour-highlight-grid>div:before{
+  display:block!important;
+  margin-bottom:18px!important;
+  color:var(--t-orange)!important;
+  font-size:9px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  letter-spacing:.14em!important;
+}
+.tour-page-ref .tour-highlight-grid>div:nth-child(1):before{content:"01 / BẢN SẮC"!important}
+.tour-page-ref .tour-highlight-grid>div:nth-child(2):before{content:"02 / CON NGƯỜI"!important}
+.tour-page-ref .tour-highlight-grid>div:nth-child(3):before{content:"03 / NHỊP ĐI"!important}
+.tour-page-ref .tour-highlight-grid>div:nth-child(4):before{content:"04 / GẶP GỠ"!important}
+.tour-page-ref .tour-highlight-grid>div:nth-child(5):before{content:"05 / NHỊP ĐỘ"!important}
+.tour-page-ref .tour-highlight-grid>div:nth-child(6):before{content:"06 / TRẢI NGHIỆM"!important}
+
+.tour-page-ref .tour-highlight-grid>div>span{
+  position:absolute!important;
+  top:16px!important;
+  right:16px!important;
+  width:34px!important;
+  height:34px!important;
+  border-radius:11px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#eef3ec!important;
+  color:#25624f!important;
+  border:1px solid rgba(37,98,79,.08)!important;
+}
+
+.tour-page-ref .tour-highlight-grid>div:nth-child(even)>span{
+  background:#fff0e6!important;
+  color:var(--t-orange)!important;
+  border-color:rgba(216,95,43,.08)!important;
+}
+
+.tour-page-ref .tour-highlight-grid svg{
+  width:16px!important;
+  height:16px!important;
+  stroke-width:1.9!important;
+}
+
+.tour-page-ref .tour-highlight-grid b{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  color:var(--t-green)!important;
+  font-size:16px!important;
+  font-weight:760!important;
+  line-height:1.24!important;
+  letter-spacing:-.02em!important;
+}
+
+.tour-page-ref .tour-highlight-grid p{
+  margin:8px 0 0!important;
+  color:#66736c!important;
+  font-size:12.5px!important;
+  line-height:1.52!important;
+}
+
+@media(max-width:1080px){
+  .tour-page-ref .tour-highlight-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:720px){
+  .tour-page-ref .tour-highlights{
+    margin-top:18px!important;
+    padding:20px 0 4px!important;
+  }
+  .tour-page-ref .tour01-block-title{
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    align-items:start!important;
+    margin-bottom:14px!important;
+    padding-bottom:12px!important;
+  }
+  .tour-page-ref .tour01-block-title h2{
+    font-size:34px!important;
+  }
+  .tour-page-ref .tour01-block-title>span{
+    width:max-content!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+  .tour-page-ref .tour-highlight-grid{
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+  .tour-page-ref .tour-highlight-grid>div{
+    min-height:0!important;
+    padding:17px 52px 16px 17px!important;
+    border-radius:15px!important;
+  }
+  .tour-page-ref .tour-highlight-grid>div:before{
+    margin-bottom:14px!important;
+  }
+  .tour-page-ref .tour-highlight-grid b{
+    font-size:15px!important;
+  }
+  .tour-page-ref .tour-highlight-grid p{
+    font-size:12px!important;
+  }
+}
