@@ -257,6 +257,6 @@ export const agenda = [
   { time: '15:00', title: '52 góc nhìn', image: img.event, desc: 'Check-in · triển lãm TOP52 · Sắc màu Hòa Lạc · Live Art.' },
   { time: '16:00', title: 'HOLA TALK', image: img.talk, desc: '52 góc nhìn – Một Hòa Lạc đang chuyển mình.' },
   { time: '16:45', title: 'Nắng Hòa Lạc', image: img.sunset, desc: 'Ngắm hoàng hôn · photobooth · tiệc trà.' },
-  { time: '17:15', title: 'Main Event', image: img.event, desc: 'Opening · trao giải · HELLO HÒA LẠC.' },
+  { time: '17:15', title: 'Main Event', image: img.event, desc: 'Opening, tuyên dương, HELLO HÒA LẠC.' },
   { time: '18:48', title: 'Hello Hòa Lạc', image: img.night, desc: 'Giao lưu · Calendar · Collection · kết nối cộng đồng.' },
 ]
