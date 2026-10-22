@@ -118,18 +118,32 @@
 .hola-day-page .hola-day-agenda-row{min-height:108px;padding-block:14px}
 .hola-day-page .hola-day-agenda-row:hover{padding-inline:0}
 .hola-day-page .hola-day-agenda-thumb{border-radius:5px}
-.hola-day-page .hola-day-experience-media{height:205px;border-radius:7px}
-.hola-day-page .hola-day-experience-body{padding-top:16px}
-.hola-day-page .hola-day-experience-label{color:var(--hd-moss);gap:10px}
-.hola-day-page .hola-day-experience-label svg{
-  box-sizing:content-box;
-  width:17px;
-  height:17px;
-  padding:8px;
-  flex:none;
-  border-radius:50%;
-  background:var(--hd-item-color);
-  color:var(--hd-item-ink);
+.hola-day-page .hola-day-experience-media{
+  position:relative;
+  height:205px;
+  border-radius:7px;
+}
+.hola-day-page .hola-day-experience-body{padding-top:14px}
+.hola-day-page .hola-day-experience-label{
+  position:absolute;
+  z-index:2;
+  top:12px;
+  right:12px;
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:999px;
+  background:rgba(251,247,239,.9);
+  color:var(--hd-green);
+  box-shadow:0 6px 16px rgba(18,61,45,.08);
+  backdrop-filter:blur(6px);
+  font-size:9px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.14em;
+  text-transform:uppercase;
 }
 .hola-day-page .hola-day-experience-card p{color:#606c62}
 
@@ -141,7 +155,7 @@
   .hola-day-page .hola-day-agenda-layout,
   .hola-day-page .hola-day-touch-grid{gap:26px}
   .hola-day-page .hola-day-touch-image{aspect-ratio:16/9;max-height:320px}
-  .hola-day-page .hola-day-experience-body{padding-top:8px}
+  .hola-day-page .hola-day-experience-body{padding-top:12px}
 }
 @media(max-width:680px){
   .hola-day-page .hola-day-agenda-section{padding:32px 0 36px}
@@ -165,7 +179,14 @@
   .hola-day-page .hola-day-touch-image{max-height:240px}
   .hola-day-page .hola-day-touch-list article{min-height:70px;gap:10px}
   .hola-day-page .hola-day-experience-media{height:185px}
-  .hola-day-page .hola-day-experience-body{padding:14px 0 2px}
+  .hola-day-page .hola-day-experience-label{
+    top:9px;
+    right:9px;
+    min-height:27px;
+    padding-inline:9px;
+    font-size:8px;
+  }
+  .hola-day-page .hola-day-experience-body{padding:12px 0 2px}
   .hola-day-page .hola-day-final-facts{margin-block:18px}
   .hola-day-page .hola-day-info-lines article{padding-block:16px}
 }
