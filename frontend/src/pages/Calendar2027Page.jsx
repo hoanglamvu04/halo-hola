@@ -78,7 +78,7 @@ export default function Calendar2027Page(){
     <section className="calendar2027-bridge-section">
       <div className="container calendar2027-bridge-grid">
         <div className="calendar2027-section-copy">
-          <span className="eyebrow">PHYSICAL × DIGITAL</span>
+          <span className="eyebrow">TỪ TRANG LỊCH ĐẾN CÂU CHUYỆN</span>
           <h2>Mở lịch để xem. Quét để đọc tiếp.</h2>
           <p>Mỗi trang đứng độc lập như một lát cắt nhỏ. Khi muốn đi sâu hơn, QR đưa bạn trở lại câu chuyện đầy đủ trên HALO HOLA.</p>
         </div>
