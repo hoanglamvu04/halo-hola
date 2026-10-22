@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+  ArrowLeft,
   ArrowRight,
   CalendarDays,
   CheckCircle2,
@@ -24,6 +25,14 @@ const touchpoints=[
   ['04','Main Event','Opening · ghi nhận · trao giải'],
   ['05','WE HOLA','Gặp gỡ những người cùng yêu Hòa Lạc'],
   ['06','Check-in','Điểm bắt đầu cho một buổi chiều chung'],
+]
+
+const holaDayHeroSlides=[
+  {image:img.event,label:'TOP52',caption:'52 góc nhìn trong cùng một không gian.'},
+  {image:img.talk,label:'HOLA TALK',caption:'Những câu chuyện phía sau mỗi góc nhìn.'},
+  {image:img.sunset,label:'NẮNG HÒA LẠC',caption:'Một khoảng dừng cho ánh sáng và cảm xúc.'},
+  {image:img.award,label:'MAIN EVENT',caption:'Opening · ghi nhận · trao giải.'},
+  {image:img.people,label:'WE HOLA',caption:'Một Hòa Lạc, nhiều câu chuyện.'},
 ]
 
 const experiences=[
@@ -64,6 +73,8 @@ const two=value=>String(value).padStart(2,'0')
 
 export default function HolaDayPage(){
   const [countdown,setCountdown]=useState(getCountdown)
+  const [heroSlide,setHeroSlide]=useState(0)
+  const heroTouchStartX=useRef(null)
   const [showRegistration,setShowRegistration]=useState(false)
   const [form,setForm]=useState(initialForm)
   const [result,setResult]=useState(null)
@@ -86,6 +97,24 @@ export default function HolaDayPage(){
       window.removeEventListener('keydown',closeOnEscape)
     }
   },[showRegistration])
+
+  const showHeroSlide=index=>{
+    const total=holaDayHeroSlides.length
+    setHeroSlide((index+total)%total)
+  }
+
+  const handleHeroTouchStart=event=>{
+    heroTouchStartX.current=event.touches?.[0]?.clientX??null
+  }
+
+  const handleHeroTouchEnd=event=>{
+    if(heroTouchStartX.current===null)return
+    const endX=event.changedTouches?.[0]?.clientX
+    const delta=typeof endX==='number'?endX-heroTouchStartX.current:0
+    heroTouchStartX.current=null
+    if(Math.abs(delta)<42)return
+    showHeroSlide(heroSlide+(delta<0?1:-1))
+  }
 
   const openRegistration=()=>{
     setError('')
@@ -123,11 +152,36 @@ export default function HolaDayPage(){
             </div>
           </div>
 
-          <figure className="hola-day-editorial-visual">
+          <figure className="hola-day-editorial-visual" onTouchStart={handleHeroTouchStart} onTouchEnd={handleHeroTouchEnd}>
             <div className="hola-day-editorial-photo">
-              <img src={img.people} alt="Những người bạn cùng gặp gỡ và trò chuyện" width="1200" height="800" loading="eager" decoding="async"/>
+              <img
+                key={holaDayHeroSlides[heroSlide].image}
+                src={holaDayHeroSlides[heroSlide].image}
+                alt={holaDayHeroSlides[heroSlide].caption}
+                width="1400"
+                height="875"
+                loading="eager"
+                decoding="async"
+              />
             </div>
-            <figcaption><span>XEM · NGHE · GẶP</span><span>Một Hòa Lạc, nhiều câu chuyện.</span></figcaption>
+            <div className="hola-day-hero-slide-label">
+              <span>{holaDayHeroSlides[heroSlide].label}</span>
+              <b>{holaDayHeroSlides[heroSlide].caption}</b>
+            </div>
+            <div className="hola-day-hero-slide-dots" aria-label="Chọn ảnh HOLA DAY">
+              {holaDayHeroSlides.map((slide,index)=><button
+                type="button"
+                key={slide.label}
+                className={index===heroSlide?'active':''}
+                onClick={()=>showHeroSlide(index)}
+                aria-label={'Xem ảnh '+String(index+1).padStart(2,'0')}
+              />)}
+            </div>
+            <div className="hola-day-hero-slide-controls" aria-label="Điều hướng ảnh HOLA DAY">
+              <button type="button" onClick={()=>showHeroSlide(heroSlide-1)} aria-label="Ảnh trước"><ArrowLeft/></button>
+              <span>{String(heroSlide+1).padStart(2,'0')} / {String(holaDayHeroSlides.length).padStart(2,'0')}</span>
+              <button type="button" onClick={()=>showHeroSlide(heroSlide+1)} aria-label="Ảnh tiếp theo"><ArrowRight/></button>
+            </div>
           </figure>
         </div>
 
