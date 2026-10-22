@@ -159,7 +159,6 @@ export default function ThemePage(){
   if(loading)return <main className="theme-page-ref"><div className="jw-empty">Đang tải chủ đề từ hệ thống...</div></main>
   if(error||!theme)return <main className="theme-page-ref"><div className="form-error">{error||'Không tìm thấy chủ đề.'}</div><div className="container section"><Link className="btn btn-outline" to="/chu-de"><ArrowLeft/> Quay lại 8 chủ đề</Link></div></main>
 
-  const visibleCount=Number(theme.artworkCount ?? totalCount ?? 0)
   const heroSlides=buildThemeHeroSlides(theme,heroArtworks)
   const activeHeroIndex=heroSlides.length?Math.min(heroSlide,heroSlides.length-1):0
   const activeHero=heroSlides[activeHeroIndex]
@@ -197,11 +196,6 @@ export default function ThemePage(){
             <a className="theme-explore-link" href="#kham-pha"><span><Play/></span>Khám phá chủ đề</a>
           </div>
 
-          <div className="theme-hero-stats">
-            <div><span><Users/></span><b>{visibleCount}</b><small>Tác phẩm cộng đồng</small></div>
-            <div><span><BookOpen/></span><b>Câu chuyện</b><small>Góc nhìn cộng đồng</small></div>
-            <div><span><ImageIcon/></span><b>4 loại hình</b><small>Ảnh · Video · Story · Art</small></div>
-          </div>
         </div>
 
         <div className="theme-hero-visual" onTouchStart={handleHeroTouchStart} onTouchEnd={handleHeroTouchEnd}>
