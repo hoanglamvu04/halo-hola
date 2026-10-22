@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight,
   BookOpen,
-  Building2,
   CalendarDays,
   Image as ImageIcon,
   Package,
@@ -14,16 +13,16 @@ import { img } from '../data/siteData.js'
 import './Calendar2027Page.css'
 
 const weeklyFormat=[
-  {icon:CalendarDays,index:'01',title:'Một góc nhìn',text:'Một lát cắt đủ rõ để mở ra câu chuyện Hòa Lạc trong tuần.'},
-  {icon:ImageIcon,index:'02',title:'Một hình ảnh',text:'Hero Image là điểm chạm thị giác chính của mỗi tuần.'},
-  {icon:Quote,index:'03',title:'Một câu dẫn ngắn',text:'Một câu đủ gợi mở để người xem muốn bước sâu hơn vào câu chuyện.'},
-  {icon:QrCode,index:'04',title:'Một QR',text:'Quét để đọc câu chuyện đầy đủ trên HALO HOLA — nơi nội dung tiếp tục sống.'},
+  {icon:ImageIcon,index:'01',title:'Một khung hình',text:'Một bức ảnh đủ chậm để giữ lại không khí của Hòa Lạc trong tuần.'},
+  {icon:Quote,index:'02',title:'Một câu chuyện',text:'Vài dòng về con người, ký ức, kiến trúc, thiên nhiên hay một khoảnh khắc đời thường.'},
+  {icon:CalendarDays,index:'03',title:'Một tuần để sống',text:'Lịch tuần hiện diện vừa đủ để cuốn lịch thật sự ở lại trên bàn mỗi ngày.'},
+  {icon:QrCode,index:'04',title:'Một đường dẫn',text:'Quét QR khi bạn muốn xem thêm ảnh, video và câu chuyện đầy đủ trên HALO HOLA.'},
 ]
 
 const rollout=[
-  {date:'Trước 24.11',title:'Prototype & pre-order B2B',text:'Hoàn thiện 8–12 tuần mẫu, packaging và mở đăng ký quan tâm cho doanh nghiệp, tổ chức, trường học và đối tác Hòa Lạc.'},
-  {date:'24.11',title:'Official Reveal tại HOLA DAY',text:'Calendar 2027 được giới thiệu như cánh cửa vật lý dẫn vào hành trình kể chuyện HALO HOLA 2027.'},
-  {date:'25.11 → Tết',title:'Mở rộng B2B + B2C',text:'Tiếp tục giới thiệu rộng hơn sau HOLA DAY, phục vụ nhu cầu quà tặng cuối năm và cộng đồng quan tâm tới Hòa Lạc.'},
+  {date:'24.11.2026',title:'Gặp nhau lần đầu tại HOLA DAY',text:'Calendar 2027 xuất hiện như một lời mời mang những câu chuyện Hòa Lạc về gần hơn trong đời sống hằng ngày.'},
+  {date:'12.2026',title:'Mang Hòa Lạc về bàn làm việc',text:'Những cuốn lịch đầu tiên bắt đầu đồng hành cùng người yêu Hòa Lạc, bạn bè, gia đình và những cộng đồng gắn bó với vùng đất này.'},
+  {date:'01 → 12.2027',title:'Mỗi tuần mở thêm một câu chuyện',text:'52 tuần lần lượt đi qua thiên nhiên, con người, kiến trúc, tri thức, cộng đồng và những trải nghiệm đời thường.'},
 ]
 
 const sampleWeeks=[
@@ -34,17 +33,23 @@ const sampleWeeks=[
 
 function CalendarMockup(){
   return <div className="calendar2027-mockup" aria-label="Mô phỏng HALO HOLA Calendar 2027">
-    <div className="calendar2027-rings" aria-hidden="true">{Array.from({length:7}).map((_,index)=><i key={index}/>)}</div>
+    <div className="calendar2027-rings" aria-hidden="true">{Array.from({length:9}).map((_,index)=><i key={index}/>)}</div>
     <div className="calendar2027-sheet calendar2027-sheet-back" aria-hidden="true"/>
-    <div className="calendar2027-sheet">
-      <div className="calendar2027-sheet-head"><span>HALO HOLA</span><b>2027</b></div>
-      <img src={img.village} alt="Không gian Hòa Lạc minh họa cho Calendar 2027"/>
-      <div className="calendar2027-week-row"><b>WEEK 01</b><span>04 — 10 JAN</span></div>
-      <h3>Mỗi tuần một câu chuyện.</h3>
-      <p>Một góc nhìn · một hình ảnh · một câu dẫn</p>
-      <div className="calendar2027-qr-row"><div><QrCode/></div><span>Quét để đọc câu chuyện đầy đủ<br/><b>halohola.vn</b></span></div>
+    <div className="calendar2027-sheet calendar2027-cover-sheet">
+      <img src={img.sunset} alt="Một buổi chiều Hòa Lạc trên bìa Calendar 2027"/>
+      <div className="calendar2027-cover-overlay" aria-hidden="true"/>
+      <div className="calendar2027-cover-brand">HALO HOLA</div>
+      <div className="calendar2027-cover-copy">
+        <strong>52 tuần</strong>
+        <span>HÒA LẠC</span>
+        <p>Một năm sống chậm · khám phá · kết nối</p>
+      </div>
+      <div className="calendar2027-cover-bottom">
+        <span>THIÊN NHIÊN · CON NGƯỜI · KIẾN TRÚC · TRI THỨC · CỘNG ĐỒNG · TRẢI NGHIỆM</span>
+        <b>2027</b>
+      </div>
     </div>
-    <div className="calendar2027-stamp"><Sparkles/><span>52 TUẦN</span><b>52 CÂU CHUYỆN</b></div>
+    <div className="calendar2027-stamp"><Sparkles/><span>52 TUẦN</span><b>52 GÓC NHÌN</b></div>
   </div>
 }
 
@@ -57,13 +62,13 @@ export default function Calendar2027Page(){
         <div className="calendar2027-hero-copy">
           <span className="calendar2027-kicker">HALO HOLA CALENDAR 2027</span>
           <h1><em>52 tuần.</em><br/>52 câu chuyện Hòa Lạc.</h1>
-          <p>Phiên bản vật lý của hành trình kể chuyện HALO HOLA 2027 — để mỗi tuần, một góc nhìn về Hòa Lạc lại được mở ra và dẫn tiếp tới kho câu chuyện số.</p>
+          <p>Một cuốn lịch để Hòa Lạc ở lại trên bàn mỗi ngày — 52 tuần đi qua thiên nhiên, con người, kiến trúc, tri thức, cộng đồng và những trải nghiệm đáng nhớ.</p>
           <div className="calendar2027-hero-actions">
             <Link className="btn btn-terra" to="/dong-hanh">Quan tâm Calendar 2027 <ArrowRight size={17}/></Link>
             <Link className="calendar2027-text-link" to="/stories">Khám phá câu chuyện <BookOpen size={17}/></Link>
           </div>
           <div className="calendar2027-hero-meta">
-            <span><b>52</b> tuần</span><i/><span><b>52</b> câu chuyện</span><i/><span><b>01</b> Hòa Lạc</span>
+            <span><b>52</b> tuần</span><i/><span><b>06</b> mạch câu chuyện</span><i/><span><b>01</b> Hòa Lạc</span>
           </div>
         </div>
         <CalendarMockup/>
@@ -74,21 +79,21 @@ export default function Calendar2027Page(){
       <div className="container calendar2027-bridge-grid">
         <div className="calendar2027-section-copy">
           <span className="eyebrow">PHYSICAL × DIGITAL</span>
-          <h2>Không chỉ là một cuốn lịch.</h2>
-          <p>Calendar là phiên bản vật lý của hành trình kể chuyện 2027. HALO HOLA là lớp nội dung số đi cùng nó suốt 52 tuần.</p>
+          <h2>Mở lịch để xem. Quét để đọc tiếp.</h2>
+          <p>Mỗi trang đứng độc lập như một lát cắt nhỏ. Khi muốn đi sâu hơn, QR đưa bạn trở lại câu chuyện đầy đủ trên HALO HOLA.</p>
         </div>
         <div className="calendar2027-media-bridge">
-          <article><Package/><small>PHYSICAL MEDIA</small><h3>Calendar 2027</h3><p>Chạm vào hình ảnh, câu dẫn và nhịp tuần của từng câu chuyện.</p></article>
+          <article><Package/><small>TRÊN BÀN MỖI NGÀY</small><h3>Một tuần để nhìn lại</h3><p>Ảnh, câu dẫn và lịch tuần được giữ gọn để sống cùng không gian làm việc mỗi ngày.</p></article>
           <div className="calendar2027-bridge-arrow"><ArrowRight/></div>
-          <article className="digital"><QrCode/><small>DIGITAL MEDIA</small><h3>HALO HOLA</h3><p>Quét QR để mở câu chuyện đầy đủ, hình ảnh, video và tư liệu liên quan.</p></article>
+          <article className="digital"><QrCode/><small>KHI MUỐN ĐI SÂU HƠN</small><h3>Câu chuyện phía sau</h3><p>Ảnh bổ sung, video và những góc nhìn liên quan tiếp tục được kể trên HALO HOLA.</p></article>
         </div>
       </div>
     </section>
 
     <section className="container calendar2027-section calendar2027-format-section">
       <div className="calendar2027-section-head">
-        <div><span className="eyebrow">CẤU TRÚC MỖI TUẦN</span><h2>Một trang lịch, bốn điểm chạm.</h2></div>
-        <p>Mỗi tuần kể vừa đủ trên bản in và để QR mở phần còn lại trên HALO HOLA.</p>
+        <div><span className="eyebrow">MỖI TUẦN MỘT LÁT CẮT</span><h2>Một trang lịch, bốn điều để nhớ.</h2></div>
+        <p>Mỗi tuần đủ gọn để xem nhanh, nhưng vẫn để lại một câu chuyện đáng giữ.</p>
       </div>
       <div className="calendar2027-format-grid">
         {weeklyFormat.map(({icon:Icon,index,title,text})=><article key={index}>
@@ -101,8 +106,8 @@ export default function Calendar2027Page(){
     <section className="calendar2027-preview-section">
       <div className="container">
         <div className="calendar2027-section-head">
-          <div><span className="eyebrow">MẪU CẤU TRÚC NỘI DUNG</span><h2>52 tuần không chỉ có phong cảnh.</h2></div>
-          <p>Calendar đi qua bản sắc, con người, tri thức, kiến trúc, đời sống, thiên nhiên và tương lai của Hòa Lạc.</p>
+          <div><span className="eyebrow">MỘT NĂM ĐỒNG HÀNH</span><h2>Một năm đi qua nhiều Hòa Lạc.</h2></div>
+          <p>Thiên nhiên, con người, kiến trúc, tri thức, cộng đồng và trải nghiệm cùng xuất hiện trong nhịp 52 tuần.</p>
         </div>
         <div className="calendar2027-preview-grid">
           {sampleWeeks.map(item=><article key={item.week}>
@@ -111,14 +116,14 @@ export default function Calendar2027Page(){
             <div className="calendar2027-preview-copy"><span>{item.week}</span><small>{item.label}</small><h3>{item.title}</h3><div><QrCode/> Câu chuyện đầy đủ trên HALO HOLA</div></div>
           </article>)}
         </div>
-        <p className="calendar2027-preview-note">Các tuần trên là mô phỏng cấu trúc trình bày, không phải danh sách nội dung Calendar đã chốt.</p>
+        <p className="calendar2027-preview-note">Những hình ảnh này minh họa tinh thần các mạch câu chuyện sẽ xuất hiện xuyên suốt Calendar 2027.</p>
       </div>
     </section>
 
     <section className="container calendar2027-section calendar2027-rollout-section">
       <div className="calendar2027-section-head">
-        <div><span className="eyebrow">LỘ TRÌNH CALENDAR</span><h2>Từ prototype đến hành trình 2027.</h2></div>
-        <p>Calendar được chuẩn bị trước HOLA DAY thay vì chờ đến ngày reveal mới bắt đầu.</p>
+        <div><span className="eyebrow">TỪ HOLA DAY ĐẾN 2027</span><h2>Một cuộc gặp mở ra 52 tuần đồng hành.</h2></div>
+        <p>Cuốn lịch bắt đầu từ một cuộc gặp và tiếp tục sống trên bàn làm việc, trong lớp học, trong gia đình và những không gian gắn với Hòa Lạc.</p>
       </div>
       <div className="calendar2027-rollout">
         {rollout.map((item,index)=><article key={item.date}>
@@ -131,25 +136,24 @@ export default function Calendar2027Page(){
     <section className="calendar2027-b2b-section">
       <div className="container calendar2027-b2b-grid">
         <div>
-          <span className="eyebrow">DÀNH CHO TỔ CHỨC & DOANH NGHIỆP</span>
-          <h2>Một món quà mang câu chuyện Hòa Lạc.</h2>
-          <p>Định hướng B2B có thể triển khai theo các mốc số lượng 50 · 100 · 300 · 500+ cuốn, với mức cá nhân hóa hợp lý như logo, thiệp chúc và bao bì.</p>
-          <div className="calendar2027-quantity-row">{['50','100','300','500+'].map(value=><span key={value}><b>{value}</b><small>cuốn</small></span>)}</div>
-          <Link className="btn btn-terra" to="/dong-hanh">Trao đổi nhu cầu đồng hành <ArrowRight size={17}/></Link>
+          <span className="eyebrow">MỘT MÓN QUÀ TỪ HÒA LẠC</span>
+          <h2>Để một phần Hòa Lạc ở lại trên bàn mỗi ngày.</h2>
+          <p>Calendar 2027 phù hợp để dành tặng người thân, đồng nghiệp, khách mời hoặc những người có một mối liên hệ với Hòa Lạc — như một món quà vừa hữu dụng, vừa có câu chuyện.</p>
+          <Link className="btn btn-terra" to="/dong-hanh">Quan tâm Calendar 2027 <ArrowRight size={17}/></Link>
         </div>
         <aside>
-          <Building2/>
-          <span>PRE-ORDER B2B</span>
-          <h3>Prototype 8–12 tuần mẫu trước 24.11</h3>
-          <p>Phù hợp cho doanh nghiệp, tổ chức, trường học, ngân hàng, khu công nghiệp/công nghệ cao và các đối tác tại Hòa Lạc.</p>
+          <Package/>
+          <span>DÀNH TẶNG · LƯU GIỮ · SẺ CHIA</span>
+          <h3>Một cuốn lịch, nhiều cách để ở gần Hòa Lạc.</h3>
+          <p>Đặt trên bàn làm việc, mang về nhà hoặc dành tặng một người bạn — mỗi tuần lại mở ra một lát cắt khác của vùng đất này.</p>
         </aside>
       </div>
     </section>
 
     <section className="calendar2027-final-section">
       <div className="container calendar2027-final-card">
-        <div><span>HALO HOLA 2027</span><h2>Mỗi tuần một câu chuyện.<br/>Mỗi câu chuyện mở thêm một Hòa Lạc.</h2></div>
-        <div><p>Calendar = Physical Media<br/>HALO HOLA = Digital Media</p><Link to="/stories">Đi vào kho câu chuyện <ArrowRight/></Link></div>
+        <div><span>52 TUẦN HÒA LẠC</span><h2>Mỗi tuần một khung hình.<br/>Mỗi tuần một câu chuyện để nhớ.</h2></div>
+        <div><p>Mở lịch để xem.<br/>Quét để đọc tiếp trên HALO HOLA.</p><Link to="/stories">Đi vào kho câu chuyện <ArrowRight/></Link></div>
       </div>
     </section>
   </main>
