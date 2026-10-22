@@ -193,26 +193,26 @@
 
 /* Agenda editorial timeline v2 */
 .hola-day-page .hola-day-agenda-section{
-  padding:46px 0 54px;
+  padding:30px 0 36px;
 }
 .hola-day-page .hola-day-agenda-layout{
   grid-template-columns:minmax(290px,.7fr) minmax(0,1.3fr);
-  gap:clamp(46px,5vw,76px);
+  gap:clamp(38px,4vw,60px);
 }
 .hola-day-page .hola-day-agenda-intro{
   top:96px;
 }
 .hola-day-page .hola-day-agenda-intro>p{
-  max-width:470px;
-  margin-top:16px;
-  font-size:14px;
-  line-height:1.7;
+  max-width:455px;
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.58;
 }
 .hola-day-page .hola-day-agenda-note{
   display:inline-flex;
   width:auto;
-  margin-top:20px;
-  padding:10px 14px;
+  margin-top:14px;
+  padding:8px 12px;
   border:1px solid rgba(156,100,61,.2);
   border-radius:999px;
   background:rgba(255,255,255,.34);
@@ -233,11 +233,11 @@
 .hola-day-page .hola-day-agenda-row{
   position:relative;
   display:grid;
-  grid-template-columns:104px 30px minmax(0,1fr);
-  gap:16px;
+  grid-template-columns:92px 26px minmax(0,1fr);
+  gap:13px;
   align-items:start;
-  min-height:96px;
-  padding:17px 0 18px;
+  min-height:68px;
+  padding:8px 0 9px;
   border:0;
   background:transparent;
   transition:none;
@@ -250,7 +250,7 @@
 .hola-day-page .hola-day-agenda-row time{
   padding-top:1px;
   color:var(--hd-green);
-  font-size:32px;
+  font-size:28px;
   font-weight:900;
   line-height:1;
   letter-spacing:-.035em;
@@ -259,15 +259,15 @@
 .hola-day-page .hola-day-agenda-marker{
   position:relative;
   align-self:stretch;
-  min-height:62px;
+  min-height:44px;
 }
 .hola-day-page .hola-day-agenda-marker:before{
   content:'';
   position:absolute;
   z-index:0;
   left:50%;
-  top:-18px;
-  bottom:-18px;
+  top:-9px;
+  bottom:-9px;
   width:1px;
   background:rgba(182,78,43,.3);
   transform:translateX(-50%);
@@ -277,28 +277,28 @@
   position:absolute;
   z-index:1;
   left:50%;
-  top:7px;
-  width:9px;
-  height:9px;
-  border:3px solid var(--hd-cream);
+  top:5px;
+  width:8px;
+  height:8px;
+  border:2px solid var(--hd-cream);
   border-radius:50%;
   background:#b64e2b;
   box-shadow:0 0 0 1px rgba(182,78,43,.52);
   transform:translateX(-50%);
 }
 .hola-day-page .hola-day-agenda-row:first-child .hola-day-agenda-marker:before{
-  top:11px;
+  top:7px;
 }
 .hola-day-page .hola-day-agenda-row:last-child .hola-day-agenda-marker:before{
-  bottom:calc(100% - 11px);
+  bottom:calc(100% - 7px);
 }
 .hola-day-page .hola-day-agenda-copy{
   padding:0 0 5px;
 }
 .hola-day-page .hola-day-agenda-copy h3{
-  margin:0 0 5px;
+  margin:0 0 3px;
   color:var(--hd-green);
-  font-size:22px;
+  font-size:20px;
   font-weight:850;
   line-height:1.16;
   letter-spacing:-.025em;
@@ -307,8 +307,8 @@
   max-width:620px;
   margin:0;
   color:#68766e;
-  font-size:12px;
-  line-height:1.55;
+  font-size:11px;
+  line-height:1.42;
 }
 .hola-day-page .hola-day-agenda-thumb,
 .hola-day-page .hola-day-agenda-index{
@@ -318,7 +318,7 @@
 @media(max-width:960px){
   .hola-day-page .hola-day-agenda-layout{
     grid-template-columns:1fr;
-    gap:28px;
+    gap:18px;
   }
   .hola-day-page .hola-day-agenda-intro{
     position:static;
@@ -331,51 +331,51 @@
 
 @media(max-width:680px){
   .hola-day-page .hola-day-agenda-section{
-    padding:30px 0 36px;
+    padding:26px 0 30px;
   }
   .hola-day-page .hola-day-agenda-layout{
     gap:22px;
   }
   .hola-day-page .hola-day-agenda-intro>p{
-    margin-top:12px;
-    font-size:13px;
-    line-height:1.65;
+    margin-top:10px;
+    font-size:12px;
+    line-height:1.55;
   }
   .hola-day-page .hola-day-agenda-note{
-    margin-top:16px;
-    padding:9px 11px;
+    margin-top:12px;
+    padding:8px 10px;
     border-radius:14px;
   }
   .hola-day-page .hola-day-agenda-row{
-    grid-template-columns:66px 22px minmax(0,1fr);
-    gap:10px;
-    min-height:82px;
-    padding:14px 0 15px;
+    grid-template-columns:60px 20px minmax(0,1fr);
+    gap:8px;
+    min-height:66px;
+    padding:9px 0 10px;
   }
   .hola-day-page .hola-day-agenda-row time{
-    font-size:23px;
+    font-size:21px;
   }
   .hola-day-page .hola-day-agenda-marker{
-    min-height:52px;
+    min-height:40px;
   }
   .hola-day-page .hola-day-agenda-marker:after{
-    top:5px;
-    width:8px;
-    height:8px;
+    top:4px;
+    width:7px;
+    height:7px;
     border-width:2px;
   }
   .hola-day-page .hola-day-agenda-row:first-child .hola-day-agenda-marker:before{
-    top:8px;
+    top:6px;
   }
   .hola-day-page .hola-day-agenda-row:last-child .hola-day-agenda-marker:before{
-    bottom:calc(100% - 8px);
+    bottom:calc(100% - 6px);
   }
   .hola-day-page .hola-day-agenda-copy h3{
-    font-size:18px;
+    font-size:17px;
   }
   .hola-day-page .hola-day-agenda-copy p{
-    font-size:11px;
-    line-height:1.48;
+    font-size:10.5px;
+    line-height:1.4;
   }
 }
 
