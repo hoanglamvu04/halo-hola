@@ -1,0 +1,241 @@
+/* HOLA DAY hero carousel.
+   Loaded after the existing HOLA DAY layers so only the approved hero is refined. */
+
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-layout{
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(34px,4vw,58px);
+}
+
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-visual{
+  position:relative;
+  min-width:0;
+  margin:0;
+  touch-action:pan-y;
+}
+
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-photo{
+  position:relative;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  border:6px solid rgba(251,247,239,.94);
+  border-radius:26px;
+  background:#315340;
+  box-shadow:0 18px 42px rgba(5,28,20,.22);
+}
+
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-photo:after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,31,23,0) 52%,rgba(6,31,23,.3) 100%);
+}
+
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-photo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  animation:hola-day-hero-slide-in .28s ease both;
+}
+
+@keyframes hola-day-hero-slide-in{
+  from{opacity:.58;transform:scale(1.008)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.hola-day-page .hola-day-hero-slide-label{
+  position:absolute;
+  z-index:4;
+  left:18px;
+  top:18px;
+  max-width:min(360px,58%);
+  display:grid;
+  gap:3px;
+  padding:9px 12px;
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:12px;
+  background:rgba(13,65,48,.78);
+  color:#fff;
+  backdrop-filter:blur(8px);
+  box-shadow:0 9px 22px rgba(5,28,20,.14);
+}
+
+.hola-day-page .hola-day-hero-slide-label span{
+  color:#f1b28e;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.hola-day-page .hola-day-hero-slide-label b{
+  overflow:hidden;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hola-day-page .hola-day-hero-slide-dots{
+  position:absolute;
+  z-index:5;
+  left:18px;
+  bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 9px;
+  border-radius:999px;
+  background:rgba(13,65,48,.76);
+  backdrop-filter:blur(8px);
+}
+
+.hola-day-page .hola-day-hero-slide-dots button{
+  width:7px;
+  height:7px;
+  padding:0;
+  border:0;
+  border-radius:999px;
+  background:rgba(255,255,255,.5);
+  cursor:pointer;
+  transition:width .18s ease,background .18s ease;
+}
+
+.hola-day-page .hola-day-hero-slide-dots button.active{
+  width:28px;
+  background:#fff;
+}
+
+.hola-day-page .hola-day-hero-slide-controls{
+  position:absolute;
+  z-index:5;
+  right:18px;
+  bottom:16px;
+  display:grid;
+  grid-template-columns:42px auto 42px;
+  align-items:center;
+  gap:7px;
+  padding:6px;
+  border-radius:999px;
+  background:rgba(251,247,239,.96);
+  box-shadow:0 10px 26px rgba(4,25,18,.18);
+  backdrop-filter:blur(8px);
+}
+
+.hola-day-page .hola-day-hero-slide-controls button{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#174a38;
+  cursor:pointer;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+
+.hola-day-page .hola-day-hero-slide-controls button:hover{
+  transform:translateY(-1px);
+  background:#174a38;
+  color:#fff;
+}
+
+.hola-day-page .hola-day-hero-slide-controls svg{
+  width:18px;
+  height:18px;
+}
+
+.hola-day-page .hola-day-hero-slide-controls span{
+  min-width:54px;
+  color:#50635a;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+
+/* The information now lives on the image, so remove the old caption strip. */
+.hola-day-page .hola-day-hero--editorial .hola-day-editorial-visual figcaption{
+  display:none;
+}
+
+@media(max-width:1100px) and (min-width:761px){
+  .hola-day-page .hola-day-hero--editorial .hola-day-editorial-layout{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+    gap:28px;
+  }
+  .hola-day-page .hola-day-hero-slide-controls{
+    grid-template-columns:38px auto 38px;
+  }
+  .hola-day-page .hola-day-hero-slide-controls button{
+    width:38px;
+    height:38px;
+  }
+}
+
+@media(max-width:760px){
+  .hola-day-page .hola-day-hero--editorial .hola-day-editorial-layout{
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .hola-day-page .hola-day-hero--editorial .hola-day-editorial-photo{
+    aspect-ratio:16/10;
+    border-width:4px;
+    border-radius:18px;
+  }
+  .hola-day-page .hola-day-hero-slide-label{
+    left:10px;
+    top:10px;
+    max-width:64%;
+    padding:7px 9px;
+    border-radius:9px;
+  }
+  .hola-day-page .hola-day-hero-slide-label span{font-size:8px}
+  .hola-day-page .hola-day-hero-slide-label b{font-size:10px}
+  .hola-day-page .hola-day-hero-slide-dots{
+    left:10px;
+    bottom:10px;
+    gap:5px;
+    padding:6px 8px;
+  }
+  .hola-day-page .hola-day-hero-slide-dots button{
+    width:6px;
+    height:6px;
+  }
+  .hola-day-page .hola-day-hero-slide-dots button.active{width:22px}
+  .hola-day-page .hola-day-hero-slide-controls{
+    right:10px;
+    bottom:9px;
+    grid-template-columns:34px auto 34px;
+    gap:4px;
+    padding:5px;
+  }
+  .hola-day-page .hola-day-hero-slide-controls button{
+    width:34px;
+    height:34px;
+  }
+  .hola-day-page .hola-day-hero-slide-controls svg{
+    width:15px;
+    height:15px;
+  }
+  .hola-day-page .hola-day-hero-slide-controls span{
+    min-width:44px;
+    font-size:9px;
+  }
+}
+
+@media(max-width:420px){
+  .hola-day-page .hola-day-hero-slide-label{
+    max-width:58%;
+  }
+  .hola-day-page .hola-day-hero-slide-label b{
+    display:none;
+  }
+}
