@@ -256,3 +256,46 @@
 
   .campaign-live .live-counter h2{max-width:none!important;}
 }
+
+/* HOLA DAY section headlines share the exact homepage display-title language. */
+.hola-day-page .hola-day-agenda-intro h2,
+.hola-day-page .hola-day-touch-head h2,
+.hola-day-page .hola-day-experience-head h2,
+.hola-day-page .hola-day-final-copy h2{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-inline:0!important;
+  font-family:var(--home-title-font-family)!important;
+  font-size:clamp(2rem,2.9vw,3.2rem)!important;
+  font-weight:900!important;
+  font-optical-sizing:auto;
+  line-height:1.08!important;
+  letter-spacing:.005em!important;
+  font-style:normal!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+  text-wrap:wrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  hyphens:none!important;
+}
+
+.hola-day-page .hola-day-agenda-intro h2>br,
+.hola-day-page .hola-day-touch-head h2>br,
+.hola-day-page .hola-day-experience-head h2>br,
+.hola-day-page .hola-day-final-copy h2>br{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  .hola-day-page .hola-day-agenda-intro h2,
+  .hola-day-page .hola-day-touch-head h2,
+  .hola-day-page .hola-day-experience-head h2,
+  .hola-day-page .hola-day-final-copy h2{
+    font-size:clamp(1.8rem,7.8vw,2.35rem)!important;
+    line-height:1.09!important;
+    letter-spacing:.002em!important;
+  }
+}
+
