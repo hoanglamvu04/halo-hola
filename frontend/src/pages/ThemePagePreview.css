@@ -164,6 +164,24 @@
   opacity:1!important;
 }
 
+/* Theme hero stats — remove decorative icons and let the numbers/text breathe. */
+.theme-page-ref .theme-hero-stats>div{
+  grid-template-columns:1fr!important;
+  row-gap:3px;
+  align-content:start;
+}
+.theme-page-ref .theme-hero-stats span{
+  display:none!important;
+}
+.theme-page-ref .theme-hero-stats b{
+  font-size:1.22rem;
+  line-height:1.08;
+}
+.theme-page-ref .theme-hero-stats small{
+  font-size:.64rem;
+  line-height:1.35;
+}
+
 /* Theme hero — horizontal community artwork carousel.
    Public submission images take priority in ThemePage.jsx; when none are
    available the existing theme image is used as the fallback slide. */
