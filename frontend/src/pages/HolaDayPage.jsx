@@ -200,15 +200,11 @@ export default function HolaDayPage(){
         </header>
 
         <div className="hola-day-agenda-list">
-          {agenda.map((item,index)=>{
-            const displayImage=item.title==='Hello Hòa Lạc'?img.people:item.image
-            return <article className="hola-day-agenda-row" key={`${item.time}-${item.title}`}>
-              <div className="hola-day-agenda-index">{String(index+1).padStart(2,'0')}</div>
-              <time>{item.time}</time>
-              <div className="hola-day-agenda-copy"><h3>{item.title}</h3><p>{item.desc}</p></div>
-              <div className="hola-day-agenda-thumb"><img src={displayImage} alt=""/></div>
-            </article>
-          })}
+          {agenda.map(item=><article className="hola-day-agenda-row" key={`${item.time}-${item.title}`}>
+            <time>{item.time}</time>
+            <span className="hola-day-agenda-marker" aria-hidden="true"/>
+            <div className="hola-day-agenda-copy"><h3>{item.title}</h3><p>{item.desc}</p></div>
+          </article>)}
         </div>
       </div>
     </section>
