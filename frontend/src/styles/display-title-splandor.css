@@ -299,3 +299,265 @@
   }
 }
 
+/* SITE-WIDE PUBLIC DISPLAY TITLE SYSTEM */
+:root{
+  --halo-public-title-h1-size:clamp(2.4rem,3.75vw,3.95rem);
+  --halo-public-title-h2-size:clamp(2rem,2.9vw,3.2rem);
+  --halo-public-title-compact-size:clamp(1.45rem,2.15vw,2rem);
+}
+
+/* All major public H1/H2 titles now share the homepage Fraunces poster system.
+   H3/card labels/body copy intentionally keep their own typography. */
+:is(
+  .home-hero-copy h1,
+  .community-gallery-copy h1,
+  .top52-live-page h1,
+  .artwork-showcase-info h1,
+  .tour-page-ref h1,
+  .hola-day-page h1,
+  .calendar2027-page h1,
+  .stories-page-ref h1,
+  .story-detail-page h1,
+  .we-hola-page h1,
+  .partners-page-modern h1,
+  .hello-page h1,
+  .theme-index-page h1,
+  .theme-page-ref h1,
+  .rules4-page h1,
+  .lookup-modern-page h1,
+  .not-found-page h1,
+  .page-hero-copy h1
+),
+:is(
+  .campaign-live .live-counter h2,
+  .change-band .change-copy h2,
+  .themes-showcase .themes-showcase-title h2,
+  .color-section .color-copy h2,
+  .home-tour-section .home-tour-title h2,
+  .home-map-live-copy h2,
+  .top52-showcase .top52-title-block h2,
+  .we-banner .we-overlay h2,
+  .community-gallery-heading h2,
+  .top52-live-copy h2,
+  .top52-live-heading h2,
+  .artwork-story-layout>article>h2,
+  .artwork-related-section>header h2,
+  .tour-page-ref>section h2,
+  .hola-day-page>section h2,
+  .calendar2027-page>section h2,
+  .stories-page-ref>section h2,
+  .story-detail-page>section h2,
+  .we-hola-page>section h2,
+  .partners-page-modern>section h2,
+  .theme-index-page>section h2,
+  .theme-page-ref>section h2,
+  .rules4-page>section h2
+){
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-inline:0!important;
+  font-family:var(--halo-display-font)!important;
+  font-weight:900!important;
+  font-optical-sizing:auto;
+  line-height:1.08!important;
+  letter-spacing:.005em!important;
+  font-style:normal!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+  text-wrap:wrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  hyphens:none!important;
+}
+
+/* Hero/page H1 scale. */
+:is(
+  .home-hero-copy h1,
+  .community-gallery-copy h1,
+  .top52-live-page h1,
+  .artwork-showcase-info h1,
+  .tour-page-ref h1,
+  .hola-day-page h1,
+  .calendar2027-page h1,
+  .stories-page-ref h1,
+  .story-detail-page h1,
+  .we-hola-page h1,
+  .partners-page-modern h1,
+  .hello-page h1,
+  .theme-index-page h1,
+  .theme-page-ref h1,
+  .rules4-page h1,
+  .lookup-modern-page h1,
+  .not-found-page h1,
+  .page-hero-copy h1
+){
+  font-size:var(--halo-public-title-h1-size)!important;
+}
+
+/* Main section H2 scale. */
+:is(
+  .campaign-live .live-counter h2,
+  .change-band .change-copy h2,
+  .themes-showcase .themes-showcase-title h2,
+  .color-section .color-copy h2,
+  .home-tour-section .home-tour-title h2,
+  .home-map-live-copy h2,
+  .top52-showcase .top52-title-block h2,
+  .we-banner .we-overlay h2,
+  .community-gallery-heading h2,
+  .top52-live-copy h2,
+  .top52-live-heading h2,
+  .artwork-story-layout>article>h2,
+  .artwork-related-section>header h2,
+  .tour-page-ref>section h2,
+  .hola-day-page>section h2,
+  .calendar2027-page>section h2,
+  .stories-page-ref>section h2,
+  .story-detail-page>section h2,
+  .we-hola-page>section h2,
+  .partners-page-modern>section h2,
+  .theme-index-page>section h2,
+  .theme-page-ref>section h2,
+  .rules4-page>section h2
+){
+  font-size:var(--halo-public-title-h2-size)!important;
+}
+
+/* Functional headings still use the same display language, but stay compact so
+   forms/results/modals remain usable instead of becoming oversized posters. */
+:is(
+  .wizard-card h2,
+  .lookup-modern-form-head h2,
+  .lookup-modern-empty h2,
+  .lookup-modern-result-head h2,
+  .tour-register-panel h2,
+  .story-article-section h2
+){
+  font-family:var(--halo-display-font)!important;
+  font-size:var(--halo-public-title-compact-size)!important;
+  font-weight:900!important;
+  font-optical-sizing:auto;
+  line-height:1.08!important;
+  letter-spacing:.005em!important;
+  font-style:normal!important;
+  text-transform:uppercase!important;
+  text-wrap:wrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  hyphens:none!important;
+}
+
+/* Accent fragments keep their page colors while inheriting the unified face. */
+:is(
+  .home-hero-copy h1,
+  .community-gallery-copy h1,
+  .top52-live-page h1,
+  .artwork-showcase-info h1,
+  .tour-page-ref h1,
+  .hola-day-page h1,
+  .calendar2027-page h1,
+  .stories-page-ref h1,
+  .story-detail-page h1,
+  .we-hola-page h1,
+  .partners-page-modern h1,
+  .hello-page h1,
+  .theme-index-page h1,
+  .theme-page-ref h1,
+  .rules4-page h1,
+  .lookup-modern-page h1,
+  .not-found-page h1,
+  .page-hero-copy h1
+)>:is(span,em){
+  font-family:inherit!important;
+  font-size:inherit!important;
+  font-weight:inherit!important;
+  line-height:inherit!important;
+  letter-spacing:inherit!important;
+  font-style:normal!important;
+}
+
+/* Forced BRs no longer decide the composition; titles wrap only when their
+   actual container runs out of horizontal space. */
+:is(
+  .home-hero-copy h1,
+  .community-gallery-copy h1,
+  .top52-live-page h1,
+  .artwork-showcase-info h1,
+  .tour-page-ref h1,
+  .hola-day-page h1,
+  .calendar2027-page h1,
+  .stories-page-ref h1,
+  .story-detail-page h1,
+  .we-hola-page h1,
+  .partners-page-modern h1,
+  .hello-page h1,
+  .theme-index-page h1,
+  .theme-page-ref h1,
+  .rules4-page h1,
+  .lookup-modern-page h1,
+  .not-found-page h1,
+  .page-hero-copy h1,
+  .tour-page-ref>section h2,
+  .hola-day-page>section h2,
+  .calendar2027-page>section h2,
+  .partners-page-modern>section h2
+)>br{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  :root{
+    --halo-public-title-h1-size:clamp(2rem,8.7vw,2.6rem);
+    --halo-public-title-h2-size:clamp(1.8rem,7.8vw,2.35rem);
+    --halo-public-title-compact-size:clamp(1.3rem,6.4vw,1.7rem);
+  }
+
+  :is(
+    .home-hero-copy h1,
+    .community-gallery-copy h1,
+    .top52-live-page h1,
+    .artwork-showcase-info h1,
+    .tour-page-ref h1,
+    .hola-day-page h1,
+    .calendar2027-page h1,
+    .stories-page-ref h1,
+    .story-detail-page h1,
+    .we-hola-page h1,
+    .partners-page-modern h1,
+    .hello-page h1,
+    .theme-index-page h1,
+    .theme-page-ref h1,
+    .rules4-page h1,
+    .lookup-modern-page h1,
+    .not-found-page h1,
+    .page-hero-copy h1,
+    .campaign-live .live-counter h2,
+    .change-band .change-copy h2,
+    .themes-showcase .themes-showcase-title h2,
+    .color-section .color-copy h2,
+    .home-tour-section .home-tour-title h2,
+    .home-map-live-copy h2,
+    .top52-showcase .top52-title-block h2,
+    .we-banner .we-overlay h2,
+    .community-gallery-heading h2,
+    .top52-live-copy h2,
+    .top52-live-heading h2,
+    .artwork-story-layout>article>h2,
+    .artwork-related-section>header h2,
+    .tour-page-ref>section h2,
+    .hola-day-page>section h2,
+    .calendar2027-page>section h2,
+    .stories-page-ref>section h2,
+    .story-detail-page>section h2,
+    .we-hola-page>section h2,
+    .partners-page-modern>section h2,
+    .theme-index-page>section h2,
+    .theme-page-ref>section h2,
+    .rules4-page>section h2
+  ){
+    line-height:1.09!important;
+    letter-spacing:.002em!important;
+  }
+}
+
