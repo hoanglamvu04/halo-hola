@@ -6,10 +6,7 @@ import {
   CheckCircle2,
   Clock3,
   MapPin,
-  Mic2,
   Sparkles,
-  Trophy,
-  Users,
   X,
 } from 'lucide-react'
 import { agenda, img } from '../data/siteData.js'
@@ -41,21 +38,18 @@ const experiences=[
     title:'52 góc nhìn trong một không gian.',
     desc:'TOP52 được đặt cạnh nhau như một lát cắt chung về Hòa Lạc — đủ gần để xem kỹ, đủ mở để bắt đầu câu chuyện.',
     image:img.event,
-    Icon:Trophy,
   },
   {
     label:'GẶP',
     title:'Nghe những câu chuyện phía sau khung hình.',
     desc:'HOLA TALK và những cuộc gặp trực tiếp đưa tác giả, người địa phương và cộng đồng về cùng một bàn trò chuyện.',
     image:img.talk,
-    Icon:Mic2,
   },
   {
     label:'CÙNG THAM GIA',
     title:'Mang một kết nối mới về cùng bạn.',
     desc:'WE HOLA, photobooth, calendar và những khoảng giao lưu biến HOLA DAY thành một điểm hẹn chứ không chỉ là nơi để xem.',
     image:img.people,
-    Icon:Users,
   },
 ]
 
@@ -246,10 +240,12 @@ export default function HolaDayPage(){
           <h2>HOLA DAY là một ngày để thực sự tham gia.</h2>
         </div>
         <div className="hola-day-experience-grid">
-          {experiences.map(({label,title,desc,image,Icon},index)=><article key={label} className={`hola-day-experience-card e${index+1}`}>
-            <div className="hola-day-experience-media"><img src={image} alt=""/></div>
+          {experiences.map(({label,title,desc,image},index)=><article key={label} className={`hola-day-experience-card e${index+1}`}>
+            <div className="hola-day-experience-media">
+              <img src={image} alt=""/>
+              <span className="hola-day-experience-label">{label}</span>
+            </div>
             <div className="hola-day-experience-body">
-              <div className="hola-day-experience-label"><Icon/><span>{label}</span></div>
               <h3>{title}</h3>
               <p>{desc}</p>
             </div>
