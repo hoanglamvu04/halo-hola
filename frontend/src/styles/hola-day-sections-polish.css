@@ -190,3 +190,192 @@
   .hola-day-page .hola-day-final-facts{margin-block:18px}
   .hola-day-page .hola-day-info-lines article{padding-block:16px}
 }
+
+/* Agenda editorial timeline v2 */
+.hola-day-page .hola-day-agenda-section{
+  padding:46px 0 54px;
+}
+.hola-day-page .hola-day-agenda-layout{
+  grid-template-columns:minmax(290px,.7fr) minmax(0,1.3fr);
+  gap:clamp(46px,5vw,76px);
+}
+.hola-day-page .hola-day-agenda-intro{
+  top:96px;
+}
+.hola-day-page .hola-day-agenda-intro>p{
+  max-width:470px;
+  margin-top:16px;
+  font-size:14px;
+  line-height:1.7;
+}
+.hola-day-page .hola-day-agenda-note{
+  display:inline-flex;
+  width:auto;
+  margin-top:20px;
+  padding:10px 14px;
+  border:1px solid rgba(156,100,61,.2);
+  border-radius:999px;
+  background:rgba(255,255,255,.34);
+}
+.hola-day-page .hola-day-agenda-note>svg{
+  width:18px;
+  height:18px;
+}
+.hola-day-page .hola-day-agenda-note b{
+  font-size:11px;
+}
+.hola-day-page .hola-day-agenda-note small{
+  font-size:10px;
+}
+.hola-day-page .hola-day-agenda-list{
+  border:0;
+}
+.hola-day-page .hola-day-agenda-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:104px 30px minmax(0,1fr);
+  gap:16px;
+  align-items:start;
+  min-height:96px;
+  padding:17px 0 18px;
+  border:0;
+  background:transparent;
+  transition:none;
+}
+.hola-day-page .hola-day-agenda-row:hover{
+  padding-left:0;
+  padding-right:0;
+  background:transparent;
+}
+.hola-day-page .hola-day-agenda-row time{
+  padding-top:1px;
+  color:var(--hd-green);
+  font-size:32px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums;
+}
+.hola-day-page .hola-day-agenda-marker{
+  position:relative;
+  align-self:stretch;
+  min-height:62px;
+}
+.hola-day-page .hola-day-agenda-marker:before{
+  content:'';
+  position:absolute;
+  z-index:0;
+  left:50%;
+  top:-18px;
+  bottom:-18px;
+  width:1px;
+  background:rgba(182,78,43,.3);
+  transform:translateX(-50%);
+}
+.hola-day-page .hola-day-agenda-marker:after{
+  content:'';
+  position:absolute;
+  z-index:1;
+  left:50%;
+  top:7px;
+  width:9px;
+  height:9px;
+  border:3px solid var(--hd-cream);
+  border-radius:50%;
+  background:#b64e2b;
+  box-shadow:0 0 0 1px rgba(182,78,43,.52);
+  transform:translateX(-50%);
+}
+.hola-day-page .hola-day-agenda-row:first-child .hola-day-agenda-marker:before{
+  top:11px;
+}
+.hola-day-page .hola-day-agenda-row:last-child .hola-day-agenda-marker:before{
+  bottom:calc(100% - 11px);
+}
+.hola-day-page .hola-day-agenda-copy{
+  padding:0 0 5px;
+}
+.hola-day-page .hola-day-agenda-copy h3{
+  margin:0 0 5px;
+  color:var(--hd-green);
+  font-size:22px;
+  font-weight:850;
+  line-height:1.16;
+  letter-spacing:-.025em;
+}
+.hola-day-page .hola-day-agenda-copy p{
+  max-width:620px;
+  margin:0;
+  color:#68766e;
+  font-size:12px;
+  line-height:1.55;
+}
+.hola-day-page .hola-day-agenda-thumb,
+.hola-day-page .hola-day-agenda-index{
+  display:none!important;
+}
+
+@media(max-width:960px){
+  .hola-day-page .hola-day-agenda-layout{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .hola-day-page .hola-day-agenda-intro{
+    position:static;
+    max-width:760px;
+  }
+  .hola-day-page .hola-day-agenda-list{
+    max-width:820px;
+  }
+}
+
+@media(max-width:680px){
+  .hola-day-page .hola-day-agenda-section{
+    padding:30px 0 36px;
+  }
+  .hola-day-page .hola-day-agenda-layout{
+    gap:22px;
+  }
+  .hola-day-page .hola-day-agenda-intro>p{
+    margin-top:12px;
+    font-size:13px;
+    line-height:1.65;
+  }
+  .hola-day-page .hola-day-agenda-note{
+    margin-top:16px;
+    padding:9px 11px;
+    border-radius:14px;
+  }
+  .hola-day-page .hola-day-agenda-row{
+    grid-template-columns:66px 22px minmax(0,1fr);
+    gap:10px;
+    min-height:82px;
+    padding:14px 0 15px;
+  }
+  .hola-day-page .hola-day-agenda-row time{
+    font-size:23px;
+  }
+  .hola-day-page .hola-day-agenda-marker{
+    min-height:52px;
+  }
+  .hola-day-page .hola-day-agenda-marker:after{
+    top:5px;
+    width:8px;
+    height:8px;
+    border-width:2px;
+  }
+  .hola-day-page .hola-day-agenda-row:first-child .hola-day-agenda-marker:before{
+    top:8px;
+  }
+  .hola-day-page .hola-day-agenda-row:last-child .hola-day-agenda-marker:before{
+    bottom:calc(100% - 8px);
+  }
+  .hola-day-page .hola-day-agenda-copy h3{
+    font-size:18px;
+  }
+  .hola-day-page .hola-day-agenda-copy p{
+    font-size:11px;
+    line-height:1.48;
+  }
+}
+
