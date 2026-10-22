@@ -22,7 +22,7 @@ const touchpoints=[
   ['01','Triển lãm TOP52','52 góc nhìn nổi bật của Hòa Lạc'],
   ['02','HOLA TALK','Những cuộc trò chuyện mở'],
   ['03','Nắng Hòa Lạc','Khoảng dừng của ánh sáng và cảm xúc'],
-  ['04','Main Event','Opening · ghi nhận · trao giải'],
+  ['04','Main Event','Opening, ghi nhận, tuyên dương'],
   ['05','WE HOLA','Gặp gỡ những người cùng yêu Hòa Lạc'],
   ['06','Check-in','Điểm bắt đầu cho một buổi chiều chung'],
 ]
@@ -31,7 +31,7 @@ const holaDayHeroSlides=[
   {image:img.event,label:'TOP52',caption:'52 góc nhìn trong cùng một không gian.'},
   {image:img.talk,label:'HOLA TALK',caption:'Những câu chuyện phía sau mỗi góc nhìn.'},
   {image:img.sunset,label:'NẮNG HÒA LẠC',caption:'Một khoảng dừng cho ánh sáng và cảm xúc.'},
-  {image:img.award,label:'MAIN EVENT',caption:'Opening · ghi nhận · trao giải.'},
+  {image:img.award,label:'MAIN EVENT',caption:'Opening, ghi nhận, tuyên dương.'},
   {image:img.people,label:'WE HOLA',caption:'Một Hòa Lạc, nhiều câu chuyện.'},
 ]
 
@@ -296,7 +296,7 @@ export default function HolaDayPage(){
             <label>Email *<input required type="email" value={form.email} onChange={e=>setForm(v=>({...v,email:e.target.value}))}/></label>
             <label>Số điện thoại *<input required minLength="8" value={form.phone} onChange={e=>setForm(v=>({...v,phone:e.target.value}))}/></label>
             <label>Đối tượng<select value={form.roleLabel} onChange={e=>setForm(v=>({...v,roleLabel:e.target.value}))}><option value="">Chọn đối tượng</option><option>Tác giả / Creator</option><option>Học sinh – Sinh viên</option><option>Người dân Hòa Lạc</option><option>Đối tác / Doanh nghiệp</option><option>Khách mời</option><option>Công chúng</option><option>Khác</option></select></label>
-            <label className="full">Bạn quan tâm hoạt động nào?<textarea rows="2" maxLength="1500" value={form.interest} onChange={e=>setForm(v=>({...v,interest:e.target.value}))} placeholder="TOP52, HOLA TALK, trao giải, WE HOLA, networking..."/></label>
+            <label className="full">Bạn quan tâm hoạt động nào?<textarea rows="2" maxLength="1500" value={form.interest} onChange={e=>setForm(v=>({...v,interest:e.target.value}))} placeholder="TOP52, HOLA TALK, tuyên dương, WE HOLA, networking..."/></label>
             <label className="full">Ghi chú<textarea rows="2" maxLength="1500" value={form.note} onChange={e=>setForm(v=>({...v,note:e.target.value}))}/></label>
             <label className="full"><input type="checkbox" checked={form.allowUpdates} onChange={e=>setForm(v=>({...v,allowUpdates:e.target.checked}))}/> Tôi đồng ý nhận thông tin cập nhật về HOLA DAY và HALO HOLA.</label>
             {error&&<div className="form-error full">{error}</div>}
