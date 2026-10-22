@@ -18,8 +18,23 @@
 .hola-day-page .hola-day-experience-section,
 .hola-day-page .hola-day-final-section{padding:52px 0}
 .hola-day-page .hola-day-agenda-section{scroll-margin-top:90px}
-.hola-day-page .hola-day-touch-head,
-.hola-day-page .hola-day-experience-head{margin-bottom:28px}
+.hola-day-page .hola-day-touch-head{margin-bottom:28px}
+
+/* Experience header: one editorial column instead of the old split layout. */
+.hola-day-page .hola-day-experience-head{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  width:min(100%,1040px);
+  margin:0 0 26px;
+}
+.hola-day-page .hola-day-experience-head .hola-day-section-label{
+  margin:0;
+}
+.hola-day-page .hola-day-experience-head h2{
+  margin:0!important;
+}
 .hola-day-page .hola-day-agenda-intro>p,
 .hola-day-page .hola-day-final-copy>p{margin-top:18px}
 .hola-day-page .hola-day-agenda-note{margin-top:22px;padding-top:16px}
@@ -133,8 +148,12 @@
   .hola-day-page .hola-day-touch-section,
   .hola-day-page .hola-day-experience-section,
   .hola-day-page .hola-day-final-section{padding:36px 0}
-  .hola-day-page .hola-day-touch-head,
-  .hola-day-page .hola-day-experience-head{margin-bottom:22px;gap:18px}
+  .hola-day-page .hola-day-touch-head{margin-bottom:22px;gap:18px}
+  .hola-day-page .hola-day-experience-head{
+    width:100%;
+    gap:10px;
+    margin-bottom:20px;
+  }
   .hola-day-page .hola-day-agenda-layout,
   .hola-day-page .hola-day-touch-grid,
   .hola-day-page .hola-day-final-grid{gap:22px}
