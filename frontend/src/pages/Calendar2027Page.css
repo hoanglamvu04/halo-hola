@@ -512,3 +512,235 @@
   }
 }
 
+/* Calendar cover mockup aligned to the physical desk-calendar reference */
+.calendar2027-page .calendar2027-mockup{
+  min-height:405px;
+}
+.calendar2027-page .calendar2027-cover-sheet{
+  width:min(650px,94%);
+  aspect-ratio:16/10;
+  padding:0;
+  overflow:hidden;
+  border:1px solid rgba(68,61,45,.2);
+  border-radius:14px;
+  background:#18382c;
+  box-shadow:0 22px 48px rgba(47,42,31,.18);
+  transform:rotate(-1.4deg);
+}
+.calendar2027-page .calendar2027-sheet-back{
+  width:min(650px,94%);
+  height:auto;
+  aspect-ratio:16/10;
+  border-radius:14px;
+  background:#d7c5a8;
+  transform:translate(18px,16px) rotate(2.4deg);
+}
+.calendar2027-page .calendar2027-cover-sheet>img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  aspect-ratio:auto;
+  object-fit:cover;
+  object-position:center 58%;
+  border-radius:0;
+  filter:saturate(.86) contrast(1.02) brightness(.88);
+}
+.calendar2027-page .calendar2027-cover-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(6,31,23,.08) 0%,rgba(6,31,23,.02) 38%,rgba(6,31,23,.48) 100%),
+    linear-gradient(90deg,rgba(7,32,24,.22),transparent 48%);
+}
+.calendar2027-page .calendar2027-cover-brand{
+  position:absolute;
+  z-index:2;
+  top:13%;
+  left:50%;
+  transform:translateX(-50%);
+  padding-bottom:5px;
+  border-bottom:1px solid rgba(255,255,255,.62);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.17em;
+}
+.calendar2027-page .calendar2027-cover-copy{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:48%;
+  width:min(78%,460px);
+  transform:translate(-50%,-50%);
+  color:#fff;
+  text-align:center;
+  text-shadow:0 2px 16px rgba(6,27,20,.2);
+}
+.calendar2027-page .calendar2027-cover-copy strong{
+  display:block;
+  font-family:var(--halo-display-font,'Fraunces',Georgia,serif);
+  font-size:clamp(2.7rem,4.2vw,4.4rem);
+  font-weight:700;
+  font-style:italic;
+  line-height:.92;
+  letter-spacing:-.045em;
+}
+.calendar2027-page .calendar2027-cover-copy span{
+  display:block;
+  margin-top:5px;
+  color:#efb07f;
+  font-size:clamp(1.35rem,2vw,2.15rem);
+  font-weight:900;
+  letter-spacing:.05em;
+}
+.calendar2027-page .calendar2027-cover-copy p{
+  margin-top:18px;
+  color:rgba(255,255,255,.88);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+.calendar2027-page .calendar2027-cover-bottom{
+  position:absolute;
+  z-index:2;
+  left:22px;
+  right:22px;
+  bottom:18px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  color:rgba(255,255,255,.9);
+}
+.calendar2027-page .calendar2027-cover-bottom span{
+  max-width:72%;
+  font-size:7px;
+  line-height:1.45;
+  letter-spacing:.11em;
+}
+.calendar2027-page .calendar2027-cover-bottom b{
+  font-size:17px;
+  letter-spacing:.04em;
+}
+.calendar2027-page .calendar2027-rings{
+  top:11px;
+  left:50%;
+  z-index:6;
+  gap:14px;
+  transform:translateX(-50%) rotate(-1.4deg);
+}
+.calendar2027-page .calendar2027-rings i{
+  width:7px;
+  height:28px;
+  border:2px solid #263f35;
+  border-radius:6px;
+  background:#eadcc4;
+}
+.calendar2027-page .calendar2027-stamp{
+  right:2.5%;
+  bottom:18px;
+}
+
+/* Weekly previews borrow the open-page feel of the physical calendar. */
+.calendar2027-page .calendar2027-preview-grid article{
+  border:1px solid rgba(156,100,61,.18);
+  background:#fbf7ef;
+  box-shadow:0 10px 26px rgba(65,55,39,.06);
+}
+.calendar2027-page .calendar2027-preview-overlay{
+  background:linear-gradient(
+    180deg,
+    rgba(251,247,239,0) 0%,
+    rgba(251,247,239,.04) 46%,
+    rgba(251,247,239,.92) 72%,
+    #fbf7ef 100%
+  );
+}
+.calendar2027-page .calendar2027-preview-copy{
+  color:var(--cal-green);
+}
+.calendar2027-page .calendar2027-preview-copy>span{
+  background:var(--cal-orange);
+  color:#fff;
+}
+.calendar2027-page .calendar2027-preview-copy small{
+  color:var(--cal-stone);
+}
+.calendar2027-page .calendar2027-preview-copy div{
+  color:#65736b;
+  opacity:1;
+}
+.calendar2027-page .calendar2027-preview-copy svg{
+  color:var(--cal-orange);
+}
+
+@media(max-width:1080px){
+  .calendar2027-page .calendar2027-cover-sheet,
+  .calendar2027-page .calendar2027-sheet-back{
+    width:min(590px,94%);
+  }
+}
+
+@media(max-width:820px){
+  .calendar2027-page .calendar2027-mockup{
+    min-height:390px;
+  }
+  .calendar2027-page .calendar2027-cover-sheet,
+  .calendar2027-page .calendar2027-sheet-back{
+    width:min(620px,94%);
+  }
+}
+
+@media(max-width:620px){
+  .calendar2027-page .calendar2027-mockup{
+    min-height:290px;
+  }
+  .calendar2027-page .calendar2027-cover-sheet,
+  .calendar2027-page .calendar2027-sheet-back{
+    width:94%;
+  }
+  .calendar2027-page .calendar2027-sheet-back{
+    transform:translate(10px,10px) rotate(2deg);
+  }
+  .calendar2027-page .calendar2027-rings{
+    top:6px;
+    gap:8px;
+  }
+  .calendar2027-page .calendar2027-rings i{
+    width:5px;
+    height:20px;
+  }
+  .calendar2027-page .calendar2027-cover-brand{
+    top:10%;
+    font-size:7px;
+  }
+  .calendar2027-page .calendar2027-cover-copy strong{
+    font-size:clamp(2rem,11vw,3rem);
+  }
+  .calendar2027-page .calendar2027-cover-copy span{
+    font-size:clamp(1rem,5.4vw,1.45rem);
+  }
+  .calendar2027-page .calendar2027-cover-copy p{
+    margin-top:10px;
+    font-size:6px;
+    letter-spacing:.12em;
+  }
+  .calendar2027-page .calendar2027-cover-bottom{
+    left:13px;
+    right:13px;
+    bottom:10px;
+  }
+  .calendar2027-page .calendar2027-cover-bottom span{
+    max-width:74%;
+    font-size:5px;
+  }
+  .calendar2027-page .calendar2027-cover-bottom b{
+    font-size:11px;
+  }
+  .calendar2027-page .calendar2027-stamp{
+    display:none;
+  }
+}
+
