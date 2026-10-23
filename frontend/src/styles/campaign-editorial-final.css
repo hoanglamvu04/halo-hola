@@ -276,7 +276,7 @@
     min-height:72px !important;
     padding:0 11px !important;
     border:0 !important;
-    border-left:1px solid #ded3c0 !important;
+    border-left:0 !important;
     border-radius:0 !important;
     background:transparent !important;
   }
@@ -310,19 +310,9 @@
     letter-spacing:-.005em !important;
   }
 
-  .campaign-live .campaign-milestone i{
-    display:block !important;
-    width:24px !important;
-    height:2px !important;
-    margin-top:auto !important;
-    border:0 !important;
-    border-radius:999px !important;
-    background:#cfc3af !important;
-  }
-
+  .campaign-live .campaign-milestone i,
   .campaign-live .campaign-milestone i.active{
-    width:38px !important;
-    background:#cf5b30 !important;
+    display:none !important;
   }
 }
 
