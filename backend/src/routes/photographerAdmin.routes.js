@@ -5,8 +5,7 @@ import {
   createPhotographer,
   updatePhotographer,
   resetPhotographerPassword,
-  listTeamShoots,
-  listTeamAssets
+  listTeamShoots
 } from '../services/photographer.service.js';
 
 const router=Router();
@@ -31,15 +30,6 @@ router.post('/:id/reset-password',async (req,res,next)=>{
 
 router.get('/workspace/shoots',async (req,res,next)=>{
   try{res.json(await listTeamShoots({photographerId:req.query.photographerId}));}catch(error){next(error);}
-});
-
-router.get('/workspace/assets',async (req,res,next)=>{
-  try{
-    res.json(await listTeamAssets({
-      photographerId:req.query.photographerId,
-      shootId:req.query.shootId
-    }));
-  }catch(error){next(error);}
 });
 
 export default router;
