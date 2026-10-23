@@ -91,10 +91,58 @@ export function getPhotographerShoots() { return unwrap(client.get('/photographe
 export function createPhotographerShoot(payload) { return unwrap(client.post('/photographer/shoots', payload)); }
 export function updatePhotographerShoot(id,payload) { return unwrap(client.patch('/photographer/shoots/' + encodeURIComponent(id), payload)); }
 export function getPhotographerAssets(params = {}) { return unwrap(client.get('/photographer/assets', { params })); }
-export function uploadPhotographerAssets(shootId,files = []) {
-  const form=new FormData();
-  files.forEach(file=>form.append('files',file));
-  return unwrap(client.post('/photographer/shoots/' + encodeURIComponent(shootId) + '/assets',form,{timeout:0}));
+export async function uploadPhotographerAssets(shootId,files = []) {
+  const queue=files.map((file,index)=>({
+    file,
+    clientId:`${Date.now()}-${index}-${Math.random().toString(36).slice(2,9)}`
+  }));
+  if(!queue.length) return [];
+
+  const base='/photographer/shoots/' + encodeURIComponent(shootId) + '/uploads';
+  const tickets=await unwrap(client.post(base + '/presign',{
+    files:queue.map(({file,clientId})=>({
+      clientId,
+      name:file.name,
+      size:file.size,
+      type:file.type || ''
+    }))
+  }));
+
+  const sourceById=new Map(queue.map(item=>[item.clientId,item.file]));
+  const results=await Promise.allSettled(tickets.map(async ticket=>{
+    const file=sourceById.get(ticket.clientId);
+    if(!file) throw new Error('Không tìm thấy file tương ứng với vé upload R2.');
+
+    let response;
+    try{
+      response=await fetch(ticket.uploadUrl,{
+        method:'PUT',
+        headers:{'Content-Type':ticket.contentType},
+        body:file
+      });
+    }catch{
+      throw new Error('Không kết nối được trực tiếp tới Cloudflare R2. Hãy kiểm tra CORS của bucket originals.');
+    }
+    if(!response.ok) throw new Error(`R2 từ chối ${file.name} (HTTP ${response.status}).`);
+
+    return {
+      key:ticket.key,
+      name:file.name,
+      size:file.size,
+      type:ticket.contentType,
+      clientId:ticket.clientId
+    };
+  }));
+
+  const uploaded=results.filter(result=>result.status==='fulfilled').map(result=>result.value);
+  let saved=[];
+  if(uploaded.length){
+    saved=await unwrap(client.post(base + '/finalize',{uploads:uploaded}));
+  }
+
+  const failed=results.find(result=>result.status==='rejected');
+  if(failed) throw failed.reason instanceof Error ? failed.reason : new Error('Có file chưa tải được lên R2.');
+  return saved;
 }
 export function deletePhotographerAsset(id) { return unwrap(client.delete('/photographer/assets/' + encodeURIComponent(id))); }
 
