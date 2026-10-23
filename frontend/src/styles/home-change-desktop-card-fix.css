@@ -38,12 +38,17 @@
 
   .change-band-reference .era-card-reference .era-content b{
     display:block !important;
+    width:max-content !important;
+    max-width:none !important;
     margin:0 !important;
     font-family:Inter,'DM Sans',system-ui,sans-serif !important;
     font-size:clamp(1.65rem,1.8vw,2.15rem) !important;
     line-height:1.05 !important;
     font-weight:800 !important;
     letter-spacing:-.035em !important;
+    white-space:nowrap !important;
+    word-break:keep-all !important;
+    overflow-wrap:normal !important;
     color:#fff !important;
   }
 
