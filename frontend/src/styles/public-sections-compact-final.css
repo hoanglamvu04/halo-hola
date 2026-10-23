@@ -455,19 +455,28 @@
     line-height:1.2!important;
   }
 
-  .story-side-index{
-    gap:8px!important;
-    padding:14px 0 14px 14px!important;
+  .story-detail-page .story-side-index{
+    gap:10px!important;
+    padding:17px 0 17px 16px!important;
   }
 
-  .story-side-index small{
-    font-size:.62rem!important;
-    line-height:1.2!important;
+  .story-detail-page .story-side-index small{
+    font-size:.76rem!important;
+    line-height:1.25!important;
+    font-weight:850!important;
+    letter-spacing:.055em!important;
   }
 
-  .story-side-index a{
-    font-size:.68rem!important;
-    line-height:1.45!important;
+  .story-detail-page .story-side-index a{
+    font-size:.84rem!important;
+    line-height:1.5!important;
+    font-weight:620!important;
+    letter-spacing:-.005em!important;
+    color:#6b7770!important;
+  }
+
+  .story-detail-page .story-side-index a:hover{
+    color:#174b38!important;
   }
 
   .story-opening{
