@@ -24,6 +24,7 @@ const ThemesPage=lazy(()=>import('./pages/ThemesPage.jsx'))
 const ThemePage=lazy(()=>import('./pages/ThemePage.jsx'))
 const RulesAwardsPage=lazy(()=>import('./pages/RulesAwardsPage.jsx'))
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
+const PhotographerPage=lazy(()=>import('./pages/PhotographerPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
@@ -65,7 +66,8 @@ function isKnownPath(pathname){
     pathname.startsWith('/chu-de/') ||
     pathname.startsWith('/tac-pham/') ||
     pathname.startsWith('/stories/') ||
-    pathname.startsWith('/admin')
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/tac-nghiep')
   )
 }
 function routeSeo(pathname){
@@ -74,6 +76,7 @@ function routeSeo(pathname){
   if(pathname.startsWith('/tac-pham/'))return ['Góc nhìn HALO HOLA 2026','Khám phá câu chuyện, địa điểm và góc nhìn được cộng đồng đóng góp cho HALO HOLA 2026.']
   if(pathname.startsWith('/stories/'))return ['Câu chuyện Hòa Lạc | HALO HOLA','Đọc một câu chuyện từ cộng đồng HALO HOLA về Hòa Lạc.']
   if(pathname.startsWith('/admin'))return ['Admin | HALO HOLA','Khu vực quản trị HALO HOLA.']
+  if(pathname.startsWith('/tac-nghiep'))return ['Đội tác nghiệp | HALO HOLA','Khu vực riêng dành cho đội nhiếp ảnh HALO HOLA.']
   return ['404 — Không tìm thấy trang | HALO HOLA','Đường dẫn này không tồn tại hoặc nội dung chưa được công bố.']
 }
 
@@ -118,7 +121,7 @@ function ScrollToTop() {
 
 function SiteRuntime(){
   const {pathname}=useLocation()
-  const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/tac-pham/xem-truoc/')
+  const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/tac-nghiep')||pathname.startsWith('/tac-pham/xem-truoc/')
   const knownPage=isKnownPath(pathname)
   const noIndex=privatePage||!knownPage
 
@@ -213,14 +216,16 @@ function RouteFallback(){return <main><div className="jw-empty" role="status">Đ
 function SiteShell() {
   const { pathname } = useLocation()
   const isAdmin = pathname.startsWith('/admin')
-  const showBottomNav = !isAdmin && pathname !== '/gui-goc-nhin'
+  const isWorkspace = pathname.startsWith('/tac-nghiep')
+  const privateShell = isAdmin || isWorkspace
+  const showBottomNav = !privateShell && pathname !== '/gui-goc-nhin'
 
   return (
     <div className={'site-shell '+(showBottomNav?'has-mobile-bottom-nav':'')}>
       <BrandRuntime />
       <SiteRuntime />
       <ScrollToTop />
-      {!isAdmin && <Header />}
+      {!privateShell && <Header />}
       <Suspense fallback={<RouteFallback/>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -242,11 +247,12 @@ function SiteShell() {
           <Route path="/chu-de" element={<ThemesPage />} />
           <Route path="/chu-de/:slug" element={<ThemePage />} />
           <Route path="/admin/*" element={<AdminPage />} />
+          <Route path="/tac-nghiep" element={<PhotographerPage />} />
           <Route path="/tra-cuu" element={<LookupPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
-      {!isAdmin && <Footer />}
+      {!privateShell && <Footer />}
       {showBottomNav && <BottomNav />}
     </div>
   )
