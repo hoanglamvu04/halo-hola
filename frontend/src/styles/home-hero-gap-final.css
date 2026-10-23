@@ -1,0 +1,112 @@
+/* Final desktop homepage hero geometry.
+   The previous layout kept the feature band absolutely positioned against a
+   fixed-height hero, leaving a large dead area under the CTA. This layer is
+   intentionally loaded last and returns the band to normal grid flow. */
+
+@media (min-width:981px){
+  .home-hero-reference{
+    min-height:0!important;
+  }
+
+  .home-hero-reference .home-hero-art{
+    min-height:0!important;
+    grid-template-columns:minmax(0,42%) minmax(0,58%)!important;
+    grid-template-rows:auto auto!important;
+    align-items:start!important;
+    column-gap:34px!important;
+    row-gap:14px!important;
+    padding:26px 0 22px!important;
+  }
+
+  .home-hero-reference .home-hero-copy{
+    align-self:center!important;
+    margin-top:0!important;
+    padding:0 0 0 24px!important;
+  }
+
+  .home-hero-reference .hero-collage{
+    height:390px!important;
+    margin-top:0!important;
+  }
+
+  .home-hero-reference .hero-desktop-carousel{
+    inset:0 1.5% auto 1.5%!important;
+    width:97%!important;
+    height:370px!important;
+  }
+
+  .home-hero-reference .hero-pillar-band{
+    position:relative!important;
+    grid-column:1/-1!important;
+    grid-row:2!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:min(1320px,92%)!important;
+    min-height:0!important;
+    margin:0 auto!important;
+    transform:none!important;
+  }
+
+  .home-hero-reference .hero-pillar-item{
+    min-height:68px!important;
+    padding:13px 18px!important;
+  }
+
+  .home-hero-reference .pillar-icon{
+    width:42px!important;
+    height:42px!important;
+  }
+
+  .home-hero-reference .pillar-icon svg{
+    width:21px!important;
+    height:21px!important;
+  }
+}
+
+@media (min-width:981px) and (max-width:1320px){
+  .home-hero-reference .home-hero-art{
+    grid-template-columns:minmax(0,43%) minmax(0,57%)!important;
+    column-gap:22px!important;
+    row-gap:12px!important;
+    padding:22px 0 18px!important;
+  }
+
+  .home-hero-reference .home-hero-copy{
+    padding-left:8px!important;
+  }
+
+  .home-hero-reference .hero-collage{
+    height:350px!important;
+  }
+
+  .home-hero-reference .hero-desktop-carousel{
+    inset:0 1% auto 1%!important;
+    width:98%!important;
+    height:330px!important;
+  }
+
+  .home-hero-reference .hero-pillar-band{
+    width:95%!important;
+  }
+
+  .home-hero-reference .hero-pillar-item{
+    min-height:62px!important;
+    padding:11px 14px!important;
+  }
+}
+
+@media (min-width:1600px){
+  .home-hero-reference .home-hero-art{
+    padding-top:30px!important;
+    padding-bottom:24px!important;
+  }
+
+  .home-hero-reference .hero-collage{
+    height:420px!important;
+  }
+
+  .home-hero-reference .hero-desktop-carousel{
+    height:400px!important;
+  }
+}
