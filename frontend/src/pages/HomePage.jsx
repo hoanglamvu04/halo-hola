@@ -121,7 +121,7 @@ export default function HomePage() {
           <h1><span>{hero.titleLine1}</span><em>{hero.titleAccent}</em></h1>
           <span className="hero-title-stroke"/>
           <h3>{hero.tagline}</h3>
-          <p>{hero.description}</p>
+          <p>{hero.description} Từ thiên nhiên, con người đến kiến trúc và nhịp sống đang đổi thay, mỗi đóng góp cùng lưu giữ thêm một lát cắt chân thật của Hòa Lạc hôm nay và mai sau.</p>
 
           <div className="hero-actions">
             <Link to="/kham-pha" className="btn btn-green">Khám phá chương trình <ArrowRight size={17}/></Link>
