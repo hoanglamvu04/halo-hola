@@ -7,6 +7,8 @@ import {
   createPhotographerShoot,
   listPhotographerShoots,
   updatePhotographerShoot,
+  createPhotographerUploadTickets,
+  finalizePhotographerUploads,
   storePhotographerAssets,
   listPhotographerAssets,
   deletePhotographerAsset
@@ -38,6 +40,26 @@ router.patch('/shoots/:id',async (req,res,next)=>{
 router.get('/assets',async (req,res,next)=>{
   try{
     res.json(await listPhotographerAssets(req.user.id,{shootId:req.query.shootId}));
+  }catch(error){next(error);}
+});
+
+router.post('/shoots/:id/uploads/presign',async (req,res,next)=>{
+  try{
+    res.json(await createPhotographerUploadTickets({
+      user:req.user,
+      shootId:req.params.id,
+      files:req.body?.files||[]
+    }));
+  }catch(error){next(error);}
+});
+
+router.post('/shoots/:id/uploads/finalize',async (req,res,next)=>{
+  try{
+    res.status(201).json(await finalizePhotographerUploads({
+      user:req.user,
+      shootId:req.params.id,
+      uploads:req.body?.uploads||[]
+    }));
   }catch(error){next(error);}
 });
 
