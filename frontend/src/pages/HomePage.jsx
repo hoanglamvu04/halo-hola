@@ -97,6 +97,8 @@ export default function HomePage() {
     backgroundImage:img.people
   })
 
+  const communityTitleMatch=String(community.title||'').match(/^(.+?)\s+[–—-]\s+(.+)$/)
+
   const colorImages=[
     colorsCopy.colorImage1,
     colorsCopy.colorImage2,
@@ -435,6 +437,6 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('community')&&<section className="we-banner we-banner-clean"><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><div className="we-banner-manifesto"><span>01</span><b>Nhiều góc nhìn</b><span>02</span><b>Một cộng đồng</b><span>03</span><b>Một Hòa Lạc</b></div></div></section>}
+    {sectionOn('community')&&<section className="we-banner we-banner-clean"><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{communityTitleMatch?<><span className="we-banner-title-name">{communityTitleMatch[1]}</span><span className="we-banner-title-separator">{' – '}</span><span className="we-banner-title-tagline">{communityTitleMatch[2]}</span></>:community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><div className="we-banner-manifesto"><span>01</span><b>Nhiều góc nhìn</b><span>02</span><b>Một cộng đồng</b><span>03</span><b>Một Hòa Lạc</b></div></div></section>}
   </main>
 }
