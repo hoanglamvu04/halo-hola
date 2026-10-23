@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   LogIn, RefreshCw, ShieldCheck, ExternalLink, Home, FolderOpen, Globe2,
-  Activity, Layers3, Palette, Trophy, ChevronRight
+  Activity, Layers3, Palette, Trophy, ChevronRight, Camera
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
@@ -17,6 +17,7 @@ import PublicationManager from '../components/PublicationManager.jsx'
 import AnalyticsManager from '../components/AnalyticsManager.jsx'
 import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
 import AdminSubmissionOperations from '../components/AdminSubmissionOperations.jsx'
+import PhotographerManager from '../components/PhotographerManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -30,7 +31,8 @@ const navGroups=[
       {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
       {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
       {label:'Tác giả',icon:Users,path:'/admin/authors'},
-      {label:'Công bố',icon:Globe2,path:'/admin/publication'}
+      {label:'Công bố',icon:Globe2,path:'/admin/publication'},
+      {label:'Đội ảnh',icon:Camera,path:'/admin/photographers'}
     ]
   },
   {
@@ -68,6 +70,7 @@ const sectionDescriptions={
   'Tác phẩm':'Theo dõi trọn luồng Đã nhận → Hợp lệ → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
   'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
+  'Đội ảnh':'Cấp tài khoản, theo dõi buổi chụp và quản lý kho ảnh tác nghiệp.',
   'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
   'Chủ đề':'Quản lý hệ chủ đề của HALO HOLA 2026.',
   'Sắc màu':'Quản lý hệ màu và nội dung kể chuyện theo sắc màu Hòa Lạc.',
@@ -212,6 +215,7 @@ export default function AdminPage(){
      active==='Hội đồng BGK'?<JuryBoardManager/>:
      active==='Analytics'?<AnalyticsManager/>:
      active==='Công bố'?<PublicationManager/>:
+     active==='Đội ảnh'?<PhotographerManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
        <AdminContentManager type="tours"/>
        <div className="admin-panel"><div className="admin-panel-head"><h2>Đăng ký HOLA Tour</h2><span>{tourRegistrations.length} đăng ký</span></div><div className="tour-admin-list">{tourRegistrations.length?tourRegistrations.map(r=><div key={r.id}><div><b>{r.code} · Tour #{r.tour_number}</b><small>{r.name} · {r.email} · {r.phone}</small></div><div><span>{r.role_label||'Chưa chọn vai trò'}</span><small>{r.equipment||'Không ghi thiết bị'}</small></div><b className="status approved">{r.status}</b></div>):<p>Chưa có đăng ký tour.</p>}</div></div>
