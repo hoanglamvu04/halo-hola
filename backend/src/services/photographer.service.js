@@ -264,15 +264,22 @@ export async function listPhotographers() {
       u.last_login_at AS "lastLoginAt",
       u.created_at AS "createdAt",
       p.phone,p.notes,p.sort_order AS "sortOrder",
-      COUNT(DISTINCT s.id)::int AS "shootCount",
-      COUNT(a.id)::int AS "assetCount",
-      COALESCE(SUM(a.size_bytes),0)::bigint AS "totalBytes"
+      COALESCE(s.shoot_count,0)::int AS "shootCount",
+      COALESCE(a.asset_count,0)::int AS "assetCount",
+      COALESCE(a.total_bytes,0)::bigint AS "totalBytes"
     FROM users u
     LEFT JOIN photographer_profiles p ON p.photographer_id=u.id
-    LEFT JOIN photographer_shoots s ON s.photographer_id=u.id
-    LEFT JOIN photographer_assets a ON a.photographer_id=u.id
+    LEFT JOIN LATERAL (
+      SELECT COUNT(*)::int AS shoot_count
+      FROM photographer_shoots ps
+      WHERE ps.photographer_id=u.id
+    ) s ON TRUE
+    LEFT JOIN LATERAL (
+      SELECT COUNT(*)::int AS asset_count,COALESCE(SUM(size_bytes),0)::bigint AS total_bytes
+      FROM photographer_assets pa
+      WHERE pa.photographer_id=u.id
+    ) a ON TRUE
     WHERE u.role='PHOTOGRAPHER'
-    GROUP BY u.id,p.phone,p.notes,p.sort_order
     ORDER BY COALESCE(p.sort_order,999),u.created_at ASC
   `);
   return rows;
@@ -331,6 +338,10 @@ export async function updatePhotographer(id,input={}) {
        RETURNING id,name,email,role,account_status AS "accountStatus",last_login_at AS "lastLoginAt"`,
       [id,name,email,status]
     );
+    const profile=(await client.query(
+      'SELECT phone,notes,sort_order FROM photographer_profiles WHERE photographer_id=$1',
+      [id]
+    )).rows[0]||{};
     await client.query(
       `INSERT INTO photographer_profiles(photographer_id,phone,notes,sort_order,updated_at)
        VALUES ($1,$2,$3,$4,NOW())
@@ -338,9 +349,9 @@ export async function updatePhotographer(id,input={}) {
          phone=EXCLUDED.phone,notes=EXCLUDED.notes,sort_order=EXCLUDED.sort_order,updated_at=NOW()`,
       [
         id,
-        input.phone===undefined?null:(String(input.phone||'').trim()||null),
-        input.notes===undefined?null:(String(input.notes||'').trim()||null),
-        Number.isFinite(Number(input.sortOrder))?Number(input.sortOrder):0
+        input.phone===undefined?(profile.phone||null):(String(input.phone||'').trim()||null),
+        input.notes===undefined?(profile.notes||null):(String(input.notes||'').trim()||null),
+        input.sortOrder===undefined?Number(profile.sort_order||0):(Number.isFinite(Number(input.sortOrder))?Number(input.sortOrder):0)
       ]
     );
     return rows[0];
