@@ -31,11 +31,14 @@ import siteRoutes from './routes/site.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import colorAdminRoutes from './routes/colorAdmin.routes.js';
 import themeAdminRoutes from './routes/themeAdmin.routes.js';
+import photographerRoutes from './routes/photographer.routes.js';
+import photographerAdminRoutes from './routes/photographerAdmin.routes.js';
 
 function isSensitivePath(pathname='') {
   return pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/admin') ||
     pathname.startsWith('/api/jury') ||
+    pathname.startsWith('/api/photographer') ||
     pathname.startsWith('/api/submissions/lookup') ||
     pathname.startsWith('/api/submission-operations/state');
 }
@@ -109,7 +112,9 @@ export function createApp() {
   app.use('/api', contentRoutes);
   app.use('/api', analyticsRoutes);
   app.use('/api/jury', juryRoutes);
+  app.use('/api/photographer', photographerRoutes);
   app.use('/api/admin/jury-board', juryBoardRoutes);
+  app.use('/api/admin/photographers', photographerAdminRoutes);
   app.use('/api/admin/jury-results', juryResultsRoutes);
   app.use('/api/admin/publication', publicationRoutes);
   app.use('/api/admin/public-preview', adminPreviewRoutes);
