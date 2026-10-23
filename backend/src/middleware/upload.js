@@ -74,31 +74,3 @@ export const submissionUpload = multer({
   },
   fileFilter
 });
-
-const photographerExtensions = new Set([
-  '.jpg','.jpeg','.png','.webp','.avif','.tif','.tiff','.dng','.cr2','.nef','.arw'
-]);
-
-function photographerFileFilter(_req,file,cb){
-  const ext = path.extname(file.originalname || '').toLowerCase();
-  const acceptedMimes = mimeByExtension.get(ext);
-  if (!photographerExtensions.has(ext) || !acceptedMimes || !acceptedMimes.has(String(file.mimetype || '').toLowerCase())) {
-    return cb(new AppError('Đội ảnh chỉ tải file ảnh hoặc RAW được hỗ trợ.', 400));
-  }
-  cb(null, true);
-}
-
-export const photographerUpload = multer({
-  storage,
-  limits:{
-    fileSize:100*1024*1024,
-    files:30,
-    fields:10,
-    fieldNameSize:80,
-    fieldSize:20*1024,
-    parts:45,
-    headerPairs:100
-  },
-  fileFilter:photographerFileFilter
-});
-
