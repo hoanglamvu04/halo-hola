@@ -1,0 +1,366 @@
+/* Final desktop campaign composition.
+   Editorial, compact and public-facing: copy + inline facts on the left,
+   scenic image + lightweight journey rail on the right. */
+@media (min-width:1081px){
+  .campaign-live{
+    padding:30px 0 38px !important;
+    background:var(--campaign-main-bg,#fbf7ef) !important;
+  }
+
+  .campaign-live-grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,44%) minmax(0,56%) !important;
+    grid-template-rows:minmax(330px,1fr) auto !important;
+    width:min(1640px,calc(100% - 72px)) !important;
+    min-height:520px !important;
+    margin:0 auto !important;
+    overflow:hidden !important;
+    border:1px solid color-mix(in srgb,var(--campaign-stat-border,#eadfcd) 82%,transparent) !important;
+    border-radius:26px !important;
+    background:#fffaf2 !important;
+    box-shadow:0 18px 48px rgba(31,49,40,.065) !important;
+  }
+
+  .campaign-live .live-counter{
+    grid-column:1 !important;
+    grid-row:1 / 3 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    padding:42px clamp(38px,3.2vw,58px) 38px !important;
+    border-right:1px solid #e8dfd0 !important;
+    background:
+      radial-gradient(circle at 8% 5%,rgba(255,255,255,.82),transparent 30%),
+      #fffaf2 !important;
+  }
+
+  .campaign-live .campaign-kicker{
+    margin:0 0 14px !important;
+  }
+
+  .campaign-live .live-counter h2{
+    max-width:610px !important;
+    margin:0 !important;
+    font-size:clamp(2.85rem,3.3vw,4.15rem) !important;
+    line-height:1.04 !important;
+    letter-spacing:-.035em !important;
+    text-wrap:balance !important;
+  }
+
+  .campaign-live .campaign-accent-line{
+    width:62px !important;
+    height:4px !important;
+    margin:18px 0 17px !important;
+  }
+
+  .campaign-live .campaign-desc{
+    max-width:580px !important;
+    margin:0 0 22px !important;
+    font-size:.95rem !important;
+    line-height:1.65 !important;
+  }
+
+  /* One editorial facts strip instead of four dashboard cards. */
+  .campaign-live .live-stats{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:0 !important;
+    width:100% !important;
+    max-width:620px !important;
+    margin:0 0 22px !important;
+    padding:14px 0 !important;
+    border-top:1px solid #e5dbc9 !important;
+    border-bottom:1px solid #e5dbc9 !important;
+  }
+
+  .campaign-live .live-stat,
+  .campaign-live .live-stats>div{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:center !important;
+    gap:4px !important;
+    min-height:48px !important;
+    padding:0 14px !important;
+    border:0 !important;
+    border-right:1px solid #e5dbc9 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    text-decoration:none !important;
+  }
+
+  .campaign-live .live-stat:first-child{
+    padding-left:0 !important;
+  }
+
+  .campaign-live .live-stat:last-child{
+    border-right:0 !important;
+  }
+
+  .campaign-live .live-stat svg{
+    display:none !important;
+  }
+
+  .campaign-live .live-stat b{
+    margin:0 !important;
+    color:#174b38 !important;
+    font-family:Inter,'DM Sans',system-ui,sans-serif !important;
+    font-size:1.45rem !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    letter-spacing:-.035em !important;
+  }
+
+  .campaign-live .live-stat small{
+    margin:0 !important;
+    color:#718078 !important;
+    font-size:.61rem !important;
+    line-height:1.25 !important;
+    font-weight:650 !important;
+  }
+
+  .campaign-live .campaign-cta{
+    min-width:210px !important;
+    min-height:48px !important;
+    padding:0 22px !important;
+    box-shadow:none !important;
+  }
+
+  .campaign-live .campaign-signature{
+    margin-top:14px !important;
+    max-width:590px !important;
+    color:#708078 !important;
+  }
+
+  /* Scenic image: deliberately clean. */
+  .campaign-live .campaign-visual{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    position:relative !important;
+    min-height:330px !important;
+    height:100% !important;
+    overflow:hidden !important;
+    border-radius:0 !important;
+  }
+
+  .campaign-live .campaign-visual-bg{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center 55% !important;
+    transform:none !important;
+    filter:saturate(.90) contrast(.98) brightness(.91) !important;
+  }
+
+  .campaign-live .campaign-visual::before{
+    content:'' !important;
+    display:block !important;
+    position:absolute !important;
+    z-index:2 !important;
+    inset:0 !important;
+    background:
+      linear-gradient(180deg,rgba(8,44,32,.03),rgba(8,44,32,.20)),
+      linear-gradient(90deg,rgba(8,44,32,.12),transparent 38%) !important;
+    pointer-events:none !important;
+  }
+
+  .campaign-live .campaign-visual-shade{
+    display:none !important;
+  }
+
+  .campaign-live .campaign-photo-main,
+  .campaign-live .campaign-photo-secondary,
+  .campaign-live .campaign-note-card{
+    display:none !important;
+  }
+
+  .campaign-live .campaign-place-sign{
+    z-index:4 !important;
+    top:auto !important;
+    right:auto !important;
+    left:24px !important;
+    bottom:22px !important;
+    padding:9px 13px !important;
+    border:1px solid rgba(255,255,255,.36) !important;
+    border-radius:999px !important;
+    background:rgba(255,250,242,.90) !important;
+    color:#174b38 !important;
+    box-shadow:none !important;
+    backdrop-filter:blur(8px) !important;
+  }
+
+  .campaign-live .campaign-place-sign span{
+    font-size:.78rem !important;
+    font-weight:800 !important;
+  }
+
+  /* Lightweight journey rail under the image. */
+  .campaign-live .campaign-timeline{
+    grid-column:2 !important;
+    grid-row:2 !important;
+    align-self:stretch !important;
+    justify-self:stretch !important;
+    width:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:18px 22px 20px !important;
+    border:0 !important;
+    border-top:1px solid #dfd4c1 !important;
+    border-radius:0 !important;
+    background:#f4eddf !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    color:#174b38 !important;
+  }
+
+  .campaign-live .timeline-title{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    margin:0 0 15px !important;
+    padding:0 !important;
+    border:0 !important;
+    color:#174b38 !important;
+  }
+
+  .campaign-live .timeline-title svg{
+    width:17px !important;
+    height:17px !important;
+    color:#cf5b30 !important;
+  }
+
+  .campaign-live .timeline-title b{
+    color:#174b38 !important;
+    font-size:.88rem !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    letter-spacing:-.01em !important;
+  }
+
+  .campaign-live .timeline-title::after{
+    content:'07 MỐC' !important;
+    margin-left:auto !important;
+    min-height:22px !important;
+    padding:0 9px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    border:1px solid #d7c9b2 !important;
+    border-radius:999px !important;
+    background:rgba(255,255,255,.36) !important;
+    color:#7b715f !important;
+    font-size:.52rem !important;
+    font-weight:850 !important;
+    letter-spacing:.11em !important;
+  }
+
+  .campaign-live .campaign-milestones{
+    display:grid !important;
+    grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+    gap:0 !important;
+    padding:0 !important;
+  }
+
+  .campaign-live .campaign-milestone,
+  .campaign-live .campaign-milestone:last-child:nth-child(odd){
+    position:relative !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:flex-start !important;
+    gap:6px !important;
+    width:auto !important;
+    min-width:0 !important;
+    min-height:72px !important;
+    padding:0 11px !important;
+    border:0 !important;
+    border-left:1px solid #ded3c0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+  }
+
+  .campaign-live .campaign-milestone:first-child{
+    padding-left:0 !important;
+    border-left:0 !important;
+    background:transparent !important;
+  }
+
+  .campaign-live .campaign-milestone span{
+    display:block !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:none !important;
+    color:#cf5b30 !important;
+    font-size:.76rem !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    font-variant-numeric:tabular-nums !important;
+  }
+
+  .campaign-live .campaign-milestone b{
+    margin:0 !important;
+    padding:0 !important;
+    color:#244f41 !important;
+    font-size:.66rem !important;
+    line-height:1.28 !important;
+    font-weight:720 !important;
+    letter-spacing:-.005em !important;
+  }
+
+  .campaign-live .campaign-milestone i{
+    display:block !important;
+    width:24px !important;
+    height:2px !important;
+    margin-top:auto !important;
+    border:0 !important;
+    border-radius:999px !important;
+    background:#cfc3af !important;
+  }
+
+  .campaign-live .campaign-milestone i.active{
+    width:38px !important;
+    background:#cf5b30 !important;
+  }
+}
+
+@media (min-width:1081px) and (max-width:1320px){
+  .campaign-live-grid{
+    grid-template-columns:45% 55% !important;
+    min-height:500px !important;
+  }
+
+  .campaign-live .live-counter{
+    padding:34px 30px 32px !important;
+  }
+
+  .campaign-live .live-counter h2{
+    font-size:clamp(2.55rem,3.8vw,3.45rem) !important;
+  }
+
+  .campaign-live .campaign-desc{
+    font-size:.88rem !important;
+  }
+
+  .campaign-live .live-stat,
+  .campaign-live .live-stats>div{
+    padding-inline:10px !important;
+  }
+
+  .campaign-live .live-stat b{
+    font-size:1.25rem !important;
+  }
+
+  .campaign-live .campaign-timeline{
+    padding:16px 18px 18px !important;
+  }
+
+  .campaign-live .campaign-milestone,
+  .campaign-live .campaign-milestone:last-child:nth-child(odd){
+    padding-inline:8px !important;
+  }
+
+  .campaign-live .campaign-milestone b{
+    font-size:.61rem !important;
+  }
+}
