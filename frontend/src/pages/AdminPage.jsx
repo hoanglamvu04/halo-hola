@@ -70,7 +70,7 @@ const sectionDescriptions={
   'Tác phẩm':'Theo dõi trọn luồng Đã nhận → Hợp lệ → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
   'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
-  'Đội ảnh':'Cấp tài khoản, theo dõi buổi chụp và quản lý kho ảnh tác nghiệp.',
+  'Đội ảnh':'Cấp tài khoản và nhận địa điểm cùng link Google Drive từ đội nhiếp ảnh.',
   'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
   'Chủ đề':'Quản lý hệ chủ đề của HALO HOLA 2026.',
   'Sắc màu':'Quản lý hệ màu và nội dung kể chuyện theo sắc màu Hòa Lạc.',
