@@ -11,12 +11,64 @@ import {
   getR2Buckets,
   putR2Object,
   deleteR2Object,
-  createDownloadUrl
+  createDownloadUrl,
+  createUploadUrl,
+  headR2Object
 } from '../storage/r2.js';
 
 const PREVIEWABLE_MIMES = new Set([
   'image/jpeg','image/png','image/webp','image/avif'
 ]);
+
+const DIRECT_UPLOAD_MAX_FILES=30;
+const DIRECT_UPLOAD_MAX_BYTES=100*1024*1024;
+const DIRECT_UPLOAD_TYPES=new Map([
+  ['.jpg',new Set(['image/jpeg'])],
+  ['.jpeg',new Set(['image/jpeg'])],
+  ['.png',new Set(['image/png'])],
+  ['.webp',new Set(['image/webp'])],
+  ['.avif',new Set(['image/avif'])],
+  ['.tif',new Set(['image/tiff'])],
+  ['.tiff',new Set(['image/tiff'])],
+  ['.dng',new Set(['image/x-adobe-dng','application/octet-stream'])],
+  ['.cr2',new Set(['image/x-canon-cr2','application/octet-stream'])],
+  ['.nef',new Set(['image/x-nikon-nef','application/octet-stream'])],
+  ['.arw',new Set(['image/x-sony-arw','application/octet-stream'])]
+]);
+
+function normalizeDirectUploadFile(input={}) {
+  const originalName=String(input.name||input.originalName||'').trim();
+  const size=Number(input.size);
+  const ext=path.extname(originalName).toLowerCase();
+  const allowed=DIRECT_UPLOAD_TYPES.get(ext);
+  if(!originalName || !allowed) throw new AppError('Định dạng ảnh không được hỗ trợ.',400);
+  if(!Number.isInteger(size) || size<=0 || size>DIRECT_UPLOAD_MAX_BYTES) {
+    throw new AppError('Mỗi file phải lớn hơn 0 và không vượt quá 100 MB.',400);
+  }
+  const requested=String(input.type||input.mimeType||'').trim().toLowerCase();
+  const contentType=requested && allowed.has(requested)
+    ? requested
+    : (allowed.has('application/octet-stream')?'application/octet-stream':[...allowed][0]);
+  if(requested && !allowed.has(requested) && requested!=='application/octet-stream') {
+    throw new AppError('MIME type không khớp phần mở rộng file.',400);
+  }
+  return {
+    clientId:String(input.clientId||'').trim()||null,
+    originalName,
+    size,
+    contentType
+  };
+}
+
+async function getOwnedShoot(userId,shootId) {
+  const shoot=(await pool.query(
+    'SELECT * FROM photographer_shoots WHERE id=$1 AND photographer_id=$2',
+    [shootId,userId]
+  )).rows[0];
+  if(!shoot) throw new AppError('Buổi chụp không tồn tại hoặc không thuộc tài khoản này.',404);
+  if(shoot.status==='ARCHIVED') throw new AppError('Buổi chụp đã lưu trữ, không thể tải thêm ảnh.',409);
+  return shoot;
+}
 
 function safeName(name='photo') {
   const ext=path.extname(name).toLowerCase().replace(/[^.a-z0-9]/g,'');
@@ -156,6 +208,106 @@ export async function updatePhotographerShoot(userId,id,input={}) {
     [id,userId,placeId,placeName,title,capturedOn,notes,status]
   );
   return rows[0];
+}
+
+export async function createPhotographerUploadTickets({user,shootId,files=[]}) {
+  if(!Array.isArray(files) || !files.length) throw new AppError('Chưa chọn ảnh để tải lên.',400);
+  if(files.length>DIRECT_UPLOAD_MAX_FILES) throw new AppError('Mỗi lượt chỉ tạo tối đa 30 file upload.',400);
+  if(!hasR2Originals()) throw new AppError('R2 originals chưa được cấu hình trên máy chủ.',503);
+
+  const shoot=await getOwnedShoot(user.id,shootId);
+  const client=createR2Client();
+  const bucket=getR2Buckets().originals;
+  const shootDate=String(shoot.captured_on).slice(0,10);
+  const normalized=files.map(normalizeDirectUploadFile);
+
+  return Promise.all(normalized.map(async file=>{
+    const key=[
+      'photographers',
+      user.id,
+      shootDate,
+      shoot.id,
+      `${crypto.randomUUID()}-${safeName(file.originalName)}`
+    ].join('/');
+    const uploadUrl=await createUploadUrl({
+      client,
+      bucket,
+      key,
+      contentType:file.contentType,
+      expiresIn:900
+    });
+    return {
+      clientId:file.clientId,
+      key,
+      uploadUrl,
+      originalName:file.originalName,
+      contentType:file.contentType,
+      size:file.size,
+      expiresIn:900
+    };
+  }));
+}
+
+export async function finalizePhotographerUploads({user,shootId,uploads=[]}) {
+  if(!Array.isArray(uploads) || !uploads.length) throw new AppError('Không có file để xác nhận.',400);
+  if(uploads.length>DIRECT_UPLOAD_MAX_FILES) throw new AppError('Mỗi lượt chỉ xác nhận tối đa 30 file.',400);
+  if(!hasR2Originals()) throw new AppError('R2 originals chưa được cấu hình trên máy chủ.',503);
+
+  const shoot=await getOwnedShoot(user.id,shootId);
+  const client=createR2Client();
+  const bucket=getR2Buckets().originals;
+  const prefix=`photographers/${user.id}/${String(shoot.captured_on).slice(0,10)}/${shoot.id}/`;
+  const saved=[];
+
+  for(const input of uploads){
+    const file=normalizeDirectUploadFile(input);
+    const key=String(input.key||'').trim();
+    if(!key.startsWith(prefix) || key.length<=prefix.length) {
+      throw new AppError('Object key R2 không hợp lệ cho buổi chụp này.',403);
+    }
+
+    let head;
+    try{
+      head=await headR2Object({client,bucket,key});
+    }catch{
+      throw new AppError(`R2 chưa nhận file: ${file.originalName}`,409);
+    }
+
+    if(Number(head.ContentLength)!==file.size){
+      await deleteR2Object({client,bucket,key}).catch(()=>{});
+      throw new AppError(`Kích thước file trên R2 không khớp: ${file.originalName}`,409);
+    }
+
+    const existing=(await pool.query(
+      `SELECT a.*,s.title AS shoot_title,s.place_name,s.captured_on
+       FROM photographer_assets a
+       JOIN photographer_shoots s ON s.id=a.shoot_id
+       WHERE a.object_key=$1 AND a.photographer_id=$2 AND a.shoot_id=$3
+       LIMIT 1`,
+      [key,user.id,shoot.id]
+    )).rows[0];
+
+    if(existing){
+      saved.push(await decorateAsset(existing));
+      continue;
+    }
+
+    const { rows }=await pool.query(
+      `INSERT INTO photographer_assets
+        (shoot_id,photographer_id,original_name,mime_type,size_bytes,storage_provider,bucket,object_key,sha256)
+       VALUES ($1,$2,$3,$4,$5,'R2',$6,$7,NULL)
+       RETURNING *`,
+      [shoot.id,user.id,file.originalName,file.contentType,file.size,bucket,key]
+    );
+    saved.push(await decorateAsset({
+      ...rows[0],
+      shoot_title:shoot.title,
+      place_name:shoot.place_name,
+      captured_on:shoot.captured_on
+    }));
+  }
+
+  return saved;
 }
 
 export async function storePhotographerAssets({user,shootId,files=[]}) {
