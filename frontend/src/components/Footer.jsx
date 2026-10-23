@@ -98,16 +98,18 @@ export default function Footer() {
           </a>
         </section>
 
-        <section className="footer-story-column">
-          <h4>Cùng kể về Hòa Lạc</h4>
-          <i className="footer-heading-line"/>
-          <p>Bạn có câu chuyện, hình ảnh hay góc nhìn thú vị về Hòa Lạc?</p>
-          <Link to="/gui-goc-nhin" className="footer-submit-cta">
-            <span>Gửi một góc nhìn</span>
-            <span className="footer-submit-icon"><ArrowRight/></span>
-          </Link>
-        </section>
       </div>
+
+      <section className="footer-story-band">
+        <div className="footer-story-copy">
+          <span className="footer-story-kicker">Cùng kể về Hòa Lạc</span>
+          <p>Bạn có câu chuyện, hình ảnh hay góc nhìn thú vị về Hòa Lạc?</p>
+        </div>
+        <Link to="/gui-goc-nhin" className="footer-submit-cta">
+          <span>Gửi một góc nhìn</span>
+          <span className="footer-submit-icon"><ArrowRight/></span>
+        </Link>
+      </section>
 
       <div className="footer-bottom">
         <span>© 2026 {brand.siteName||'HELLO HÒA LẠC'}. All rights reserved.</span>
