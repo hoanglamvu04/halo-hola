@@ -435,6 +435,6 @@ export default function HomePage() {
       </div>
     </section>}
 
-    {sectionOn('community')&&<section className="we-banner"><img src={community.backgroundImage}/><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><span className="hand-note">Nhiều góc nhìn<br/>Một cộng đồng<br/>Một Hòa Lạc</span></div></section>}
+    {sectionOn('community')&&<section className="we-banner we-banner-clean"><div className="container we-overlay"><div><span className="eyebrow">{community.eyebrow}</span><h2>{community.title}</h2><p>{community.description}</p><Link className="btn btn-green" to="/we-hola"><HeartHandshake size={17}/> Tham gia cộng đồng</Link></div><div className="we-banner-manifesto"><span>01</span><b>Nhiều góc nhìn</b><span>02</span><b>Một cộng đồng</b><span>03</span><b>Một Hòa Lạc</b></div></div></section>}
   </main>
 }
