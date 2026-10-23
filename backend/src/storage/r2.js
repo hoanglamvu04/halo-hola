@@ -1,7 +1,6 @@
 import {
   S3Client,
   HeadBucketCommand,
-  HeadObjectCommand,
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand
@@ -48,18 +47,6 @@ export async function putR2Object({ client, bucket, key, body, contentType, meta
     ContentType: contentType,
     Metadata: metadata
   }));
-}
-
-export async function createUploadUrl({ client, bucket, key, contentType='application/octet-stream', expiresIn=900 }) {
-  return getSignedUrl(
-    client,
-    new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: contentType }),
-    { expiresIn }
-  );
-}
-
-export async function headR2Object({ client, bucket, key }) {
-  return client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
 }
 
 export async function deleteR2Object({ client, bucket, key }) {
