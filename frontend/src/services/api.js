@@ -85,6 +85,19 @@ export function getHomepageContent() { return unwrap(client.get('/site/homepage'
 export function adminLogin(payload) { return unwrap(client.post('/auth/login', payload)); }
 export function getCurrentUser() { return unwrap(client.get('/auth/me')); }
 
+// Photographer Workspace: authenticated PHOTOGRAPHER / MODERATOR / ADMIN.
+export function getPhotographerPlaces() { return unwrap(client.get('/photographer/places')); }
+export function getPhotographerShoots() { return unwrap(client.get('/photographer/shoots')); }
+export function createPhotographerShoot(payload) { return unwrap(client.post('/photographer/shoots', payload)); }
+export function updatePhotographerShoot(id,payload) { return unwrap(client.patch('/photographer/shoots/' + encodeURIComponent(id), payload)); }
+export function getPhotographerAssets(params = {}) { return unwrap(client.get('/photographer/assets', { params })); }
+export function uploadPhotographerAssets(shootId,files = []) {
+  const form=new FormData();
+  files.forEach(file=>form.append('files',file));
+  return unwrap(client.post('/photographer/shoots/' + encodeURIComponent(shootId) + '/assets',form,{timeout:0}));
+}
+export function deletePhotographerAsset(id) { return unwrap(client.delete('/photographer/assets/' + encodeURIComponent(id))); }
+
 export function getAdminHomepageSections() {
   return unwrap(client.get('/admin/site/homepage')).then(rows=>(Array.isArray(rows)?rows:[]).filter(row=>!['themes','colors'].includes(row.section_key)));
 }
@@ -124,6 +137,14 @@ export function createAdminJuror(payload) { return unwrap(client.post('/admin/ju
 export function updateAdminJuror(id,payload) { return unwrap(client.put('/admin/jury-board/' + encodeURIComponent(id), payload)); }
 export function resetAdminJurorPassword(id,password) { return unwrap(client.post('/admin/jury-board/' + encodeURIComponent(id), {password})); }
 export function deleteAdminJuror(id) { return unwrap(client.delete('/admin/jury-board/' + encodeURIComponent(id))); }
+
+// Photographer team administration: ADMIN only.
+export function getAdminPhotographers() { return unwrap(client.get('/admin/photographers')); }
+export function createAdminPhotographer(payload) { return unwrap(client.post('/admin/photographers', payload)); }
+export function updateAdminPhotographer(id,payload) { return unwrap(client.put('/admin/photographers/' + encodeURIComponent(id), payload)); }
+export function resetAdminPhotographerPassword(id,password) { return unwrap(client.post('/admin/photographers/' + encodeURIComponent(id) + '/reset-password', {password})); }
+export function getAdminPhotographerShoots(params = {}) { return unwrap(client.get('/admin/photographers/workspace/shoots', { params })); }
+export function getAdminPhotographerAssets(params = {}) { return unwrap(client.get('/admin/photographers/workspace/assets', { params })); }
 
 // Jury Results administration: ranking, TOP52 builder, round lock and audit.
 export function getAdminJuryResultsOverview() { return unwrap(client.get('/admin/jury-results/overview')); }
