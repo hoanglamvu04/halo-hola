@@ -264,14 +264,6 @@ export async function updateSubmissionStatus(id, status) {
   return rows[0] || null;
 }
 
-export async function updateJuryNote(id, note) {
-  const { rows } = await pool.query(
-    `UPDATE submissions SET jury_note = $2, updated_at = NOW() WHERE id = $1 RETURNING *`,
-    [id, note]
-  );
-  return rows[0] || null;
-}
-
 export async function updateSubmissionContent(id, input = {}) {
   const { rows: currentRows } = await pool.query('SELECT * FROM submissions WHERE id=$1 LIMIT 1', [id]);
   const current = currentRows[0];
