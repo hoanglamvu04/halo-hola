@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { getConnectionConfig, isConnectionConfigured } from './connectionSettings.service.js';
+import { getConnectionConfig, isConnectionConfigured, smtpConfigurationIssue } from './connectionSettings.service.js';
 
 const STATUS_COPY = {
   PENDING: {
@@ -40,14 +40,30 @@ const STATUS_COPY = {
   }
 };
 
+// Bound all SMTP network phases: without this, Nodemailer may wait 120s for
+// TCP and up to 10 minutes on an idle socket, blocking registration responses.
+export function smtpTransportOptions(config) {
+  const port = Number(config.port || 587);
+  const secure = Boolean(config.secure);
+  return {
+    host: config.host,
+    port,
+    secure,
+    ...(port === 587 && !secure ? {requireTLS: true} : {}),
+    ...(config.user ? {auth: {user: config.user, pass: config.password}} : {}),
+    connectionTimeout: 10000,
+    greetingTimeout: 8000,
+    socketTimeout: 15000,
+    dnsTimeout: 8000
+  };
+}
+
 function transporter() {
   const config = getConnectionConfig('smtp');
   if (!isConnectionConfigured('smtp', config)) return null;
-  return nodemailer.createTransport({
-    host: config.host, port: Number(config.port || 587),
-    secure: Boolean(config.secure),
-    ...(config.user ? { auth: { user: config.user, pass: config.password } } : {})
-  });
+  const issue = smtpConfigurationIssue(config);
+  if (issue) throw new Error(issue);
+  return nodemailer.createTransport(smtpTransportOptions(config));
 }
 
 function siteUrl() {
@@ -63,11 +79,76 @@ function fromAddress() {
   return { name: config.fromName || 'HALO HOLA', address: config.fromAddress };
 }
 
+export function smtpErrorDiagnostic(error) {
+  const code = String(error?.code || '').toUpperCase();
+  const responseCode = Number(error?.responseCode || 0);
+  if (code === 'EAUTH' || responseCode === 535 || responseCode === 534) {
+    return {code: 'AUTH_FAILED', message: 'Máy chủ SMTP từ chối đăng nhập. Với Gmail, hãy kiểm tra địa chỉ gửi và mật khẩu ứng dụng (App Password).'};
+  }
+  if (code === 'ENOTFOUND' || code === 'EAI_AGAIN' || code === 'EDNS') {
+    return {code: 'DNS_FAILED', message: 'VPS không phân giải được tên máy chủ SMTP. Kiểm tra hostname và DNS.'};
+  }
+  if (code === 'ECONNREFUSED') {
+    return {code: 'CONNECTION_REFUSED', message: 'Máy chủ SMTP từ chối cổng kết nối. Kiểm tra cổng 465/587 và firewall VPS.'};
+  }
+  if (code === 'ETIMEDOUT' || code === 'ESOCKET' || code === 'ECONNECTION' ||
+      code === 'EHOSTUNREACH' || code === 'ENETUNREACH' ||
+      /timeout|timed out/i.test(String(error?.message || ''))) {
+    return {code: 'NETWORK_TIMEOUT', message: 'Không kết nối được SMTP trong thời gian cho phép. Kiểm tra cổng, firewall hoặc kết nối mạng của VPS.'};
+  }
+  if (code.includes('TLS') || /certificate|tls|ssl/i.test(String(error?.message || ''))) {
+    return {code: 'TLS_FAILED', message: 'Lỗi SSL/TLS. Kiểm tra cổng 465 với SSL bật, hoặc 587 với SSL trực tiếp tắt.'};
+  }
+  // Never send raw SMTP errors to the browser: servers may echo credentials.
+  return {code: 'SMTP_FAILED', message: 'SMTP chưa phản hồi thành công. Hãy kiểm tra host, port, TLS và tài khoản.'};
+}
+
 export async function verifySmtpConnection() {
-  const tx = transporter();
-  if (!tx) return { ok: false, message: 'SMTP chưa được cấu hình đầy đủ.' };
-  await tx.verify();
-  return { ok: true, message: 'Máy chủ SMTP đã xác nhận kết nối và xác thực.' };
+  const config = getConnectionConfig('smtp');
+  const issue = smtpConfigurationIssue(config);
+  if (issue) return {ok:false, code:'INVALID_CONFIG', message:issue};
+  let tx;
+  try {
+    tx = transporter();
+    if (!tx) return {ok:false, code:'NOT_CONFIGURED', message:'SMTP chưa được cấu hình đầy đủ hoặc đang tắt.'};
+    await tx.verify();
+    return {ok:true, code:'VERIFIED', message:'Kết nối và xác thực SMTP thành công. Chưa gửi email thực tế.'};
+  } catch (error) {
+    const result = smtpErrorDiagnostic(error);
+    console.warn('SMTP verification failed:', result.code);
+    return {ok:false,...result};
+  } finally {
+    tx?.close();
+  }
+}
+
+// Optional end-to-end check, invoked only by the ADMIN button. Sends exclusively
+// to the configured sender address and never exposes the password.
+export async function sendSmtpTestEmail() {
+  const config = getConnectionConfig('smtp');
+  const issue = smtpConfigurationIssue(config);
+  if (issue) return {ok:false,code:'INVALID_CONFIG',message:issue};
+  let tx;
+  try {
+    tx = transporter();
+    if (!tx) return {ok:false,code:'NOT_CONFIGURED',message:'SMTP chưa được cấu hình đầy đủ hoặc đang tắt.'};
+    const result = await tx.sendMail({
+      from: fromAddress(),
+      to: config.fromAddress,
+      subject: 'HALO HOLA - Kiểm tra gửi email',
+      text: 'Đây là email thử kết nối SMTP từ HALO HOLA. Nếu bạn nhận được email này, dịch vụ gửi thư đã hoạt động.'
+    });
+    if (!Array.isArray(result?.accepted) || !result.accepted.length) {
+      return {ok:false,code:'NOT_ACCEPTED',message:'SMTP chưa chấp nhận người nhận. Kiểm tra địa chỉ gửi và chính sách của nhà cung cấp.'};
+    }
+    return {ok:true,code:'SENT',message:'SMTP đã chấp nhận email thử gửi đến địa chỉ người gửi. Hãy kiểm tra Inbox và Spam.'};
+  } catch (error) {
+    const result = smtpErrorDiagnostic(error);
+    console.warn('SMTP test email failed:', result.code);
+    return {ok:false,...result};
+  } finally {
+    tx?.close();
+  }
 }
 
 function escapeHtml(value = '') {
