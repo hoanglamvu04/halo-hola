@@ -46,16 +46,6 @@ export async function authenticateAdmin(req, res, next) {
   });
 }
 
-export async function authenticateJury(req, res, next) {
-  return authenticate(req, res, (error) => {
-    if (error) return next(error);
-    if (!['JUROR', 'MODERATOR', 'ADMIN'].includes(req.user?.role)) {
-      return next(new AppError('Tài khoản không có quyền truy cập Hội đồng giám khảo.', 403));
-    }
-    return next();
-  });
-}
-
 export function requireRoles(...roles) {
   return (req, _res, next) => {
     if (!roles.includes(req.user?.role)) return next(new AppError('Bạn không có quyền thực hiện thao tác này.',403));
