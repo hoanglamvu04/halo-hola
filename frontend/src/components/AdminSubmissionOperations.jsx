@@ -9,7 +9,7 @@ import { resyncSubmissionHolaMaps } from '../services/adminOperationsApi.js'
 import './AdminSubmissionOperations.css'
 
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
-const statusLabels={PENDING:'Mới nhận',VALID:'Hợp lệ',SHORTLIST:'Shortlist',TOP52:'TOP52',AWARDED:'Đạt giải',REJECTED:'Không hợp lệ'}
+const statusLabels={PENDING:'Mới nhận',VALID:'Đủ thông tin',SHORTLIST:'Được chọn biên tập',TOP52:'TOP52',AWARDED:'Góc nhìn tiêu biểu',REJECTED:'Cần bổ sung'}
 
 const approvedStatuses=new Set(['VALID','SHORTLIST','TOP52','AWARDED'])
 
@@ -258,7 +258,7 @@ export default function AdminSubmissionOperations({
 
   return <div className="admin-submissions-v2">
     <div className="admin-v2-commandbar">
-      <div><b>Quản lý bài dự thi</b><span>Chọn một tác phẩm để kiểm tra, duyệt và xử lý toàn bộ luồng ở cùng một màn hình.</span></div>
+      <div><b>Quản lý góc nhìn cộng đồng</b><span>Kiểm tra, biên tập, công bố và theo dõi từng góc nhìn trên cùng một màn hình.</span></div>
       <div className="admin-v2-command-actions">
         <button className="admin-v2-btn ghost" onClick={exportCsv}><Download/> Xuất CSV</button>
         <button className="admin-v2-btn ghost" onClick={refreshAll} disabled={busy}><RefreshCw className={busy?'spin':''}/> Làm mới</button>
@@ -275,7 +275,7 @@ export default function AdminSubmissionOperations({
     </div>
 
     <div className="admin-v2-filterbar">
-      <label className="admin-v2-search"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm theo mã bài, tác phẩm, tác giả, email..."/></label>
+      <label className="admin-v2-search"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Tìm theo mã góc nhìn, tiêu đề, người kể, email..."/></label>
       <select value={sourceFilter} onChange={e=>{setSourceFilter(e.target.value);setActiveIssue('')}}><option value="">Mọi nguồn</option><option value="WEB">Web</option><option value="FACEBOOK">Facebook</option></select>
       <select value={viewStatus} onChange={e=>{setViewStatus(e.target.value);setActiveIssue('')}}><option value="">Tất cả trạng thái</option>{statuses.map(status=><option value={status} key={status}>{statusLabels[status]}</option>)}</select>
       <select value={themeFilter} onChange={e=>setThemeFilter(e.target.value)}><option value="">Mọi chủ đề</option>{themes.map(theme=><option value={theme} key={theme}>{theme}</option>)}</select>
@@ -285,8 +285,8 @@ export default function AdminSubmissionOperations({
 
     <div className="admin-v2-layout">
       <section className="admin-v2-list-card">
-        <div className="admin-v2-list-title"><div><h2>Danh sách tác phẩm</h2><span>{filteredItems.length} / {total} bài</span></div>{activeIssue&&<button onClick={()=>setActiveIssue('')}><X/> Bỏ lọc nhanh</button>}</div>
-        <div className="admin-v2-table-head"><span></span><span>Tác phẩm</span><span>Tác giả</span><span>Nguồn</span><span>Tiến trình</span><span>Facebook</span><span>Maps</span><span>Trạng thái</span><span></span></div>
+        <div className="admin-v2-list-title"><div><h2>Danh sách góc nhìn</h2><span>{filteredItems.length} / {total} bài</span></div>{activeIssue&&<button onClick={()=>setActiveIssue('')}><X/> Bỏ lọc nhanh</button>}</div>
+        <div className="admin-v2-table-head"><span></span><span>Góc nhìn</span><span>Tác giả</span><span>Nguồn</span><span>Tiến trình</span><span>Facebook</span><span>Maps</span><span>Trạng thái</span><span></span></div>
         <div className="admin-v2-rows">
           {filteredItems.map(item=>{
             const state=getOperationalState(item)
@@ -304,7 +304,7 @@ export default function AdminSubmissionOperations({
               <button className="admin-v2-view" onClick={e=>{e.stopPropagation();setSelected?.(item)}}>Xem</button>
             </div>
           })}
-          {!filteredItems.length&&!busy&&<div className="admin-v2-empty"><Search/><b>Không có tác phẩm phù hợp</b><span>Thử bỏ bớt bộ lọc hoặc tìm bằng từ khóa khác.</span></div>}
+          {!filteredItems.length&&!busy&&<div className="admin-v2-empty"><Search/><b>Không có góc nhìn phù hợp</b><span>Thử bỏ bớt bộ lọc hoặc tìm bằng từ khóa khác.</span></div>}
           {busy&&!filteredItems.length&&<div className="admin-v2-empty"><RefreshCw className="spin"/><b>Đang tải dữ liệu...</b></div>}
         </div>
       </section>
