@@ -25,8 +25,7 @@ git reset --hard "origin/$BRANCH"
 echo "==> Install backend dependencies from lockfile"
 npm ci --prefix backend --omit=dev
 
-echo "==> Apply backend security fixes from npm advisories"
-npm audit fix --prefix backend --omit=dev --force
+echo "==> Audit backend production dependencies"
 npm audit --prefix backend --omit=dev --audit-level=high
 
 echo "==> Install frontend dependencies from lockfile"

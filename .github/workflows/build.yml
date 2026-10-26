@@ -21,9 +21,7 @@ jobs:
             frontend/package-lock.json
       - run: npm ci
       - run: npm run install:all
-      - name: Apply backend security fixes from npm advisories
-        run: npm audit fix --prefix backend --omit=dev --force
-      - name: Run backend tests against patched dependencies
+      - name: Run backend tests
         run: npm test --prefix backend
       - name: Audit backend production dependencies
         run: npm audit --prefix backend --omit=dev --audit-level=high
