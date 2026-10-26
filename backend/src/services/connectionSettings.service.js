@@ -152,10 +152,31 @@ function assertSafeEndpoint(value, label) {
   return url.origin;
 }
 
+export function smtpConfigurationIssue(config) {
+  const host = String(config?.host || '').trim().toLowerCase();
+  const port = Number(config?.port);
+  const secure = config?.secure === true;
+
+  if (host === 'smtp.gmail.com' && port !== 465 && port !== 587) {
+    return 'Gmail chỉ hỗ trợ SMTP cổng 465 (bật SSL) hoặc 587 (tắt SSL trực tiếp, dùng STARTTLS). Cổng ' + port + ' không đúng.';
+  }
+  if (port === 465 && !secure) {
+    return 'Cổng SMTP 465 cần bật SSL trực tiếp.';
+  }
+  if (port === 587 && secure) {
+    return 'Cổng SMTP 587 cần tắt SSL trực tiếp để sử dụng STARTTLS.';
+  }
+  return '';
+}
+
 function validateConfiguration(key, config) {
   if (!isConnectionConfigured(key, config)) {
     if (config.enabled === false) return;
     throw new AppError('Cần điền đủ thông tin kết nối trước khi bật.', 400);
+  }
+  if (key === 'smtp') {
+    const issue = smtpConfigurationIssue(config);
+    if (issue) throw new AppError(issue, 400);
   }
   if (key === 'hola_maps') config.baseUrl = assertSafeEndpoint(config.baseUrl, 'HOLA Maps URL');
   if (key === 'r2') config.endpoint = assertSafeEndpoint(config.endpoint, 'R2 endpoint');
