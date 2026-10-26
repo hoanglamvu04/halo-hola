@@ -148,3 +148,58 @@
   .community-history-status,.community-history-copy,.community-history-item>a,.community-history-wait{grid-column:1;grid-row:auto}
   .community-history-wait{text-align:left}
 }
+
+
+/* Standard password authentication and one-time email verification */
+.community-auth-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:4px;
+  margin:18px 0 14px;
+  padding:5px;
+  border:1px solid #e2e8df;
+  border-radius:13px;
+  background:#f2f5ef;
+}
+.community-auth-tabs button{
+  min-height:42px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#66796c;
+  font-size:.85rem;
+  font-weight:800;
+  cursor:pointer;
+}
+.community-auth-tabs button.active{
+  background:#173d2d;
+  color:#fff;
+  box-shadow:0 4px 10px rgba(23,61,45,.15);
+}
+.community-auth-help{display:flex;justify-content:flex-end;margin-top:-4px}
+.community-auth-secondary{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
+.community-auth-secondary .community-auth-link:disabled{
+  opacity:.54;cursor:not-allowed;
+}
+.community-auth-hint{
+  color:#7c887f;
+  font-size:.72rem;
+  line-height:1.6;
+}
+.community-account-legacy-alert{
+  flex:1 0 100%;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:14px;
+  border:1px solid #ebd7ac;
+  border-radius:13px;
+  background:#fff8e9;
+  color:#6d5029;
+  line-height:1.5;
+  font-size:.78rem;
+}
+.community-account-legacy-alert span{flex:1;min-width:190px}
+.community-account-legacy-alert button{flex-shrink:0}
+.community-account-head{flex-wrap:wrap}
