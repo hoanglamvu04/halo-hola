@@ -122,16 +122,6 @@ export function updateAdminPhotographer(id,payload) { return unwrap(client.put('
 export function resetAdminPhotographerPassword(id,password) { return unwrap(client.post('/admin/photographers/' + encodeURIComponent(id) + '/reset-password', {password})); }
 export function getAdminPhotographerShoots(params = {}) { return unwrap(client.get('/admin/photographers/workspace/shoots', { params })); }
 
-// Jury Results administration: ranking, TOP52 builder, round lock and audit.
-export function getAdminJuryResultsOverview() { return unwrap(client.get('/admin/jury-results/overview')); }
-export function getAdminJuryResultsRanking(params = {}) { return unwrap(client.get('/admin/jury-results/ranking', { params })); }
-export function autoBuildAdminJurySelections(payload = {}) { return unwrap(client.post('/admin/jury-results/selections/auto', payload)); }
-export function setAdminJurySelection(submissionId,payload) { return unwrap(client.put('/admin/jury-results/selections/' + encodeURIComponent(submissionId), payload)); }
-export function lockAdminJuryRound(reason = '') { return unwrap(client.post('/admin/jury-results/round/lock', { reason })); }
-export function reopenAdminJuryRound(reason = '') { return unwrap(client.post('/admin/jury-results/round/reopen', { reason })); }
-export function publishAdminTop52(reason = '') { return unwrap(client.post('/admin/jury-results/publish-top52', { reason })); }
-export function getAdminJuryAudit(params = {}) { return unwrap(client.get('/admin/jury-results/audit', { params })); }
-
 export function getAdminCmsStories() { return unwrap(client.get('/admin/cms/stories')); }
 export function createAdminCmsStory(payload) { return unwrap(client.post('/admin/cms/stories', payload)); }
 export function updateAdminCmsStory(id, payload) { return unwrap(client.put('/admin/cms/stories/' + encodeURIComponent(id), payload)); }
