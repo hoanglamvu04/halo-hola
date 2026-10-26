@@ -219,7 +219,7 @@ export default function AdminSubmissionOperations({
 
   const resetAll=async()=>{
     if(resetBusy)return
-    const typed=window.prompt('Thao tác này sẽ xóa toàn bộ tác phẩm và không thể hoàn tác.\n\nNhập XOA TAT CA để xác nhận:')
+    const typed=window.prompt('Thao tác này sẽ xóa toàn bộ góc nhìn và không thể hoàn tác.\n\nNhập XOA TAT CA để xác nhận:')
     if(typed===null)return
     if(typed.trim().toUpperCase()!=='XOA TAT CA'){
       window.alert('Nội dung xác nhận chưa đúng. Chưa có dữ liệu nào bị xóa.')
@@ -229,7 +229,7 @@ export default function AdminSubmissionOperations({
     try{
       const {data}=await client.post('/admin/submissions/reset-all',{confirm:'RESET_ALL_SUBMISSIONS'})
       setSelected?.(null)
-      window.alert(`Đã xóa ${Number(data?.removed||0)} tác phẩm.`)
+      window.alert(`Đã xóa ${Number(data?.removed||0)} góc nhìn.`)
       await refreshAll()
     }catch(err){onError?.(err.response?.data?.error||err.message)}
     finally{setResetBusy(false)}
@@ -262,12 +262,12 @@ export default function AdminSubmissionOperations({
       <div className="admin-v2-command-actions">
         <button className="admin-v2-btn ghost" onClick={exportCsv}><Download/> Xuất CSV</button>
         <button className="admin-v2-btn ghost" onClick={refreshAll} disabled={busy}><RefreshCw className={busy?'spin':''}/> Làm mới</button>
-        <details className="admin-v2-more"><summary aria-label="Thao tác khác"><MoreHorizontal/></summary><div><button onClick={resetAll} disabled={resetBusy}><Trash2/> {resetBusy?'Đang xóa...':'Xóa toàn bộ tác phẩm'}</button></div></details>
+        <details className="admin-v2-more"><summary aria-label="Thao tác khác"><MoreHorizontal/></summary><div><button onClick={resetAll} disabled={resetBusy}><Trash2/> {resetBusy?'Đang xóa...':'Xóa toàn bộ góc nhìn'}</button></div></details>
       </div>
     </div>
 
     <div className="admin-v2-kpis">
-      <button className={!viewStatus&&!activeIssue&&!sourceFilter?'active':''} onClick={()=>selectKpi('all')}><span className="kpi-icon blue"><FileText/></span><small>Tổng bài</small><b>{total}</b></button>
+      <button className={!viewStatus&&!activeIssue&&!sourceFilter?'active':''} onClick={()=>selectKpi('all')}><span className="kpi-icon blue"><FileText/></span><small>Tổng góc nhìn</small><b>{total}</b></button>
       <button className={viewStatus==='PENDING'?'active':''} onClick={()=>selectKpi('pending')}><span className="kpi-icon amber"><FileCheck2/></span><small>Chờ kiểm tra</small><b>{pendingCount}</b></button>
       <button className={activeIssue==='MISSING_FACEBOOK'?'active':''} onClick={()=>selectKpi('missing-facebook')}><span className="kpi-icon red"><Link2/></span><small>Thiếu Facebook</small><b>{missingFacebook}</b></button>
       <button className={activeIssue==='UNVERIFIED_FACEBOOK'?'active':''} onClick={()=>selectKpi('unverified')}><span className="kpi-icon amber"><ShieldCheck/></span><small>Chưa xác minh</small><b>{unverified}</b></button>
@@ -279,13 +279,13 @@ export default function AdminSubmissionOperations({
       <select value={sourceFilter} onChange={e=>{setSourceFilter(e.target.value);setActiveIssue('')}}><option value="">Mọi nguồn</option><option value="WEB">Web</option><option value="FACEBOOK">Facebook</option></select>
       <select value={viewStatus} onChange={e=>{setViewStatus(e.target.value);setActiveIssue('')}}><option value="">Tất cả trạng thái</option>{statuses.map(status=><option value={status} key={status}>{statusLabels[status]}</option>)}</select>
       <select value={themeFilter} onChange={e=>setThemeFilter(e.target.value)}><option value="">Mọi chủ đề</option>{themes.map(theme=><option value={theme} key={theme}>{theme}</option>)}</select>
-      <select value={sortMode} onChange={e=>setSortMode(e.target.value)}><option value="newest">Mới nhất</option><option value="oldest">Cũ nhất</option><option value="code">Theo mã bài</option></select>
+      <select value={sortMode} onChange={e=>setSortMode(e.target.value)}><option value="newest">Mới nhất</option><option value="oldest">Cũ nhất</option><option value="code">Theo mã góc nhìn</option></select>
       <button className="admin-v2-btn primary" onClick={refreshAll}><Filter/> Lọc</button>
     </div>
 
     <div className="admin-v2-layout">
       <section className="admin-v2-list-card">
-        <div className="admin-v2-list-title"><div><h2>Danh sách góc nhìn</h2><span>{filteredItems.length} / {total} bài</span></div>{activeIssue&&<button onClick={()=>setActiveIssue('')}><X/> Bỏ lọc nhanh</button>}</div>
+        <div className="admin-v2-list-title"><div><h2>Danh sách góc nhìn</h2><span>{filteredItems.length} / {total} góc nhìn</span></div>{activeIssue&&<button onClick={()=>setActiveIssue('')}><X/> Bỏ lọc nhanh</button>}</div>
         <div className="admin-v2-table-head"><span></span><span>Góc nhìn</span><span>Tác giả</span><span>Nguồn</span><span>Tiến trình</span><span>Facebook</span><span>Maps</span><span>Trạng thái</span><span></span></div>
         <div className="admin-v2-rows">
           {filteredItems.map(item=>{
@@ -310,7 +310,7 @@ export default function AdminSubmissionOperations({
       </section>
 
       <aside className="admin-v2-detail-card">
-        {!selectedItem?<div className="admin-v2-detail-empty"><Images/><h3>Chọn một tác phẩm</h3><p>Thông tin hồ sơ, Facebook, file gốc và các hành động vận hành sẽ hiển thị tại đây.</p></div>:<>
+        {!selectedItem?<div className="admin-v2-detail-empty"><Images/><h3>Chọn một góc nhìn</h3><p>Thông tin hồ sơ, Facebook, file gốc và các hành động vận hành sẽ hiển thị tại đây.</p></div>:<>
           <div className="admin-v2-detail-head">
             {firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<span className="admin-v2-detail-placeholder"><Images/></span>}
             <div><span className="admin-v2-code">{selectedItem.code}</span><h2>{selectedItem.title||'Góc nhìn chưa đặt tên'}</h2><span className={'admin-v2-status '+getOperationalState(selectedItem).tone}>{getOperationalState(selectedItem).label}</span></div>
@@ -326,8 +326,8 @@ export default function AdminSubmissionOperations({
           <section className="admin-v2-detail-section">
             <div className="admin-v2-section-title"><Images/><h3>File & liên kết</h3></div>
             <div className="admin-v2-file-grid">
-              <div className="admin-v2-file-summary"><span className="admin-v2-file-thumb">{firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<Images/>}</span><div><small>File tác phẩm</small><b>{selectedItem.media?.[0]?.originalName||`${Number(selectedItem.media_count||0)} file đã lưu`}</b></div>{selectedItem.media?.[0]?.id&&<button title="Tải file gốc" onClick={()=>onOpenOriginal?.(selectedItem.media[0].id)}><Download/></button>}</div>
-              <div className="admin-v2-link-summary"><div><small>Link tác phẩm</small><b>{selectedItem.external_link?'Đã có liên kết':'Chưa có liên kết'}</b></div>{selectedItem.external_link&&<a href={selectedItem.external_link} target="_blank" rel="noreferrer"><ExternalLink/></a>}</div>
+              <div className="admin-v2-file-summary"><span className="admin-v2-file-thumb">{firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<Images/>}</span><div><small>File góc nhìn</small><b>{selectedItem.media?.[0]?.originalName||`${Number(selectedItem.media_count||0)} file đã lưu`}</b></div>{selectedItem.media?.[0]?.id&&<button title="Tải file gốc" onClick={()=>onOpenOriginal?.(selectedItem.media[0].id)}><Download/></button>}</div>
+              <div className="admin-v2-link-summary"><div><small>Link góc nhìn</small><b>{selectedItem.external_link?'Đã có liên kết':'Chưa có liên kết'}</b></div>{selectedItem.external_link&&<a href={selectedItem.external_link} target="_blank" rel="noreferrer"><ExternalLink/></a>}</div>
             </div>
           </section>
 
