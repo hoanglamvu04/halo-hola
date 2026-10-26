@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight,
@@ -10,6 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { img } from '../data/siteData.js'
+import { getPublicTop52 } from '../services/api.js'
 import './Calendar2027Page.css'
 
 const weeklyFormat=[
@@ -54,6 +56,33 @@ function CalendarMockup(){
 }
 
 export default function Calendar2027Page(){
+  const [top52,setTop52]=useState([])
+
+  useEffect(()=>{
+    let alive=true
+    getPublicTop52({limit:3}).then(data=>{
+      if(alive)setTop52(Array.isArray(data?.items)?data.items:[])
+    }).catch(()=>{})
+    return()=>{alive=false}
+  },[])
+
+  const previewWeeks=useMemo(()=>{
+    if(!top52.length)return sampleWeeks
+    const weekLabels=['W01','W18','W42']
+    return weekLabels.map((week,index)=>{
+      const item=top52[index]
+      const fallback=sampleWeeks[index]
+      if(!item)return fallback
+      return {
+        week,
+        label:String(item.theme||fallback.label||'HÒA LẠC').toUpperCase(),
+        title:item.title||item.code||fallback.title,
+        image:item.image||fallback.image,
+        href:item.slug?'/tac-pham/'+item.slug:''
+      }
+    })
+  },[top52])
+
   return <main className="calendar2027-page">
     <section className="calendar2027-hero">
       <div className="calendar2027-hero-orbit orbit-one" aria-hidden="true"/>
@@ -110,13 +139,13 @@ export default function Calendar2027Page(){
           <p>Thiên nhiên, con người, kiến trúc, tri thức, cộng đồng và trải nghiệm cùng xuất hiện trong nhịp 52 tuần.</p>
         </div>
         <div className="calendar2027-preview-grid">
-          {sampleWeeks.map(item=><article key={item.week}>
+          {previewWeeks.map(item=><article key={item.week}>
             <img src={item.image} alt=""/>
             <div className="calendar2027-preview-overlay"/>
-            <div className="calendar2027-preview-copy"><span>{item.week}</span><small>{item.label}</small><h3>{item.title}</h3><div><QrCode/> Câu chuyện đầy đủ trên HALO HOLA</div></div>
+            <div className="calendar2027-preview-copy"><span>{item.week}</span><small>{item.label}</small><h3>{item.title}</h3><div><QrCode/> {item.href?<Link to={item.href}>Đọc góc nhìn trên HALO HOLA</Link>:'Câu chuyện đầy đủ trên HALO HOLA'}</div></div>
           </article>)}
         </div>
-        <p className="calendar2027-preview-note">Những hình ảnh này minh họa tinh thần các mạch câu chuyện sẽ xuất hiện xuyên suốt Calendar 2027.</p>
+        <p className="calendar2027-preview-note">Preview ưu tiên sử dụng những góc nhìn đã được tuyển chọn trên HALO HOLA; khi dữ liệu chưa đủ, trang sẽ dùng hình ảnh minh họa theo đúng mạch nội dung.</p>
       </div>
     </section>
 
