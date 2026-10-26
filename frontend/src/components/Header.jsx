@@ -1,4 +1,4 @@
-import { Menu, Search, X, ArrowRight, Leaf, ChevronDown } from 'lucide-react'
+import { Menu, Search, X, ArrowRight, Leaf, ChevronDown, CircleUserRound } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { getHomepageContent, getSiteSettings } from '../services/api.js'
@@ -23,6 +23,7 @@ const MOBILE_QUICK_LINKS = [
   {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
   {label:'Chiến dịch đóng góp',href:'/chien-dich'},
   {label:'Theo dõi góc nhìn',href:'/tra-cuu'},
+  {label:'Tài khoản',href:'/tai-khoan'},
   {label:'WE HOLA',href:'/we-hola'},
   {label:'Đồng hành',href:'/dong-hanh'},
   {label:'HOLA DAY',href:'/hola-day'}
@@ -265,6 +266,7 @@ export default function Header() {
         </div>
       </nav>
       <div className="header-actions">
+        <HeaderActionLink className="icon-btn account-btn" href="/tai-khoan" ariaLabel="Tài khoản cộng đồng" title="Tài khoản cộng đồng"><CircleUserRound size={19}/></HeaderActionLink>
         {config.showSearch!==false&&<HeaderActionLink className="icon-btn search-btn" href={searchUrl} ariaLabel={searchLabel} title={searchLabel}><Search size={18}/></HeaderActionLink>}
         <HeaderActionLink className="btn btn-terra btn-sm" href={ctaUrl} newTab={Boolean(config.ctaNewTab)}>{config.ctaText||'GỬI GÓC NHÌN'} <ArrowRight size={16}/></HeaderActionLink>
         <button className="menu-btn" onClick={() => setOpen(v => !v)} aria-label="Menu">{open ? <X/> : <Menu/>}</button>

@@ -7,7 +7,8 @@ const HOME_HOLA_BOUNDS = { north: 21.145, south: 20.885, east: 105.665, west: 10
 
 export const client = axios.create({
   baseURL: API_URL,
-  timeout: 120000
+  timeout: 120000,
+  withCredentials: true
 });
 
 client.interceptors.request.use((config) => {
@@ -45,6 +46,13 @@ export function setAdminToken(token) {
 }
 
 export function healthCheck() { return unwrap(client.get('/health')); }
+
+export function requestCommunityLoginCode(payload) { return unwrap(client.post('/community-auth/request-code', payload)); }
+export function verifyCommunityLoginCode(payload) { return unwrap(client.post('/community-auth/verify-code', payload)); }
+export function getCommunityAccount() { return unwrap(client.get('/community-auth/me')); }
+export function updateCommunityAccount(payload) { return unwrap(client.patch('/community-auth/profile', payload)); }
+export function getCommunityContributionHistory() { return unwrap(client.get('/community-auth/submissions')); }
+export function logoutCommunityAccount() { return unwrap(client.post('/community-auth/logout')); }
 
 export async function submitArtwork(payload) {
   const form = new FormData();

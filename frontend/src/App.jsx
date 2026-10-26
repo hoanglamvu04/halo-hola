@@ -26,6 +26,7 @@ const ContributionCampaignPage=lazy(()=>import('./pages/ContributionCampaignPage
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
 const PhotographerPage=lazy(()=>import('./pages/PhotographerPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
+const CommunityAccountPage=lazy(()=>import('./pages/CommunityAccountPage.jsx'))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage.jsx'))
 
 const SITE_URL='https://halohola.vn'
@@ -46,6 +47,7 @@ const SEO_ROUTES={
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác cùng đóng góp, kết nối và xây dựng HALO HOLA.'],
   '/chien-dich':['Chiến dịch đóng góp góc nhìn | HALO HOLA 2026','Cùng đóng góp ảnh, video, câu chuyện và sáng tạo thị giác để xây dựng kho tư liệu cộng đồng về Hòa Lạc. Đây không phải cuộc thi; mỗi góc nhìn đều có giá trị.'],
   '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn, mức hoàn thiện, trạng thái công bố và các bước ghi nhận trong HALO HOLA 2026.'],
+  '/tai-khoan':['Tài khoản cộng đồng | HALO HOLA','Hồ sơ cá nhân và lịch sử đóng góp góc nhìn của bạn trên HALO HOLA.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
 
@@ -123,7 +125,8 @@ function SiteRuntime(){
   const {pathname}=useLocation()
   const privatePage=pathname.startsWith('/admin')||pathname.startsWith('/tac-nghiep')||pathname.startsWith('/tac-pham/xem-truoc/')
   const knownPage=isKnownPath(pathname)
-  const noIndex=privatePage||!knownPage
+  const personalPage=pathname.startsWith('/tai-khoan')
+  const noIndex=privatePage||personalPage||!knownPage
 
   useEffect(()=>{
     const [title,description]=routeSeo(pathname)
@@ -250,6 +253,7 @@ function SiteShell() {
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/tac-nghiep" element={<PhotographerPage />} />
           <Route path="/tra-cuu" element={<LookupPage />} />
+          <Route path="/tai-khoan" element={<CommunityAccountPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

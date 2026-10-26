@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft, ArrowRight, Camera, Video, FileText, Palette, Upload,
   Check, Copy, Image as ImageIcon, Loader2, Save, ShieldCheck,
-  ExternalLink, Share2
+  ExternalLink, Share2, CircleUserRound, Pencil
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
 import HolaLocationPicker from '../components/HolaLocationPicker.jsx'
-import { getColors, getSiteSettings, getThemes, submitArtwork } from '../services/api.js'
+import { getColors, getCommunityAccount, getSiteSettings, getThemes, submitArtwork } from '../services/api.js'
 import {
   buildSubmissionFacebookCaption,
   CHECKIN_GROUP_SEARCH_URL,
@@ -16,6 +16,7 @@ import {
   shareSubmission
 } from '../utils/facebookShare.js'
 import '../styles/submit-success-receipt.css'
+import '../styles/community-account.css'
 
 const steps = ['Thông tin người gửi','Góc nhìn','Tải nội dung','Chủ đề & sắc màu','Địa điểm & câu chuyện','Quyền sử dụng','Xác nhận']
 const DRAFT_KEY = 'halo_hola_submission_draft_v2'
@@ -105,6 +106,8 @@ export default function SubmitPage(){
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
   const [siteSettings,setSiteSettings]=useState({})
+  const [communityAccount,setCommunityAccount]=useState(null)
+  const [editingContributor,setEditingContributor]=useState(false)
   const [files,setFiles]=useState([])
   const [previewUrl,setPreviewUrl]=useState('')
   const [submitting,setSubmitting]=useState(false)
@@ -145,6 +148,25 @@ export default function SubmitPage(){
 
   useEffect(()=>{
     getSiteSettings().then(settings=>setSiteSettings(settings||{})).catch(()=>{})
+  },[])
+
+  useEffect(()=>{
+    let alive=true
+    getCommunityAccount().then(data=>{
+      if(!alive||!data?.account)return
+      const account=data.account
+      setCommunityAccount(account)
+      setEditingContributor(!(clean(account.name)&&clean(account.phone)))
+      setForm(current=>({
+        ...current,
+        name:clean(current.name)||account.name||'',
+        display:clean(current.display)||account.displayName||'',
+        email:account.email||clean(current.email),
+        phone:clean(current.phone)||account.phone||'',
+        bio:clean(current.bio)||account.bio||''
+      }))
+    }).catch(()=>{})
+    return()=>{alive=false}
   },[])
 
   useEffect(()=>{
@@ -296,7 +318,14 @@ export default function SubmitPage(){
     replaceSubmissionUrl('')
     const defaultThemes=themes[0]?.title?[themes[0].title]:[]
     const defaultColors=colors[0]?.name?[colors[0].name]:[]
-    setForm({...initialForm,themes:defaultThemes,colors:defaultColors,theme:defaultThemes.join(TAXONOMY_SEPARATOR),color:defaultColors.join(TAXONOMY_SEPARATOR)})
+    const profileDefaults=communityAccount?{
+      name:communityAccount.name||'',
+      display:communityAccount.displayName||'',
+      email:communityAccount.email||'',
+      phone:communityAccount.phone||'',
+      bio:communityAccount.bio||''
+    }:{}
+    setForm({...initialForm,...profileDefaults,themes:defaultThemes,colors:defaultColors,theme:defaultThemes.join(TAXONOMY_SEPARATOR),color:defaultColors.join(TAXONOMY_SEPARATOR)})
     setFiles([])
     setStep(1)
     setResult(null)
@@ -378,14 +407,33 @@ export default function SubmitPage(){
           <span className="eyebrow">Bước {step} / 7</span>
 
           {step===1&&<div>
-            <h2>Thông tin người đóng góp</h2><p>Thông tin này giúp Ban Tổ chức liên hệ, xác minh và ghi nhận đúng người gửi góc nhìn.</p>
-            <div className="form-grid">
-              <label>Họ và tên *<input value={form.name} onChange={e=>upd('name',e.target.value)} placeholder="Nguyễn Minh An"/></label>
-              <label>Tên hiển thị<input value={form.display} onChange={e=>upd('display',e.target.value)} placeholder="Minh An"/></label>
-              <label>Email *<input type="email" value={form.email} onChange={e=>upd('email',e.target.value)} placeholder="an.nguyen@gmail.com"/></label>
-              <label>Số điện thoại *<input type="tel" inputMode="tel" autoComplete="tel" required value={form.phone} onChange={e=>upd('phone',e.target.value)} placeholder="0987 654 321"/></label>
-              <label className="full">Giới thiệu ngắn<textarea value={form.bio} onChange={e=>upd('bio',e.target.value)} placeholder="Một vài dòng về bạn..."/></label>
-            </div>
+            <h2>Thông tin người đóng góp</h2><p>{communityAccount?'Thông tin đã được lấy từ hồ sơ cộng đồng của bạn.':'Thông tin này giúp HALO HOLA liên hệ, xác minh và ghi nhận đúng người gửi góc nhìn.'}</p>
+
+            {communityAccount&&!editingContributor?<div className="contributor-account-card">
+              <div className="contributor-account-card-head"><div><CircleUserRound/><span>Đang đóng góp với tư cách</span></div><Check size={17}/></div>
+              <div className="contributor-account-card-profile">
+                <div><small>Người gửi</small><b>{form.display||form.name||'Chưa cập nhật'}</b></div>
+                <div><small>Email đã xác minh</small><b>{form.email}</b></div>
+                <div><small>Số điện thoại</small><b>{form.phone||'Chưa cập nhật'}</b></div>
+              </div>
+              <div className="contributor-account-card-actions">
+                <Link to="/tai-khoan">Chỉnh sửa hồ sơ</Link>
+                <button type="button" onClick={()=>setEditingContributor(true)}><Pencil/> Sửa cho lần gửi này</button>
+              </div>
+            </div>:<>
+              {!communityAccount&&<div className="contributor-login-hint">
+                <div><CircleUserRound/><span><b>Đã từng đóng góp?</b><small>Đăng nhập để tự điền thông tin và xem lịch sử của bạn.</small></span></div>
+                <Link to={'/tai-khoan?next='+encodeURIComponent('/gui-goc-nhin')+(clean(form.email)?'&email='+encodeURIComponent(clean(form.email)):'')}>Đăng nhập →</Link>
+              </div>}
+              <div className="form-grid">
+                <label>Họ và tên *<input value={form.name} onChange={e=>upd('name',e.target.value)} placeholder="Nguyễn Minh An"/></label>
+                <label>Tên hiển thị<input value={form.display} onChange={e=>upd('display',e.target.value)} placeholder="Minh An"/></label>
+                <label>Email *<input type="email" value={form.email} readOnly={Boolean(communityAccount)} onChange={e=>upd('email',e.target.value)} placeholder="an.nguyen@gmail.com"/></label>
+                <label>Số điện thoại *<input type="tel" inputMode="tel" autoComplete="tel" required value={form.phone} onChange={e=>upd('phone',e.target.value)} placeholder="0987 654 321"/></label>
+                <label className="full">Giới thiệu ngắn<textarea value={form.bio} onChange={e=>upd('bio',e.target.value)} placeholder="Một vài dòng về bạn..."/></label>
+              </div>
+              {communityAccount&&<div className="contributor-account-card-actions"><button type="button" onClick={()=>setEditingContributor(false)}><Check/> Dùng thông tin này</button><Link to="/tai-khoan">Cập nhật hồ sơ gốc</Link></div>}
+            </>}
           </div>}
 
           {step===2&&<div>
