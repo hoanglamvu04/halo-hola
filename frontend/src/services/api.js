@@ -106,7 +106,6 @@ export function getAdminSubmissions(params = {}) { return unwrap(client.get('/ad
 export function getAdminPublicPreviewArtworks(params = {}) { return unwrap(client.get('/admin/public-preview/artworks', { params })); }
 export function getAdminPublicPreviewArtwork(id) { return unwrap(client.get('/admin/public-preview/artworks/' + encodeURIComponent(id))); }
 export function updateSubmissionStatus(id, status) { return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/status', { status })); }
-export function updateJuryNote(id, note) { return unwrap(client.patch('/admin/submissions/' + encodeURIComponent(id) + '/jury-note', { note })); }
 export function getOriginalDownload(mediaId) { return unwrap(client.get('/admin/media/' + encodeURIComponent(mediaId) + '/download')); }
 
 // Publication control: selection/status is separate from public visibility.
@@ -115,21 +114,6 @@ export function getAdminPublicationItems(params = {}) { return unwrap(client.get
 export function setAdminPublication(id,payload) { return unwrap(client.patch('/admin/publication/items/' + encodeURIComponent(id), payload)); }
 export function bulkSetAdminPublication(payload) { return unwrap(client.post('/admin/publication/bulk', payload)); }
 export function getAdminPublicationAudit(params = {}) { return unwrap(client.get('/admin/publication/audit', { params })); }
-
-// Dedicated Jury Workspace API: available to JUROR / MODERATOR / ADMIN.
-export function getJurySubmissions(params = {}) { return unwrap(client.get('/jury/submissions', { params })); }
-export function getJuryScorecard(submissionId) { return unwrap(client.get('/jury/submissions/' + encodeURIComponent(submissionId) + '/score')); }
-export function saveJuryScore(submissionId, payload) { return unwrap(client.put('/jury/submissions/' + encodeURIComponent(submissionId) + '/score', payload)); }
-export function getJuryStats() { return unwrap(client.get('/jury/stats')); }
-export function getJuryMediaDownload(mediaId) { return unwrap(client.get('/jury/media/' + encodeURIComponent(mediaId) + '/download')); }
-
-// Jury Board administration: ADMIN only.
-export function getAdminJuryBoard() { return unwrap(client.get('/admin/jury-board')); }
-export function getAdminJuryBoardSummary() { return unwrap(client.get('/admin/jury-board/summary')); }
-export function createAdminJuror(payload) { return unwrap(client.post('/admin/jury-board', payload)); }
-export function updateAdminJuror(id,payload) { return unwrap(client.put('/admin/jury-board/' + encodeURIComponent(id), payload)); }
-export function resetAdminJurorPassword(id,password) { return unwrap(client.post('/admin/jury-board/' + encodeURIComponent(id), {password})); }
-export function deleteAdminJuror(id) { return unwrap(client.delete('/admin/jury-board/' + encodeURIComponent(id))); }
 
 // Photographer team administration: ADMIN only.
 export function getAdminPhotographers() { return unwrap(client.get('/admin/photographers')); }
