@@ -111,6 +111,11 @@ export function uploadAdminSiteAsset(sectionKey, file) {
 
 export function getAdminTourRegistrations(params = {}) { return unwrap(client.get('/admin/tour-registrations', { params })); }
 
+export function getAdminConnections() { return unwrap(client.get('/admin/connections')); }
+export function updateAdminConnection(key,payload) { return unwrap(client.put('/admin/connections/' + encodeURIComponent(key),payload)); }
+export function resetAdminConnection(key) { return unwrap(client.delete('/admin/connections/' + encodeURIComponent(key))); }
+export function testAdminSmtp() { return unwrap(client.post('/admin/connections/smtp/test')); }
+
 export function getAdminCommunityLoginCodes(params = {}) { return unwrap(client.get('/admin/community-login-codes', { params })); }
 export function createAdminCommunityLoginCode(payload) { return unwrap(client.post('/admin/community-login-codes', payload)); }
 export function revokeAdminCommunityLoginCode(id) { return unwrap(client.delete('/admin/community-login-codes/' + encodeURIComponent(id))); }
