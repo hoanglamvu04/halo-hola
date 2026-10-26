@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { getConnectionConfig, isConnectionConfigured } from './connectionSettings.service.js';
 
 const STATUS_COPY = {
   PENDING: {
@@ -39,25 +40,13 @@ const STATUS_COPY = {
   }
 };
 
-function configured() {
-  return Boolean(
-    process.env.SMTP_HOST &&
-    process.env.SMTP_USER &&
-    process.env.SMTP_PASS &&
-    process.env.MAIL_FROM
-  );
-}
-
 function transporter() {
-  if (!configured()) return null;
+  const config = getConnectionConfig('smtp');
+  if (!isConnectionConfigured('smtp', config)) return null;
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
+    host: config.host, port: Number(config.port || 587),
+    secure: Boolean(config.secure),
+    ...(config.user ? { auth: { user: config.user, pass: config.password } } : {})
   });
 }
 
@@ -70,10 +59,15 @@ function lookupUrl(code) {
 }
 
 function fromAddress() {
-  return {
-    name: process.env.MAIL_FROM_NAME || 'HALO HOLA',
-    address: process.env.MAIL_FROM
-  };
+  const config = getConnectionConfig('smtp');
+  return { name: config.fromName || 'HALO HOLA', address: config.fromAddress };
+}
+
+export async function verifySmtpConnection() {
+  const tx = transporter();
+  if (!tx) return { ok: false, message: 'SMTP chưa được cấu hình đầy đủ.' };
+  await tx.verify();
+  return { ok: true, message: 'Máy chủ SMTP đã xác nhận kết nối và xác thực.' };
 }
 
 function escapeHtml(value = '') {
