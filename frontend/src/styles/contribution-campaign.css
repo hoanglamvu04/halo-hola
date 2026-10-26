@@ -1,0 +1,2382 @@
+/* HALO HOLA — contribution campaign styles.
+   Consolidated from the former rules/awards cascade after the page became a community contribution campaign. */
+
+/* ===== rules-awards-document-v4.css ===== */
+.rules4-page{--r4-green:#0b4637;--r4-green-2:#123f34;--r4-orange:#d35d36;--r4-ink:#173d34;--r4-muted:#68736e;--r4-paper:#fffdf8;--r4-bg:#eee9df;--r4-line:rgba(11,70,55,.14);--r4-line-soft:rgba(11,70,55,.08);background:var(--r4-bg);color:var(--r4-ink)}
+.rules4-page *{box-sizing:border-box}.rules4-page a{-webkit-tap-highlight-color:transparent}
+
+.rules4-hero{min-height:244px;padding:38px 0 34px;border-bottom:1px solid var(--r4-line);background:linear-gradient(90deg,rgba(255,253,248,.98),rgba(255,253,248,.93) 48%,rgba(255,253,248,.54) 74%,rgba(255,253,248,.2)),url('https://halohola.xspace.vn/api/site-assets/fcb6d30a-5e70-4e92-bc7a-9079a3ca57a9') center 52%/cover no-repeat}
+.rules4-hero-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:end}.rules4-kicker{display:block;margin-bottom:10px;color:var(--r4-orange);font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.rules4-hero h1{max-width:780px;margin:0;font-family:var(--page-title-font-family,Inter,system-ui,sans-serif);font-size:clamp(2.2rem,4vw,3.8rem);font-weight:820;line-height:.98;letter-spacing:-.05em}.rules4-hero p{max-width:680px;margin:15px 0 0;color:#53625c;font-size:.98rem;line-height:1.65}.rules4-hero-meta{display:grid;grid-template-columns:repeat(3,auto);gap:0;border:1px solid rgba(11,70,55,.14);background:rgba(255,253,248,.88);backdrop-filter:blur(8px)}.rules4-hero-meta>div{min-width:128px;padding:14px 16px;border-left:1px solid var(--r4-line)}.rules4-hero-meta>div:first-child{border-left:0}.rules4-hero-meta span{display:block;color:#77827d;font-size:.64rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.rules4-hero-meta b{display:block;margin-top:5px;color:var(--r4-green);font-size:1rem}.rules4-hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.rules4-hero-actions .btn{min-height:42px;padding:0 15px;border-radius:4px;box-shadow:none}.rules4-hero-actions svg{width:15px;height:15px}
+
+.rules4-wrap{padding:34px 0 64px}.rules4-layout{display:grid;grid-template-columns:220px minmax(0,860px);justify-content:center;gap:28px;align-items:start}.rules4-sidebar{position:sticky;top:92px}.rules4-sidebar-card{border:1px solid var(--r4-line);background:rgba(255,253,248,.88);box-shadow:0 8px 28px rgba(63,57,44,.05)}.rules4-sidebar-head{padding:16px 16px 13px;border-bottom:1px solid var(--r4-line)}.rules4-sidebar-head span{display:block;color:var(--r4-orange);font-size:.66rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.rules4-sidebar-head b{display:block;margin-top:5px;font-size:.9rem}.rules4-nav{display:flex;flex-direction:column;padding:7px 0}.rules4-nav a{display:grid;grid-template-columns:30px 1fr;gap:8px;padding:9px 15px;color:#405149;font-size:.78rem;font-weight:720;text-decoration:none;border-left:2px solid transparent}.rules4-nav a span{color:#9a6d59;font-family:Georgia,'Times New Roman',serif}.rules4-nav a:hover{background:#f7f2e8;border-left-color:var(--r4-orange);color:var(--r4-green)}.rules4-sidebar-foot{padding:13px 15px;border-top:1px solid var(--r4-line);font-size:.72rem;line-height:1.5;color:var(--r4-muted)}.rules4-sidebar-foot a{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:var(--r4-green);font-weight:800;text-decoration:none}
+
+.rules4-paper{background:var(--r4-paper);border:1px solid var(--r4-line);box-shadow:0 18px 55px rgba(55,50,40,.075)}.rules4-paper-head{display:grid;grid-template-columns:1fr auto;gap:24px;padding:26px 34px 22px;border-bottom:1px solid var(--r4-line);background:#fbf8f1}.rules4-paper-head span{display:block;color:var(--r4-orange);font-size:.66rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.rules4-paper-head h2{margin:5px 0 0;font-size:1.4rem;letter-spacing:-.025em}.rules4-paper-stamp{text-align:right}.rules4-paper-stamp strong{display:block;color:var(--r4-green);font-size:1.35rem}.rules4-paper-stamp small{color:var(--r4-muted)}
+
+.rules4-section{display:grid;grid-template-columns:58px minmax(0,1fr);gap:24px;padding:40px 34px;border-top:1px solid var(--r4-line-soft);scroll-margin-top:96px}.rules4-section:first-of-type{border-top:0}.rules4-roman{padding-top:2px;color:var(--r4-orange);font-family:Georgia,'Times New Roman',serif;font-size:1.2rem;font-weight:700}.rules4-section-kicker{display:block;margin-bottom:5px;color:#8a6a5c;font-size:.66rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase}.rules4-section h3{margin:0;font-family:var(--page-title-font-family,Inter,system-ui,sans-serif);font-size:clamp(1.55rem,2.3vw,2rem);font-weight:800;line-height:1.08;letter-spacing:-.035em}.rules4-lead{max-width:720px;margin:14px 0 22px;color:#4d5d56;font-family:Georgia,'Times New Roman',serif;font-size:1.04rem;line-height:1.75}
+
+.rules4-facts{margin:0;border-top:1px solid var(--r4-line)}.rules4-fact{display:grid;grid-template-columns:28px 142px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--r4-line-soft)}.rules4-fact svg{width:18px;height:18px;color:var(--r4-orange);margin-top:2px}.rules4-fact dt{font-size:.86rem;font-weight:800}.rules4-fact dd{margin:0;color:var(--r4-muted);font-size:.9rem;line-height:1.5}
+
+.rules4-table{width:100%;margin-top:20px;border-collapse:collapse;border-top:1px solid var(--r4-line);border-bottom:1px solid var(--r4-line);table-layout:fixed}.rules4-table th{padding:9px 10px;text-align:left;color:#77827d;background:#f7f3eb;font-size:.63rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;border-bottom:1px solid var(--r4-line)}.rules4-table td{padding:13px 10px;vertical-align:top;border-bottom:1px solid var(--r4-line-soft);color:#52605a;font-size:.86rem;line-height:1.5}.rules4-table tr:last-child td{border-bottom:0}.rules4-table strong{color:var(--r4-green);font-size:.88rem}.rules4-format-name{display:flex;align-items:center;gap:8px}.rules4-format-name span{display:grid;place-items:center;width:27px;height:27px;border:1px solid var(--r4-line);color:var(--r4-green)}.rules4-format-name svg{width:14px;height:14px}
+
+.rules4-theme-grid{display:grid;grid-template-columns:1fr 1fr;margin-top:20px;border-top:1px solid var(--r4-line)}.rules4-theme{display:grid;grid-template-columns:38px 1fr auto;gap:8px;align-items:center;min-height:50px;padding:10px 0;border-bottom:1px solid var(--r4-line-soft)}.rules4-theme:nth-child(odd){padding-right:20px;border-right:1px solid var(--r4-line-soft)}.rules4-theme:nth-child(even){padding-left:20px}.rules4-theme .num{color:var(--r4-orange);font-size:.72rem;font-weight:900}.rules4-theme b{font-size:.86rem}.rules4-theme small{padding:2px 6px;background:#f2ede4;color:#6f7a74;font-size:.62rem}.rules4-note{margin-top:16px;padding:12px 14px;border-left:3px solid var(--r4-orange);background:#f7f1e8;color:#596760;font-size:.86rem;line-height:1.6}
+
+.rules4-award-total{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin-top:18px;padding:13px 0;border-top:1px solid var(--r4-line);border-bottom:1px solid var(--r4-line)}.rules4-award-total strong{color:var(--r4-green);font-size:1.45rem}.rules4-award-total span{color:var(--r4-muted);font-size:.82rem;text-align:right}.rules4-awards-table th:nth-child(1){width:25%}.rules4-awards-table th:nth-child(2){width:12%}.rules4-awards-table th:nth-child(3){width:19%}.rules4-awards-table th:nth-child(4){width:44%}.rules4-awards-table tr.is-featured td{background:#fbf3ea}.rules4-award-label{display:block;margin-top:3px;color:var(--r4-orange);font-size:.62rem;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.rules4-policy{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;border-top:1px solid var(--r4-line);border-bottom:1px solid var(--r4-line)}.rules4-policy>div{padding:14px 16px 14px 0}.rules4-policy>div+div{padding-left:16px;border-left:1px solid var(--r4-line-soft)}.rules4-policy b{display:block;margin-bottom:5px;font-size:.78rem}.rules4-policy span{color:var(--r4-muted);font-size:.76rem;line-height:1.5}
+
+.rules4-steps{margin:16px 0 0;padding:0;list-style:none;border-top:1px solid var(--r4-line)}.rules4-steps li{display:grid;grid-template-columns:36px 160px 1fr;gap:14px;padding:13px 0;border-bottom:1px solid var(--r4-line-soft)}.rules4-steps .num{color:var(--r4-orange);font-size:.7rem;font-weight:900}.rules4-steps b{font-size:.85rem}.rules4-steps p{margin:0;color:var(--r4-muted);font-size:.85rem;line-height:1.5}
+.rules4-timeline{margin-top:16px;border-top:1px solid var(--r4-line)}.rules4-time-row{display:grid;grid-template-columns:142px 1fr;gap:18px;padding:13px 0;border-bottom:1px solid var(--r4-line-soft)}.rules4-time-row time{color:var(--r4-orange);font-size:.8rem;font-weight:850}.rules4-time-row b{font-size:.86rem}.rules4-time-row.is-final{padding-left:12px;border-left:3px solid var(--r4-green);background:#f4f7f4}
+.rules4-checks{margin:15px 0 0;padding:0;list-style:none;border-top:1px solid var(--r4-line)}.rules4-checks li{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--r4-line-soft);color:#4f5e57;font-size:.87rem;line-height:1.55}.rules4-checks svg{width:15px;height:15px;color:var(--r4-green);margin-top:3px}
+
+.rules4-footer-action{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 34px;border-top:1px solid var(--r4-line);background:#f7f2e9}.rules4-footer-action span{display:block;color:var(--r4-orange);font-size:.64rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase}.rules4-footer-action h3{margin:4px 0 0;font-size:1.12rem}.rules4-footer-action .btn{border-radius:4px}
+
+@media(max-width:980px){.rules4-hero-inner{grid-template-columns:1fr}.rules4-hero-meta{justify-self:start}.rules4-layout{grid-template-columns:1fr;max-width:860px}.rules4-sidebar{position:static}.rules4-sidebar-card{display:grid;grid-template-columns:auto 1fr}.rules4-sidebar-head,.rules4-sidebar-foot{display:none}.rules4-nav{display:flex;flex-direction:row;overflow:auto;padding:0;scrollbar-width:none}.rules4-nav::-webkit-scrollbar{display:none}.rules4-nav a{flex:0 0 auto;grid-template-columns:auto auto;padding:12px 13px;border-left:0;border-bottom:2px solid transparent}.rules4-nav a:hover{border-bottom-color:var(--r4-orange)}}
+@media(max-width:720px){.rules4-hero{min-height:0;padding:28px 0}.rules4-hero h1{font-size:clamp(2rem,10vw,2.7rem)}.rules4-hero-meta{grid-template-columns:repeat(3,1fr);width:100%}.rules4-hero-meta>div{min-width:0;padding:10px}.rules4-hero-meta b{font-size:.82rem}.rules4-wrap{padding:18px 0 88px}.rules4-layout{gap:14px}.rules4-paper-head{grid-template-columns:1fr;padding:20px}.rules4-paper-stamp{text-align:left}.rules4-section{grid-template-columns:1fr;gap:8px;padding:28px 20px}.rules4-roman{font-size:.9rem}.rules4-section h3{font-size:1.55rem}.rules4-lead{font-size:.98rem}.rules4-fact{grid-template-columns:24px 108px 1fr}.rules4-table{display:block;overflow-x:auto;white-space:normal}.rules4-table thead,.rules4-table tbody{min-width:640px;display:table;width:100%;table-layout:fixed}.rules4-theme-grid{grid-template-columns:1fr}.rules4-theme:nth-child(odd),.rules4-theme:nth-child(even){padding:10px 0;border-right:0}.rules4-policy{grid-template-columns:1fr}.rules4-policy>div{padding:12px 0}.rules4-policy>div+div{padding-left:0;border-left:0;border-top:1px solid var(--r4-line-soft)}.rules4-steps li{grid-template-columns:32px 120px 1fr}.rules4-time-row{grid-template-columns:120px 1fr}.rules4-footer-action{align-items:flex-start;flex-direction:column;padding:20px}}
+@media(max-width:480px){.rules4-hero-meta{grid-template-columns:1fr}.rules4-hero-meta>div{border-left:0;border-top:1px solid var(--r4-line)}.rules4-hero-meta>div:first-child{border-top:0}.rules4-steps li{grid-template-columns:30px 1fr}.rules4-steps p{grid-column:2}.rules4-time-row{grid-template-columns:1fr;gap:4px}.rules4-fact{grid-template-columns:22px 1fr}.rules4-fact dd{grid-column:2}.rules4-footer-action .btn{width:100%;justify-content:center}}
+
+/* ===== rules-awards-document-v5.css ===== */
+/* HALO HOLA 2026 — official-regulation reading mode
+   v5 deliberately removes the compressed desktop-table feeling on phones.
+   Desktop keeps the document canvas; mobile becomes a single-column regulation. */
+
+.rules4-page{
+  overflow-x:hidden;
+  background:#f4f1ea;
+}
+
+.rules4-paper,
+.rules4-paper *{
+  min-width:0;
+  max-width:100%;
+}
+
+/* Slightly calmer desktop document rhythm. */
+@media (min-width: 769px){
+  .rules4-paper{
+    max-width:920px;
+  }
+
+  .rules4-section h3{
+    font-size:clamp(1.65rem,2.1vw,2.15rem);
+    line-height:1.16;
+  }
+
+  .rules4-lead{
+    max-width:760px;
+    font-size:1rem;
+    line-height:1.78;
+  }
+}
+
+@media (max-width: 768px){
+  /* ===== Page / hero ===== */
+  .rules4-page{
+    --rules-mobile-text:#161916;
+    --rules-mobile-muted:#5f6863;
+    --rules-mobile-line:#deded9;
+    background:#efefec;
+    color:var(--rules-mobile-text);
+    overflow-x:hidden;
+  }
+
+  .rules4-page .container{
+    width:100%;
+    max-width:none;
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .rules4-hero{
+    min-height:0;
+    padding:20px 22px 18px;
+    background:#fff;
+    border-bottom:1px solid #deded9;
+  }
+
+  .rules4-hero-inner{
+    display:block;
+  }
+
+  .rules4-kicker{
+    margin-bottom:8px;
+    color:#8e513e;
+    font-size:.68rem;
+    letter-spacing:.12em;
+  }
+
+  .rules4-hero h1{
+    margin:0;
+    font-size:1.8rem;
+    line-height:1.12;
+    letter-spacing:-.03em;
+  }
+
+  .rules4-hero p{
+    margin:10px 0 0;
+    font-size:.98rem;
+    line-height:1.62;
+    color:#5a625e;
+  }
+
+  .rules4-hero-actions{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .rules4-hero-actions::-webkit-scrollbar{display:none}
+
+  .rules4-hero-actions .btn{
+    flex:0 0 auto;
+    min-height:40px;
+    padding:0 14px;
+    border-radius:6px;
+    font-size:.82rem;
+  }
+
+  .rules4-hero-meta{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin-top:16px;
+    border:1px solid #e1e1dc;
+    background:#fafaf8;
+  }
+
+  .rules4-hero-meta>div{
+    padding:10px 8px;
+    border:0;
+    border-right:1px solid #e1e1dc;
+    text-align:center;
+  }
+  .rules4-hero-meta>div:last-child{border-right:0}
+  .rules4-hero-meta span{
+    display:block;
+    margin-bottom:4px;
+    font-size:.61rem;
+    line-height:1.2;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#777f7a;
+  }
+  .rules4-hero-meta b{
+    display:block;
+    font-size:.77rem;
+    line-height:1.3;
+    color:#1d342c;
+  }
+
+  /* ===== Remove desktop sidebar completely on phones ===== */
+  .rules4-wrap{
+    padding:0;
+    background:#efefec;
+  }
+
+  .rules4-layout{
+    display:block;
+    width:100%;
+    margin:0;
+    padding:0;
+  }
+
+  .rules4-sidebar{
+    display:none !important;
+  }
+
+  /* ===== One continuous paper, like a regulation document ===== */
+  .rules4-paper{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0 28px calc(122px + env(safe-area-inset-bottom));
+    border:0;
+    border-left:1px solid #deded9;
+    border-right:1px solid #deded9;
+    border-radius:0;
+    box-shadow:none;
+    background:#fff;
+    overflow:visible;
+  }
+
+  /* Replace dashboard-like paper header with a formal chapter heading. */
+  .rules4-paper-head{
+    display:block;
+    position:relative;
+    min-height:210px;
+    margin:0;
+    padding:54px 0 34px;
+    border-bottom:1px solid var(--rules-mobile-line);
+    text-align:center;
+  }
+  .rules4-paper-head>div{
+    display:none !important;
+  }
+  .rules4-paper-head::before{
+    content:"CHƯƠNG I\A QUY ĐỊNH CHUNG";
+    white-space:pre-line;
+    display:block;
+    color:#111;
+    font-size:1.55rem;
+    line-height:2.45;
+    font-weight:850;
+    letter-spacing:-.02em;
+  }
+  .rules4-paper-head::after{
+    content:"-----";
+    display:block;
+    margin-top:4px;
+    color:#111;
+    font-size:1rem;
+    letter-spacing:.08em;
+  }
+
+  /* ===== Sections read as Điều 1, Điều 2... ===== */
+  .rules4-section{
+    display:block;
+    width:100%;
+    padding:34px 0;
+    border-top:0;
+    border-bottom:1px solid var(--rules-mobile-line);
+    scroll-margin-top:74px;
+  }
+
+  .rules4-section:last-of-type{
+    border-bottom:0;
+  }
+
+  .rules4-roman,
+  .rules4-section-kicker{
+    display:none !important;
+  }
+
+  .rules4-section h3{
+    margin:0 0 20px;
+    color:#101210;
+    font-family:Inter,'DM Sans',system-ui,sans-serif;
+    font-size:1.34rem;
+    line-height:1.38;
+    font-weight:820;
+    letter-spacing:-.018em;
+    text-wrap:pretty;
+  }
+
+  #tham-gia h3::before{content:"Điều 1. ";}
+  #loai-hinh h3::before{content:"Điều 2. ";}
+  #chu-de h3::before{content:"Điều 3. ";}
+  #giai-thuong h3::before{content:"Điều 4. ";}
+  #cach-tham-gia h3::before{content:"Điều 5. ";}
+  #moc-thoi-gian h3::before{content:"Điều 6. ";}
+  #luu-y h3::before{content:"Điều 7. ";}
+
+  .rules4-lead,
+  .rules4-section p,
+  .rules4-fact dd,
+  .rules4-note,
+  .rules4-award-desc,
+  .rules4-checks li,
+  .rules4-steps p{
+    color:var(--rules-mobile-text);
+    font-size:1.08rem;
+    line-height:1.85;
+    letter-spacing:-.008em;
+  }
+
+  .rules4-lead{
+    margin:0 0 24px;
+    text-wrap:pretty;
+  }
+
+  /* ===== Participant facts: compact rows + a clearer area block ===== */
+  .rules4-facts{
+    margin:0;
+    border-top:1px solid #ecece8;
+  }
+
+  .rules4-fact{
+    display:grid;
+    grid-template-columns:max-content minmax(0,1fr);
+    column-gap:10px;
+    align-items:baseline;
+    padding:14px 0;
+    border-bottom:1px solid #e5e5e1;
+  }
+  .rules4-fact:last-child{border-bottom:0}
+  .rules4-fact svg{display:none}
+  .rules4-fact dt{
+    display:block;
+    margin:0;
+    color:#111;
+    font-size:.95rem;
+    line-height:1.65;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .rules4-fact:not(:nth-child(2)) dt::after{
+    content:":";
+  }
+  .rules4-fact dd{
+    display:block;
+    margin:0;
+    font-size:.98rem;
+    line-height:1.65;
+    color:#303732;
+    text-wrap:pretty;
+  }
+
+  /* Địa bàn contains many names, so give it its own quiet document panel
+     instead of a long dot-separated paragraph between two labels. */
+  .rules4-fact:nth-child(2){
+    display:block;
+    margin:8px 0;
+    padding:14px 15px 15px;
+    border:1px solid #e4e0d6;
+    border-radius:10px;
+    background:#f8f6f0;
+  }
+  .rules4-fact:nth-child(2) dt{
+    margin:0 0 7px;
+    color:#123f32;
+    font-size:.88rem;
+    line-height:1.2;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .rules4-fact:nth-child(2) dd{
+    color:#26312c;
+    font-size:.96rem;
+    line-height:1.72;
+    word-spacing:.06em;
+  }
+
+  /* ===== Desktop tables become formal stacked clauses ===== */
+  .rules4-table,
+  .rules4-table tbody,
+  .rules4-table tr,
+  .rules4-table td{
+    display:block;
+    width:100%;
+  }
+
+  .rules4-table{
+    margin:4px 0 0;
+    border:0;
+    border-top:1px solid #d9dad6;
+    table-layout:auto;
+  }
+
+  .rules4-table thead{
+    display:none !important;
+  }
+
+  .rules4-table tr{
+    padding:20px 0;
+    border:0;
+    border-bottom:1px solid #dedfdb;
+    background:transparent !important;
+  }
+  .rules4-table tr:last-child{border-bottom:0}
+
+  .rules4-table td{
+    padding:0 !important;
+    border:0 !important;
+    color:var(--rules-mobile-text);
+    font-size:1.04rem;
+    line-height:1.7;
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+
+  .rules4-table td+td{
+    margin-top:8px;
+  }
+
+  .rules4-format-name{
+    display:block;
+    margin:0 0 8px;
+  }
+  .rules4-format-name span{display:none}
+  .rules4-format-name strong{
+    display:block;
+    color:#123f32;
+    font-size:1.08rem;
+    font-weight:850;
+  }
+
+  /* Format table gets readable labels rather than columns. */
+  .rules4-table:not(.rules4-awards-table) td:nth-child(2)::before{
+    content:"Nội dung: ";
+    font-weight:800;
+  }
+  .rules4-table:not(.rules4-awards-table) td:nth-child(3)::before{
+    content:"Thông số: ";
+    font-weight:800;
+  }
+
+  /* ===== Themes: numbered legal-style list ===== */
+  .rules4-theme-grid{
+    display:block;
+    margin:2px 0 0;
+    border-top:1px solid #d9dad6;
+  }
+  .rules4-theme{
+    display:grid;
+    grid-template-columns:34px minmax(0,1fr);
+    gap:9px;
+    align-items:start;
+    min-height:0;
+    padding:14px 0;
+    border:0;
+    border-bottom:1px solid #e1e2de;
+    border-radius:0;
+    background:transparent;
+  }
+  .rules4-theme .num{
+    color:#8e513e;
+    font-size:.9rem;
+    font-weight:850;
+  }
+  .rules4-theme b{
+    color:#151715;
+    font-size:1.04rem;
+    line-height:1.55;
+  }
+  .rules4-theme small{
+    grid-column:2;
+    justify-self:start;
+    margin-top:2px;
+    padding:0;
+    background:transparent;
+    color:#707873;
+    font-size:.85rem;
+  }
+
+  .rules4-note{
+    margin:20px 0 0;
+    padding:16px 0 16px 16px;
+    border:0;
+    border-left:3px solid #8e513e;
+    border-radius:0;
+    background:transparent;
+  }
+
+  /* ===== Awards: stacked, no horizontal table ===== */
+  .rules4-award-total{
+    display:block;
+    margin:0 0 14px;
+    padding:16px 0;
+    border-top:1px solid #d9dad6;
+    border-bottom:1px solid #d9dad6;
+    background:transparent;
+  }
+  .rules4-award-total strong{
+    display:block;
+    margin-bottom:4px;
+    color:#143e32;
+    font-size:1.55rem;
+  }
+  .rules4-award-total span{
+    display:block;
+    color:#5d6661;
+    font-size:.93rem;
+    line-height:1.55;
+  }
+
+  .rules4-awards-table td:nth-child(1){margin-bottom:8px}
+  .rules4-awards-table td:nth-child(2)::before{content:"Số lượng: ";font-weight:800}
+  .rules4-awards-table td:nth-child(3)::before{content:"Giá trị: ";font-weight:800}
+  .rules4-awards-table td:nth-child(4)::before{content:"Ghi chú: ";font-weight:800}
+
+  .rules4-awards-table .rules4-award-name b{
+    display:block;
+    color:#123f32;
+    font-size:1.1rem;
+    line-height:1.45;
+  }
+  .rules4-awards-table .rules4-award-name small{
+    display:block;
+    margin-top:3px;
+    color:#8e513e;
+    font-size:.78rem;
+    font-weight:800;
+    text-transform:uppercase;
+  }
+
+  .rules4-award-policy{
+    display:block;
+    margin-top:22px;
+    border-top:1px solid #d9dad6;
+    border-bottom:1px solid #d9dad6;
+  }
+  .rules4-award-policy>div{
+    display:block;
+    padding:15px 0 !important;
+    border:0 !important;
+    border-bottom:1px solid #e4e4e0 !important;
+  }
+  .rules4-award-policy>div:last-child{border-bottom:0 !important}
+  .rules4-award-policy b{
+    display:block;
+    margin-bottom:5px;
+    font-size:1rem;
+  }
+  .rules4-award-policy span{
+    color:var(--rules-mobile-text);
+    font-size:1rem;
+    line-height:1.72;
+  }
+
+  /* ===== Steps / timeline: paragraph rhythm ===== */
+  .rules4-steps{
+    margin:0;
+    padding:0;
+    border-top:1px solid #d9dad6;
+    list-style:none;
+  }
+  .rules4-steps li{
+    display:block;
+    padding:18px 0;
+    border-bottom:1px solid #e0e1dd;
+  }
+  .rules4-steps .num{
+    display:block;
+    margin-bottom:6px;
+    color:#8e513e;
+    font-size:.87rem;
+    font-weight:850;
+  }
+  .rules4-steps b{
+    display:block;
+    margin-bottom:5px;
+    font-size:1.08rem;
+  }
+  .rules4-steps p{margin:0}
+
+  .rules4-timeline{
+    margin:0;
+    border-top:1px solid #d9dad6;
+  }
+  .rules4-time-row{
+    display:block;
+    padding:16px 0;
+    border-bottom:1px solid #e0e1dd;
+    background:transparent !important;
+  }
+  .rules4-time-row time{
+    display:block;
+    margin-bottom:5px;
+    color:#8e513e;
+    font-size:.91rem;
+    font-weight:850;
+  }
+  .rules4-time-row b{
+    display:block;
+    color:#161916;
+    font-size:1.05rem;
+    line-height:1.55;
+  }
+  .rules4-time-row.is-final{
+    padding-left:14px;
+    border-left:3px solid #143e32;
+  }
+
+  /* ===== Rules: clean numbered-looking paragraphs ===== */
+  .rules4-checks{
+    margin:0;
+    padding:0;
+    list-style:none;
+    counter-reset:rule-note;
+  }
+  .rules4-checks li{
+    counter-increment:rule-note;
+    display:grid;
+    grid-template-columns:28px minmax(0,1fr);
+    gap:8px;
+    padding:12px 0;
+    border-bottom:0;
+  }
+  .rules4-checks li::before{
+    content:counter(rule-note) ".";
+    color:#111;
+    font-size:1.08rem;
+    font-weight:500;
+    line-height:1.85;
+  }
+  .rules4-checks li svg{display:none}
+  .rules4-checks li span{
+    color:#161916;
+    font-size:1.08rem;
+    line-height:1.85;
+  }
+
+  /* ===== End CTA: no floating marketing card ===== */
+  .rules4-footer-action{
+    display:block;
+    margin:0;
+    padding:28px 0 12px;
+    border-top:1px solid #d9dad6;
+    background:#fff;
+  }
+  .rules4-footer-action>div>span{
+    display:block;
+    margin-bottom:6px;
+    color:#8e513e;
+    font-size:.7rem;
+    font-weight:850;
+    letter-spacing:.1em;
+  }
+  .rules4-footer-action h3{
+    margin:0;
+    font-size:1.32rem;
+    line-height:1.4;
+  }
+  .rules4-footer-action .btn{
+    width:100%;
+    justify-content:center;
+    margin-top:16px;
+    border-radius:6px;
+  }
+}
+
+/* Extra narrow devices: keep comfortable document margins, never create horizontal scroll. */
+@media (max-width: 390px){
+  .rules4-paper{padding-left:22px;padding-right:22px}
+  .rules4-hero{padding-left:18px;padding-right:18px}
+  .rules4-hero h1{font-size:1.65rem}
+  .rules4-section h3{font-size:1.25rem}
+  .rules4-lead,
+  .rules4-section p,
+  .rules4-fact dd,
+  .rules4-table td,
+  .rules4-checks li span{font-size:1.02rem}
+
+  .rules4-fact{
+    grid-template-columns:max-content minmax(0,1fr);
+    column-gap:8px;
+  }
+  .rules4-fact dt{font-size:.9rem}
+  .rules4-fact dd{font-size:.94rem}
+  .rules4-fact:nth-child(2) dd{font-size:.93rem}
+}
+
+/* ===== rules-awards-desktop-reading.css ===== */
+/* HALO HOLA 2026 — desktop reading mode
+   Keep the same calm, regulation-style rhythm as the mobile version. */
+
+@media (min-width: 769px){
+  .rules4-page{
+    background:#f2efe8;
+    color:#18211d;
+  }
+
+  /* ===== Compact editorial hero ===== */
+  .rules4-hero{
+    min-height:0;
+    padding:34px 0 28px;
+    border-bottom:1px solid #e3dfd6;
+    background:#fffdf9;
+  }
+
+  .rules4-hero-inner{
+    display:block;
+    width:min(100% - 48px, 980px);
+    margin:0 auto;
+  }
+
+  .rules4-kicker{
+    margin-bottom:8px;
+    color:#a65339;
+    font-size:.7rem;
+    letter-spacing:.14em;
+  }
+
+  .rules4-hero h1{
+    max-width:760px;
+    margin:0;
+    color:#16231e;
+    font-size:clamp(2.15rem,3.4vw,3rem);
+    line-height:1.05;
+    letter-spacing:-.045em;
+  }
+
+  .rules4-hero p{
+    max-width:700px;
+    margin:14px 0 0;
+    color:#59645f;
+    font-size:1rem;
+    line-height:1.7;
+  }
+
+  .rules4-hero-actions{
+    margin-top:18px;
+    gap:8px;
+  }
+
+  .rules4-hero-actions .btn{
+    min-height:40px;
+    padding:0 15px;
+    border-radius:6px;
+    box-shadow:none;
+  }
+
+  .rules4-hero-meta{
+    width:min(100%,720px);
+    margin-top:22px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    border:1px solid #e4e0d7;
+    background:#faf8f3;
+    backdrop-filter:none;
+  }
+
+  .rules4-hero-meta>div{
+    min-width:0;
+    padding:12px 16px;
+    border-left:1px solid #e4e0d7;
+    text-align:left;
+  }
+
+  .rules4-hero-meta span{
+    color:#7b817d;
+    font-size:.62rem;
+  }
+
+  .rules4-hero-meta b{
+    margin-top:4px;
+    color:#173d34;
+    font-size:.95rem;
+  }
+
+  /* ===== One centered document instead of sidebar + dashboard ===== */
+  .rules4-wrap{
+    padding:28px 0 70px;
+    background:#f2efe8;
+  }
+
+  .rules4-layout{
+    display:block;
+    width:min(100% - 48px, 980px);
+    max-width:none;
+    margin:0 auto;
+  }
+
+  .rules4-sidebar{
+    display:none !important;
+  }
+
+  .rules4-paper{
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0 56px 48px;
+    border:1px solid #e2ded5;
+    border-radius:10px;
+    background:#fff;
+    box-shadow:0 14px 40px rgba(60,52,42,.055);
+    overflow:hidden;
+  }
+
+  /* Mobile already proved the extra chapter card is unnecessary. */
+  .rules4-paper-head{
+    display:none !important;
+  }
+
+  /* ===== Continuous regulation sections ===== */
+  .rules4-section{
+    display:block;
+    width:100%;
+    padding:42px 0;
+    border-top:0;
+    border-bottom:1px solid #ebe8e1;
+    scroll-margin-top:110px;
+  }
+
+  .rules4-section:last-of-type{
+    border-bottom:0;
+  }
+
+  .rules4-roman,
+  .rules4-section-kicker{
+    display:none !important;
+  }
+
+  .rules4-section h3{
+    margin:0 0 18px;
+    color:#17211d;
+    font-family:Inter,'DM Sans',system-ui,sans-serif;
+    font-size:1.72rem;
+    line-height:1.28;
+    font-weight:820;
+    letter-spacing:-.028em;
+  }
+
+  #tham-gia h3::before{content:"Điều 1. ";}
+  #loai-hinh h3::before{content:"Điều 2. ";}
+  #chu-de h3::before{content:"Điều 3. ";}
+  #giai-thuong h3::before{content:"Điều 4. ";}
+  #cach-tham-gia h3::before{content:"Điều 5. ";}
+  #moc-thoi-gian h3::before{content:"Điều 6. ";}
+  #luu-y h3::before{content:"Điều 7. ";}
+
+  .rules4-lead{
+    max-width:780px;
+    margin:0 0 24px;
+    color:#39443f;
+    font-family:Inter,'DM Sans',system-ui,sans-serif;
+    font-size:1rem;
+    line-height:1.8;
+  }
+
+  /* ===== Participant facts ===== */
+  .rules4-facts{
+    max-width:800px;
+    margin:0;
+    border-top:1px solid #ece9e2;
+  }
+
+  .rules4-fact{
+    display:grid;
+    grid-template-columns:150px minmax(0,1fr);
+    gap:18px;
+    align-items:start;
+    padding:15px 0;
+    border-bottom:1px solid #ece9e2;
+  }
+
+  .rules4-fact svg{
+    display:none;
+  }
+
+  .rules4-fact dt{
+    margin:0;
+    color:#1a221f;
+    font-size:.92rem;
+    line-height:1.65;
+    font-weight:800;
+  }
+
+  .rules4-fact dt::after{
+    content:":";
+  }
+
+  .rules4-fact dd{
+    margin:0;
+    color:#4f5954;
+    font-size:.95rem;
+    line-height:1.68;
+  }
+
+  .rules4-fact:nth-child(2){
+    display:block;
+    margin:12px 0;
+    padding:16px 18px 17px;
+    border:1px solid #e4e0d6;
+    border-radius:9px;
+    background:#f8f6f0;
+  }
+
+  .rules4-fact:nth-child(2) dt{
+    margin-bottom:7px;
+    color:#173d34;
+    font-size:.78rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+
+  .rules4-fact:nth-child(2) dt::after{
+    content:"";
+  }
+
+  .rules4-fact:nth-child(2) dd{
+    color:#2f3934;
+  }
+
+  /* ===== Format / award data: flatter and less dashboard-like ===== */
+  .rules4-table{
+    width:100%;
+    margin-top:16px;
+    border-collapse:collapse;
+    border-top:1px solid #dedbd4;
+    border-bottom:1px solid #dedbd4;
+    table-layout:auto;
+  }
+
+  .rules4-table thead{
+    display:none;
+  }
+
+  .rules4-table tbody,
+  .rules4-table tr{
+    width:100%;
+  }
+
+  .rules4-table tr{
+    border-bottom:1px solid #ece9e2;
+    background:transparent !important;
+  }
+
+  .rules4-table tr:last-child{
+    border-bottom:0;
+  }
+
+  .rules4-table td{
+    padding:16px 12px 16px 0;
+    border:0;
+    color:#4b5650;
+    font-size:.9rem;
+    line-height:1.6;
+  }
+
+  .rules4-table td:first-child{
+    width:190px;
+  }
+
+  .rules4-table td:nth-child(2){
+    width:260px;
+  }
+
+  .rules4-format-name{
+    display:block;
+  }
+
+  .rules4-format-name span{
+    display:none;
+  }
+
+  .rules4-format-name strong{
+    color:#173d34;
+    font-size:.92rem;
+    font-weight:850;
+  }
+
+  /* ===== Themes ===== */
+  .rules4-theme-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 28px;
+    margin-top:16px;
+    border-top:1px solid #dedbd4;
+  }
+
+  .rules4-theme{
+    grid-template-columns:34px minmax(0,1fr) auto;
+    min-height:0;
+    padding:14px 0 !important;
+    border-right:0 !important;
+    border-bottom:1px solid #ece9e2;
+  }
+
+  .rules4-theme .num{
+    color:#9c5d46;
+    font-size:.78rem;
+  }
+
+  .rules4-theme b{
+    font-size:.94rem;
+    line-height:1.5;
+  }
+
+  .rules4-theme small{
+    border-radius:999px;
+    background:#f3eee6;
+    font-size:.66rem;
+  }
+
+  .rules4-note{
+    max-width:820px;
+    margin-top:20px;
+    padding:14px 0 14px 16px;
+    border-left:3px solid #a65339;
+    background:transparent;
+    color:#515b56;
+    font-size:.92rem;
+    line-height:1.72;
+  }
+
+  /* ===== Awards ===== */
+  .rules4-award-total{
+    display:block;
+    margin:4px 0 8px;
+    padding:16px 0;
+    border-top:1px solid #dedbd4;
+    border-bottom:1px solid #dedbd4;
+    background:transparent;
+  }
+
+  .rules4-award-total strong{
+    display:block;
+    color:#173d34;
+    font-size:1.65rem;
+  }
+
+  .rules4-award-total span{
+    display:block;
+    margin-top:4px;
+    color:#66706b;
+    font-size:.9rem;
+    text-align:left;
+  }
+
+  .rules4-awards-table td:first-child{width:220px}
+  .rules4-awards-table td:nth-child(2){width:105px}
+  .rules4-awards-table td:nth-child(3){width:170px}
+  .rules4-awards-table td:nth-child(4){width:auto}
+
+  .rules4-awards-table tr.is-featured td{
+    background:#fbf7f0 !important;
+  }
+
+  .rules4-award-name b{
+    color:#173d34;
+    font-size:.96rem;
+  }
+
+  .rules4-award-name small{
+    display:block;
+    margin-top:3px;
+    color:#a65339;
+    font-size:.67rem;
+    font-weight:850;
+    text-transform:uppercase;
+  }
+
+  .rules4-award-policy{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    margin-top:20px;
+    border-top:1px solid #e4e1da;
+    border-bottom:1px solid #e4e1da;
+  }
+
+  .rules4-award-policy>div{
+    padding:16px 18px 16px 0;
+  }
+
+  .rules4-award-policy>div+div{
+    padding-left:18px;
+    border-left:1px solid #ece9e2;
+  }
+
+  .rules4-award-policy b{
+    display:block;
+    margin-bottom:6px;
+    font-size:.86rem;
+  }
+
+  .rules4-award-policy span{
+    color:#5d6762;
+    font-size:.84rem;
+    line-height:1.6;
+  }
+
+  /* ===== Steps: number and title together, text beneath ===== */
+  .rules4-steps{
+    margin-top:8px;
+    border-top:1px solid #dedbd4;
+  }
+
+  .rules4-steps li{
+    display:grid;
+    grid-template-columns:44px 190px minmax(0,1fr);
+    gap:14px;
+    align-items:start;
+    padding:16px 0;
+    border-bottom:1px solid #ece9e2;
+  }
+
+  .rules4-steps .num{
+    margin:0;
+    color:#a65339;
+    font-size:.78rem;
+    line-height:1.55;
+  }
+
+  .rules4-steps b{
+    color:#1f2924;
+    font-size:.94rem;
+    line-height:1.55;
+  }
+
+  .rules4-steps p{
+    margin:0;
+    color:#55605a;
+    font-size:.92rem;
+    line-height:1.65;
+  }
+
+  /* ===== Timeline: same visual language as the mobile version ===== */
+  .rules4-timeline{
+    margin-top:12px;
+    border-top:1px solid #dedbd4;
+  }
+
+  .rules4-time-row{
+    display:grid;
+    grid-template-columns:170px minmax(0,1fr);
+    gap:18px;
+    align-items:baseline;
+    padding:15px 0;
+    border-bottom:1px solid #ece9e2;
+  }
+
+  .rules4-time-row time{
+    color:#a65339;
+    font-size:.84rem;
+    font-weight:850;
+  }
+
+  .rules4-time-row b{
+    color:#202824;
+    font-size:.94rem;
+    line-height:1.5;
+  }
+
+  .rules4-time-row.is-final{
+    padding-left:14px;
+    border-left:3px solid #173d34;
+    background:transparent;
+  }
+
+  /* ===== Regulations ===== */
+  .rules4-checks{
+    margin-top:10px;
+    border-top:1px solid #dedbd4;
+    counter-reset:desktop-rule;
+  }
+
+  .rules4-checks li{
+    counter-increment:desktop-rule;
+    display:grid;
+    grid-template-columns:34px minmax(0,1fr);
+    gap:10px;
+    padding:13px 0;
+    border-bottom:1px solid #ece9e2;
+    color:#414b46;
+    font-size:.94rem;
+    line-height:1.7;
+  }
+
+  .rules4-checks li::before{
+    content:counter(desktop-rule) ".";
+    color:#1d2521;
+  }
+
+  .rules4-checks svg{
+    display:none;
+  }
+
+  /* ===== Quiet closing action ===== */
+  .rules4-footer-action{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    margin:0 -56px -48px;
+    padding:24px 56px;
+    border-top:1px solid #e3dfd6;
+    background:#faf8f3;
+  }
+
+  .rules4-footer-action h3{
+    margin-top:4px;
+    font-size:1.18rem;
+  }
+
+  .rules4-footer-action .btn{
+    border-radius:6px;
+  }
+}
+
+/* Tablet / compact desktop: keep the document feeling without squeezing columns. */
+@media (min-width: 769px) and (max-width: 980px){
+  .rules4-layout,
+  .rules4-hero-inner{
+    width:min(100% - 32px, 900px);
+  }
+
+  .rules4-paper{
+    padding-left:36px;
+    padding-right:36px;
+  }
+
+  .rules4-footer-action{
+    margin-left:-36px;
+    margin-right:-36px;
+    padding-left:36px;
+    padding-right:36px;
+  }
+
+  .rules4-table td:first-child{width:160px}
+  .rules4-table td:nth-child(2){width:220px}
+  .rules4-awards-table td:first-child{width:190px}
+  .rules4-awards-table td:nth-child(2){width:95px}
+  .rules4-awards-table td:nth-child(3){width:150px}
+}
+
+/* ===== rules-awards-mobile-facts-fix.css ===== */
+/* HALO HOLA — mobile regulation fact alignment fix */
+@media (max-width: 768px){
+  /* Remove the decorative CHƯƠNG I / QUY ĐỊNH CHUNG block on mobile.
+     The page should continue directly from the summary into Điều 1. */
+  .rules4-paper-head{
+    display:none !important;
+  }
+
+  .rules4-paper{
+    padding-top:0;
+  }
+
+  #tham-gia.rules4-section{
+    padding-top:26px;
+  }
+
+  /* Participant facts must use the full document width before wrapping.
+     Older rules4 styles leave a narrow multi-column grid active on phones,
+     which makes the first and third fact cards wrap far too early. */
+  #tham-gia .rules4-facts{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+  }
+
+  #tham-gia .rules4-fact{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    padding:14px 0 16px;
+  }
+
+  #tham-gia .rules4-fact dt,
+  #tham-gia .rules4-fact dd{
+    display:block;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0;
+    margin:0;
+    padding:0;
+    white-space:normal;
+    overflow-wrap:break-word;
+    word-break:normal;
+    text-align:left;
+    text-indent:0;
+  }
+
+  #tham-gia .rules4-fact dt{
+    margin-bottom:5px;
+    line-height:1.5;
+  }
+
+  #tham-gia .rules4-fact dd{
+    line-height:1.72;
+    text-wrap:pretty;
+  }
+
+  /* Keep the area list as one full-width quiet panel, but use the real DOM
+     content directly so the commune list cannot be duplicated by pseudo text. */
+  #tham-gia .rules4-fact:nth-child(2){
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:8px 0;
+  }
+
+  #tham-gia .rules4-fact:nth-child(2) dt{
+    margin:0 0 7px;
+  }
+
+  #tham-gia .rules4-fact:nth-child(2) dd{
+    font-size:.96rem;
+    line-height:1.72;
+    word-spacing:normal;
+  }
+
+  #tham-gia .rules4-fact:nth-child(2) dd::before{
+    content:none !important;
+    display:none !important;
+  }
+
+  /* Participation steps: number + title share one baseline.
+     The description always starts on the next line from the document margin. */
+  #cach-tham-gia .rules4-steps li{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    column-gap:8px;
+    row-gap:4px;
+    padding:16px 0;
+  }
+
+  #cach-tham-gia .rules4-steps .num{
+    display:inline-flex;
+    flex:0 0 auto;
+    margin:0;
+    min-width:24px;
+    line-height:1.3;
+  }
+
+  #cach-tham-gia .rules4-steps b{
+    display:inline;
+    flex:0 1 auto;
+    margin:0;
+    line-height:1.35;
+  }
+
+  #cach-tham-gia .rules4-steps p{
+    flex:0 0 100%;
+    width:100%;
+    margin:4px 0 0;
+    padding:0;
+  }
+
+  /* Timeline follows the same document rhythm: date + milestone on one row.
+     If the title is long, only the title wraps inside its own column. */
+  #moc-thoi-gian .rules4-time-row{
+    display:grid;
+    grid-template-columns:max-content minmax(0,1fr);
+    align-items:baseline;
+    column-gap:10px;
+    padding:15px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row time{
+    display:block;
+    margin:0;
+    white-space:nowrap;
+    line-height:1.45;
+  }
+
+  #moc-thoi-gian .rules4-time-row b{
+    display:block;
+    margin:0;
+    line-height:1.45;
+    min-width:0;
+  }
+
+  #moc-thoi-gian .rules4-time-row.is-final{
+    padding-left:12px;
+  }
+
+  /* Give the handbook cards a little breathing room. The handbook stylesheet
+     is loaded after this file, so these selectors deliberately use the page +
+     paper hierarchy to keep the spacing stable without touching desktop. */
+  .rules4-page .rules4-paper > .rules4-section{
+    margin-bottom:16px !important;
+  }
+
+  .rules4-page .rules4-paper > .rules4-section:last-of-type{
+    margin-bottom:18px !important;
+  }
+
+  #tham-gia .rules4-facts{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:9px !important;
+  }
+
+  #tham-gia .rules4-fact,
+  #tham-gia .rules4-fact:nth-child(2),
+  #tham-gia .rules4-fact:nth-child(3){
+    margin:0 !important;
+  }
+
+  .rules4-page .rules4-table tbody,
+  .rules4-page .rules4-theme-grid,
+  .rules4-page .rules4-steps,
+  .rules4-page .rules4-checks{
+    row-gap:9px !important;
+  }
+
+  /* Center the check mark vertically inside every important-rule card. */
+  #luu-y .rules4-checks li{
+    display:grid !important;
+    grid-template-columns:24px minmax(0,1fr) !important;
+    align-items:center !important;
+    column-gap:10px !important;
+    min-height:0 !important;
+  }
+
+  #luu-y .rules4-checks li > svg{
+    align-self:center !important;
+    justify-self:center !important;
+    margin:0 !important;
+  }
+
+  /* Final CTA: lighter, cleaner and visually separated from both the rules
+     card and the site footer. */
+  .rules4-page .rules4-paper > .rules4-footer-action{
+    position:relative !important;
+    display:block !important;
+    margin:0 0 18px !important;
+    padding:18px 16px 16px !important;
+    border:1px solid rgba(23,61,45,.11) !important;
+    border-radius:18px !important;
+    background:linear-gradient(145deg,#fffdf8 0%,#f6efe3 100%) !important;
+    box-shadow:0 8px 24px rgba(55,45,32,.06) !important;
+    overflow:hidden !important;
+  }
+
+  .rules4-page .rules4-paper > .rules4-footer-action::before{
+    content:"" !important;
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    width:54px !important;
+    height:4px !important;
+    border-radius:0 0 999px 0 !important;
+    background:#c45b32 !important;
+  }
+
+  .rules4-page .rules4-footer-action > div{
+    margin:0 0 14px !important;
+    padding:0 !important;
+    text-align:left !important;
+  }
+
+  .rules4-page .rules4-footer-action span{
+    display:block !important;
+    margin:0 0 6px !important;
+    color:#a54f31 !important;
+    font-size:.58rem !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    letter-spacing:.13em !important;
+  }
+
+  .rules4-page .rules4-footer-action h3{
+    max-width:250px !important;
+    margin:0 !important;
+    color:#173d2d !important;
+    font-size:1.05rem !important;
+    line-height:1.3 !important;
+    font-weight:850 !important;
+    letter-spacing:-.025em !important;
+  }
+
+  .rules4-page .rules4-footer-action .btn{
+    width:100% !important;
+    min-height:44px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    padding:0 15px 0 17px !important;
+    border:0 !important;
+    border-radius:12px !important;
+    background:#173d2d !important;
+    color:#fff !important;
+    box-shadow:none !important;
+    font-size:.76rem !important;
+    font-weight:850 !important;
+  }
+
+  .rules4-page .rules4-footer-action .btn svg{
+    width:16px !important;
+    height:16px !important;
+  }
+}
+
+@media (max-width: 390px){
+  #tham-gia .rules4-fact:nth-child(2) dd{
+    font-size:.93rem;
+  }
+
+  #cach-tham-gia .rules4-steps li{
+    column-gap:7px;
+    padding:14px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row{
+    column-gap:8px;
+    padding:14px 0;
+  }
+
+  #moc-thoi-gian .rules4-time-row time{
+    font-size:.86rem;
+  }
+
+  #moc-thoi-gian .rules4-time-row b{
+    font-size:1rem;
+  }
+}
+
+/* ===== rules-awards-mobile-handbook.css ===== */
+/* HALO HOLA — mobile handbook experiment for Rules & Awards
+   Desktop is intentionally untouched. */
+@media (max-width: 768px){
+  .rules4-page{
+    --hh-forest:#173d2d;
+    --hh-terra:#c45b32;
+    --hh-cream:#f7f2e8;
+    --hh-paper:#fffdf9;
+    --hh-line:rgba(23,61,45,.10);
+    --hh-muted:#66736d;
+    background:#f3efe7 !important;
+    color:#1b241f !important;
+  }
+
+  /* ===== Compact handbook intro ===== */
+  .rules4-page .rules4-hero{
+    padding:18px 16px 14px !important;
+    border-bottom:0 !important;
+    background:linear-gradient(180deg,#fffdf9 0%,#f8f2e8 100%) !important;
+  }
+
+  .rules4-page .rules4-hero-inner{
+    padding:0 !important;
+  }
+
+  .rules4-page .rules4-kicker{
+    display:block !important;
+    margin:0 0 7px !important;
+    color:var(--hh-terra) !important;
+    font-size:.61rem !important;
+    line-height:1.2 !important;
+    font-weight:850 !important;
+    letter-spacing:.13em !important;
+  }
+
+  .rules4-page .rules4-hero h1{
+    max-width:350px !important;
+    margin:0 !important;
+    color:var(--hh-forest) !important;
+    font-size:1.72rem !important;
+    line-height:1.06 !important;
+    letter-spacing:-.045em !important;
+  }
+
+  .rules4-page .rules4-hero p{
+    max-width:390px !important;
+    margin:9px 0 0 !important;
+    color:#58645e !important;
+    font-size:.84rem !important;
+    line-height:1.55 !important;
+  }
+
+  .rules4-page .rules4-hero-actions{
+    margin-top:13px !important;
+    gap:7px !important;
+  }
+
+  .rules4-page .rules4-hero-actions .btn{
+    min-height:38px !important;
+    padding:0 13px !important;
+    border-radius:999px !important;
+    font-size:.74rem !important;
+    font-weight:800 !important;
+  }
+
+  .rules4-page .rules4-hero-actions .btn svg{
+    width:14px !important;
+    height:14px !important;
+  }
+
+  .rules4-page .rules4-hero-meta{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+    margin:14px 0 0 !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+
+  .rules4-page .rules4-hero-meta>div{
+    min-width:0 !important;
+    padding:10px 7px 9px !important;
+    border:1px solid rgba(23,61,45,.09) !important;
+    border-radius:13px !important;
+    background:rgba(255,255,255,.76) !important;
+    text-align:left !important;
+  }
+
+  .rules4-page .rules4-hero-meta span{
+    min-height:2.2em !important;
+    margin:0 0 5px !important;
+    color:#7b827e !important;
+    font-size:.52rem !important;
+    line-height:1.1 !important;
+    font-weight:700 !important;
+    letter-spacing:.035em !important;
+  }
+
+  .rules4-page .rules4-hero-meta b{
+    color:var(--hh-forest) !important;
+    font-size:.72rem !important;
+    line-height:1.25 !important;
+    letter-spacing:-.01em !important;
+  }
+
+  /* ===== Re-use the desktop sidebar markup as a sticky chapter rail ===== */
+  .rules4-page .rules4-wrap{
+    padding:0 !important;
+    background:transparent !important;
+  }
+
+  .rules4-page .rules4-layout{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .rules4-page .rules4-layout>.rules4-sidebar{
+    display:block !important;
+    position:sticky !important;
+    top:var(--mobile-header-height,60px) !important;
+    z-index:35 !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:8px 10px !important;
+    border-top:1px solid rgba(23,61,45,.07) !important;
+    border-bottom:1px solid rgba(23,61,45,.08) !important;
+    background:rgba(247,242,232,.94) !important;
+    backdrop-filter:blur(14px) saturate(125%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(125%) !important;
+  }
+
+  .rules4-page .rules4-sidebar-card{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  .rules4-page .rules4-sidebar-head,
+  .rules4-page .rules4-sidebar-foot{
+    display:none !important;
+  }
+
+  .rules4-page .rules4-nav{
+    display:flex !important;
+    align-items:center !important;
+    gap:6px !important;
+    width:100% !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    padding:0 !important;
+    margin:0 !important;
+    scrollbar-width:none !important;
+    scroll-snap-type:x proximity !important;
+  }
+  .rules4-page .rules4-nav::-webkit-scrollbar{display:none !important;}
+
+  .rules4-page .rules4-nav a{
+    flex:0 0 auto !important;
+    min-height:34px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:5px !important;
+    padding:0 11px !important;
+    border:1px solid rgba(23,61,45,.10) !important;
+    border-radius:999px !important;
+    background:rgba(255,255,255,.78) !important;
+    color:#46534d !important;
+    font-size:.68rem !important;
+    line-height:1 !important;
+    font-weight:760 !important;
+    text-decoration:none !important;
+    white-space:nowrap !important;
+    scroll-snap-align:start !important;
+  }
+
+  .rules4-page .rules4-nav a span{
+    color:var(--hh-terra) !important;
+    font-size:.58rem !important;
+    font-weight:900 !important;
+  }
+
+  /* ===== Handbook content canvas ===== */
+  .rules4-page .rules4-paper{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:10px 12px 24px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+
+  .rules4-page .rules4-paper-head{
+    display:none !important;
+  }
+
+  .rules4-page .rules4-section{
+    position:relative !important;
+    display:block !important;
+    width:100% !important;
+    margin:0 0 10px !important;
+    padding:18px 15px 16px !important;
+    border:1px solid rgba(23,61,45,.09) !important;
+    border-radius:18px !important;
+    background:rgba(255,253,249,.97) !important;
+    box-shadow:0 7px 22px rgba(60,48,35,.045) !important;
+    scroll-margin-top:118px !important;
+  }
+
+  .rules4-page .rules4-section:last-of-type{
+    margin-bottom:10px !important;
+  }
+
+  .rules4-page .rules4-section::before{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    min-width:36px !important;
+    height:22px !important;
+    margin:0 0 9px !important;
+    padding:0 8px !important;
+    border-radius:999px !important;
+    background:#edf3ed !important;
+    color:var(--hh-forest) !important;
+    font-size:.59rem !important;
+    line-height:1 !important;
+    font-weight:900 !important;
+    letter-spacing:.08em !important;
+  }
+
+  .rules4-page #tham-gia::before{content:"01" !important;}
+  .rules4-page #loai-hinh::before{content:"02" !important;}
+  .rules4-page #chu-de::before{content:"03" !important;}
+  .rules4-page #giai-thuong::before{content:"04" !important;}
+  .rules4-page #cach-tham-gia::before{content:"05" !important;}
+  .rules4-page #moc-thoi-gian::before{content:"06" !important;}
+  .rules4-page #luu-y::before{content:"07" !important;}
+
+  .rules4-page .rules4-roman{
+    display:none !important;
+  }
+
+  .rules4-page .rules4-section-kicker{
+    display:block !important;
+    margin:0 0 4px !important;
+    color:var(--hh-terra) !important;
+    font-size:.57rem !important;
+    line-height:1.25 !important;
+    font-weight:900 !important;
+    letter-spacing:.105em !important;
+    text-transform:uppercase !important;
+  }
+
+  .rules4-page .rules4-section h3{
+    margin:0 0 10px !important;
+    color:var(--hh-forest) !important;
+    font-family:Inter,'DM Sans',system-ui,sans-serif !important;
+    font-size:1.15rem !important;
+    line-height:1.2 !important;
+    font-weight:850 !important;
+    letter-spacing:-.03em !important;
+  }
+
+  .rules4-page #tham-gia h3::before,
+  .rules4-page #loai-hinh h3::before,
+  .rules4-page #chu-de h3::before,
+  .rules4-page #giai-thuong h3::before,
+  .rules4-page #cach-tham-gia h3::before,
+  .rules4-page #moc-thoi-gian h3::before,
+  .rules4-page #luu-y h3::before{
+    content:"" !important;
+  }
+
+  .rules4-page .rules4-lead,
+  .rules4-page .rules4-section p,
+  .rules4-page .rules4-fact dd,
+  .rules4-page .rules4-note,
+  .rules4-page .rules4-award-desc,
+  .rules4-page .rules4-checks li,
+  .rules4-page .rules4-steps p{
+    color:#4d5953 !important;
+    font-size:.86rem !important;
+    line-height:1.58 !important;
+    letter-spacing:0 !important;
+  }
+
+  .rules4-page .rules4-lead{
+    margin:0 0 14px !important;
+  }
+
+  /* ===== Facts become short cards ===== */
+  .rules4-page .rules4-facts{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:7px !important;
+    margin:0 !important;
+    border:0 !important;
+  }
+
+  .rules4-page .rules4-fact,
+  .rules4-page #tham-gia .rules4-fact:nth-child(3){
+    display:block !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:11px !important;
+    border:1px solid rgba(23,61,45,.08) !important;
+    border-radius:13px !important;
+    background:#faf8f2 !important;
+  }
+
+  .rules4-page #tham-gia .rules4-fact:nth-child(2){
+    grid-column:1/-1 !important;
+  }
+
+  .rules4-page .rules4-fact dt,
+  .rules4-page #tham-gia .rules4-fact:nth-child(2) dt,
+  .rules4-page #tham-gia .rules4-fact:nth-child(3) dt{
+    margin:0 0 4px !important;
+    color:var(--hh-forest) !important;
+    font-size:.66rem !important;
+    line-height:1.25 !important;
+    font-weight:850 !important;
+    letter-spacing:.025em !important;
+    text-transform:none !important;
+  }
+
+  .rules4-page .rules4-fact dt::after{content:"" !important;}
+
+  .rules4-page .rules4-fact dd,
+  .rules4-page #tham-gia .rules4-fact:nth-child(2) dd,
+  .rules4-page #tham-gia .rules4-fact:nth-child(3) dd{
+    margin:0 !important;
+    color:#56615c !important;
+    font-size:.77rem !important;
+    line-height:1.5 !important;
+  }
+
+  .rules4-page #tham-gia .rules4-fact:nth-child(2) dd::before{
+    color:#56615c !important;
+    font-size:.77rem !important;
+    line-height:1.5 !important;
+  }
+
+  /* ===== Format rows read as visual cards ===== */
+  .rules4-page .rules4-table{
+    display:block !important;
+    width:100% !important;
+    margin:4px 0 0 !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+
+  .rules4-page .rules4-table tbody{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+  }
+
+  .rules4-page .rules4-table tr{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:12px !important;
+    border:1px solid rgba(23,61,45,.085) !important;
+    border-radius:13px !important;
+    background:#fff !important;
+  }
+
+  .rules4-page .rules4-table td{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    color:#59635e !important;
+    font-size:.76rem !important;
+    line-height:1.48 !important;
+  }
+
+  .rules4-page .rules4-table td+td{
+    margin-top:5px !important;
+  }
+
+  .rules4-page .rules4-format-name{
+    margin:0 0 5px !important;
+  }
+
+  .rules4-page .rules4-format-name strong{
+    color:var(--hh-forest) !important;
+    font-size:.83rem !important;
+    font-weight:900 !important;
+  }
+
+  .rules4-page .rules4-table:not(.rules4-awards-table) td:nth-child(2)::before,
+  .rules4-page .rules4-table:not(.rules4-awards-table) td:nth-child(3)::before{
+    color:#7a817d !important;
+    font-size:.67rem !important;
+    font-weight:850 !important;
+  }
+
+  /* ===== Themes are the visual core: 2-column handbook cards ===== */
+  .rules4-page .rules4-theme-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+    margin:4px 0 0 !important;
+    border:0 !important;
+  }
+
+  .rules4-page .rules4-theme{
+    display:grid !important;
+    grid-template-columns:auto minmax(0,1fr) !important;
+    gap:5px 8px !important;
+    align-content:start !important;
+    min-height:88px !important;
+    padding:11px !important;
+    border:1px solid rgba(23,61,45,.085) !important;
+    border-radius:13px !important;
+    background:#faf8f2 !important;
+  }
+
+  .rules4-page .rules4-theme .num{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:27px !important;
+    height:22px !important;
+    border-radius:999px !important;
+    background:#edf3ed !important;
+    color:var(--hh-forest) !important;
+    font-size:.61rem !important;
+    font-weight:900 !important;
+  }
+
+  .rules4-page .rules4-theme b{
+    align-self:center !important;
+    color:#26332d !important;
+    font-size:.74rem !important;
+    line-height:1.3 !important;
+    font-weight:820 !important;
+  }
+
+  .rules4-page .rules4-theme small{
+    grid-column:2 !important;
+    justify-self:start !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    color:#7b827e !important;
+    font-size:.61rem !important;
+  }
+
+  .rules4-page .rules4-theme:nth-child(8){
+    border-color:rgba(196,91,50,.24) !important;
+    background:#fff5ed !important;
+  }
+  .rules4-page .rules4-theme:nth-child(8) .num{
+    background:#f7ddcf !important;
+    color:#a44728 !important;
+  }
+
+  .rules4-page .rules4-note{
+    margin:9px 0 0 !important;
+    padding:11px 12px !important;
+    border:1px solid rgba(196,91,50,.15) !important;
+    border-left:3px solid var(--hh-terra) !important;
+    border-radius:12px !important;
+    background:#fff8f2 !important;
+    color:#66564d !important;
+    font-size:.75rem !important;
+    line-height:1.52 !important;
+  }
+
+  /* ===== Awards: make the money / hierarchy visible ===== */
+  .rules4-page .rules4-award-total{
+    display:flex !important;
+    align-items:flex-end !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    margin:0 0 8px !important;
+    padding:13px !important;
+    border:0 !important;
+    border-radius:14px !important;
+    background:var(--hh-forest) !important;
+  }
+
+  .rules4-page .rules4-award-total strong{
+    margin:0 !important;
+    color:#fff !important;
+    font-size:1.28rem !important;
+    line-height:1 !important;
+  }
+
+  .rules4-page .rules4-award-total span{
+    max-width:48% !important;
+    color:rgba(255,255,255,.72) !important;
+    font-size:.62rem !important;
+    line-height:1.35 !important;
+    text-align:right !important;
+  }
+
+  .rules4-page .rules4-awards-table tr.is-featured{
+    border-color:rgba(196,91,50,.27) !important;
+    background:#fff4eb !important;
+  }
+
+  .rules4-page .rules4-award-name b{
+    color:var(--hh-forest) !important;
+    font-size:.84rem !important;
+    line-height:1.35 !important;
+  }
+
+  .rules4-page .rules4-award-name small{
+    margin-top:3px !important;
+    color:var(--hh-terra) !important;
+    font-size:.58rem !important;
+  }
+
+  .rules4-page .rules4-awards-table td:nth-child(2)::before,
+  .rules4-page .rules4-awards-table td:nth-child(3)::before,
+  .rules4-page .rules4-awards-table td:nth-child(4)::before{
+    color:#7b827e !important;
+    font-size:.65rem !important;
+  }
+
+  .rules4-page .rules4-award-policy{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:6px !important;
+    margin:8px 0 0 !important;
+    border:0 !important;
+  }
+
+  .rules4-page .rules4-award-policy>div{
+    padding:9px 10px !important;
+    border:1px solid rgba(23,61,45,.07) !important;
+    border-radius:11px !important;
+    background:#faf8f2 !important;
+  }
+
+  .rules4-page .rules4-award-policy b{
+    margin:0 0 3px !important;
+    color:var(--hh-forest) !important;
+    font-size:.71rem !important;
+  }
+
+  .rules4-page .rules4-award-policy span{
+    color:#68716c !important;
+    font-size:.7rem !important;
+    line-height:1.45 !important;
+  }
+
+  /* ===== Steps ===== */
+  .rules4-page #cach-tham-gia .rules4-steps{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+    margin:3px 0 0 !important;
+    padding:0 !important;
+    border:0 !important;
+  }
+
+  .rules4-page #cach-tham-gia .rules4-steps li{
+    display:grid !important;
+    grid-template-columns:32px minmax(0,1fr) !important;
+    gap:2px 8px !important;
+    align-items:start !important;
+    margin:0 !important;
+    padding:11px !important;
+    border:1px solid rgba(23,61,45,.08) !important;
+    border-radius:13px !important;
+    background:#faf8f2 !important;
+  }
+
+  .rules4-page #cach-tham-gia .rules4-steps .num{
+    grid-row:1/3 !important;
+    width:28px !important;
+    height:28px !important;
+    display:grid !important;
+    place-items:center !important;
+    margin:0 !important;
+    border-radius:50% !important;
+    background:var(--hh-forest) !important;
+    color:#fff !important;
+    font-size:.58rem !important;
+    font-weight:900 !important;
+  }
+
+  .rules4-page #cach-tham-gia .rules4-steps b{
+    color:#2b3731 !important;
+    font-size:.78rem !important;
+    line-height:1.3 !important;
+  }
+
+  .rules4-page #cach-tham-gia .rules4-steps p{
+    grid-column:2 !important;
+    margin:2px 0 0 !important;
+    color:#65706a !important;
+    font-size:.72rem !important;
+    line-height:1.45 !important;
+  }
+
+  /* ===== Timeline ===== */
+  .rules4-page #moc-thoi-gian .rules4-timeline{
+    position:relative !important;
+    display:grid !important;
+    gap:0 !important;
+    margin:4px 0 0 !important;
+    padding-left:12px !important;
+    border:0 !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-timeline::before{
+    content:"" !important;
+    position:absolute !important;
+    left:3px !important;
+    top:8px !important;
+    bottom:8px !important;
+    width:1px !important;
+    background:rgba(23,61,45,.15) !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-time-row{
+    position:relative !important;
+    display:grid !important;
+    grid-template-columns:92px minmax(0,1fr) !important;
+    gap:8px !important;
+    align-items:baseline !important;
+    margin:0 !important;
+    padding:8px 0 8px 8px !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-time-row::before{
+    content:"" !important;
+    position:absolute !important;
+    left:-12px !important;
+    top:14px !important;
+    width:7px !important;
+    height:7px !important;
+    border:2px solid #f8f3e9 !important;
+    border-radius:50% !important;
+    background:var(--hh-terra) !important;
+    box-shadow:0 0 0 1px rgba(196,91,50,.18) !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-time-row time{
+    color:var(--hh-terra) !important;
+    font-size:.68rem !important;
+    line-height:1.35 !important;
+    font-weight:900 !important;
+    white-space:normal !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-time-row b{
+    color:#34413a !important;
+    font-size:.75rem !important;
+    line-height:1.4 !important;
+  }
+
+  .rules4-page #moc-thoi-gian .rules4-time-row.is-final{
+    margin-top:3px !important;
+    padding:10px 9px !important;
+    border-radius:10px !important;
+    background:#edf3ed !important;
+  }
+
+  /* ===== Important rules as checklist cards ===== */
+  .rules4-page .rules4-checks{
+    display:grid !important;
+    gap:6px !important;
+    margin:3px 0 0 !important;
+    padding:0 !important;
+    border:0 !important;
+    list-style:none !important;
+  }
+
+  .rules4-page .rules4-checks li{
+    display:grid !important;
+    grid-template-columns:24px minmax(0,1fr) !important;
+    gap:8px !important;
+    align-items:start !important;
+    margin:0 !important;
+    padding:10px !important;
+    border:1px solid rgba(23,61,45,.075) !important;
+    border-radius:12px !important;
+    background:#faf8f2 !important;
+    color:#56615b !important;
+    font-size:.73rem !important;
+    line-height:1.48 !important;
+  }
+
+  .rules4-page .rules4-checks li::before{
+    content:"✓" !important;
+    width:22px !important;
+    height:22px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:50% !important;
+    background:#e6f0e8 !important;
+    color:var(--hh-forest) !important;
+    font-size:.7rem !important;
+    font-weight:900 !important;
+  }
+
+  .rules4-page .rules4-checks svg{
+    display:none !important;
+  }
+
+  /* ===== Quiet but useful closing CTA ===== */
+  .rules4-page .rules4-footer-action{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    margin:0 !important;
+    padding:14px !important;
+    border:0 !important;
+    border-radius:17px !important;
+    background:var(--hh-forest) !important;
+  }
+
+  .rules4-page .rules4-footer-action span{
+    color:rgba(255,255,255,.62) !important;
+    font-size:.54rem !important;
+    letter-spacing:.09em !important;
+  }
+
+  .rules4-page .rules4-footer-action h3{
+    max-width:220px !important;
+    margin:3px 0 0 !important;
+    color:#fff !important;
+    font-size:.82rem !important;
+    line-height:1.28 !important;
+  }
+
+  .rules4-page .rules4-footer-action .btn{
+    flex:0 0 auto !important;
+    min-height:38px !important;
+    padding:0 11px !important;
+    border-radius:999px !important;
+    font-size:.67rem !important;
+    white-space:nowrap !important;
+  }
+}
+
+@media (max-width: 390px){
+  .rules4-page .rules4-paper{padding-inline:10px !important;}
+  .rules4-page .rules4-section{padding:16px 13px 14px !important;}
+  .rules4-page .rules4-theme{min-height:84px !important;padding:10px !important;}
+  .rules4-page .rules4-theme b{font-size:.7rem !important;}
+  .rules4-page .rules4-hero h1{font-size:1.58rem !important;}
+}
+
+/* ===== rules-awards-mobile-final-polish.css ===== */
+/* HALO HOLA — final mobile cascade for Rules & Awards.
+   Loaded after the handbook stylesheet so contrast/alignment fixes cannot be
+   overridden by the older mobile experiment rules. */
+@media (max-width: 768px){
+  /* More breathing room between the numbered handbook sections. */
+  .rules4-page .rules4-paper > .rules4-section{
+    margin-bottom:16px !important;
+  }
+
+  .rules4-page .rules4-paper > .rules4-section:last-of-type{
+    margin-bottom:18px !important;
+  }
+
+  /* Participant facts read as full-width rows on phone. */
+  .rules4-page #tham-gia .rules4-facts{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:9px !important;
+  }
+
+  .rules4-page #tham-gia .rules4-fact,
+  .rules4-page #tham-gia .rules4-fact:nth-child(2),
+  .rules4-page #tham-gia .rules4-fact:nth-child(3){
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+  }
+
+  /* Important-rule check marks sit in the optical middle of each card. */
+  .rules4-page #luu-y .rules4-checks li{
+    display:grid !important;
+    grid-template-columns:24px minmax(0,1fr) !important;
+    align-items:center !important;
+    gap:10px !important;
+    padding:12px 11px !important;
+  }
+
+  .rules4-page #luu-y .rules4-checks li::before{
+    align-self:center !important;
+    justify-self:center !important;
+    margin:0 !important;
+  }
+
+  /* Closing CTA: light card means all copy must switch back to dark brand
+     colors. The old handbook stylesheet still expected a dark-green card. */
+  .rules4-page .rules4-paper > .rules4-footer-action{
+    position:relative !important;
+    display:block !important;
+    margin:0 0 18px !important;
+    padding:18px 16px 16px !important;
+    border:1px solid rgba(23,61,45,.11) !important;
+    border-radius:18px !important;
+    background:linear-gradient(145deg,#fffdf8 0%,#f6efe3 100%) !important;
+    box-shadow:0 8px 24px rgba(55,45,32,.06) !important;
+    overflow:hidden !important;
+  }
+
+  .rules4-page .rules4-paper > .rules4-footer-action::before{
+    content:"" !important;
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    width:54px !important;
+    height:4px !important;
+    border-radius:0 0 999px 0 !important;
+    background:#c45b32 !important;
+  }
+
+  .rules4-page .rules4-footer-action > div{
+    margin:0 0 14px !important;
+    padding:0 !important;
+    text-align:left !important;
+  }
+
+  .rules4-page .rules4-footer-action span{
+    display:block !important;
+    margin:0 0 6px !important;
+    color:#a54f31 !important;
+    font-size:.58rem !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    letter-spacing:.13em !important;
+  }
+
+  .rules4-page .rules4-footer-action h3{
+    max-width:260px !important;
+    margin:0 !important;
+    color:#173d2d !important;
+    font-size:1.05rem !important;
+    line-height:1.3 !important;
+    font-weight:850 !important;
+    letter-spacing:-.025em !important;
+  }
+
+  .rules4-page .rules4-footer-action .btn{
+    width:100% !important;
+    min-height:44px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    padding:0 15px 0 17px !important;
+    border:0 !important;
+    border-radius:12px !important;
+    background:#173d2d !important;
+    color:#fff !important;
+    box-shadow:none !important;
+    font-size:.76rem !important;
+    font-weight:850 !important;
+  }
+
+  .rules4-page .rules4-footer-action .btn svg{
+    width:16px !important;
+    height:16px !important;
+  }
+}
