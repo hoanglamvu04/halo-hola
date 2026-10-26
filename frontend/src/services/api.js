@@ -23,9 +23,12 @@ client.interceptors.request.use((config) => {
 function unwrap(promise) {
   return promise.then((res) => res.data).catch((error) => {
     const isNetworkError = !error.response && (error.code === 'ERR_NETWORK' || error.message === 'Network Error');
-    const message = isNetworkError
-      ? 'Không kết nối được máy chủ HALO HOLA API. Hãy kiểm tra backend đang chạy.'
-      : (error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.');
+    const isTimeout = !error.response && error.code === 'ECONNABORTED';
+    const message = isTimeout
+      ? 'Yêu cầu mất quá nhiều thời gian. Máy chủ email có thể không phản hồi; hãy kiểm tra SMTP trong Admin.'
+      : isNetworkError
+        ? 'Không kết nối được máy chủ HALO HOLA API. Hãy kiểm tra backend đang chạy.'
+        : (error.response?.data?.error || error.response?.data?.message || error.message || 'Đã có lỗi xảy ra.');
     const wrapped = new Error(message);
     wrapped.status = error.response?.status;
     wrapped.details = error.response?.data?.details;
@@ -47,11 +50,11 @@ export function setAdminToken(token) {
 
 export function healthCheck() { return unwrap(client.get('/health')); }
 
-export function registerCommunityAccount(payload) { return unwrap(client.post('/community-auth/register',payload)); }
-export function resendCommunityVerification(payload) { return unwrap(client.post('/community-auth/resend-verification',payload)); }
+export function registerCommunityAccount(payload) { return unwrap(client.post('/community-auth/register',payload,{timeout:45000})); }
+export function resendCommunityVerification(payload) { return unwrap(client.post('/community-auth/resend-verification',payload,{timeout:45000})); }
 export function verifyCommunityEmail(payload) { return unwrap(client.post('/community-auth/verify-email',payload)); }
 export function loginCommunityAccount(payload) { return unwrap(client.post('/community-auth/login',payload)); }
-export function requestCommunityPasswordReset(payload) { return unwrap(client.post('/community-auth/request-password-reset',payload)); }
+export function requestCommunityPasswordReset(payload) { return unwrap(client.post('/community-auth/request-password-reset',payload,{timeout:45000})); }
 export function resetCommunityPassword(payload) { return unwrap(client.post('/community-auth/reset-password',payload)); }
 export function getCommunityAccount() { return unwrap(client.get('/community-auth/me')); }
 export function updateCommunityAccount(payload) { return unwrap(client.patch('/community-auth/profile', payload)); }
@@ -118,7 +121,8 @@ export function getAdminTourRegistrations(params = {}) { return unwrap(client.ge
 export function getAdminConnections() { return unwrap(client.get('/admin/connections')); }
 export function updateAdminConnection(key,payload) { return unwrap(client.put('/admin/connections/' + encodeURIComponent(key),payload)); }
 export function resetAdminConnection(key) { return unwrap(client.delete('/admin/connections/' + encodeURIComponent(key))); }
-export function testAdminSmtp() { return unwrap(client.post('/admin/connections/smtp/test')); }
+export function testAdminSmtp() { return unwrap(client.post('/admin/connections/smtp/test',{}, {timeout:30000})); }
+export function sendAdminSmtpTestEmail() { return unwrap(client.post('/admin/connections/smtp/send-test',{}, {timeout:30000})); }
 
 export function getAdminCommunityLoginCodes(params = {}) { return unwrap(client.get('/admin/community-login-codes', { params })); }
 export function createAdminCommunityLoginCode(payload) { return unwrap(client.post('/admin/community-login-codes', payload)); }
