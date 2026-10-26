@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import rateLimit from 'express-rate-limit';
 import { authenticateAdmin, requireRoles } from '../middleware/auth.js';
 import { listConnectionStatuses, saveConnectionSettings, resetConnectionSettings } from '../services/connectionSettings.service.js';
-import { verifySmtpConnection } from '../services/mail.service.js';
+import { verifySmtpConnection, sendSmtpTestEmail } from '../services/mail.service.js';
 import { AppError } from '../utils/AppError.js';
 import { statusSchema } from '../validators/submission.validators.js';
 import { listTourRegistrations } from '../services/tourRegistration.service.js';
@@ -72,14 +73,31 @@ router.delete('/connections/:key',requireRoles('ADMIN'),async(req,res,next)=>{
     res.json(await resetConnectionSettings(req.params.key));
   }catch(error){next(error);}
 });
-router.post('/connections/smtp/test',requireRoles('ADMIN'),async(_req,res,next)=>{
+const smtpCheckLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 15,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: {error: 'Bạn kiểm tra kết nối quá nhiều lần. Hãy thử lại sau ít phút.'}
+});
+const smtpTestSendLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: {error: 'Bạn đã gửi nhiều email kiểm tra. Hãy thử lại sau.'}
+});
+router.post('/connections/smtp/test', requireRoles('ADMIN'), smtpCheckLimiter, async(_req,res,next)=>{
   try{
     res.set('Cache-Control','no-store');
     res.json(await verifySmtpConnection());
-  }catch(error){
-    console.warn('SMTP verification failed:',error?.code||error?.name||'ERROR');
-    res.json({ok:false,message:'Không xác minh được SMTP. Kiểm tra host, cổng, TLS và tài khoản.'});
-  }
+  }catch(error){next(error);}
+});
+router.post('/connections/smtp/send-test', requireRoles('ADMIN'), smtpTestSendLimiter, async(_req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await sendSmtpTestEmail());
+  }catch(error){next(error);}
 });
 router.get('/site/homepage', async (_req, res, next) => {
   try {
