@@ -8,9 +8,9 @@ const PAGE_SIZE=18
 const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeForItem(item){
-  if(item.status==='AWARDED') return 'ĐƯỢC VINH DANH'
+  if(item.status==='AWARDED') return 'GÓC NHÌN TIÊU BIỂU'
   if(item.status==='TOP52') return 'TOP52'
-  if(item.status==='SHORTLIST') return 'NỔI BẬT'
+  if(item.status==='SHORTLIST') return 'ĐƯỢC CHỌN BIÊN TẬP'
   return 'GÓC NHÌN CỘNG ĐỒNG'
 }
 
@@ -87,7 +87,7 @@ export default function CommunityGalleryPage(){
 
     <section className="container community-gallery-shell" id="gallery">
       <div className="community-gallery-heading">
-        <div><span>KHO GÓC NHÌN CỘNG ĐỒNG</span><h2>Những đóng góp đang làm đầy Hòa Lạc</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và sáng tạo do cộng đồng gửi về và Ban Tổ chức công bố.</p></div>
+        <div><span>KHO GÓC NHÌN CỘNG ĐỒNG</span><h2>Những góc nhìn đang làm đầy Hòa Lạc</h2><p>Khám phá Hòa Lạc qua hình ảnh, video, câu chuyện và sáng tạo do cộng đồng gửi về, được biên tập và công bố trên HALO HOLA.</p></div>
         <div className="community-gallery-count"><b>{total}</b> góc nhìn <span>·</span> {themeTitle}</div>
       </div>
 
