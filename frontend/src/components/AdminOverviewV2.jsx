@@ -62,7 +62,7 @@ export default function AdminOverviewV2({
       icon:Clock3,
       title:data.pending?'Góc nhìn đang chờ kiểm tra':'Hàng chờ đã sạch',
       text:data.pending?`${data.pending} góc nhìn cần kiểm tra trạng thái và quyền sử dụng.`:'Không còn góc nhìn mới cần xử lý ngay.',
-      action:data.pending?'Duyệt ngay':'Xem tác phẩm',
+      action:data.pending?'Duyệt ngay':'Xem góc nhìn',
       tone:data.pending?'warning':'good',
       go:()=>onNavigate?.('Góc nhìn')
     },
@@ -72,7 +72,7 @@ export default function AdminOverviewV2({
       icon:FileWarning,
       title:(data.missingMedia+data.missingFacebook)?'Hồ sơ chưa hoàn tất':'Hồ sơ đang đầy đủ',
       text:(data.missingMedia+data.missingFacebook)
-        ? `${data.missingMedia} bài thiếu file/link · ${data.missingFacebook} bài Facebook thiếu liên kết.`
+        ? `${data.missingMedia} góc nhìn thiếu file/link · ${data.missingFacebook} góc nhìn Facebook thiếu liên kết.`
         :'Chưa phát hiện hồ sơ thiếu media hoặc bước Facebook bắt buộc.',
       action:'Kiểm tra hồ sơ',
       tone:(data.missingMedia+data.missingFacebook)?'danger':'good',
@@ -122,7 +122,7 @@ export default function AdminOverviewV2({
           <div><strong>{data.reviewProgress}%</strong><span>đã xử lý</span></div>
         </div>
         <div className="admin-v2-health-copy">
-          <b>{data.pending?`${data.pending} góc nhìn đang chờ`:'Không có bài chờ duyệt'}</b>
+          <b>{data.pending?`${data.pending} góc nhìn đang chờ`:'Không có góc nhìn chờ kiểm tra'}</b>
           <span>{data.today?`Hôm nay nhận thêm ${data.today} góc nhìn.`:'Hôm nay chưa có góc nhìn mới.'}</span>
         </div>
       </div>
