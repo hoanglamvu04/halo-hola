@@ -50,8 +50,6 @@ router.get('/',async(req,res,next)=>{
     }
     if(req.query.theme){values.push(String(req.query.theme));conditions.push(`$${values.length}=ANY(${taxonomyArraySql('s','theme')})`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
-    if(req.query.award==='true') conditions.push(`s.status='AWARDED'`);
-
     const limit=Math.max(1,Math.min(52,safeNumber(req.query.limit,16)));
     const offset=Math.max(0,safeNumber(req.query.offset,0));
     values.push(limit);const limitParam=values.length;
@@ -69,8 +67,7 @@ router.get('/',async(req,res,next)=>{
         sel.source AS "selectionSource",sel.selected_at AS "selectedAt",
         COALESCE(media.media,'[]'::json) AS media,
         media.image,COALESCE(media.media_count,0)::int AS "mediaCount",
-        COALESCE(jury.avg_score,0)::float AS "juryScore",
-        COALESCE(awards.types,'[]'::json) AS "selectionTypes",
+        COALESCE(editorial.types,'[]'::json) AS "selectionTypes",
         COUNT(*) OVER()::int AS "totalCount"
       FROM jury_selections sel
       JOIN submissions s ON s.id=sel.submission_id
@@ -85,19 +82,13 @@ router.get('/',async(req,res,next)=>{
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
       LEFT JOIN LATERAL (
-        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
-        FROM jury_scores js
-        WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
-      ) jury ON TRUE
-      LEFT JOIN LATERAL (
         SELECT COALESCE(json_agg(x.selection_type ORDER BY x.selection_type),'[]'::json) AS types
         FROM jury_selections x
         WHERE x.round_id=sel.round_id AND x.submission_id=s.id
           AND x.selection_type IN ('TOP3_THEME','THEME_WINNER','COLOR_WINNER','TITLE_FINALIST')
-      ) awards ON TRUE
+      ) editorial ON TRUE
       WHERE ${conditions.join(' AND ')}
-      ORDER BY CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,
-               jury.avg_score DESC NULLS LAST,sel.selected_at ASC,s.code ASC
+      ORDER BY sel.selected_at ASC,COALESCE(s.published_at,s.created_at) ASC,s.code ASC
       LIMIT $${limitParam} OFFSET $${offsetParam}
     `,values);
 
