@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
-  LogIn, RefreshCw, ShieldCheck, ExternalLink, Home, FolderOpen, Globe2,
-  Activity, Layers3, Palette, Trophy, ChevronRight, Camera
+  LogIn, RefreshCw, ExternalLink, Home, FolderOpen, Globe2,
+  Activity, Layers3, Palette, ChevronRight, Camera
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
@@ -11,8 +11,6 @@ import ColorManagementManager from '../components/ColorManagementManager.jsx'
 import AdminContentManager from '../components/AdminContentManager.jsx'
 import MediaLibrary from '../components/MediaLibrary.jsx'
 import SiteSettingsManager from '../components/SiteSettingsManager.jsx'
-import AwardsManager from '../components/AwardsManager.jsx'
-import JuryBoardManager from '../components/JuryBoardManager.jsx'
 import PublicationManager from '../components/PublicationManager.jsx'
 import AnalyticsManager from '../components/AnalyticsManager.jsx'
 import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
@@ -47,11 +45,9 @@ const navGroups=[
     ]
   },
   {
-    label:'Chấm giải',
+    label:'Tuyển chọn',
     items:[
-      {label:'TOP52',icon:Images,path:'/admin/top52'},
-      {label:'Giải thưởng',icon:Trophy,path:'/admin/awards'},
-      {label:'Hội đồng BGK',icon:ShieldCheck,path:'/admin/jury-board'}
+      {label:'TOP52',icon:Images,path:'/admin/top52'}
     ]
   },
   {
@@ -78,8 +74,6 @@ const sectionDescriptions={
   'Stories':'Quản lý nội dung Stories.',
   'Đối tác':'Quản lý đối tác và nội dung hợp tác.',
   'TOP52':'Theo dõi danh sách góc nhìn được Ban Biên tập tuyển chọn.',
-  'Giải thưởng':'Quản lý cơ cấu và thông tin giải thưởng.',
-  'Hội đồng BGK':'Quản lý tài khoản hội đồng đang lưu trên hệ thống.',
   'Analytics':'Theo dõi hoạt động và hiệu quả sử dụng website.',
   'HOLA Map':'Quản lý nội dung liên quan tới bản đồ Hòa Lạc.',
   'HOLA Tour':'Quản lý tour và danh sách đăng ký.',
@@ -210,9 +204,7 @@ export default function AdminPage(){
      active==='Stories'?<AdminContentManager type="stories"/>:
      active==='HOLA Map'?<AdminContentManager type="places"/>:
      active==='Đối tác'?<AdminContentManager type="partners"/>:
-     active==='Giải thưởng'?<AwardsManager/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
-     active==='Hội đồng BGK'?<JuryBoardManager/>:
      active==='Analytics'?<AnalyticsManager/>:
      active==='Công bố'?<PublicationManager/>:
      active==='Đội ảnh'?<PhotographerManager/>:
