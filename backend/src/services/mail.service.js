@@ -11,25 +11,25 @@ const STATUS_COPY = {
     label: 'Hợp lệ',
     subject: 'Góc nhìn của bạn đã được xác nhận hợp lệ',
     headline: 'Góc nhìn đã hoàn tất bước kiểm tra.',
-    message: 'Nội dung đóng góp của bạn đã đủ điều kiện để tiếp tục trong hành trình công bố và ghi nhận của HALO HOLA 2026.'
+    message: 'Nội dung đóng góp của bạn đã đủ thông tin để tiếp tục trong hành trình biên tập và công bố của HALO HOLA 2026.'
   },
   SHORTLIST: {
-    label: 'Nổi bật',
-    subject: 'Góc nhìn của bạn được ghi nhận trong nhóm nổi bật HALO HOLA',
-    headline: 'Một cột mốc mới cho góc nhìn của bạn.',
-    message: 'Góc nhìn đã được đưa vào nhóm nổi bật và tiếp tục bước đánh giá để lựa chọn những đóng góp tiêu biểu của HALO HOLA 2026.'
+    label: 'Được chọn biên tập',
+    subject: 'Góc nhìn của bạn được chọn để biên tập trên HALO HOLA',
+    headline: 'Góc nhìn của bạn đã bước vào vòng biên tập.',
+    message: 'Ban biên tập đã chọn góc nhìn này để tiếp tục hoàn thiện, sắp xếp và cân nhắc giới thiệu trong các bộ sưu tập nội dung của HALO HOLA 2026.'
   },
   TOP52: {
     label: 'TOP52',
-    subject: 'Chúc mừng! Góc nhìn của bạn được ghi nhận trong TOP52 HALO HOLA 2026',
+    subject: 'Góc nhìn của bạn đã có mặt trong TOP52 HALO HOLA 2026',
     headline: 'Bạn đã có mặt trong TOP52.',
-    message: 'Góc nhìn của bạn đã được lựa chọn vào TOP52 HALO HOLA 2026 — nhóm những đóng góp nổi bật được chương trình ghi nhận và giới thiệu tới cộng đồng.'
+    message: 'Góc nhìn của bạn đã được Ban biên tập lựa chọn vào TOP52 HALO HOLA 2026 — bộ sưu tập 52 lát cắt cùng kể về một Hòa Lạc.'
   },
   AWARDED: {
-    label: 'Được vinh danh',
-    subject: 'Chúc mừng! Góc nhìn của bạn được vinh danh tại HALO HOLA 2026',
-    headline: 'Góc nhìn của bạn đã được vinh danh.',
-    message: 'Góc nhìn đã được ghi nhận ở hạng mục vinh danh của HALO HOLA 2026. Ban Tổ chức sẽ liên hệ thêm qua thông tin bạn đã cung cấp.'
+    label: 'Góc nhìn tiêu biểu',
+    subject: 'Góc nhìn của bạn được chọn giới thiệu nổi bật tại HALO HOLA 2026',
+    headline: 'Góc nhìn của bạn được chọn giới thiệu nổi bật.',
+    message: 'Ban biên tập đã chọn góc nhìn này để giới thiệu như một lát cắt tiêu biểu trong hành trình HALO HOLA 2026. Nếu cần thêm tư liệu hoặc thông tin, chúng tôi sẽ liên hệ với bạn.'
   },
   REJECTED: {
     label: 'Cần bổ sung',
