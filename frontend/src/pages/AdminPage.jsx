@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   LogIn, RefreshCw, ExternalLink, Home, FolderOpen, Globe2,
-  Activity, Layers3, Palette, ChevronRight, Camera
+  Activity, Layers3, Palette, ChevronRight, Camera, KeyRound
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
@@ -16,6 +16,7 @@ import AnalyticsManager from '../components/AnalyticsManager.jsx'
 import AdminOverviewV2 from '../components/AdminOverviewV2.jsx'
 import AdminSubmissionOperations from '../components/AdminSubmissionOperations.jsx'
 import PhotographerManager from '../components/PhotographerManager.jsx'
+import AdminCommunityCodesManager from '../components/AdminCommunityCodesManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -54,6 +55,7 @@ const navGroups=[
     label:'Hệ thống',
     items:[
       {label:'Analytics',icon:Activity,path:'/admin/analytics'},
+      {label:'Mã đăng nhập',icon:KeyRound,path:'/admin/login-codes'},
       {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
       {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
       {label:'Cài đặt',icon:Settings,path:'/admin/settings'}
@@ -75,6 +77,7 @@ const sectionDescriptions={
   'Đối tác':'Quản lý đối tác và nội dung hợp tác.',
   'TOP52':'Theo dõi danh sách góc nhìn được Ban Biên tập tuyển chọn.',
   'Analytics':'Theo dõi hoạt động và hiệu quả sử dụng website.',
+  'Mã đăng nhập':'Tạo và thu hồi mã OTP cộng đồng khi email tự động tạm thời không gửi được.',
   'HOLA Map':'Quản lý nội dung liên quan tới bản đồ Hòa Lạc.',
   'HOLA Tour':'Quản lý tour và danh sách đăng ký.',
   'Cài đặt':'Thiết lập hệ thống và thông tin website.'
@@ -206,6 +209,7 @@ export default function AdminPage(){
      active==='Đối tác'?<AdminContentManager type="partners"/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Analytics'?<AnalyticsManager/>:
+     active==='Mã đăng nhập'?<AdminCommunityCodesManager/>:
      active==='Công bố'?<PublicationManager/>:
      active==='Đội ảnh'?<PhotographerManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
