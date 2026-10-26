@@ -236,7 +236,7 @@ export default function AdminSubmissionOperations({
   }
 
   const exportCsv=()=>{
-    const header=['Mã bài','Tác phẩm','Tác giả','Email','SĐT','Nguồn','Chủ đề','Trạng thái','Địa điểm','Facebook','Điểm lan tỏa','HOLA Maps']
+    const header=['Mã góc nhìn','Góc nhìn','Người kể','Email','SĐT','Nguồn','Chủ đề','Trạng thái','Địa điểm','Facebook','Điểm lan tỏa','HOLA Maps']
     const rows=filteredItems.map(item=>[
       item.code,item.title,item.display_name||item.name,item.email,item.phone,sourceLabel(item),item.theme,statusLabels[item.status]||item.status,item.location,
       item.facebook_post_url,item.outreachScore||0,isMapped(item)?'Đã đồng bộ':item.hola_maps_sync_status||'Chưa đồng bộ'
@@ -294,7 +294,7 @@ export default function AdminSubmissionOperations({
             const isSelected=String(selectedItem?.id)===String(item.id)
             return <div className={'admin-v2-row '+(isSelected?'selected':'')} key={item.id} role="button" tabIndex="0" onClick={()=>setSelected?.(item)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' ')setSelected?.(item)}}>
               <span className={'admin-v2-select '+(isSelected?'checked':'')}>{isSelected?<Check/>:null}</span>
-              <div className="admin-v2-artwork-cell">{preview?<img src={preview} alt=""/>:<span className="admin-v2-thumb-placeholder"><Images/></span>}<div><b>{item.title||'Tác phẩm chưa đặt tên'}</b><small>{item.code||'Chưa có mã'}</small><em><MapPin/> {item.location||'Chưa có địa điểm'}</em></div></div>
+              <div className="admin-v2-artwork-cell">{preview?<img src={preview} alt=""/>:<span className="admin-v2-thumb-placeholder"><Images/></span>}<div><b>{item.title||'Góc nhìn chưa đặt tên'}</b><small>{item.code||'Chưa có mã'}</small><em><MapPin/> {item.location||'Chưa có địa điểm'}</em></div></div>
               <div className="admin-v2-author-cell"><b>{item.display_name||item.name||'Chưa có tên'}</b><small>{item.email||'—'}</small></div>
               <span className={'admin-v2-source '+(sourceLabel(item)==='Facebook'?'facebook':'')}>{sourceLabel(item)}</span>
               <Pipeline item={item} compact/>
@@ -313,7 +313,7 @@ export default function AdminSubmissionOperations({
         {!selectedItem?<div className="admin-v2-detail-empty"><Images/><h3>Chọn một tác phẩm</h3><p>Thông tin hồ sơ, Facebook, file gốc và các hành động vận hành sẽ hiển thị tại đây.</p></div>:<>
           <div className="admin-v2-detail-head">
             {firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<span className="admin-v2-detail-placeholder"><Images/></span>}
-            <div><span className="admin-v2-code">{selectedItem.code}</span><h2>{selectedItem.title||'Tác phẩm chưa đặt tên'}</h2><span className={'admin-v2-status '+getOperationalState(selectedItem).tone}>{getOperationalState(selectedItem).label}</span></div>
+            <div><span className="admin-v2-code">{selectedItem.code}</span><h2>{selectedItem.title||'Góc nhìn chưa đặt tên'}</h2><span className={'admin-v2-status '+getOperationalState(selectedItem).tone}>{getOperationalState(selectedItem).label}</span></div>
           </div>
           <div className="admin-v2-meta-line"><span><MapPin/> {selectedItem.location||'Chưa có địa điểm'}</span><span>Nhận: {formatDate(selectedItem.created_at)}</span></div>
           <Pipeline item={selectedItem}/>
