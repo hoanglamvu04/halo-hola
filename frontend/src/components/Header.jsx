@@ -12,7 +12,7 @@ const DEFAULT_NAV_LINKS = [
   {label:'HOLA DAY',href:'/hola-day'},
   {label:'Calendar 2027',href:'/calendar-2027'},
   {label:'TOP52',href:'/top52'},
-  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
+  {label:'Chiến dịch đóng góp',href:'/the-le-giai-thuong'},
   {label:'WE HOLA',href:'/we-hola'}
 ]
 
@@ -21,7 +21,7 @@ const PROGRAM_HREFS = new Set(['/top52','/the-le-giai-thuong','/we-hola'])
 
 const MOBILE_QUICK_LINKS = [
   {label:'Gửi góc nhìn',href:'/gui-goc-nhin'},
-  {label:'Cách tham gia & Ghi nhận',href:'/the-le-giai-thuong'},
+  {label:'Chiến dịch đóng góp',href:'/the-le-giai-thuong'},
   {label:'Theo dõi góc nhìn',href:'/tra-cuu'},
   {label:'WE HOLA',href:'/we-hola'},
   {label:'Đồng hành',href:'/dong-hanh'},
@@ -185,7 +185,7 @@ export default function Header() {
     mobileHeaderVisible||open?'mobile-header-visible':'mobile-header-hidden'
   ].filter(Boolean).join(' ')
 
-  const navLinks=(Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS).filter(item=>item?.label&&item?.href)
+  const navLinks=(Array.isArray(config.navLinks)?config.navLinks:DEFAULT_NAV_LINKS).filter(item=>item?.label&&item?.href).map(item=>item.href==='/the-le-giai-thuong'?{...item,label:'Chiến dịch đóng góp'}:item)
   const findNavItem=(href,fallbackLabel)=>{
     const item=navLinks.find(link=>link.href===href)
     if(!item) return DEFAULT_NAV_LINKS.find(link=>link.href===href)||null
