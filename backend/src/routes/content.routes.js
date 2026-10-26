@@ -106,7 +106,7 @@ router.get('/artworks', async (req,res,next)=>{
     const offsetParam=values.length;
     const sort=String(req.query.sort||'latest').toLowerCase();
     const orderBy=sort==='score'
-      ? "CASE WHEN s.status='AWARDED' THEN 0 ELSE 1 END,jury.avg_score DESC NULLS LAST,s.created_at DESC"
+      ? '(s.facebook_reactions + s.facebook_comments*2 + s.facebook_shares*3) DESC,COALESCE(s.published_at,s.created_at) DESC,s.created_at DESC'
       : sort==='oldest'
         ? 'COALESCE(s.published_at,s.created_at) ASC,s.created_at ASC'
         : 'COALESCE(s.published_at,s.created_at) DESC,s.created_at DESC';
@@ -125,7 +125,6 @@ router.get('/artworks', async (req,res,next)=>{
              s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
              media.image,
-             COALESCE(jury.avg_score,0)::float AS "juryScore",
              COUNT(*) OVER()::int AS "totalCount"
       FROM submissions s
       LEFT JOIN LATERAL (
@@ -139,11 +138,6 @@ router.get('/artworks', async (req,res,next)=>{
                (ARRAY_AGG('/api/public-media/'||m.id::text||'?w=960&format=auto' ORDER BY m.created_at ASC))[1] AS image
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
-      LEFT JOIN LATERAL (
-        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
-        FROM jury_scores js
-        WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
-      ) jury ON TRUE
       WHERE ${conditions.join(' AND ')}
       ORDER BY ${orderBy}
       LIMIT $${limitParam} OFFSET $${offsetParam}
@@ -167,8 +161,7 @@ router.get('/artworks/:slug', async (req,res,next)=>{
              (s.facebook_reactions + s.facebook_comments*2 + s.facebook_shares*3)::int AS "outreachScore",
              s.created_at AS "createdAt",s.published_at AS "publishedAt",
              COALESCE(media.media,'[]'::json) AS media,
-             media.image,
-             COALESCE(jury.avg_score,0)::float AS "juryScore"
+             media.image
       FROM submissions s
       LEFT JOIN LATERAL (
         SELECT json_agg(json_build_object(
@@ -181,11 +174,6 @@ router.get('/artworks/:slug', async (req,res,next)=>{
                (ARRAY_AGG('/api/public-media/'||m.id::text||'?w=960&format=auto' ORDER BY m.created_at ASC))[1] AS image
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
-      LEFT JOIN LATERAL (
-        SELECT ROUND(AVG(js.weighted_total),2) AS avg_score
-        FROM jury_scores js
-        WHERE js.submission_id=s.id AND js.submitted=TRUE AND js.conflict_of_interest=FALSE
-      ) jury ON TRUE
       WHERE LOWER(s.code)=$1 AND s.status IN ${PUBLIC_STATUSES} AND s.is_demo=FALSE AND s.allow_media_use=TRUE
         AND ${publicArtworkCondition('s')}
       LIMIT 1
