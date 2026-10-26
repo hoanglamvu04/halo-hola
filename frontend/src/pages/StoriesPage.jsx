@@ -44,11 +44,11 @@ export default function StoriesPage(){
       <div className="stories-feature-inner">
         <Link className="stories-feature-image" to={'/stories/'+featured.slug}>
           {featured.cover||featured.image?<img src={featured.cover||featured.image} alt={featured.title}/>:<div className="theme-card-placeholder"/>}
-          <span className="stories-feature-badge">FEATURED STORY</span>
+          <span className="stories-feature-badge">CÂU CHUYỆN NỔI BẬT</span>
         </Link>
 
         <div className="stories-feature-copy">
-          <span className="eyebrow">FEATURED STORY</span>
+          <span className="eyebrow">CÂU CHUYỆN NỔI BẬT</span>
           <h2>{featured.title}</h2>
           <p className="stories-feature-lead">{featured.excerpt}</p>
           <div className="stories-feature-meta">
