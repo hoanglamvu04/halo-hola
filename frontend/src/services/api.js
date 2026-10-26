@@ -47,8 +47,12 @@ export function setAdminToken(token) {
 
 export function healthCheck() { return unwrap(client.get('/health')); }
 
-export function requestCommunityLoginCode(payload) { return unwrap(client.post('/community-auth/request-code', payload)); }
-export function verifyCommunityLoginCode(payload) { return unwrap(client.post('/community-auth/verify-code', payload)); }
+export function registerCommunityAccount(payload) { return unwrap(client.post('/community-auth/register',payload)); }
+export function resendCommunityVerification(payload) { return unwrap(client.post('/community-auth/resend-verification',payload)); }
+export function verifyCommunityEmail(payload) { return unwrap(client.post('/community-auth/verify-email',payload)); }
+export function loginCommunityAccount(payload) { return unwrap(client.post('/community-auth/login',payload)); }
+export function requestCommunityPasswordReset(payload) { return unwrap(client.post('/community-auth/request-password-reset',payload)); }
+export function resetCommunityPassword(payload) { return unwrap(client.post('/community-auth/reset-password',payload)); }
 export function getCommunityAccount() { return unwrap(client.get('/community-auth/me')); }
 export function updateCommunityAccount(payload) { return unwrap(client.patch('/community-auth/profile', payload)); }
 export function getCommunityContributionHistory() { return unwrap(client.get('/community-auth/submissions')); }
