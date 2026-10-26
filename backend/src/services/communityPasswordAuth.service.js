@@ -10,8 +10,6 @@ export const EMAIL_CODE_PURPOSE = Object.freeze({
   RESET: 'RESET_PASSWORD'
 });
 const OTP_TTL_MINUTES = 10;
-const SESSION_TTL_DAYS = 30;
-const REGISTER_TTL_MINUTES = 30;
 const EMAIL_REQUEST_LIMIT = 5;
 const dummyHash = bcrypt.hash('not-a-real-halo-hola-password', 12);
 
@@ -21,9 +19,9 @@ function digest(value) {
   return crypto.createHmac('sha256', env.jwtSecret).update(String(value)).digest('hex');
 }
 
-export function hashCommunityEmailCode(purpose, email, code) {
+export function hashCommunityEmailCode(purpose, email, code, registrationHash = '') {
   if (!Object.values(EMAIL_CODE_PURPOSE).includes(purpose)) throw new Error('Unsupported OTP purpose');
-  return digest(['community-email-otp', purpose, normalizeCommunityEmail(email), String(code)].join(':'));
+  return digest(['community-email-otp', purpose, normalizeCommunityEmail(email), registrationHash, String(code)].join(':'));
 }
 
 export function passwordIsValid(password) {
@@ -71,7 +69,7 @@ function constantTimeCodeMatch(expected, actual) {
   return crypto.timingSafeEqual(Buffer.from(expected, 'hex'), Buffer.from(actual, 'hex'));
 }
 
-async function consumeCode(client, email, purpose, code) {
+async function consumeCode(client, email, purpose, code, registrationHash = '') {
   const { rows } = await client.query(
     `SELECT id,code_hash FROM community_login_codes
      WHERE email=$1 AND purpose=$2 AND consumed_at IS NULL AND expires_at>NOW()
@@ -81,7 +79,7 @@ async function consumeCode(client, email, purpose, code) {
   );
   const item = rows[0];
   if (!item) return false;
-  if (!constantTimeCodeMatch(hashCommunityEmailCode(purpose, email, code), item.code_hash)) {
+  if (!constantTimeCodeMatch(hashCommunityEmailCode(purpose, email, code, registrationHash), item.code_hash)) {
     // Return false instead of throwing here: the transaction must COMMIT
     // the increment so attackers cannot retry wrong codes without a limit.
     await client.query(
@@ -109,8 +107,21 @@ async function issueEmailCode(email, purpose, ip) {
     throw new AppError('Vui lòng đợi khoảng 45 giây trước khi gửi lại mã.', 429);
   }
 
+  // Bind registration OTPs to the precise pending password hash. A second
+  // signup must never let someone activate a replaced password using an older OTP.
+  const pending = purpose === EMAIL_CODE_PURPOSE.VERIFY
+    ? await pool.query(
+        'SELECT password_hash FROM community_registration_requests WHERE email=$1 AND expires_at>NOW()',
+        [email]
+      )
+    : null;
+  if (purpose === EMAIL_CODE_PURPOSE.VERIFY && !pending?.rows[0]) {
+    throw new AppError('Yêu cầu đăng ký đã hết hạn. Vui lòng đăng ký lại.', 400);
+  }
   const code = crypto.randomInt(0, 1_000_000).toString().padStart(6, '0');
-  const codeHash = hashCommunityEmailCode(purpose, email, code);
+  const codeHash = hashCommunityEmailCode(
+    purpose, email, code, pending?.rows[0]?.password_hash || ''
+  );
   await withTransaction(async client => {
     await client.query(
       `UPDATE community_login_codes SET consumed_at=NOW()
@@ -187,15 +198,14 @@ export async function resendCommunityVerification({ email, ip }) {
 export async function verifyCommunityEmail({ email, code, userAgent }) {
   const normalized = normalizeCommunityEmail(email);
   const result = await withTransaction(async client => {
-    const correct = await consumeCode(client, normalized, EMAIL_CODE_PURPOSE.VERIFY, code);
-    if (!correct) return { kind: 'INVALID' };
-
     const pending = await client.query(
       `SELECT * FROM community_registration_requests
        WHERE email=$1 AND expires_at>NOW() FOR UPDATE`, [normalized]
     );
     const request = pending.rows[0];
     if (!request) return { kind: 'EXPIRED' };
+    const correct = await consumeCode(client, normalized, EMAIL_CODE_PURPOSE.VERIFY, code, request.password_hash);
+    if (!correct) return { kind: 'INVALID' };
 
     const { rows } = await client.query(
       `INSERT INTO community_accounts
