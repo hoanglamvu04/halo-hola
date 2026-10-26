@@ -22,9 +22,14 @@ export default function ArtworkCard({ item, featured = false }) {
     ? `${item.isDemo?'MẪU · ':''}${previewStatusLabel[item.status]||item.status}`
     : (publicStatusLabel[item.status]||'GÓC NHÌN CỘNG ĐỒNG'))
   const hasOutreach=Number.isFinite(Number(item.outreachScore))&&Number(item.outreachScore)>0
+  const metaIcon=hasOutreach?Share2:Eye
+  const MetaIcon=metaIcon
+  const metaText=hasOutreach
+    ? `${Number(item.outreachScore)} điểm lan tỏa`
+    : (item.preview&&Number(item.juryScore)>0?`${Number(item.juryScore).toFixed(1)} điểm biên tập`:(item.type||'Góc nhìn'))
 
   return <Link to={href} className={`art-card ${featured ? 'featured' : ''}`}>
     <div className="art-image">{item.image?<img src={item.image} alt={item.title||item.code} loading="lazy" decoding="async"/>:<div className="theme-card-placeholder"/>}<span className="top52-badge">{badge}</span><span className="heart" aria-hidden="true"><Heart size={16}/></span></div>
-    <div className="art-body"><h3>{item.title||item.code}</h3><p>{item.author}</p><div className="art-meta">{hasOutreach?<span><Share2 size={14}/>{Number(item.outreachScore)} điểm lan tỏa</span>:<span><Eye size={14}/>{Number(item.juryScore||0).toFixed(1)} điểm BGK</span>}<span><MapPin size={14}/>{item.location}</span></div></div>
+    <div className="art-body"><h3>{item.title||item.code}</h3><p>{item.author}</p><div className="art-meta"><span><MetaIcon size={14}/>{metaText}</span><span><MapPin size={14}/>{item.location}</span></div></div>
   </Link>
 }
