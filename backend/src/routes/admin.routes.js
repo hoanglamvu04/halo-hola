@@ -248,7 +248,7 @@ const adminCommunityCodeSchema=z.object({
   purpose:z.enum(['VERIFY_EMAIL','RESET_PASSWORD']).optional().default('VERIFY_EMAIL')
 });
 
-router.get('/community-login-codes', async (req,res,next)=>{
+router.get('/community-login-codes', requireRoles('ADMIN'), async (req,res,next)=>{
   try{
     res.json({
       items:await listAdminCommunityLoginCodes({
@@ -259,7 +259,7 @@ router.get('/community-login-codes', async (req,res,next)=>{
   }catch(error){next(error);}
 });
 
-router.post('/community-login-codes', async (req,res,next)=>{
+router.post('/community-login-codes', requireRoles('ADMIN'), async (req,res,next)=>{
   try{
     const input=adminCommunityCodeSchema.parse(req.body||{});
     res.status(201).json(await issueAdminCommunityLoginCode(input));
@@ -271,7 +271,7 @@ router.post('/community-login-codes', async (req,res,next)=>{
   }
 });
 
-router.delete('/community-login-codes/:id', async (req,res,next)=>{
+router.delete('/community-login-codes/:id', requireRoles('ADMIN'), async (req,res,next)=>{
   try{
     const item=await revokeAdminCommunityLoginCode(req.params.id);
     if(!item)throw new AppError('Không tìm thấy mã đăng nhập.',404);
