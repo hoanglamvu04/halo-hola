@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { authenticateAdmin } from '../middleware/auth.js';
 import { AppError } from '../utils/AppError.js';
 import { statusSchema } from '../validators/submission.validators.js';
@@ -23,6 +24,11 @@ import {
   sendStatusNotificationForSubmission,
   sendStatusNotificationByCode
 } from '../services/submissionNotification.service.js';
+import {
+  issueAdminCommunityLoginCode,
+  listAdminCommunityLoginCodes,
+  revokeAdminCommunityLoginCode
+} from '../services/communityAccount.service.js';
 const router = Router();
 router.use(authenticateAdmin);
 
@@ -183,6 +189,42 @@ router.delete('/media-library/:id', async (req,res,next)=>{
   try{
     const item=await deleteMediaAsset(req.params.id);
     if(!item) throw new AppError('Không tìm thấy media.',404);
+    res.json(item);
+  }catch(error){next(error);}
+});
+
+const adminCommunityCodeSchema=z.object({
+  email:z.string().trim().email().max(255),
+  expiresInMinutes:z.coerce.number().int().min(5).max(60).optional().default(10)
+});
+
+router.get('/community-login-codes', async (req,res,next)=>{
+  try{
+    res.json({
+      items:await listAdminCommunityLoginCodes({
+        q:req.query.q,
+        limit:req.query.limit
+      })
+    });
+  }catch(error){next(error);}
+});
+
+router.post('/community-login-codes', async (req,res,next)=>{
+  try{
+    const input=adminCommunityCodeSchema.parse(req.body||{});
+    res.status(201).json(await issueAdminCommunityLoginCode(input));
+  }catch(error){
+    if(error?.name==='ZodError'){
+      return next(new AppError('Thông tin tạo mã chưa hợp lệ.',400,error.issues));
+    }
+    return next(error);
+  }
+});
+
+router.delete('/community-login-codes/:id', async (req,res,next)=>{
+  try{
+    const item=await revokeAdminCommunityLoginCode(req.params.id);
+    if(!item)throw new AppError('Không tìm thấy mã đăng nhập.',404);
     res.json(item);
   }catch(error){next(error);}
 });
