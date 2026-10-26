@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { pool } from '../database/pool.js';
 import { env } from '../config/env.js';
+import { getConnectionConfig, isConnectionConfigured } from './connectionSettings.service.js';
 
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAYS_MS = [1000, 5000, 30000];
@@ -32,7 +33,7 @@ function authorId(email = '') {
 }
 
 function configured() {
-  return Boolean(trimSlash(env.holaMapsBaseUrl) && env.holaMapsHaloSecret);
+  return isConnectionConfigured('hola_maps');
 }
 
 function isPublicationEffective(submission, at = Date.now()) {
@@ -59,14 +60,15 @@ export function isSubmissionEligibleForHolaMaps(submission, at = Date.now()) {
 async function request(path, options = {}) {
   if (!configured()) throw new Error('HOLA_MAPS_BASE_URL hoặc HOLA_MAPS_HALO_SECRET chưa được cấu hình.');
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), env.holaMapsSyncTimeoutMs);
+  const config = getConnectionConfig('hola_maps');
+  const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
   try {
-    const response = await fetch(`${trimSlash(env.holaMapsBaseUrl)}${path}`, {
+    const response = await fetch(`${trimSlash(config.baseUrl)}${path}`, {
       ...options,
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
-        'X-Halo-Hola-Key': env.holaMapsHaloSecret,
+        'X-Halo-Hola-Key': config.secret,
         ...(options.headers || {})
       }
     });
@@ -106,7 +108,7 @@ function mapPublicMetadata(result) {
     result.publicUrl ?? result.public_url ?? result.url ?? result.spotUrl ?? result.spot_url ?? result.data?.publicUrl,
     1000
   );
-  const base = trimSlash(env.holaMapsBaseUrl);
+  const base = trimSlash(getConnectionConfig('hola_maps').baseUrl);
   const publicUrl = explicitUrl || (spotId && base ? `${base}/halo?spot=${encodeURIComponent(spotId)}` : null);
   return { spotId, publicUrl };
 }
