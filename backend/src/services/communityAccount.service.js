@@ -268,3 +268,75 @@ export async function logoutCommunitySession(req){
   const tokenHash=digest(`session:${token}`);
   await pool.query('DELETE FROM community_sessions WHERE token_hash=$1',[tokenHash]);
 }
+
+
+export async function listAdminCommunityLoginCodes({q='',limit=100}={}){
+  const values=[];
+  const conditions=[];
+  const search=clean(q);
+  if(search){
+    values.push('%'+search.toLowerCase()+'%');
+    conditions.push(`LOWER(c.email) LIKE $${values.length}`);
+  }
+  values.push(Math.max(1,Math.min(200,Number(limit)||100)));
+  const limitParam=values.length;
+  const where=conditions.length?'WHERE '+conditions.join(' AND '):'';
+  const {rows}=await pool.query(
+    `SELECT
+       c.id,c.email,
+       c.expires_at AS "expiresAt",
+       c.consumed_at AS "consumedAt",
+       c.attempt_count AS "attemptCount",
+       c.request_ip AS "requestIp",
+       c.created_at AS "createdAt",
+       a.id AS "accountId",
+       a.name AS "accountName",
+       a.display_name AS "accountDisplayName",
+       CASE
+         WHEN c.consumed_at IS NOT NULL THEN 'USED'
+         WHEN c.expires_at<=NOW() THEN 'EXPIRED'
+         ELSE 'ACTIVE'
+       END AS status
+     FROM community_login_codes c
+     LEFT JOIN community_accounts a ON a.email=c.email
+     ${where}
+     ORDER BY c.created_at DESC
+     LIMIT $${limitParam}`,
+    values
+  );
+  return rows;
+}
+
+export async function issueAdminCommunityLoginCode({email,expiresInMinutes=10}){
+  const normalized=normalizeEmail(email);
+  const ttl=Math.max(5,Math.min(60,Number(expiresInMinutes)||10));
+  const code=crypto.randomInt(0,1000000).toString().padStart(6,'0');
+  const codeHash=digest(`otp:${normalized}:${code}`);
+
+  return withTransaction(async(client)=>{
+    await client.query(
+      `UPDATE community_login_codes
+       SET consumed_at=COALESCE(consumed_at,NOW())
+       WHERE email=$1 AND consumed_at IS NULL AND expires_at>NOW()`,
+      [normalized]
+    );
+    const {rows}=await client.query(
+      `INSERT INTO community_login_codes(email,code_hash,expires_at,request_ip)
+       VALUES($1,$2,NOW()+($3::text || ' minutes')::interval,'ADMIN')
+       RETURNING id,email,expires_at AS "expiresAt",created_at AS "createdAt"`,
+      [normalized,codeHash,String(ttl)]
+    );
+    return {...rows[0],code,expiresIn:ttl*60};
+  });
+}
+
+export async function revokeAdminCommunityLoginCode(id){
+  const {rows}=await pool.query(
+    `UPDATE community_login_codes
+     SET consumed_at=COALESCE(consumed_at,NOW())
+     WHERE id=$1
+     RETURNING id,email,expires_at AS "expiresAt",consumed_at AS "consumedAt",created_at AS "createdAt"`,
+    [id]
+  );
+  return rows[0]||null;
+}
