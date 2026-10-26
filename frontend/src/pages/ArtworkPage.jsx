@@ -47,9 +47,9 @@ function setCanonical(url){
 }
 
 function publicBadge(status){
-  if(status==='AWARDED')return'ĐẠT GIẢI'
+  if(status==='AWARDED')return'GÓC NHÌN TIÊU BIỂU'
   if(status==='TOP52')return'TOP52'
-  if(status==='SHORTLIST')return'SHORTLIST'
+  if(status==='SHORTLIST')return'ĐƯỢC CHỌN BIÊN TẬP'
   return'GÓC NHÌN CỘNG ĐỒNG'
 }
 
