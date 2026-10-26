@@ -64,7 +64,7 @@ export default function AdminOverviewV2({
       text:data.pending?`${data.pending} góc nhìn cần kiểm tra trạng thái và quyền sử dụng.`:'Không còn góc nhìn mới cần xử lý ngay.',
       action:data.pending?'Duyệt ngay':'Xem tác phẩm',
       tone:data.pending?'warning':'good',
-      go:()=>onNavigate?.('Tác phẩm')
+      go:()=>onNavigate?.('Góc nhìn')
     },
     {
       key:'completion',
@@ -76,7 +76,7 @@ export default function AdminOverviewV2({
         :'Chưa phát hiện hồ sơ thiếu media hoặc bước Facebook bắt buộc.',
       action:'Kiểm tra hồ sơ',
       tone:(data.missingMedia+data.missingFacebook)?'danger':'good',
-      go:()=>onNavigate?.('Tác phẩm')
+      go:()=>onNavigate?.('Góc nhìn')
     },
     {
       key:'publish',
@@ -96,7 +96,7 @@ export default function AdminOverviewV2({
       text:data.mapFailed?`${data.mapFailed} góc nhìn cần đồng bộ lại từ module Góc nhìn.`:'Không phát hiện job HOLA Maps bị FAILED trong danh sách hiện tại.',
       action:'Kiểm tra Maps',
       tone:data.mapFailed?'danger':'good',
-      go:()=>onNavigate?.('Tác phẩm')
+      go:()=>onNavigate?.('Góc nhìn')
     }
   ]
 
@@ -113,7 +113,7 @@ export default function AdminOverviewV2({
           ? 'Hệ thống đã gom các việc quan trọng lên trước để bạn không phải dò từng module.'
           : 'Hiện chưa có cảnh báo ưu tiên. Bạn có thể tiếp tục theo dõi góc nhìn, tiến trình biên tập và lịch công bố.'}</p>
         <div className="admin-v2-hero-actions">
-          <button onClick={()=>onNavigate?.('Tác phẩm')}><Images size={16}/> Quản lý góc nhìn <ArrowRight size={15}/></button>
+          <button onClick={()=>onNavigate?.('Góc nhìn')}><Images size={16}/> Quản lý góc nhìn <ArrowRight size={15}/></button>
           <button className="secondary" onClick={onRefresh} disabled={loading}><RefreshCw size={16} className={loading?'spin':''}/> Làm mới</button>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function AdminOverviewV2({
     </section>
 
     <section className="admin-v2-metrics" aria-label="Chỉ số chính">
-      <button onClick={()=>onNavigate?.('Tác phẩm')}>
+      <button onClick={()=>onNavigate?.('Góc nhìn')}>
         <span className="metric-icon"><Images/></span><div><small>Tổng góc nhìn</small><strong>{data.total}</strong><em>{data.pending} chờ kiểm tra</em></div>
       </button>
       <button onClick={()=>onNavigate?.('Tác giả')}>
@@ -164,7 +164,7 @@ export default function AdminOverviewV2({
       <div className="admin-v2-recent">
         <div className="admin-v2-section-head">
           <div><span>GẦN ĐÂY</span><h3>Góc nhìn mới nhất</h3></div>
-          <button onClick={()=>onNavigate?.('Tác phẩm')}>Xem tất cả</button>
+          <button onClick={()=>onNavigate?.('Góc nhìn')}>Xem tất cả</button>
         </div>
         <div className="admin-v2-recent-list">
           {data.recent.length?data.recent.map(item=><button key={item.id||item.code} onClick={()=>onOpenSubmission?.(item)}>
@@ -178,6 +178,6 @@ export default function AdminOverviewV2({
 
     <AdminOperationsInsights/>
 
-    {data.rejected>0&&<div className="admin-v2-foot-alert"><AlertTriangle/><span><b>{data.rejected} hồ sơ không hợp lệ.</b> Có thể xem lại tại module Góc nhìn để đảm bảo lý do xử lý đã rõ ràng.</span><button onClick={()=>onNavigate?.('Tác phẩm')}>Mở danh sách</button></div>}
+    {data.rejected>0&&<div className="admin-v2-foot-alert"><AlertTriangle/><span><b>{data.rejected} hồ sơ không hợp lệ.</b> Có thể xem lại tại module Góc nhìn để đảm bảo lý do xử lý đã rõ ràng.</span><button onClick={()=>onNavigate?.('Góc nhìn')}>Mở danh sách</button></div>}
   </div>
 }
