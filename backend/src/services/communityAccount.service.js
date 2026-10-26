@@ -2,10 +2,9 @@ import crypto from 'node:crypto';
 import { pool, withTransaction } from '../database/pool.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
-import { sendCommunityLoginCode } from './mail.service.js';
+import { EMAIL_CODE_PURPOSE, hashCommunityEmailCode } from './communityPasswordAuth.service.js';
 
 const COOKIE_NAME='halo_hola_community_session';
-const OTP_TTL_MINUTES=10;
 const SESSION_TTL_DAYS=30;
 
 const normalizeEmail=value=>String(value||'').trim().toLowerCase();
@@ -37,6 +36,7 @@ function serializeAccount(row){
     bio:row.bio||'',
     avatarUrl:row.avatar_url||'',
     emailVerifiedAt:row.email_verified_at,
+    hasPassword:Boolean(row.password_hash),
     createdAt:row.created_at,
     updatedAt:row.updated_at
   };
@@ -92,135 +92,6 @@ export async function requireCommunityAccount(req){
   return account;
 }
 
-export async function requestCommunityLoginCode({email,ip}){
-  const normalized=normalizeEmail(email);
-  const recent=await pool.query(
-    `SELECT COUNT(*)::int AS count
-     FROM community_login_codes
-     WHERE email=$1 AND created_at>NOW()-INTERVAL '15 minutes'`,
-    [normalized]
-  );
-  if(Number(recent.rows[0]?.count||0)>=5){
-    throw new AppError('Bạn đã yêu cầu quá nhiều mã. Hãy thử lại sau ít phút.',429);
-  }
-
-  const code=crypto.randomInt(0,1000000).toString().padStart(6,'0');
-  const codeHash=digest(`otp:${normalized}:${code}`);
-  await pool.query(
-    `INSERT INTO community_login_codes(email,code_hash,expires_at,request_ip)
-     VALUES($1,$2,NOW()+INTERVAL '${OTP_TTL_MINUTES} minutes',$3)`,
-    [normalized,codeHash,clean(ip).slice(0,120)||null]
-  );
-
-  const delivery=await sendCommunityLoginCode({to:normalized,code,expiresInMinutes:OTP_TTL_MINUTES});
-  if(delivery?.skipped&&env.nodeEnv==='production'){
-    throw new AppError('Dịch vụ gửi mã đăng nhập tạm thời chưa sẵn sàng.',503);
-  }
-
-  await pool.query(
-    `DELETE FROM community_login_codes
-     WHERE expires_at<NOW()-INTERVAL '1 day' OR consumed_at<NOW()-INTERVAL '1 day'`
-  ).catch(()=>{});
-
-  return {
-    ok:true,
-    expiresIn:OTP_TTL_MINUTES*60,
-    ...(env.nodeEnv==='production'?{}:{devCode:code})
-  };
-}
-
-export async function verifyCommunityLoginCode({email,code,userAgent}){
-  const normalized=normalizeEmail(email);
-  const inputCode=clean(code);
-
-  return withTransaction(async(client)=>{
-    const codeResult=await client.query(
-      `SELECT *
-       FROM community_login_codes
-       WHERE email=$1
-         AND consumed_at IS NULL
-         AND expires_at>NOW()
-         AND attempt_count<5
-       ORDER BY created_at DESC
-       LIMIT 1
-       FOR UPDATE`,
-      [normalized]
-    );
-    const loginCode=codeResult.rows[0];
-    if(!loginCode)throw new AppError('Mã đăng nhập đã hết hạn. Hãy yêu cầu mã mới.',400);
-
-    const expected=digest(`otp:${normalized}:${inputCode}`);
-    if(expected!==loginCode.code_hash){
-      await client.query(
-        'UPDATE community_login_codes SET attempt_count=attempt_count+1 WHERE id=$1',
-        [loginCode.id]
-      );
-      throw new AppError('Mã đăng nhập chưa đúng.',400);
-    }
-
-    await client.query(
-      'UPDATE community_login_codes SET consumed_at=NOW() WHERE id=$1',
-      [loginCode.id]
-    );
-
-    const previous=await client.query(
-      `SELECT name,display_name,phone,bio
-       FROM submissions
-       WHERE LOWER(email)=$1 AND is_demo=FALSE
-       ORDER BY created_at DESC
-       LIMIT 1`,
-      [normalized]
-    );
-    const profile=previous.rows[0]||{};
-
-    const accountResult=await client.query(
-      `INSERT INTO community_accounts
-       (email,name,display_name,phone,bio,email_verified_at,last_login_at)
-       VALUES($1,$2,$3,$4,$5,NOW(),NOW())
-       ON CONFLICT(email) DO UPDATE SET
-         email_verified_at=NOW(),
-         last_login_at=NOW(),
-         updated_at=NOW(),
-         name=CASE WHEN COALESCE(community_accounts.name,'')='' THEN EXCLUDED.name ELSE community_accounts.name END,
-         display_name=CASE WHEN COALESCE(community_accounts.display_name,'')='' THEN EXCLUDED.display_name ELSE community_accounts.display_name END,
-         phone=CASE WHEN COALESCE(community_accounts.phone,'')='' THEN EXCLUDED.phone ELSE community_accounts.phone END,
-         bio=CASE WHEN COALESCE(community_accounts.bio,'')='' THEN EXCLUDED.bio ELSE community_accounts.bio END
-       RETURNING *`,
-      [
-        normalized,
-        profile.name||'',
-        profile.display_name||null,
-        profile.phone||null,
-        profile.bio||null
-      ]
-    );
-    const account=accountResult.rows[0];
-    if(account.status!=='ACTIVE')throw new AppError('Tài khoản này đang bị khóa.',403);
-
-    await client.query(
-      `UPDATE submissions
-       SET contributor_id=$1
-       WHERE contributor_id IS NULL AND LOWER(email)=$2`,
-      [account.id,normalized]
-    );
-
-    const token=crypto.randomBytes(32).toString('base64url');
-    const tokenHash=digest(`session:${token}`);
-    await client.query(
-      `DELETE FROM community_sessions
-       WHERE account_id=$1 AND expires_at<NOW()`,
-      [account.id]
-    );
-    await client.query(
-      `INSERT INTO community_sessions(account_id,token_hash,user_agent,expires_at)
-       VALUES($1,$2,$3,NOW()+INTERVAL '${SESSION_TTL_DAYS} days')`,
-      [account.id,tokenHash,clean(userAgent).slice(0,500)||null]
-    );
-
-    return {account:serializeAccount(account),token};
-  });
-}
-
 export async function updateCommunityProfile(accountId,input){
   const {rows}=await pool.query(
     `UPDATE community_accounts SET
@@ -244,6 +115,13 @@ export async function updateCommunityProfile(accountId,input){
 }
 
 export async function listCommunitySubmissions(accountId){
+  // Attach unclaimed guest submissions only after a verified user session.
+  await pool.query(
+    `UPDATE submissions SET contributor_id=$1
+     WHERE contributor_id IS NULL AND is_demo=FALSE
+       AND LOWER(email)=(SELECT LOWER(email) FROM community_accounts WHERE id=$1)`,
+    [accountId]
+  );
   const {rows}=await pool.query(
     `SELECT
        s.id,s.code,s.title,s.type,s.theme,s.color,s.location,s.status,
@@ -283,7 +161,7 @@ export async function listAdminCommunityLoginCodes({q='',limit=100}={}){
   const where=conditions.length?'WHERE '+conditions.join(' AND '):'';
   const {rows}=await pool.query(
     `SELECT
-       c.id,c.email,
+       c.id,c.email,c.purpose,
        c.expires_at AS "expiresAt",
        c.consumed_at AS "consumedAt",
        c.attempt_count AS "attemptCount",
@@ -307,24 +185,42 @@ export async function listAdminCommunityLoginCodes({q='',limit=100}={}){
   return rows;
 }
 
-export async function issueAdminCommunityLoginCode({email,expiresInMinutes=10}){
+export async function issueAdminCommunityLoginCode({email,expiresInMinutes=10,purpose='VERIFY_EMAIL'}){
   const normalized=normalizeEmail(email);
   const ttl=Math.max(5,Math.min(60,Number(expiresInMinutes)||10));
+  if(!Object.values(EMAIL_CODE_PURPOSE).includes(purpose)){
+    throw new AppError('Mục đích xác minh không hợp lệ.',400);
+  }
+
+  const valid=purpose===EMAIL_CODE_PURPOSE.VERIFY
+    ? await pool.query(
+      'SELECT 1 FROM community_registration_requests WHERE email=$1 AND expires_at>NOW()',
+      [normalized])
+    : await pool.query(
+      `SELECT 1 FROM community_accounts WHERE email=$1 AND status='ACTIVE'
+       AND password_hash IS NOT NULL AND email_verified_at IS NOT NULL`,
+      [normalized]);
+  if(!valid.rowCount){
+    throw new AppError(purpose===EMAIL_CODE_PURPOSE.VERIFY
+      ? 'Email này chưa có yêu cầu đăng ký chờ xác minh.'
+      : 'Không tìm thấy tài khoản có mật khẩu để đặt lại.',400);
+  }
+
   const code=crypto.randomInt(0,1000000).toString().padStart(6,'0');
-  const codeHash=digest(`otp:${normalized}:${code}`);
+  const codeHash=hashCommunityEmailCode(purpose,normalized,code);
 
   return withTransaction(async(client)=>{
     await client.query(
       `UPDATE community_login_codes
        SET consumed_at=COALESCE(consumed_at,NOW())
-       WHERE email=$1 AND consumed_at IS NULL AND expires_at>NOW()`,
-      [normalized]
+       WHERE email=$1 AND purpose=$2 AND consumed_at IS NULL`,
+      [normalized,purpose]
     );
     const {rows}=await client.query(
-      `INSERT INTO community_login_codes(email,code_hash,expires_at,request_ip)
-       VALUES($1,$2,NOW()+($3::text || ' minutes')::interval,'ADMIN')
-       RETURNING id,email,expires_at AS "expiresAt",created_at AS "createdAt"`,
-      [normalized,codeHash,String(ttl)]
+      `INSERT INTO community_login_codes(email,purpose,code_hash,expires_at,request_ip)
+       VALUES($1,$2,$3,NOW()+($4::text || ' minutes')::interval,'ADMIN')
+       RETURNING id,email,purpose,expires_at AS "expiresAt",created_at AS "createdAt"`,
+      [normalized,purpose,codeHash,String(ttl)]
     );
     return {...rows[0],code,expiresIn:ttl*60};
   });
