@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom'
 const previewStatusLabel={
   PENDING:'CHỜ DUYỆT',
   VALID:'HỢP LỆ',
-  SHORTLIST:'SHORTLIST',
+  SHORTLIST:'ĐƯỢC CHỌN BIÊN TẬP',
   TOP52:'TOP52',
-  AWARDED:'ĐẠT GIẢI'
+  AWARDED:'GÓC NHÌN TIÊU BIỂU'
 }
 
 const publicStatusLabel={
   VALID:'GÓC NHÌN CỘNG ĐỒNG',
-  SHORTLIST:'SHORTLIST',
+  SHORTLIST:'ĐƯỢC CHỌN BIÊN TẬP',
   TOP52:'TOP52',
-  AWARDED:'ĐẠT GIẢI'
+  AWARDED:'GÓC NHÌN TIÊU BIỂU'
 }
 
 export default function ArtworkCard({ item, featured = false }) {
