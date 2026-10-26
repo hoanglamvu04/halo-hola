@@ -8,6 +8,7 @@ import { AppError } from '../utils/AppError.js';
 import { kickHolaMapsSyncJob } from './holaMaps.service.js';
 import {
   createR2Client,
+  hasR2Config,
   getR2Buckets,
   putR2Object,
   createDownloadUrl
@@ -48,15 +49,6 @@ async function sha256File(filePath) {
     stream.on('error', reject);
   });
   return hash.digest('hex');
-}
-
-function hasR2Config() {
-  return Boolean(
-    process.env.R2_ENDPOINT &&
-    process.env.R2_ACCESS_KEY_ID &&
-    process.env.R2_SECRET_ACCESS_KEY &&
-    process.env.R2_BUCKET_ORIGINALS
-  );
 }
 
 async function storeOriginalFiles(client, submission, files = []) {
