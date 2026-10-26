@@ -37,15 +37,29 @@ export default function AdminConnectionsManager(){
   const [loading,setLoading]=useState(true)
   const [busy,setBusy]=useState('')
   const [message,setMessage]=useState(null)
+  const [loadError,setLoadError]=useState(null)
   const selected=items.find(item=>item.key===active)
   const load=async()=>{
     setLoading(true)
+    setLoadError(null)
     try{
       const result=await getAdminConnections()
       setItems(result.items||[])
       setMessage(null)
-    }catch(err){setMessage({ok:false,text:err.message})}
-    finally{setLoading(false)}
+    }catch(err){
+      setItems([])
+      setDraft(null)
+      const help=err.status===401
+        ? 'Phiên đăng nhập đã hết hạn. Hãy đăng xuất rồi đăng nhập lại.'
+        : err.status===403
+          ? 'Tài khoản hiện tại không có quyền ADMIN. Vui lòng sử dụng tài khoản quản trị cấp ADMIN.'
+          : err.status===404
+            ? 'Backend chưa có API quản lý kết nối. Cần triển khai phiên bản backend mới.'
+            : err.status===500
+              ? 'Backend xảy ra lỗi. Kiểm tra log API và migration integration_connections trên VPS.'
+              : err.message
+      setLoadError({status:err.status,help})
+    }finally{setLoading(false)}
   }
   useEffect(()=>{load()},[])
   useEffect(()=>{
@@ -100,8 +114,8 @@ export default function AdminConnectionsManager(){
         {Object.entries(META).map(([key,meta])=>{
           const Icon=meta.icon
           const item=items.find(value=>value.key===key)
-          return <button type="button" key={key} className={active===key?'selected':''} onClick={()=>{setActive(key);setMessage(null)}}>
-            <Icon size={20}/><span><b>{meta.title}</b><small>{item?.configured?'Đã cấu hình':item?.enabled===false?'Đang tắt':'Chưa sẵn sàng'}</small></span>
+          return <button type="button" key={key} className={active===key?'selected':''} onClick={()=>{setActive(key);setDraft(null);setMessage(null)}}>
+            <Icon size={20}/><span><b>{meta.title}</b><small>{!item?'Chưa tải dữ liệu':item.configured?'Đã cấu hình':item.enabled===false?'Đang tắt':'Chưa sẵn sàng'}</small></span>
             <span className={'connection-dot '+(item?.configured?'online':'')} aria-hidden="true"/>
           </button>
         })}
@@ -137,7 +151,7 @@ export default function AdminConnectionsManager(){
             {selected.source==='admin'&&<button className="connection-ghost connection-reset" onClick={reset} disabled={Boolean(busy)}><RotateCcw size={16}/> Dùng lại .env</button>}
           </div>
           <p className="connection-note">{active==='smtp'?'Kiểm tra SMTP xác thực máy chủ nhưng không gửi email thử. Hãy lưu cấu hình trước khi kiểm tra.':active==='hola_maps'?'Thay đổi được áp dụng cho các lượt đồng bộ tiếp theo. Không phát sinh bài đăng thử.':'Bucket và khóa mới áp dụng cho lần tải tệp tiếp theo. Các file đã lưu vẫn giữ bucket ban đầu.'}</p>
-        </>:!loading&&<p>Không lấy được dữ liệu kết nối. Vui lòng thử lại.</p>}
+        </>:!loading&&loadError?<div className="connection-load-error" role="alert"><AlertTriangle size={22}/><div><h3>Không tải được cấu hình kết nối{loadError.status?` (HTTP ${loadError.status})`:''}</h3><p>{loadError.help}</p><button type="button" className="connection-ghost" onClick={load}><RefreshCw size={16}/> Thử tải lại</button></div></div>:!loading&&<p>Không có dữ liệu kết nối. Bấm Làm mới để thử lại.</p>}
       </section>
     </div>
   </div>
