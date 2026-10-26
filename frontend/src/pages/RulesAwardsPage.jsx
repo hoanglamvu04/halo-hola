@@ -3,9 +3,7 @@ import {
   ArrowRight, Brush, Camera, Check, FileText,
   MapPin, PenTool, ShieldCheck, Users, Video
 } from 'lucide-react'
-import '../styles/rules-awards-document-v4.css'
-import '../styles/rules-awards-document-v5.css'
-import '../styles/rules-awards-desktop-reading.css'
+import '../styles/contribution-campaign.css'
 
 const FORMATS = [
   {icon:Camera,title:'PHOTO',detail:'Ảnh đơn, bộ ảnh, photo story',spec:'JPG/PNG · ảnh rõ nét · tối đa 10 ảnh cho một góc nhìn'},
