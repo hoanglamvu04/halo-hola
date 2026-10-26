@@ -74,7 +74,3 @@ export const lookupSchema = z.object({
 export const statusSchema = z.object({
   status: z.enum(['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED'])
 });
-
-export const juryNoteSchema = z.object({
-  note: z.string().trim().max(4000)
-});
