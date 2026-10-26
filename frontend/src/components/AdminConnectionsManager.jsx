@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { PlugZap, Save, RefreshCw, RotateCcw, ShieldCheck, Mail, MapPinned, HardDrive, CheckCircle2, AlertTriangle } from 'lucide-react'
-import { getAdminConnections, updateAdminConnection, resetAdminConnection, testAdminSmtp } from '../services/api.js'
+import { PlugZap, Save, Send, RefreshCw, RotateCcw, ShieldCheck, Mail, MapPinned, HardDrive, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { getAdminConnections, updateAdminConnection, resetAdminConnection, testAdminSmtp, sendAdminSmtpTestEmail } from '../services/api.js'
 import './AdminConnectionsManager.css'
 
 const META={
-  smtp:{title:'Email / SMTP',icon:Mail,description:'Gửi OTP đăng nhập, biên nhận và thông báo trạng thái góc nhìn.'},
+  smtp:{title:'Email / SMTP',icon:Mail,description:'Gửi mã xác minh email, đặt lại mật khẩu và thông báo góc nhìn.'},
   hola_maps:{title:'HOLA Maps',icon:MapPinned,description:'Đồng bộ các góc nhìn đã được duyệt và công bố sang bản đồ.'},
   r2:{title:'Cloudflare R2',icon:HardDrive,description:'Lưu ảnh và tệp gốc của cộng đồng, Media Library.'}
 }
@@ -37,11 +37,16 @@ export default function AdminConnectionsManager(){
   const [loading,setLoading]=useState(true)
   const [busy,setBusy]=useState('')
   const [message,setMessage]=useState(null)
+  const [smtpVerified,setSmtpVerified]=useState(null)
   const [loadError,setLoadError]=useState(null)
   const selected=items.find(item=>item.key===active)
+  const isGmail=active==='smtp'&&String(draft?.host||'').trim().toLowerCase()==='smtp.gmail.com'
+  const smtpPort=Number(draft?.port)
+  const gmailIssue=isGmail && ((smtpPort!==465&&smtpPort!==587)||(smtpPort===465&&!draft?.secure)||(smtpPort===587&&draft?.secure))
   const load=async()=>{
     setLoading(true)
     setLoadError(null)
+    setSmtpVerified(null)
     try{
       const result=await getAdminConnections()
       setItems(result.items||[])
@@ -71,7 +76,7 @@ export default function AdminConnectionsManager(){
   const patch=(name,value)=>setDraft(previous=>({...previous,[name]:value}))
   const save=async()=>{
     if(!draft)return
-    setBusy('save');setMessage(null)
+    setBusy('save');setMessage(null);setSmtpVerified(null)
     try{
       const payload={...draft}
       for(const field of Object.keys(selected.secrets||{})){
@@ -81,7 +86,7 @@ export default function AdminConnectionsManager(){
       for(const field of Object.keys(selected.secrets||{}))payload[field]=draft[field]||''
       const result=await updateAdminConnection(active,payload)
       setItems(previous=>previous.map(item=>item.key===active?result:item))
-      setMessage({ok:true,text:'Đã lưu kết nối. Cấu hình mới được áp dụng ngay trên API.'})
+      setMessage({ok:true,text:'Đã lưu cấu hình. Hãy bấm “Kiểm tra SMTP” để xác nhận kết nối thực tế.'})
     }catch(err){setMessage({ok:false,text:err.message})}
     finally{setBusy('')}
   }
@@ -96,11 +101,22 @@ export default function AdminConnectionsManager(){
     finally{setBusy('')}
   }
   const verify=async()=>{
-    setBusy('test');setMessage(null)
+    setBusy('test');setMessage(null);setSmtpVerified(null)
     try{
       const result=await testAdminSmtp()
+      setSmtpVerified(Boolean(result.ok))
       setMessage({ok:result.ok,text:result.message})
     }catch(err){setMessage({ok:false,text:err.message})}
+    finally{setBusy('')}
+  }
+
+  const sendTest=async()=>{
+    setBusy('send-test');setMessage(null)
+    try{
+      const result=await sendAdminSmtpTestEmail()
+      setSmtpVerified(Boolean(result.ok))
+      setMessage({ok:result.ok,text:result.message})
+    }catch(err){setSmtpVerified(false);setMessage({ok:false,text:err.message})}
     finally{setBusy('')}
   }
 
@@ -114,8 +130,8 @@ export default function AdminConnectionsManager(){
         {Object.entries(META).map(([key,meta])=>{
           const Icon=meta.icon
           const item=items.find(value=>value.key===key)
-          return <button type="button" key={key} className={active===key?'selected':''} onClick={()=>{setActive(key);setDraft(null);setMessage(null)}}>
-            <Icon size={20}/><span><b>{meta.title}</b><small>{!item?'Chưa tải dữ liệu':item.configured?'Đã cấu hình':item.enabled===false?'Đang tắt':'Chưa sẵn sàng'}</small></span>
+          return <button type="button" key={key} className={active===key?'selected':''} onClick={()=>{setActive(key);setDraft(null);setMessage(null);setSmtpVerified(null)}}>
+            <Icon size={20}/><span><b>{meta.title}</b><small>{!item?'Chưa tải dữ liệu':item.enabled===false?'Đang tắt':item.configured?'Đã nhập cấu hình':'Chưa sẵn sàng'}</small></span>
             <span className={'connection-dot '+(item?.configured?'online':'')} aria-hidden="true"/>
           </button>
         })}
@@ -126,7 +142,7 @@ export default function AdminConnectionsManager(){
             <div><h3>{META[active].title}</h3><p>{META[active].description}</p></div>
             <span className={'connection-status '+(selected.configured?'active':'inactive')}>
               {selected.configured?<CheckCircle2 size={15}/>:<AlertTriangle size={15}/>}
-              {selected.configured?'Đã cấu hình':'Chưa sẵn sàng'}
+              {active==='smtp'&&smtpVerified===true?'SMTP đã xác thực':selected.configured?'Đã nhập cấu hình':'Chưa sẵn sàng'}
             </span>
           </div>
           <p className="connection-source">Nguồn thiết lập: <b>{selected.source==='admin'?'Admin / PostgreSQL':'.env / biến môi trường'}</b></p>
@@ -143,14 +159,22 @@ export default function AdminConnectionsManager(){
                     onChange={e=>patch(field,type==='number'?(e.target.value===''?'':Number(e.target.value)):e.target.value)}/></>}
             </label>)}
           </div>
+          {isGmail&&<div className={'connection-smtp-guidance '+(gmailIssue?'warning':'')} role={gmailIssue?'alert':'note'}>
+            {gmailIssue?<AlertTriangle size={19}/>:<CheckCircle2 size={19}/>}
+            <div><b>{gmailIssue?'Cấu hình cổng Gmail chưa đúng':'Định dạng cổng Gmail hợp lệ'}</b>
+              <p>Gmail dùng cổng <strong>465 + SSL trực tiếp bật</strong> hoặc <strong>587 + SSL trực tiếp tắt</strong>. {gmailIssue?'Hãy sửa và lưu lại trước khi kiểm tra.':'Để xác minh tài khoản SMTP, bấm Kiểm tra SMTP.'}</p>
+            </div>
+            {gmailIssue&&<button type="button" className="connection-ghost" onClick={()=>setDraft(v=>({...v,port:465,secure:true}))}>Dùng 465 + SSL</button>}
+          </div>}
           <div className="connection-security"><ShieldCheck size={19}/><span>Khóa bí mật được mã hóa trên server. Sau khi lưu, hệ thống không gửi lại giá trị mật khẩu hoặc access key về trình duyệt.</span></div>
           {message&&<p role="status" className={'connection-message '+(message.ok?'success':'error')}>{message.text}</p>}
           <div className="connection-actions">
             <button className="btn btn-green" onClick={save} disabled={Boolean(busy)}><Save size={16}/>{busy==='save'?'Đang lưu...':'Lưu kết nối'}</button>
             {active==='smtp'&&<button className="connection-ghost" onClick={verify} disabled={Boolean(busy)||!selected.configured}><PlugZap size={16}/>{busy==='test'?'Đang kiểm tra...':'Kiểm tra SMTP'}</button>}
+            {active==='smtp'&&<button className="connection-ghost" onClick={sendTest} disabled={Boolean(busy)||!selected.configured}><Send size={16}/>{busy==='send-test'?'Đang gửi email...':'Gửi email thử'}</button>}
             {selected.source==='admin'&&<button className="connection-ghost connection-reset" onClick={reset} disabled={Boolean(busy)}><RotateCcw size={16}/> Dùng lại .env</button>}
           </div>
-          <p className="connection-note">{active==='smtp'?'Kiểm tra SMTP xác thực máy chủ nhưng không gửi email thử. Hãy lưu cấu hình trước khi kiểm tra.':active==='hola_maps'?'Thay đổi được áp dụng cho các lượt đồng bộ tiếp theo. Không phát sinh bài đăng thử.':'Bucket và khóa mới áp dụng cho lần tải tệp tiếp theo. Các file đã lưu vẫn giữ bucket ban đầu.'}</p>
+          <p className="connection-note">{active==='smtp'?'Kiểm tra SMTP chỉ xác thực kết nối. Nút Gửi email thử sẽ gửi đến địa chỉ người gửi đã lưu để xác nhận khả năng gửi thực tế.':active==='hola_maps'?'Thay đổi được áp dụng cho các lượt đồng bộ tiếp theo. Không phát sinh bài đăng thử.':'Bucket và khóa mới áp dụng cho lần tải tệp tiếp theo. Các file đã lưu vẫn giữ bucket ban đầu.'}</p>
         </>:!loading&&loadError?<div className="connection-load-error" role="alert"><AlertTriangle size={22}/><div><h3>Không tải được cấu hình kết nối{loadError.status?` (HTTP ${loadError.status})`:''}</h3><p>{loadError.help}</p><button type="button" className="connection-ghost" onClick={load}><RefreshCw size={16}/> Thử tải lại</button></div></div>:!loading&&<p>Không có dữ liệu kết nối. Bấm Làm mới để thử lại.</p>}
       </section>
     </div>
