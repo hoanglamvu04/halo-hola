@@ -22,7 +22,7 @@ const PartnersPage=lazy(()=>import('./pages/PartnersPage.jsx'))
 const HelloPage=lazy(()=>import('./pages/HelloPage.jsx'))
 const ThemesPage=lazy(()=>import('./pages/ThemesPage.jsx'))
 const ThemePage=lazy(()=>import('./pages/ThemePage.jsx'))
-const RulesAwardsPage=lazy(()=>import('./pages/RulesAwardsPage.jsx'))
+const ContributionCampaignPage=lazy(()=>import('./pages/ContributionCampaignPage.jsx'))
 const AdminPage=lazy(()=>import('./pages/AdminPage.jsx'))
 const PhotographerPage=lazy(()=>import('./pages/PhotographerPage.jsx'))
 const LookupPage=lazy(()=>import('./pages/LookupPage.jsx'))
@@ -242,7 +242,7 @@ function SiteShell() {
           <Route path="/stories/:slug" element={<StoryDetailPage />} />
           <Route path="/we-hola" element={<WeHolaPage />} />
           <Route path="/dong-hanh" element={<PartnersPage />} />
-          <Route path="/chien-dich" element={<RulesAwardsPage />} />
+          <Route path="/chien-dich" element={<ContributionCampaignPage />} />
           <Route path="/the-le-giai-thuong" element={<Navigate to="/chien-dich" replace />} />
           <Route path="/hello" element={<HelloPage />} />
           <Route path="/chu-de" element={<ThemesPage />} />
