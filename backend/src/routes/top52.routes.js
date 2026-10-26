@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { pool } from '../database/pool.js';
 
 const router=Router();
-const ROUND_CODE='PRELIMINARY';
 const TAXONOMY_SEPARATOR=' • ';
 const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
 const taxonomyArraySql=(alias,column)=>`string_to_array(COALESCE(${alias}.${column},''),'${TAXONOMY_SEPARATOR}')`;
@@ -14,31 +13,25 @@ function safeNumber(value,fallback=0){
 
 router.get('/',async(req,res,next)=>{
   try{
-    const round=(await pool.query(
-      `SELECT id,code,name,status,locked_at AS "lockedAt",updated_at AS "updatedAt"
-       FROM jury_rounds WHERE code=$1 LIMIT 1`,[ROUND_CODE]
-    )).rows[0];
-
-    if(!round){
-      return res.json({items:[],total:0,meta:{round:null,selectedCount:0,publishedCount:0}});
-    }
-
     const counts=(await pool.query(`
       SELECT
-        COUNT(*) FILTER (WHERE s.is_demo=FALSE)::int AS "selectedCount",
-        COUNT(*) FILTER (WHERE s.is_demo=FALSE AND s.allow_media_use=TRUE AND s.status IN ('TOP52','AWARDED') AND ${publicArtworkCondition('s')})::int AS "publishedCount"
-      FROM jury_selections sel
-      JOIN submissions s ON s.id=sel.submission_id
-      WHERE sel.round_id=$1 AND sel.selection_type='TOP52'
-    `,[round.id])).rows[0]||{};
+        COUNT(*) FILTER (
+          WHERE status IN ('TOP52','AWARDED') AND is_demo=FALSE
+        )::int AS "selectedCount",
+        COUNT(*) FILTER (
+          WHERE status IN ('TOP52','AWARDED')
+            AND is_demo=FALSE
+            AND allow_media_use=TRUE
+            AND ${publicArtworkCondition('submissions')}
+        )::int AS "publishedCount"
+      FROM submissions
+    `)).rows[0]||{};
 
-    const values=[round.id];
+    const values=[];
     const conditions=[
-      `sel.round_id=$1`,
-      `sel.selection_type='TOP52'`,
+      `s.status IN ('TOP52','AWARDED')`,
       `s.is_demo=FALSE`,
       `s.allow_media_use=TRUE`,
-      `s.status IN ('TOP52','AWARDED')`,
       publicArtworkCondition('s')
     ];
 
@@ -50,6 +43,7 @@ router.get('/',async(req,res,next)=>{
     }
     if(req.query.theme){values.push(String(req.query.theme));conditions.push(`$${values.length}=ANY(${taxonomyArraySql('s','theme')})`);}
     if(req.query.type){values.push(String(req.query.type));conditions.push(`s.type=$${values.length}`);}
+
     const limit=Math.max(1,Math.min(52,safeNumber(req.query.limit,16)));
     const offset=Math.max(0,safeNumber(req.query.offset,0));
     values.push(limit);const limitParam=values.length;
@@ -64,13 +58,10 @@ router.get('/',async(req,res,next)=>{
         ${taxonomyArraySql('s','color')} AS colors,
         s.location,s.story,s.captured_at AS "capturedAt",
         s.status,s.created_at AS "createdAt",s.published_at AS "publishedAt",
-        sel.source AS "selectionSource",sel.selected_at AS "selectedAt",
         COALESCE(media.media,'[]'::json) AS media,
         media.image,COALESCE(media.media_count,0)::int AS "mediaCount",
-        COALESCE(editorial.types,'[]'::json) AS "selectionTypes",
         COUNT(*) OVER()::int AS "totalCount"
-      FROM jury_selections sel
-      JOIN submissions s ON s.id=sel.submission_id
+      FROM submissions s
       LEFT JOIN LATERAL (
         SELECT
           COUNT(*)::int AS media_count,
@@ -81,14 +72,8 @@ router.get('/',async(req,res,next)=>{
           (ARRAY_AGG('/api/public-media/'||m.id::text ORDER BY m.created_at ASC))[1] AS image
         FROM submission_media m WHERE m.submission_id=s.id
       ) media ON TRUE
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(json_agg(x.selection_type ORDER BY x.selection_type),'[]'::json) AS types
-        FROM jury_selections x
-        WHERE x.round_id=sel.round_id AND x.submission_id=s.id
-          AND x.selection_type IN ('TOP3_THEME','THEME_WINNER','COLOR_WINNER','TITLE_FINALIST')
-      ) editorial ON TRUE
       WHERE ${conditions.join(' AND ')}
-      ORDER BY sel.selected_at ASC,COALESCE(s.published_at,s.created_at) ASC,s.code ASC
+      ORDER BY COALESCE(s.published_at,s.created_at) ASC,s.code ASC
       LIMIT $${limitParam} OFFSET $${offsetParam}
     `,values);
 
@@ -96,7 +81,6 @@ router.get('/',async(req,res,next)=>{
       items:rows.map(({totalCount,...item})=>item),
       total:rows[0]?.totalCount||0,
       meta:{
-        round:{code:round.code,name:round.name,status:round.status,lockedAt:round.lockedAt,updatedAt:round.updatedAt},
         selectedCount:counts.selectedCount||0,
         publishedCount:counts.publishedCount||0
       }
