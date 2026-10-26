@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
 import {
   ArrowRight, CheckCircle2, Clock3, History, KeyRound,
-  LogOut, Mail, Pencil, Save, Send, UserRound
+  LockKeyhole, LogOut, Mail, Pencil, Save, Send, UserRound
 } from 'lucide-react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   getCommunityAccount,
   getCommunityContributionHistory,
   logoutCommunityAccount,
-  requestCommunityLoginCode,
-  updateCommunityAccount,
-  verifyCommunityLoginCode
+  registerCommunityAccount,
+  resendCommunityVerification,
+  verifyCommunityEmail,
+  loginCommunityAccount,
+  requestCommunityPasswordReset,
+  resetCommunityPassword,
+  updateCommunityAccount
 } from '../services/api.js'
 import '../styles/community-account.css'
 
@@ -28,14 +32,18 @@ const EMPTY_PROFILE={name:'',displayName:'',phone:'',bio:''}
 export default function CommunityAccountPage(){
   const navigate=useNavigate()
   const [params]=useSearchParams()
-  const next=params.get('next')||''
+  const rawNext=params.get('next')||''
+  const next=rawNext.startsWith('/')&&!rawNext.startsWith('//')?rawNext:''
   const [loading,setLoading]=useState(true)
   const [account,setAccount]=useState(null)
   const [items,setItems]=useState([])
   const [email,setEmail]=useState(params.get('email')||'')
+  const [authMode,setAuthMode]=useState(params.get('mode')==='register'?'register':'login')
+  const [name,setName]=useState('')
+  const [password,setPassword]=useState('')
+  const [confirmPassword,setConfirmPassword]=useState('')
+  const [cooldown,setCooldown]=useState(0)
   const [code,setCode]=useState('')
-  const [codeSent,setCodeSent]=useState(false)
-  const [expiresIn,setExpiresIn]=useState(0)
   const [authBusy,setAuthBusy]=useState(false)
   const [profile,setProfile]=useState(EMPTY_PROFILE)
   const [editing,setEditing]=useState(false)
@@ -68,37 +76,121 @@ export default function CommunityAccountPage(){
     return()=>{alive=false}
   },[])
 
-  const requestCode=async event=>{
-    event?.preventDefault?.()
-    setError('');setNotice('');setAuthBusy(true)
+  useEffect(()=>{
+    if(cooldown<=0)return undefined
+    const timer=window.setInterval(()=>setCooldown(v=>Math.max(0,v-1)),1000)
+    return()=>window.clearInterval(timer)
+  },[cooldown>0])
+
+  const switchMode=(mode)=>{
+    setAuthMode(mode)
+    setCode('')
+    setPassword('')
+    setConfirmPassword('')
+    setCooldown(0)
+    setError('')
+    setNotice('')
+  }
+
+  const finishAuth=async(current,message)=>{
+    setAccount(current)
+    setEmail(current.email||'')
+    setProfile({
+      name:current.name||'',displayName:current.displayName||'',
+      phone:current.phone||'',bio:current.bio||''
+    })
+    setPassword('')
+    setConfirmPassword('')
+    setCode('')
+    await loadHistory().catch(()=>{})
+    setNotice(message)
+    if(next)navigate(next,{replace:true})
+  }
+
+  const register=async event=>{
+    event.preventDefault()
+    setError('');setNotice('')
+    if(password!==confirmPassword){setError('Hai mật khẩu chưa khớp.');return}
+    if(password.length<8){setError('Mật khẩu phải có ít nhất 8 ký tự.');return}
+    setAuthBusy(true)
     try{
-      const data=await requestCommunityLoginCode({email})
-      setCodeSent(true)
-      setExpiresIn(Number(data?.expiresIn||600))
-      setNotice('Mã 6 số đã được gửi tới email của bạn.')
-      if(data?.devCode)setCode(String(data.devCode))
+      const result=await registerCommunityAccount({name,email,password})
+      setAuthMode('verify')
+      setPassword('');setConfirmPassword('')
+      setCooldown(45)
+      setNotice('Đã gửi mã xác minh email. Hãy kiểm tra cả thư mục Spam.')
+      if(result.devCode)setCode(String(result.devCode))
     }catch(err){setError(err.message)}
     finally{setAuthBusy(false)}
   }
 
-  const verifyCode=async event=>{
+  const login=async event=>{
+    event.preventDefault()
+    setError('');setNotice('');setAuthBusy(true)
+    try{
+      const data=await loginCommunityAccount({email,password})
+      await finishAuth(data.account,'Đăng nhập thành công. Chào mừng bạn trở lại!')
+    }catch(err){setError(err.message)}
+    finally{setAuthBusy(false)}
+  }
+
+  const verifyEmail=async event=>{
+    event.preventDefault()
+    setError('');setNotice('');setAuthBusy(true)
+    try{
+      const result=await verifyCommunityEmail({email,code})
+      await finishAuth(result.account,'Email đã được xác minh. Tài khoản của bạn đã sẵn sàng.')
+    }catch(err){setError(err.message)}
+    finally{setAuthBusy(false)}
+  }
+
+  const resend=async()=>{
+    setError('');setNotice('');setAuthBusy(true)
+    try{
+      const result=await resendCommunityVerification({email})
+      setCooldown(45)
+      setNotice('Đã gửi lại mã xác minh. Mã trước đó không còn hiệu lực.')
+      if(result.devCode)setCode(String(result.devCode))
+    }catch(err){setError(err.message)}
+    finally{setAuthBusy(false)}
+  }
+
+  const requestReset=async event=>{
     event?.preventDefault?.()
     setError('');setNotice('');setAuthBusy(true)
     try{
-      const data=await verifyCommunityLoginCode({email,code})
-      const current=data?.account
-      setAccount(current)
-      setProfile({
-        name:current?.name||'',
-        displayName:current?.displayName||'',
-        phone:current?.phone||'',
-        bio:current?.bio||''
-      })
-      await loadHistory().catch(()=>{})
-      setNotice('Đã đăng nhập. Những đóng góp cũ cùng email đã được liên kết vào tài khoản.')
-      if(next)navigate(next,{replace:true})
+      const result=await requestCommunityPasswordReset({email})
+      setAuthMode('reset');setCode('');setPassword('');setConfirmPassword('')
+      setCooldown(45)
+      setNotice('Nếu email có tài khoản, mã đặt lại mật khẩu đã được gửi. Hãy kiểm tra hộp thư.')
+      if(result.devCode)setCode(String(result.devCode))
     }catch(err){setError(err.message)}
     finally{setAuthBusy(false)}
+  }
+
+  const reset=async event=>{
+    event.preventDefault()
+    setError('');setNotice('')
+    if(password!==confirmPassword){setError('Hai mật khẩu chưa khớp.');return}
+    if(password.length<8){setError('Mật khẩu mới phải có ít nhất 8 ký tự.');return}
+    setAuthBusy(true)
+    try{
+      const result=await resetCommunityPassword({email,code,password})
+      await finishAuth(result.account,'Đã đặt lại mật khẩu và đăng nhập. Các phiên cũ đã được đăng xuất.')
+    }catch(err){setError(err.message)}
+    finally{setAuthBusy(false)}
+  }
+
+  const startLegacySetup=async()=>{
+    const previous=account
+    try{await logoutCommunityAccount()}catch(err){
+      setError('Không thể kết thúc phiên cũ. Vui lòng thử lại.')
+      return
+    }
+    setAccount(null);setItems([]);setName(previous?.name||'')
+    setEmail(previous?.email||'')
+    switchMode('register')
+    setNotice('Tài khoản cũ đã có email xác minh. Hãy tạo mật khẩu và xác minh email một lần để tiếp tục sử dụng.')
   }
 
   const saveProfile=async event=>{
@@ -122,7 +214,7 @@ export default function CommunityAccountPage(){
   const logout=async()=>{
     setError('');setNotice('')
     try{await logoutCommunityAccount()}catch{}
-    setAccount(null);setItems([]);setCode('');setCodeSent(false);setProfile(EMPTY_PROFILE)
+    setAccount(null);setItems([]);setCode('');setProfile(EMPTY_PROFILE);switchMode('login')
     setNotice('Đã đăng xuất khỏi tài khoản cộng đồng.')
   }
 
@@ -133,28 +225,65 @@ export default function CommunityAccountPage(){
       <div className="community-auth-copy">
         <span className="eyebrow">TÀI KHOẢN CỘNG ĐỒNG</span>
         <h1>Gửi nhanh hơn.<br/>Giữ lại hành trình của bạn.</h1>
-        <p>Đăng nhập bằng email và mã OTP. Không cần mật khẩu. Sau khi xác minh, HALO HOLA tự liên kết những góc nhìn trước đây dùng cùng email.</p>
+        <p>Tạo tài khoản bằng email và mật khẩu, xác minh email một lần để kích hoạt. Sau đó đăng nhập nhanh bằng mật khẩu, không cần mã mỗi lần.</p>
         <div className="community-auth-benefits">
           <div><UserRound/><span><b>Tự điền hồ sơ</b><small>Không nhập lại tên, email, số điện thoại ở mỗi lần gửi.</small></span></div>
-          <div><History/><span><b>Lịch sử đóng góp</b><small>Xem toàn bộ mã góc nhìn và trạng thái ở một nơi.</small></span></div>
+          <div><History/><span><b>Lịch sử đóng góp</b><small>Góc nhìn trước đây dùng cùng email sẽ được liên kết sau khi xác minh.</small></span></div>
           <div><Pencil/><span><b>Chỉnh sửa hồ sơ</b><small>Cập nhật thông tin một lần cho những lần đóng góp tiếp theo.</small></span></div>
         </div>
       </div>
       <section className="community-auth-card">
-        <span className="community-auth-icon">{codeSent?<KeyRound/>:<Mail/>}</span>
-        <h2>{codeSent?'Nhập mã đăng nhập':'Đăng nhập / tạo tài khoản'}</h2>
-        <p>{codeSent?<>Mã đã gửi tới <b>{email}</b>. Mã có hiệu lực khoảng {Math.max(1,Math.round(expiresIn/60))} phút.</>:<>Nhập email bạn dùng để đóng góp góc nhìn. Nếu chưa có tài khoản, tài khoản sẽ được tạo sau khi xác minh.</>}</p>
-        {!codeSent?<form onSubmit={requestCode}>
+        <span className="community-auth-icon">{authMode==='verify'||authMode==='reset'?<KeyRound/>:<LockKeyhole/>}</span>
+        {(authMode==='login'||authMode==='register')&&<div className="community-auth-tabs" role="tablist" aria-label="Loại tài khoản">
+          <button type="button" role="tab" aria-selected={authMode==='login'} className={authMode==='login'?'active':''} onClick={()=>switchMode('login')}>Đăng nhập</button>
+          <button type="button" role="tab" aria-selected={authMode==='register'} className={authMode==='register'?'active':''} onClick={()=>switchMode('register')}>Đăng ký</button>
+        </div>}
+        <h2>{authMode==='login'?'Chào mừng trở lại':authMode==='register'?'Tạo tài khoản HALO HOLA':authMode==='verify'?'Xác minh email':authMode==='forgot'?'Quên mật khẩu?':'Đặt lại mật khẩu'}</h2>
+        <p>{authMode==='login'?'Đăng nhập bằng email và mật khẩu của bạn.'
+          :authMode==='register'?'Nhập thông tin của bạn. HALO HOLA sẽ gửi mã xác minh để kích hoạt tài khoản.'
+          :authMode==='verify'?<>Nhập mã 6 số đã gửi tới <b>{email}</b>. Mã có hiệu lực 10 phút.</>
+          :authMode==='forgot'?'Nhập email đã đăng ký để nhận mã đặt lại mật khẩu.'
+          :<>Mã đặt lại mật khẩu đã được gửi tới <b>{email}</b> nếu tài khoản tồn tại.</>}</p>
+
+        {authMode==='login'&&<form onSubmit={login}>
           <label>Email<input required type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ban@gmail.com"/></label>
-          <button className="btn btn-green full" disabled={authBusy}>{authBusy?'Đang gửi mã…':'Gửi mã đăng nhập'} <ArrowRight/></button>
-        </form>:<form onSubmit={verifyCode}>
-          <label>Mã 6 số<input required inputMode="numeric" autoComplete="one-time-code" maxLength="6" value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="123456"/></label>
-          <button className="btn btn-green full" disabled={authBusy||code.length!==6}>{authBusy?'Đang xác minh…':'Xác minh & đăng nhập'} <ArrowRight/></button>
-          <button type="button" className="community-auth-link" onClick={()=>{setCodeSent(false);setCode('');setError('')}}>Dùng email khác</button>
+          <label>Mật khẩu<input required type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Nhập mật khẩu của bạn"/></label>
+          <div className="community-auth-help"><button type="button" className="community-auth-link" onClick={()=>switchMode('forgot')}>Quên mật khẩu?</button></div>
+          <button className="btn btn-green full" disabled={authBusy}>{authBusy?'Đang đăng nhập…':'Đăng nhập'} <ArrowRight/></button>
+          <small className="community-auth-hint">Nếu bạn từng đăng nhập bằng OTP, hãy chọn Đăng ký để thiết lập mật khẩu cho email cũ.</small>
         </form>}
-        {notice&&<div className="community-account-notice success"><CheckCircle2/>{notice}</div>}
-        {error&&<div className="community-account-notice error">{error}</div>}
-        <small className="community-auth-privacy">Mã OTP chỉ dùng để xác minh email. HALO HOLA không yêu cầu mật khẩu.</small>
+
+        {authMode==='register'&&<form onSubmit={register}>
+          <label>Họ và tên<input required minLength="2" maxLength="160" autoComplete="name" value={name} onChange={e=>setName(e.target.value)} placeholder="Nguyễn Văn A"/></label>
+          <label>Email<input required type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ban@gmail.com"/></label>
+          <label>Mật khẩu (ít nhất 8 ký tự)<input required type="password" minLength="8" maxLength="72" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Tạo mật khẩu an toàn"/></label>
+          <label>Nhập lại mật khẩu<input required type="password" minLength="8" maxLength="72" autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} placeholder="Xác nhận mật khẩu"/></label>
+          <button className="btn btn-green full" disabled={authBusy}>{authBusy?'Đang tạo tài khoản…':'Đăng ký & nhận mã xác minh'} <ArrowRight/></button>
+        </form>}
+
+        {authMode==='verify'&&<form onSubmit={verifyEmail}>
+          <label>Mã xác minh 6 số<input required inputMode="numeric" autoComplete="one-time-code" maxLength="6" value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="123456"/></label>
+          <button className="btn btn-green full" disabled={authBusy||code.length!==6}>{authBusy?'Đang xác minh…':'Xác minh & kích hoạt tài khoản'} <ArrowRight/></button>
+          <div className="community-auth-secondary"><button type="button" className="community-auth-link" disabled={authBusy||cooldown>0} onClick={resend}>{cooldown>0?'Gửi lại sau '+cooldown+'s':'Gửi lại mã'}</button><button type="button" className="community-auth-link" onClick={()=>switchMode('register')}>Sửa thông tin</button></div>
+        </form>}
+
+        {authMode==='forgot'&&<form onSubmit={requestReset}>
+          <label>Email đã đăng ký<input required type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="ban@gmail.com"/></label>
+          <button className="btn btn-green full" disabled={authBusy}>{authBusy?'Đang xử lý…':'Gửi mã đặt lại mật khẩu'} <ArrowRight/></button>
+          <button type="button" className="community-auth-link" onClick={()=>switchMode('login')}>Quay lại đăng nhập</button>
+        </form>}
+
+        {authMode==='reset'&&<form onSubmit={reset}>
+          <label>Mã xác minh 6 số<input required inputMode="numeric" autoComplete="one-time-code" maxLength="6" value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="123456"/></label>
+          <label>Mật khẩu mới<input required type="password" minLength="8" maxLength="72" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mật khẩu mới"/></label>
+          <label>Nhập lại mật khẩu<input required type="password" minLength="8" maxLength="72" autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} placeholder="Xác nhận mật khẩu mới"/></label>
+          <button className="btn btn-green full" disabled={authBusy||code.length!==6}>{authBusy?'Đang cập nhật…':'Đặt lại mật khẩu'} <ArrowRight/></button>
+          <div className="community-auth-secondary"><button type="button" className="community-auth-link" disabled={authBusy||cooldown>0} onClick={requestReset}>{cooldown>0?'Gửi lại sau '+cooldown+'s':'Gửi lại mã'}</button><button type="button" className="community-auth-link" onClick={()=>switchMode('forgot')}>Đổi email</button></div>
+        </form>}
+
+        {notice&&<div role="status" className="community-account-notice success"><CheckCircle2/>{notice}</div>}
+        {error&&<div role="alert" className="community-account-notice error">{error}</div>}
+        <small className="community-auth-privacy">HALO HOLA chỉ dùng OTP để xác minh email đăng ký hoặc đặt lại mật khẩu, không yêu cầu OTP khi đăng nhập thông thường.</small>
       </section>
     </section>
   </main>
@@ -166,6 +295,11 @@ export default function CommunityAccountPage(){
         <h1>Xin chào, {account.displayName||account.name||'người kể chuyện'}.</h1>
         <p>Thông tin này sẽ được dùng để tự điền ở những lần đóng góp tiếp theo. Email đã xác minh được giữ cố định để bảo vệ lịch sử của bạn.</p>
       </div>
+      {!account.hasPassword&&<div className="community-account-legacy-alert">
+        <KeyRound size={19}/>
+        <span>Tài khoản trước đây dùng mã OTP. Hãy thiết lập mật khẩu một lần để đăng nhập theo cách mới.</span>
+        <button type="button" className="btn btn-outline" onClick={startLegacySetup}>Thiết lập mật khẩu</button>
+      </div>}
       <div className="community-account-head-actions">
         <Link className="btn btn-terra" to="/gui-goc-nhin"><Send/> Gửi góc nhìn mới</Link>
         <button className="btn btn-outline" onClick={logout}><LogOut/> Đăng xuất</button>
