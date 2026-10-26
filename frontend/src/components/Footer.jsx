@@ -48,6 +48,11 @@ export default function Footer() {
           </Link>
           <p className="footer-brand-copy">{footer.description||brand.tagline||'Nơi cộng đồng cùng khám phá, ghi lại, đóng góp và kể tiếp những câu chuyện về Hòa Lạc.'}</p>
 
+          <div className="footer-brand-contact">
+            <span><MapPin/><b>Hòa Lạc</b><em>{address}</em></span>
+            <a href={'mailto:'+email}><Mail/><b>Email</b><em>{email}</em></a>
+          </div>
+
           <div className="footer-socials" aria-label="Mạng xã hội HALO HOLA">
             <SocialLink href={footer.facebook} label="Facebook"><Facebook/></SocialLink>
             <SocialLink href={footer.tiktok} label="TikTok"><Music2/></SocialLink>
@@ -77,25 +82,6 @@ export default function Footer() {
               </a>
             )}
           </div>
-        </section>
-
-        <section className="footer-contact-column">
-          <h4>Liên hệ</h4>
-          <i className="footer-heading-line"/>
-          <div className="footer-contact-item">
-            <MapPin/>
-            <div>
-              <b>Hòa Lạc</b>
-              <span>{address}</span>
-            </div>
-          </div>
-          <a className="footer-contact-item" href={'mailto:'+email}>
-            <Mail/>
-            <div>
-              <b>Email</b>
-              <span>{email}</span>
-            </div>
-          </a>
         </section>
 
       </div>
