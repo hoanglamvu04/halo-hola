@@ -56,7 +56,7 @@ const navGroups=[
     label:'Hệ thống',
     items:[
       {label:'Analytics',icon:Activity,path:'/admin/analytics'},
-      {label:'Mã đăng nhập',icon:KeyRound,path:'/admin/login-codes'},
+      {label:'Mã xác minh',icon:KeyRound,path:'/admin/login-codes'},
       {label:'Kết nối',icon:PlugZap,path:'/admin/connections'},
       {label:'HOLA Map',icon:MapIcon,path:'/admin/map'},
       {label:'HOLA Tour',icon:CalendarDays,path:'/admin/tours'},
@@ -79,7 +79,7 @@ const sectionDescriptions={
   'Đối tác':'Quản lý đối tác và nội dung hợp tác.',
   'TOP52':'Theo dõi danh sách góc nhìn được Ban Biên tập tuyển chọn.',
   'Analytics':'Theo dõi hoạt động và hiệu quả sử dụng website.',
-  'Mã đăng nhập':'Tạo và thu hồi mã OTP cộng đồng khi email tự động tạm thời không gửi được.',
+  'Mã xác minh':'Cấp mã xác minh email hoặc đặt lại mật khẩu khi dịch vụ SMTP gặp sự cố.',
   'Kết nối':'Cài đặt SMTP, HOLA Maps và Cloudflare R2 không cần sửa .env.',
   'HOLA Map':'Quản lý nội dung liên quan tới bản đồ Hòa Lạc.',
   'HOLA Tour':'Quản lý tour và danh sách đăng ký.',
@@ -212,7 +212,7 @@ export default function AdminPage(){
      active==='Đối tác'?<AdminContentManager type="partners"/>:
      active==='Cài đặt'?<SiteSettingsManager/>:
      active==='Analytics'?<AnalyticsManager/>:
-     active==='Mã đăng nhập'?<AdminCommunityCodesManager/>:
+     active==='Mã xác minh'?<AdminCommunityCodesManager/>:
      active==='Kết nối'?<AdminConnectionsManager/>:
      active==='Công bố'?<PublicationManager/>:
      active==='Đội ảnh'?<PhotographerManager/>:
