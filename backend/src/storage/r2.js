@@ -6,33 +6,23 @@ import {
   GetObjectCommand
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { getConnectionConfig, isConnectionConfigured } from '../services/connectionSettings.service.js';
 
-function requireEnv(name) {
-  const value = process.env[name]?.trim();
-  if (!value) throw new Error(`Missing required environment variable: ${name}`);
-  return value;
+export function hasR2Config(bucket='originals') {
+  const config=getConnectionConfig('r2');
+  return isConnectionConfigured('r2',config) && Boolean(bucket==='public'?config.bucketPublic:config.bucketOriginals);
 }
-
 export function createR2Client() {
-  const endpoint = requireEnv('R2_ENDPOINT');
-  const accessKeyId = requireEnv('R2_ACCESS_KEY_ID');
-  const secretAccessKey = requireEnv('R2_SECRET_ACCESS_KEY');
-
+  const config=getConnectionConfig('r2');
+  if(!hasR2Config())throw new Error('R2 is not configured.');
   return new S3Client({
-    region: 'auto',
-    endpoint,
-    credentials: {
-      accessKeyId,
-      secretAccessKey
-    }
+    region: 'auto',endpoint:config.endpoint,
+    credentials:{accessKeyId:config.accessKeyId,secretAccessKey:config.secretAccessKey}
   });
 }
-
 export function getR2Buckets() {
-  return {
-    originals: requireEnv('R2_BUCKET_ORIGINALS'),
-    public: requireEnv('R2_BUCKET_PUBLIC')
-  };
+  const config=getConnectionConfig('r2');
+  return { originals:config.bucketOriginals,public:config.bucketPublic };
 }
 
 export async function assertR2BucketAccess(client, bucket) {
