@@ -7,7 +7,7 @@ import {
 } from '../services/api.js'
 import './PublicationManager.css'
 
-const statusLabels={PENDING:'Mới nhận',VALID:'Hợp lệ',SHORTLIST:'Shortlist',TOP52:'TOP52',AWARDED:'Đạt giải',REJECTED:'Không hợp lệ'}
+const statusLabels={PENDING:'Mới nhận',VALID:'Đủ thông tin',SHORTLIST:'Được chọn biên tập',TOP52:'TOP52',AWARDED:'Góc nhìn tiêu biểu',REJECTED:'Cần bổ sung'}
 const stateLabels={HIDDEN:'Đang ẩn',PUBLISHED:'Đã công bố',SCHEDULED:'Đã hẹn giờ'}
 const actionLabels={PUBLISH:'Công bố',HIDE:'Ẩn',SCHEDULE:'Hẹn giờ'}
 
@@ -59,8 +59,8 @@ export default function PublicationManager(){
 
   return <div className="pub-shell">
     <section className="pub-hero">
-      <div><span className="pub-kicker"><Send/> PUBLICATION CONTROL</span><h2>Điều khiển công bố tác phẩm</h2><p>Trạng thái thi và trạng thái public được tách riêng. TOP52/Đạt giải chỉ xuất hiện ngoài website sau khi BTC công bố hoặc tới đúng giờ đã hẹn.</p></div>
-      <div className="pub-hero-note"><ShieldAlert/><div><b>Không tự lộ nội dung</b><small>DEMO, bài chưa đủ quyền hoặc chưa phải TOP52/Đạt giải sẽ bị chặn khi công bố.</small></div></div>
+      <div><span className="pub-kicker"><Send/> PUBLICATION CONTROL</span><h2>Điều khiển công bố tác phẩm</h2><p>Trạng thái biên tập và trạng thái public được tách riêng. Chỉ những góc nhìn đủ điều kiện mới xuất hiện ngoài website sau khi được công bố hoặc tới đúng giờ đã hẹn.</p></div>
+      <div className="pub-hero-note"><ShieldAlert/><div><b>Không tự lộ nội dung</b><small>DEMO hoặc góc nhìn chưa đủ quyền và điều kiện công bố sẽ bị chặn trước khi hiển thị.</small></div></div>
     </section>
 
     {error&&<div className="pub-alert error">{error}</div>}{message&&<div className="pub-alert success"><CheckCircle2/>{message}</div>}
@@ -74,7 +74,7 @@ export default function PublicationManager(){
 
     <section className="pub-toolbar">
       <div className="pub-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} onKeyDown={e=>e.key==='Enter'&&applyFilters()} placeholder="Mã bài, tên, tác giả, chủ đề..."/></div>
-      <select value={filters.status} onChange={e=>applyFilters({status:e.target.value})}><option value="">Mọi trạng thái thi</option>{['TOP52','AWARDED','SHORTLIST','VALID','PENDING'].map(x=><option key={x} value={x}>{statusLabels[x]}</option>)}</select>
+      <select value={filters.status} onChange={e=>applyFilters({status:e.target.value})}><option value="">Mọi trạng thái biên tập</option>{['TOP52','AWARDED','SHORTLIST','VALID','PENDING'].map(x=><option key={x} value={x}>{statusLabels[x]}</option>)}</select>
       <select value={filters.publicationState} onChange={e=>applyFilters({publicationState:e.target.value})}><option value="">Mọi trạng thái public</option><option value="HIDDEN">Đang ẩn</option><option value="PUBLISHED">Đã công bố</option><option value="SCHEDULED">Hẹn giờ</option></select>
       <label><input type="checkbox" checked={filters.eligibleOnly==='true'} onChange={e=>applyFilters({eligibleOnly:e.target.checked?'true':'false'})}/> Chỉ bài đủ nhóm công bố</label>
       <button onClick={()=>load()} disabled={loading}>Làm mới</button>
@@ -90,7 +90,7 @@ export default function PublicationManager(){
     </section>
 
     <section className="pub-table">
-      <div className="pub-head"><span></span><span>Tác phẩm</span><span>Trạng thái thi</span><span>Public</span><span>Thời gian</span><span>Thao tác</span></div>
+      <div className="pub-head"><span></span><span>Tác phẩm</span><span>Trạng thái biên tập</span><span>Public</span><span>Thời gian</span><span>Thao tác</span></div>
       {loading?<div className="pub-empty">Đang tải trạng thái công bố...</div>:items.length===0?<div className="pub-empty">Không có tác phẩm phù hợp.</div>:items.map(item=>{
         const current=stateOf(item)
         return <div className={'pub-row '+(!item.eligible?'blocked':'')} key={item.id}>
