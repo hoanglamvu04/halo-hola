@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { authenticateAdmin } from '../middleware/auth.js';
+import { authenticateAdmin, requireRoles } from '../middleware/auth.js';
+import { listConnectionStatuses, saveConnectionSettings, resetConnectionSettings } from '../services/connectionSettings.service.js';
+import { verifySmtpConnection } from '../services/mail.service.js';
 import { AppError } from '../utils/AppError.js';
 import { statusSchema } from '../validators/submission.validators.js';
 import { listTourRegistrations } from '../services/tourRegistration.service.js';
@@ -30,6 +32,53 @@ import {
   revokeAdminCommunityLoginCode
 } from '../services/communityAccount.service.js';
 const router = Router();
+const smtpSchema=z.object({
+  enabled:z.boolean(), host:z.string().trim().max(255),
+  port:z.coerce.number().int().min(1).max(65535),
+  secure:z.boolean(), user:z.string().trim().max(255),
+  password:z.string().max(1024), fromName:z.string().trim().max(160),
+  fromAddress:z.union([z.literal(''),z.string().trim().email().max(255)])
+});
+const mapsSchema=z.object({
+  enabled:z.boolean(),baseUrl:z.string().trim().max(512),
+  secret:z.string().max(1024),timeoutMs:z.coerce.number().int().min(1000).max(30000)
+});
+const r2Schema=z.object({
+  enabled:z.boolean(),endpoint:z.string().trim().max(512),
+  accessKeyId:z.string().max(512),secretAccessKey:z.string().max(1024),
+  bucketOriginals:z.string().trim().max(255),bucketPublic:z.string().trim().max(255)
+});
+const connectionSchemas={smtp:smtpSchema,hola_maps:mapsSchema,r2:r2Schema};
+router.get('/connections',requireRoles('ADMIN'),(_req,res)=>{
+  res.set('Cache-Control','no-store');
+  res.json({items:listConnectionStatuses()});
+});
+router.put('/connections/:key',requireRoles('ADMIN'),async(req,res,next)=>{
+  try{
+    const schema=connectionSchemas[req.params.key];
+    if(!schema)throw new AppError('Kết nối không được hỗ trợ.',404);
+    res.set('Cache-Control','no-store');
+    res.json(await saveConnectionSettings(req.params.key,schema.parse(req.body),req.user.id));
+  }catch(error){
+    if(error?.name==='ZodError')return next(new AppError('Cấu hình không hợp lệ.',400,error.issues));
+    next(error);
+  }
+});
+router.delete('/connections/:key',requireRoles('ADMIN'),async(req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await resetConnectionSettings(req.params.key));
+  }catch(error){next(error);}
+});
+router.post('/connections/smtp/test',requireRoles('ADMIN'),async(_req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await verifySmtpConnection());
+  }catch(error){
+    console.warn('SMTP verification failed:',error?.code||error?.name||'ERROR');
+    res.json({ok:false,message:'Không xác minh được SMTP. Kiểm tra host, cổng, TLS và tài khoản.'});
+  }
+});
 router.use(authenticateAdmin);
 
 router.get('/site/homepage', async (_req, res, next) => {
