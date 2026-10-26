@@ -65,7 +65,7 @@ const sectionDescriptions={
   'Tổng quan':'Ưu tiên công việc, theo dõi hồ sơ và tiến độ chương trình.',
   'Góc nhìn':'Theo dõi trọn luồng Đã nhận → Đủ thông tin → Biên tập → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
-  'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
+  'Công bố':'Kiểm soát góc nhìn nào được hiển thị ra website công khai.',
   'Đội ảnh':'Cấp tài khoản và nhận địa điểm cùng link Google Drive từ đội nhiếp ảnh.',
   'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
   'Chủ đề':'Quản lý hệ chủ đề của HALO HOLA 2026.',
@@ -218,13 +218,13 @@ export default function AdminPage(){
          {authors.map(author=><div key={author.email}>
            <span className="avatar">{(author.display_name||author.name||author.email)?.charAt(0)?.toUpperCase()}</span>
            <div><b>{author.display_name||author.name||'Chưa có tên'}</b><small>{author.email}</small><small>{author.phone||'Chưa có số điện thoại'}</small></div>
-           <span>{submissions.filter(s=>s.email===author.email).length} tác phẩm</span>
+           <span>{submissions.filter(s=>s.email===author.email).length} góc nhìn</span>
          </div>)}
          {!submissions.length&&<p>Chưa có dữ liệu tác giả.</p>}
        </div>
      </div>:
      active==='TOP52'?<div className="admin-panel">
-       <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
+       <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} góc nhìn</span></div>
        <p className="admin-helper">TOP52 là danh sách góc nhìn được Ban Biên tập tuyển chọn. Việc nội dung có xuất hiện ngoài website hay không được kiểm soát riêng tại <button className="text-button" onClick={()=>go('Công bố')}>Công bố</button>.</p>
        <div className="admin-top52-grid">
          {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Góc nhìn')}}>
