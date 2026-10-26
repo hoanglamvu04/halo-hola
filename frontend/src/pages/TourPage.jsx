@@ -28,7 +28,7 @@ const tour01Outputs=[
   ['5–8','Nhân vật tiếp xúc',UserRound],
   ['3–5','Phỏng vấn tương đối sâu',MessageCircle],
   ['5–7','Lead câu chuyện',FileText],
-  ['2–4','Góc nhìn mạnh để shortlist',Eye],
+  ['2–4','Góc nhìn mạnh để biên tập',Eye],
   ['≥5','Hero Image tiềm năng',ImageIcon],
   ['≥5','Quote đáng giữ',Quote],
   ['≥3','Video interview',Video],
