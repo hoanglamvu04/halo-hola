@@ -20,8 +20,6 @@
     "db:seed:hola-maps-test:clean": "node src/database/seedHolaMapsIntegration.js --clean",
     "db:seed:admin": "node src/database/seedAdmin.js",
     "db:content:tours-2026": "node src/database/syncTours2026.js",
-    "db:content:awards-2026-values": "node src/database/updateAwards2026Values.js",
-    "db:content:awards-2026-structure-v2": "node src/database/updateAwards2026StructureV2.js",
     "r2:test": "node src/storage/testR2.js"
   },
   "dependencies": {
