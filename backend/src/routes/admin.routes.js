@@ -244,7 +244,8 @@ router.delete('/media-library/:id', async (req,res,next)=>{
 
 const adminCommunityCodeSchema=z.object({
   email:z.string().trim().email().max(255),
-  expiresInMinutes:z.coerce.number().int().min(5).max(60).optional().default(10)
+  expiresInMinutes:z.coerce.number().int().min(5).max(60).optional().default(10),
+  purpose:z.enum(['VERIFY_EMAIL','RESET_PASSWORD']).optional().default('VERIFY_EMAIL')
 });
 
 router.get('/community-login-codes', async (req,res,next)=>{
