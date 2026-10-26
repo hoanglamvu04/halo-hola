@@ -14,3 +14,36 @@
 .connection-load-error h3{margin:0 0 8px;font-size:1rem;color:#943f23}
 .connection-load-error p{margin:0 0 15px;color:#86482e;line-height:1.55;font-size:.84rem}
 .connection-load-error .connection-ghost{background:#fff;border-color:#e7c8b8;color:#943f23}
+
+
+.connection-smtp-guidance{
+  display:flex;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:13px 14px;
+  margin-top:18px;
+  border:1px solid #dbe7de;
+  border-radius:12px;
+  color:#2f674b;
+  background:#f8faf7;
+}
+.connection-smtp-guidance.warning{
+  color:#88502a;
+  border-color:#eed4b6;
+  background:#fff9f1;
+}
+.connection-smtp-guidance>svg{flex:0 0 auto;margin-top:3px}
+.connection-smtp-guidance>div{flex:1 1 230px;min-width:0}
+.connection-smtp-guidance b{font-size:.8rem}
+.connection-smtp-guidance p{
+  font-size:.76rem;
+  line-height:1.55;
+  margin:5px 0 0;
+  color:inherit;
+}
+.connection-smtp-guidance button{
+  align-self:center;
+  font-size:.75rem;
+  white-space:nowrap;
+}
