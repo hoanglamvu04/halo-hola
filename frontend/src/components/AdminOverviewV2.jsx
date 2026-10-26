@@ -1,18 +1,18 @@
 import { useMemo } from 'react'
 import {
   AlertTriangle, ArrowRight, CheckCircle2, Clock3, FileWarning, Globe2,
-  Images, RefreshCw, ShieldCheck, Sparkles, Trophy, Users
+  Images, RefreshCw, ShieldCheck, Sparkles, Users
 } from 'lucide-react'
 import AdminOperationsInsights from './AdminOperationsInsights.jsx'
 import './AdminOverviewV2.css'
 
 const statusLabels={
   PENDING:'Mới nhận',
-  VALID:'Hợp lệ',
-  SHORTLIST:'Shortlist',
+  VALID:'Đủ thông tin',
+  SHORTLIST:'Được chọn biên tập',
   TOP52:'TOP52',
-  AWARDED:'Đạt giải',
-  REJECTED:'Không hợp lệ'
+  AWARDED:'Góc nhìn tiêu biểu',
+  REJECTED:'Cần bổ sung'
 }
 
 function dateValue(item){
@@ -60,8 +60,8 @@ export default function AdminOverviewV2({
       key:'pending',
       count:data.pending,
       icon:Clock3,
-      title:data.pending?'Tác phẩm đang chờ duyệt':'Hàng chờ đã sạch',
-      text:data.pending?`${data.pending} bài cần kiểm tra trạng thái và quyền sử dụng.`:'Không còn tác phẩm mới cần xử lý ngay.',
+      title:data.pending?'Góc nhìn đang chờ kiểm tra':'Hàng chờ đã sạch',
+      text:data.pending?`${data.pending} góc nhìn cần kiểm tra trạng thái và quyền sử dụng.`:'Không còn góc nhìn mới cần xử lý ngay.',
       action:data.pending?'Duyệt ngay':'Xem tác phẩm',
       tone:data.pending?'warning':'good',
       go:()=>onNavigate?.('Tác phẩm')
@@ -82,8 +82,8 @@ export default function AdminOverviewV2({
       key:'publish',
       count:data.needsPublication,
       icon:Globe2,
-      title:data.needsPublication?'Có bài hợp lệ chưa công bố':'Công bố đã đồng bộ',
-      text:data.needsPublication?`${data.needsPublication} bài đủ điều kiện đang chưa ở trạng thái công khai.`:'Không có bài hợp lệ đang chờ công bố.',
+      title:data.needsPublication?'Có góc nhìn đủ điều kiện chưa công bố':'Công bố đã đồng bộ',
+      text:data.needsPublication?`${data.needsPublication} góc nhìn đủ điều kiện đang chưa ở trạng thái công khai.`:'Không có góc nhìn đủ điều kiện đang chờ công bố.',
       action:'Mở công bố',
       tone:data.needsPublication?'info':'good',
       go:()=>onNavigate?.('Công bố')
@@ -93,7 +93,7 @@ export default function AdminOverviewV2({
       count:data.mapFailed,
       icon:AlertTriangle,
       title:data.mapFailed?'HOLA Maps có lỗi đồng bộ':'HOLA Maps không có lỗi',
-      text:data.mapFailed?`${data.mapFailed} bài cần đồng bộ lại từ module Tác phẩm.`:'Không phát hiện job HOLA Maps bị FAILED trong danh sách hiện tại.',
+      text:data.mapFailed?`${data.mapFailed} góc nhìn cần đồng bộ lại từ module Góc nhìn.`:'Không phát hiện job HOLA Maps bị FAILED trong danh sách hiện tại.',
       action:'Kiểm tra Maps',
       tone:data.mapFailed?'danger':'good',
       go:()=>onNavigate?.('Tác phẩm')
@@ -111,9 +111,9 @@ export default function AdminOverviewV2({
         <h2>{headline}</h2>
         <p>{data.issueCount
           ? 'Hệ thống đã gom các việc quan trọng lên trước để bạn không phải dò từng module.'
-          : 'Hiện chưa có cảnh báo ưu tiên. Bạn có thể tiếp tục theo dõi bài dự thi, BGK và lịch công bố.'}</p>
+          : 'Hiện chưa có cảnh báo ưu tiên. Bạn có thể tiếp tục theo dõi góc nhìn, tiến trình biên tập và lịch công bố.'}</p>
         <div className="admin-v2-hero-actions">
-          <button onClick={()=>onNavigate?.('Tác phẩm')}><Images size={16}/> Quản lý tác phẩm <ArrowRight size={15}/></button>
+          <button onClick={()=>onNavigate?.('Tác phẩm')}><Images size={16}/> Quản lý góc nhìn <ArrowRight size={15}/></button>
           <button className="secondary" onClick={onRefresh} disabled={loading}><RefreshCw size={16} className={loading?'spin':''}/> Làm mới</button>
         </div>
       </div>
@@ -122,24 +122,24 @@ export default function AdminOverviewV2({
           <div><strong>{data.reviewProgress}%</strong><span>đã xử lý</span></div>
         </div>
         <div className="admin-v2-health-copy">
-          <b>{data.pending?`${data.pending} bài đang chờ`:'Không có bài chờ duyệt'}</b>
-          <span>{data.today?`Hôm nay nhận thêm ${data.today} bài.`:'Hôm nay chưa có bài mới.'}</span>
+          <b>{data.pending?`${data.pending} góc nhìn đang chờ`:'Không có bài chờ duyệt'}</b>
+          <span>{data.today?`Hôm nay nhận thêm ${data.today} góc nhìn.`:'Hôm nay chưa có góc nhìn mới.'}</span>
         </div>
       </div>
     </section>
 
     <section className="admin-v2-metrics" aria-label="Chỉ số chính">
       <button onClick={()=>onNavigate?.('Tác phẩm')}>
-        <span className="metric-icon"><Images/></span><div><small>Tổng tác phẩm</small><strong>{data.total}</strong><em>{data.pending} chờ duyệt</em></div>
+        <span className="metric-icon"><Images/></span><div><small>Tổng góc nhìn</small><strong>{data.total}</strong><em>{data.pending} chờ kiểm tra</em></div>
       </button>
       <button onClick={()=>onNavigate?.('Tác giả')}>
-        <span className="metric-icon"><Users/></span><div><small>Tác giả</small><strong>{uniqueCreators}</strong><em>{data.today} bài mới hôm nay</em></div>
-      </button>
-      <button onClick={()=>onNavigate?.('Kết quả BGK')}>
-        <span className="metric-icon"><ShieldCheck/></span><div><small>Qua vòng kiểm tra</small><strong>{data.valid+data.shortlist+data.top52+data.awarded}</strong><em>{data.shortlist} shortlist</em></div>
+        <span className="metric-icon"><Users/></span><div><small>Tác giả</small><strong>{uniqueCreators}</strong><em>{data.today} góc nhìn mới hôm nay</em></div>
       </button>
       <button onClick={()=>onNavigate?.('TOP52')}>
-        <span className="metric-icon"><Trophy/></span><div><small>TOP52 / giải</small><strong>{data.top52+data.awarded}</strong><em>{data.awarded} đạt giải</em></div>
+        <span className="metric-icon"><ShieldCheck/></span><div><small>Đủ điều kiện biên tập</small><strong>{data.valid+data.shortlist+data.top52+data.awarded}</strong><em>{data.shortlist} được chọn biên tập</em></div>
+      </button>
+      <button onClick={()=>onNavigate?.('TOP52')}>
+        <span className="metric-icon"><Sparkles/></span><div><small>TOP52 / tiêu biểu</small><strong>{data.top52+data.awarded}</strong><em>{data.awarded} góc nhìn tiêu biểu</em></div>
       </button>
     </section>
 
@@ -163,21 +163,21 @@ export default function AdminOverviewV2({
 
       <div className="admin-v2-recent">
         <div className="admin-v2-section-head">
-          <div><span>GẦN ĐÂY</span><h3>Tác phẩm mới nhất</h3></div>
+          <div><span>GẦN ĐÂY</span><h3>Góc nhìn mới nhất</h3></div>
           <button onClick={()=>onNavigate?.('Tác phẩm')}>Xem tất cả</button>
         </div>
         <div className="admin-v2-recent-list">
           {data.recent.length?data.recent.map(item=><button key={item.id||item.code} onClick={()=>onOpenSubmission?.(item)}>
             <span className="recent-avatar">{String(item.display_name||item.name||item.title||'H').charAt(0).toUpperCase()}</span>
-            <span className="recent-copy"><b>{item.title||'Tác phẩm chưa đặt tên'}</b><small>{item.code} · {item.display_name||item.name||'Chưa có tên'}</small></span>
+            <span className="recent-copy"><b>{item.title||'Góc nhìn chưa đặt tên'}</b><small>{item.code} · {item.display_name||item.name||'Chưa có tên'}</small></span>
             <span className={`recent-status ${String(item.status||'PENDING').toLowerCase()}`}>{statusLabels[item.status]||item.status}</span>
-          </button>):<div className="admin-v2-empty"><CheckCircle2/><b>Chưa có tác phẩm</b><span>Dữ liệu mới sẽ xuất hiện tại đây.</span></div>}
+          </button>):<div className="admin-v2-empty"><CheckCircle2/><b>Chưa có góc nhìn</b><span>Dữ liệu mới sẽ xuất hiện tại đây.</span></div>}
         </div>
       </div>
     </section>
 
     <AdminOperationsInsights/>
 
-    {data.rejected>0&&<div className="admin-v2-foot-alert"><AlertTriangle/><span><b>{data.rejected} hồ sơ không hợp lệ.</b> Có thể xem lại tại module Tác phẩm để đảm bảo lý do xử lý đã rõ ràng.</span><button onClick={()=>onNavigate?.('Tác phẩm')}>Mở danh sách</button></div>}
+    {data.rejected>0&&<div className="admin-v2-foot-alert"><AlertTriangle/><span><b>{data.rejected} hồ sơ không hợp lệ.</b> Có thể xem lại tại module Góc nhìn để đảm bảo lý do xử lý đã rõ ràng.</span><button onClick={()=>onNavigate?.('Tác phẩm')}>Mở danh sách</button></div>}
   </div>
 }
