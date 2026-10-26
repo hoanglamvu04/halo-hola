@@ -229,12 +229,12 @@ export default function AdminPage(){
        <div className="admin-top52-grid">
          {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Góc nhìn')}}>
            <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
-           <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
+           <b>{a.title||'Góc nhìn chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
          </button>)}
          {!submissions.some(s=>s.status==='TOP52'||s.status==='AWARDED')&&<p>Chưa có góc nhìn TOP52. Hãy tuyển chọn từ danh sách Góc nhìn.</p>}
        </div>
      </div>:
-     active==='Tác phẩm'?<AdminSubmissionOperations
+     active==='Góc nhìn'?<AdminSubmissionOperations
        submissions={submissions}
        selected={selected}
        setSelected={setSelected}
