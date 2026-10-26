@@ -1,22 +1,48 @@
 import { useEffect, useState } from 'react'
-import { Diamond, Medal, Handshake, Sprout, ArrowRight, ExternalLink, ShieldCheck, PackageOpen, Building2, CheckCircle2 } from 'lucide-react'
+import {
+  ArrowRight, BookOpen, Building2, CheckCircle2, ExternalLink, Handshake,
+  MapPin, Megaphone, PackageOpen, ShieldCheck
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { img } from '../data/siteData.js'
 import { getPartners } from '../services/api.js'
 
-const tiers=[
-  {name:'Kim cương',price:'100.000.000đ',Icon:Diamond,featured:true},
-  {name:'Vàng',price:'50.000.000đ',Icon:Medal},
-  {name:'Bạc',price:'30.000.000đ',Icon:Medal},
-  {name:'Đồng hành',price:'10.000.000đ',Icon:Handshake},
-  {name:'Hỗ trợ',price:'< 10 triệu',Icon:Sprout}
+const collaborationWays=[
+  {
+    name:'Không gian & địa điểm',
+    label:'MỞ CỬA MỘT NƠI CHỐN',
+    text:'Cùng mở những địa điểm có câu chuyện, không gian trải nghiệm, triển lãm, workshop hoặc điểm gặp cộng đồng.',
+    examples:'Địa điểm · không gian sự kiện · điểm chụp · điểm trải nghiệm',
+    Icon:MapPin
+  },
+  {
+    name:'Chuyên môn & tư liệu',
+    label:'GÓP THÊM CHIỀU SÂU',
+    text:'Chia sẻ kiến thức, dữ liệu, ký ức, nhân vật, tài liệu và góc nhìn chuyên môn để những câu chuyện Hòa Lạc được kể chính xác hơn.',
+    examples:'Chuyên gia · tư liệu · lịch sử · kiến trúc · giáo dục · công nghệ',
+    Icon:BookOpen
+  },
+  {
+    name:'Hậu cần & trải nghiệm',
+    label:'GIÚP MỘT HOẠT ĐỘNG DIỄN RA',
+    text:'Đồng hành bằng thiết bị, in ấn, di chuyển, vật phẩm, dịch vụ hoặc những nguồn lực cụ thể cho HOLA Tour, HOLA DAY và hoạt động cộng đồng.',
+    examples:'Thiết bị · in ấn · vận chuyển · dịch vụ · vật phẩm',
+    Icon:PackageOpen
+  },
+  {
+    name:'Kết nối & lan tỏa',
+    label:'ĐƯA CÂU CHUYỆN ĐẾN ĐÚNG NGƯỜI',
+    text:'Kết nối trường học, doanh nghiệp, cộng đồng, người dân và các kênh truyền thông để nhiều góc nhìn Hòa Lạc được tìm thấy và đóng góp hơn.',
+    examples:'Cộng đồng · trường học · doanh nghiệp · truyền thông · mạng lưới',
+    Icon:Megaphone
+  }
 ]
 
 const principles=[
-  ['01','Nội dung độc lập','Không can thiệp nội dung, kết quả và Hội đồng giám khảo.'],
-  ['02','Nhận diện vừa đủ','Logo đối tác không lấn át HALO HOLA.'],
-  ['03','Tôn trọng dữ liệu','Không chia sẻ dữ liệu cá nhân người tham gia.'],
-  ['04','Giữ chuẩn tuyển chọn','Không đánh đổi chất lượng tuyển chọn lấy quyền lợi thương mại.']
+  ['01','Độc lập biên tập','Đối tác không can thiệp vào cách HALO HOLA biên tập, lựa chọn hay kể một câu chuyện.'],
+  ['02','Hiện diện vừa đủ','Thương hiệu xuất hiện đúng điểm chạm, không lấn át người kể chuyện và nội dung cộng đồng.'],
+  ['03','Tôn trọng dữ liệu','Thông tin cá nhân của người tham gia không được chia sẻ cho bên thứ ba nếu chưa có sự đồng ý.'],
+  ['04','Đồng hành có ích','Mỗi nguồn lực cần gắn với một nhu cầu thực tế và tạo ra giá trị nhìn thấy được cho Hòa Lạc.']
 ]
 
 export default function PartnersPage(){
@@ -27,17 +53,17 @@ export default function PartnersPage(){
     <section className="partners-hero-modern">
       <div className="container partners-hero-grid">
         <div className="partners-hero-copy">
-          <span className="eyebrow">HỒ SƠ MỜI HỢP TÁC · HALO HOLA 2026</span>
-          <h1>Cùng kể <em>câu chuyện Hòa Lạc</em></h1>
-          <p>Đồng hành cùng HALO HOLA bằng nguồn lực phù hợp, hiện diện đúng điểm chạm và vẫn bảo vệ tính độc lập của nội dung, tác giả và quá trình tuyển chọn.</p>
+          <span className="eyebrow">ĐỒNG HÀNH CÙNG HALO HOLA</span>
+          <h1>Cùng làm <em>Hòa Lạc được kể tốt hơn</em></h1>
+          <p>HALO HOLA tìm kiếm những đơn vị và cộng đồng muốn góp một phần thiết thực cho hành trình lưu giữ Hòa Lạc — bằng không gian, chuyên môn, hậu cần, kết nối hoặc nguồn lực phù hợp.</p>
           <div className="partners-hero-actions">
-            <a href="#hang-dong-hanh" className="partner-btn partner-btn-primary">Xem các hạng đồng hành <ArrowRight/></a>
-            {partners.length>0&&<a href="#doi-tac" className="partner-btn partner-btn-light">Đối tác hiện tại</a>}
+            <a href="#cach-dong-hanh" className="partner-btn partner-btn-primary">Xem cách đồng hành <ArrowRight/></a>
+            <a href="mailto:admin@xspace.vn" className="partner-btn partner-btn-light">Trao đổi với HALO HOLA</a>
           </div>
           <div className="partners-hero-facts">
-            <div><b>05</b><span>Hạng đồng hành</span></div>
-            <div><PackageOpen/><span>Tiền mặt · hiện vật · dịch vụ</span></div>
-            <div><ShieldCheck/><span>Giữ độc lập nội dung</span></div>
+            <div><b>04</b><span>Cách đồng hành</span></div>
+            <div><Handshake/><span>Cùng làm theo nhu cầu thực tế</span></div>
+            <div><ShieldCheck/><span>Giữ độc lập biên tập</span></div>
           </div>
         </div>
 
@@ -46,8 +72,8 @@ export default function PartnersPage(){
           <div className="partners-hero-shade"/>
           <div className="partners-hero-card">
             <span>HALO HOLA 2026</span>
-            <b>Đồng hành đúng cách.<br/>Lan tỏa đúng giá trị.</b>
-            <p>Tài trợ không chỉ là hiện diện thương hiệu, mà là cùng tạo điều kiện để những câu chuyện Hòa Lạc được kể tốt hơn.</p>
+            <b>Một nguồn lực đúng chỗ<br/>có thể mở ra một câu chuyện mới.</b>
+            <p>Không cần bắt đầu bằng một gói tài trợ. Hãy bắt đầu từ điều bạn có thể đóng góp thật sự cho cộng đồng.</p>
           </div>
         </div>
       </div>
@@ -55,35 +81,34 @@ export default function PartnersPage(){
 
     <section className="partners-intro-strip">
       <div className="container partners-intro-grid">
-        <div><Building2/><b>Địa điểm</b><span>Không gian tổ chức, trải nghiệm và kết nối</span></div>
-        <div><PackageOpen/><b>Hậu cần</b><span>Vật phẩm, thiết bị và dịch vụ quy đổi</span></div>
-        <div><Handshake/><b>Nguồn lực</b><span>Đóng góp tài chính theo hạng đồng hành</span></div>
+        <div><MapPin/><b>Địa điểm</b><span>Mở một nơi chốn có câu chuyện</span></div>
+        <div><BookOpen/><b>Chuyên môn</b><span>Góp dữ liệu, ký ức và tri thức</span></div>
+        <div><Handshake/><b>Kết nối</b><span>Đưa người và nguồn lực đến đúng việc</span></div>
       </div>
     </section>
 
-    <section id="hang-dong-hanh" className="partners-tier-section">
+    <section id="cach-dong-hanh" className="partners-tier-section">
       <div className="container">
         <header className="partners-section-head">
           <div>
-            <span className="eyebrow">CÁC HẠNG ĐỒNG HÀNH</span>
-            <h2>Chọn mức đồng hành phù hợp</h2>
+            <span className="eyebrow">CÁCH ĐỒNG HÀNH</span>
+            <h2>Bạn có thể góp điều gì?</h2>
           </div>
-          <p>Đóng góp bằng tiền hoặc quy đổi tương đương bằng địa điểm, hậu cần, vật phẩm và dịch vụ.</p>
+          <p>Một đơn vị có thể tham gia theo một hoặc nhiều cách. HALO HOLA ưu tiên những đề xuất cụ thể, vừa sức và gắn với nhu cầu thật của hoạt động.</p>
         </header>
 
         <div className="partners-tier-grid">
-          {tiers.map(({name,price,Icon,featured},index)=><article className={'partner-tier-card '+(featured?'is-featured':'')} key={name}>
+          {collaborationWays.map(({name,label,text,examples,Icon},index)=><article className="partner-tier-card" key={name}>
             <div className="partner-tier-top">
               <span className="partner-tier-icon"><Icon/></span>
               <span className="partner-tier-index">0{index+1}</span>
             </div>
             <div className="partner-tier-body">
-              <span className="partner-tier-label">HẠNG ĐỒNG HÀNH</span>
+              <span className="partner-tier-label">{label}</span>
               <h3>{name}</h3>
-              <strong>{price}</strong>
-              <p>Hiện diện tại các điểm chạm phù hợp của HALO HOLA 2026.</p>
+              <p>{text}</p>
             </div>
-            <div className="partner-tier-meta"><CheckCircle2/><span>Tiền mặt hoặc quy đổi tương đương</span></div>
+            <div className="partner-tier-meta"><CheckCircle2/><span>{examples}</span></div>
           </article>)}
         </div>
       </div>
@@ -92,13 +117,13 @@ export default function PartnersPage(){
     {partners.length>0&&<section id="doi-tac" className="partners-live-section">
       <div className="container">
         <header className="partners-section-head partners-section-head-light">
-          <div><span className="eyebrow">ĐỐI TÁC ĐỒNG HÀNH</span><h2>Những đơn vị đang cùng HALO HOLA kể chuyện</h2></div>
-          <p>Danh sách được cập nhật trực tiếp từ hệ thống quản trị.</p>
+          <div><span className="eyebrow">ĐANG CÙNG ĐỒNG HÀNH</span><h2>Những đơn vị đang góp một phần cho hành trình</h2></div>
+          <p>Mỗi đơn vị xuất hiện ở đây theo đúng vai trò và đóng góp thực tế của mình.</p>
         </header>
         <div className="partners-live-grid-modern">
           {partners.map(p=><a key={p.id} className="partner-live-card-modern" href={p.website||'#'} target={p.website?'_blank':undefined} rel={p.website?'noreferrer':undefined}>
             <div className="partner-live-logo-modern">{p.logo?<img src={p.logo} alt={p.name}/>:<Handshake/>}</div>
-            <div className="partner-live-copy-modern"><span>{p.tier}</span><h3>{p.name}</h3><p>{p.description}</p></div>
+            <div className="partner-live-copy-modern"><span>{p.tier||'Đồng hành'}</span><h3>{p.name}</h3><p>{p.description}</p></div>
             {p.website&&<small>Xem website <ExternalLink/></small>}
           </a>)}
         </div>
@@ -109,8 +134,8 @@ export default function PartnersPage(){
       <div className="container partners-principles-grid">
         <div className="partners-principles-copy">
           <span className="eyebrow">NGUYÊN TẮC ĐỒNG HÀNH</span>
-          <h2>Thương hiệu hiện diện,<br/>giá trị vẫn nguyên vẹn.</h2>
-          <p>HALO HOLA ưu tiên các mối quan hệ hợp tác minh bạch, tôn trọng người tham gia và giữ đúng tinh thần của chương trình.</p>
+          <h2>Cùng góp nguồn lực,<br/>không làm mất tiếng nói cộng đồng.</h2>
+          <p>HALO HOLA giữ một ranh giới rõ ràng giữa việc đồng hành nguồn lực và quyết định biên tập để câu chuyện vẫn thuộc về người kể và vùng đất.</p>
         </div>
         <div className="partners-principles-list">
           {principles.map(([num,title,desc])=><div className="partner-principle-row" key={num}>
@@ -122,10 +147,10 @@ export default function PartnersPage(){
 
     <section className="partners-final-cta">
       <div className="container partners-final-card">
-        <div><span className="eyebrow">HALO HOLA 2026</span><h2>Cùng góp một phần vào câu chuyện Hòa Lạc.</h2></div>
+        <div><span className="eyebrow">CÓ MỘT Ý TƯỞNG PHÙ HỢP?</span><h2>Hãy bắt đầu bằng một cuộc trao đổi ngắn.</h2><p>Cho HALO HOLA biết bạn có thể góp gì, ở đâu và cho hoạt động nào. Chúng tôi sẽ cùng tìm cách phù hợp nhất.</p></div>
         <div className="partners-final-actions">
-          <a href="#hang-dong-hanh" className="partner-btn partner-btn-primary">Xem hạng đồng hành <ArrowRight/></a>
-          <Link to="/" className="partner-btn partner-btn-light">Khám phá chương trình</Link>
+          <a href="mailto:admin@xspace.vn" className="partner-btn partner-btn-primary">Liên hệ đồng hành <ArrowRight/></a>
+          <Link to="/chien-dich" className="partner-btn partner-btn-light">Xem chiến dịch cộng đồng</Link>
         </div>
       </div>
     </section>
