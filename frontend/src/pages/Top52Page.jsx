@@ -93,7 +93,7 @@ export default function Top52Page(){
 
     <section className="container top52-live-gallery" id="gallery">
       <div className="top52-live-heading">
-        <div><span className="eyebrow">TOP52 COLLECTION</span><h2>Những góc nhìn được chọn</h2></div>
+        <div><span className="eyebrow">BỘ SƯU TẬP TOP52</span><h2>Những góc nhìn được chọn</h2></div>
         <p>{total} kết quả phù hợp · {themeTitle}</p>
       </div>
 
