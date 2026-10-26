@@ -280,26 +280,26 @@ export default function ThemePage(){
               <h3>{activeType?'Chưa có tác phẩm ở loại hình này':'Chưa có tác phẩm công khai'}</h3>
               <p>{activeType?'Bạn có thể thử một loại hình khác hoặc xem lại tất cả tác phẩm.':'Hãy là người đầu tiên gửi một góc nhìn cho chủ đề này.'}</p>
             </div>
-            {activeType?<button type="button" onClick={()=>loadCollection('')}>Xem tất cả</button>:<Link to="/gui-goc-nhin">Gửi tác phẩm đầu tiên <ArrowRight/></Link>}
+            {activeType?<button type="button" onClick={()=>loadCollection('')}>Xem tất cả</button>:<Link to="/gui-goc-nhin">Gửi góc nhìn đầu tiên <ArrowRight/></Link>}
           </div>:<>
             <div className="theme-related-grid theme-gallery-grid theme-gallery-visible">
               {related.map(a=><Link to={'/tac-pham/'+a.slug} className="theme-related-card" key={a.id||a.slug}>
                 <div className="theme-related-media">
                   {a.image?<img loading="lazy" decoding="async" src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
-                  <span className="theme-top52-badge">{a.status==='AWARDED'?'ĐẠT GIẢI':'TOP52'}</span>
+                  <span className="theme-top52-badge">{a.status==='AWARDED'?'GÓC NHÌN TIÊU BIỂU':a.status==='TOP52'?'TOP52':a.status==='SHORTLIST'?'ĐƯỢC CHỌN BIÊN TẬP':'GÓC NHÌN CỘNG ĐỒNG'}</span>
                   <span className="theme-related-heart"><Heart/></span>
                 </div>
                 <div className="theme-related-body">
                   <span className="theme-related-category">{a.theme} · {a.location}</span>
                   <h3>{a.title||a.code}</h3>
                   <div className="theme-related-author"><span className="theme-related-avatar">{a.author?.charAt(0)}</span><b>{a.author}</b></div>
-                  <div className="theme-related-meta"><span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span><i/><span><MapPin/> {a.location}</span></div>
+                  <div className="theme-related-meta"><span><Eye/> {a.type||'Góc nhìn cộng đồng'}</span><i/><span><MapPin/> {a.location}</span></div>
                 </div>
               </Link>)}
             </div>
 
             {hasMore&&<div className="theme-gallery-more">
-              <button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Đang tải...':`Xem thêm ${Math.min(PAGE_SIZE,Math.max(0,totalCount-related.length))} tác phẩm`} <ArrowRight/></button>
+              <button type="button" onClick={loadMore} disabled={loadingMore}>{loadingMore?'Đang tải...':`Xem thêm ${Math.min(PAGE_SIZE,Math.max(0,totalCount-related.length))} góc nhìn`} <ArrowRight/></button>
             </div>}
           </>}
       </div>
