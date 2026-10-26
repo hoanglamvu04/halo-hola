@@ -92,7 +92,7 @@ async function consumeCode(client, email, purpose, code, registrationHash = '') 
   return true;
 }
 
-async function issueEmailCode(email, purpose, ip) {
+async function assertCanIssueCode(email, purpose) {
   const { rows } = await pool.query(
     `SELECT COUNT(*)::int AS total, MAX(created_at) AS latest
      FROM community_login_codes
@@ -106,6 +106,10 @@ async function issueEmailCode(email, purpose, ip) {
   if (latest && Date.now() - latest < 45_000) {
     throw new AppError('Vui lòng đợi khoảng 45 giây trước khi gửi lại mã.', 429);
   }
+}
+
+async function issueEmailCode(email, purpose, ip) {
+  await assertCanIssueCode(email, purpose);
 
   // Bind registration OTPs to the precise pending password hash. A second
   // signup must never let someone activate a replaced password using an older OTP.
@@ -172,6 +176,8 @@ export async function registerCommunityWithPassword({ email, name, password, ip 
     throw new AppError('Email đã có tài khoản. Vui lòng đăng nhập hoặc chọn Quên mật khẩu.', 409);
   }
 
+  // Reject rapid duplicate signups BEFORE changing a pending password.
+  await assertCanIssueCode(normalized, EMAIL_CODE_PURPOSE.VERIFY);
   const hash = await bcrypt.hash(password, 12);
   await pool.query(
     `INSERT INTO community_registration_requests(email,name,password_hash,expires_at)
