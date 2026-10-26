@@ -10,11 +10,6 @@ const PAGE_SIZE=16
 const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeForTop52(item){
-  const tags=Array.isArray(item.selectionTypes)?item.selectionTypes:[]
-  if(tags.includes('TITLE_FINALIST')) return 'GÓC NHÌN DẪN CHUYỆN'
-  if(tags.includes('THEME_WINNER')) return 'TIÊU BIỂU CHỦ ĐỀ'
-  if(tags.includes('COLOR_WINNER')) return 'TIÊU BIỂU SẮC MÀU'
-  if(tags.includes('TOP3_THEME')) return 'NỔI BẬT CHỦ ĐỀ'
   if(item.status==='AWARDED') return 'GÓC NHÌN TIÊU BIỂU'
   return 'TOP52'
 }
@@ -62,7 +57,7 @@ export default function Top52Page(){
   const publishedCount=Number(meta?.publishedCount||0)
   const hasMore=items.length<total
   const statusText=selectedCount?`${publishedCount||total}/${selectedCount} góc nhìn trong bộ sưu tập`:`${total} góc nhìn trong bộ sưu tập`
-  const statusDetail=meta?.round?.status==='LOCKED'?'Bộ TOP52 đã được chốt':'52 góc nhìn · 1 Hòa Lạc'
+  const statusDetail=selectedCount>=52?'Bộ sưu tập TOP52 đã đủ 52 góc nhìn':'52 góc nhìn · 1 Hòa Lạc'
   const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
   const clearFilters=()=>setFilters({q:'',theme:'',type:''})
   const hasFilters=filters.q||filters.theme||filters.type
