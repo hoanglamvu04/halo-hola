@@ -59,7 +59,7 @@ export default function PublicationManager(){
 
   return <div className="pub-shell">
     <section className="pub-hero">
-      <div><span className="pub-kicker"><Send/> PUBLICATION CONTROL</span><h2>Điều khiển công bố tác phẩm</h2><p>Trạng thái biên tập và trạng thái public được tách riêng. Chỉ những góc nhìn đủ điều kiện mới xuất hiện ngoài website sau khi được công bố hoặc tới đúng giờ đã hẹn.</p></div>
+      <div><span className="pub-kicker"><Send/> PUBLICATION CONTROL</span><h2>Điều khiển công bố góc nhìn</h2><p>Trạng thái biên tập và trạng thái public được tách riêng. Chỉ những góc nhìn đủ điều kiện mới xuất hiện ngoài website sau khi được công bố hoặc tới đúng giờ đã hẹn.</p></div>
       <div className="pub-hero-note"><ShieldAlert/><div><b>Không tự lộ nội dung</b><small>DEMO hoặc góc nhìn chưa đủ quyền và điều kiện công bố sẽ bị chặn trước khi hiển thị.</small></div></div>
     </section>
 
@@ -73,10 +73,10 @@ export default function PublicationManager(){
     </section>
 
     <section className="pub-toolbar">
-      <div className="pub-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} onKeyDown={e=>e.key==='Enter'&&applyFilters()} placeholder="Mã bài, tên, tác giả, chủ đề..."/></div>
+      <div className="pub-search"><Search/><input value={filters.q} onChange={e=>setFilters(v=>({...v,q:e.target.value}))} onKeyDown={e=>e.key==='Enter'&&applyFilters()} placeholder="Mã góc nhìn, tiêu đề, người kể, chủ đề..."/></div>
       <select value={filters.status} onChange={e=>applyFilters({status:e.target.value})}><option value="">Mọi trạng thái biên tập</option>{['TOP52','AWARDED','SHORTLIST','VALID','PENDING'].map(x=><option key={x} value={x}>{statusLabels[x]}</option>)}</select>
       <select value={filters.publicationState} onChange={e=>applyFilters({publicationState:e.target.value})}><option value="">Mọi trạng thái public</option><option value="HIDDEN">Đang ẩn</option><option value="PUBLISHED">Đã công bố</option><option value="SCHEDULED">Hẹn giờ</option></select>
-      <label><input type="checkbox" checked={filters.eligibleOnly==='true'} onChange={e=>applyFilters({eligibleOnly:e.target.checked?'true':'false'})}/> Chỉ bài đủ nhóm công bố</label>
+      <label><input type="checkbox" checked={filters.eligibleOnly==='true'} onChange={e=>applyFilters({eligibleOnly:e.target.checked?'true':'false'})}/> Chỉ góc nhìn đủ điều kiện công bố</label>
       <button onClick={()=>load()} disabled={loading}>Làm mới</button>
     </section>
 
@@ -90,8 +90,8 @@ export default function PublicationManager(){
     </section>
 
     <section className="pub-table">
-      <div className="pub-head"><span></span><span>Tác phẩm</span><span>Trạng thái biên tập</span><span>Public</span><span>Thời gian</span><span>Thao tác</span></div>
-      {loading?<div className="pub-empty">Đang tải trạng thái công bố...</div>:items.length===0?<div className="pub-empty">Không có tác phẩm phù hợp.</div>:items.map(item=>{
+      <div className="pub-head"><span></span><span>Góc nhìn</span><span>Trạng thái biên tập</span><span>Public</span><span>Thời gian</span><span>Thao tác</span></div>
+      {loading?<div className="pub-empty">Đang tải trạng thái công bố...</div>:items.length===0?<div className="pub-empty">Không có góc nhìn phù hợp.</div>:items.map(item=>{
         const current=stateOf(item)
         return <div className={'pub-row '+(!item.eligible?'blocked':'')} key={item.id}>
           <label className="pub-check"><input type="checkbox" disabled={!item.eligible} checked={selected.includes(item.id)} onChange={()=>toggle(item.id)}/></label>
