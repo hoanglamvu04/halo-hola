@@ -1,0 +1,43 @@
+.admin-community-codes{display:grid;gap:18px}
+.admin-community-code-create,.admin-community-code-list{background:#fff;border:1px solid #e7e0d5;border-radius:18px;padding:20px}
+.admin-community-code-create{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+.admin-community-code-create-copy span,.admin-community-code-list-head span{display:block;color:#c45b32;font-size:.62rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.admin-community-code-create-copy h2,.admin-community-code-list-head h2{margin:4px 0 6px;font-size:1.14rem;color:#173d2d}
+.admin-community-code-create-copy p,.admin-community-code-list-head p{margin:0;color:#748077;font-size:.76rem;line-height:1.5}
+.admin-community-code-form{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+.admin-community-code-form label{display:grid;gap:6px;color:#294a3a;font-size:.65rem;font-weight:800}
+.admin-community-code-form input,.admin-community-code-form select,.admin-community-code-search input{min-height:42px;border:1px solid #d7ded8;border-radius:10px;background:#fff;padding:9px 11px;color:#173d2d;font:inherit;outline:none}
+.admin-community-code-form input{min-width:260px}
+.admin-community-code-form input:focus,.admin-community-code-form select:focus,.admin-community-code-search input:focus{border-color:#78a68f;box-shadow:0 0 0 3px rgba(55,118,86,.08)}
+.admin-community-code-form button{min-height:42px;display:inline-flex;align-items:center;gap:7px}
+.admin-community-code-issued{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 18px;border-radius:14px;background:#173d2d;color:#fff}
+.admin-community-code-issued small{display:block;color:#cfdacf;font-size:.62rem}
+.admin-community-code-issued strong{display:block;margin-top:3px;font-size:1.7rem;letter-spacing:.18em}
+.admin-community-code-issued button{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:999px;padding:9px 12px;font-weight:800;cursor:pointer}
+.admin-community-code-list-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:14px}
+.admin-community-code-search{display:flex;gap:8px;align-items:center}
+.admin-community-code-search input{min-width:260px}
+.admin-community-code-table{display:grid}
+.admin-community-code-row{display:grid;grid-template-columns:minmax(220px,1.3fr) 130px 145px 110px auto;gap:14px;align-items:center;padding:13px 0;border-top:1px solid #eee8df}
+.admin-community-code-row:first-child{border-top:0}
+.admin-community-code-email b,.admin-community-code-email small{display:block}
+.admin-community-code-email b{font-size:.76rem;color:#173d2d;overflow-wrap:anywhere}
+.admin-community-code-email small,.admin-community-code-row>small{margin-top:3px;color:#8a918c;font-size:.6rem}
+.admin-community-code-status{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:5px 8px;border-radius:999px;font-size:.57rem;font-weight:900;text-transform:uppercase}
+.admin-community-code-status.active{background:#e8f4eb;color:#246044}
+.admin-community-code-status.used{background:#eef0ee;color:#737b75}
+.admin-community-code-status.expired{background:#fff1eb;color:#ae5234}
+.admin-community-code-row button{border:0;background:none;color:#9f4a31;font-size:.62rem;font-weight:850;cursor:pointer;justify-self:end}
+.admin-community-code-empty{padding:30px 8px;text-align:center;color:#7a837d;font-size:.75rem}
+@media(max-width:900px){
+  .admin-community-code-create{grid-template-columns:1fr}
+  .admin-community-code-form{align-items:stretch}
+  .admin-community-code-form label,.admin-community-code-form input,.admin-community-code-form select{width:100%;min-width:0}
+  .admin-community-code-form button{width:100%;justify-content:center}
+  .admin-community-code-list-head{display:grid}
+  .admin-community-code-search input{min-width:0;width:100%}
+  .admin-community-code-row{grid-template-columns:1fr auto;gap:7px 12px}
+  .admin-community-code-row>small{grid-column:1}
+  .admin-community-code-status{grid-column:2;grid-row:1}
+  .admin-community-code-row button{grid-column:2;grid-row:2}
+}
