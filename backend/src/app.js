@@ -56,7 +56,7 @@ export function createApp() {
     if(isSensitivePath(req.path)) res.set('Cache-Control','no-store');
     next();
   });
-  app.use(express.json({ limit: '2mb', strict: true }));
+  app.use(express.json({ limit: '2mb', strict: true, inflate: false }));
 
   if (env.nodeEnv !== 'test') {
     app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'));
