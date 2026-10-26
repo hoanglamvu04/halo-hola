@@ -2,7 +2,9 @@ import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { pool } from './database/pool.js';
 import { recoverPendingHolaMapsSyncJobs } from './services/holaMaps.service.js';
+import { refreshConnectionSettings } from './services/connectionSettings.service.js';
 
+await refreshConnectionSettings();
 const app = createApp();
 
 const runHolaMapsSweep=()=>recoverPendingHolaMapsSyncJobs()
