@@ -194,7 +194,7 @@ export async function issueAdminCommunityLoginCode({email,expiresInMinutes=10,pu
 
   const valid=purpose===EMAIL_CODE_PURPOSE.VERIFY
     ? await pool.query(
-      'SELECT 1 FROM community_registration_requests WHERE email=$1 AND expires_at>NOW()',
+      'SELECT password_hash FROM community_registration_requests WHERE email=$1 AND expires_at>NOW()',
       [normalized])
     : await pool.query(
       `SELECT 1 FROM community_accounts WHERE email=$1 AND status='ACTIVE'
@@ -207,7 +207,8 @@ export async function issueAdminCommunityLoginCode({email,expiresInMinutes=10,pu
   }
 
   const code=crypto.randomInt(0,1000000).toString().padStart(6,'0');
-  const codeHash=hashCommunityEmailCode(purpose,normalized,code);
+  const codeHash=hashCommunityEmailCode(purpose,normalized,code,
+    purpose===EMAIL_CODE_PURPOSE.VERIFY?valid.rows[0].password_hash:'');
 
   return withTransaction(async(client)=>{
     await client.query(
