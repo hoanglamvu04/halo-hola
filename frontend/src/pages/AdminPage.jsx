@@ -27,7 +27,7 @@ const navGroups=[
     primary:true,
     items:[
       {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
-      {label:'Tác phẩm',icon:Images,path:'/admin/submissions'},
+      {label:'Góc nhìn',icon:Images,path:'/admin/submissions'},
       {label:'Tác giả',icon:Users,path:'/admin/authors'},
       {label:'Công bố',icon:Globe2,path:'/admin/publication'},
       {label:'Đội ảnh',icon:Camera,path:'/admin/photographers'}
@@ -63,7 +63,7 @@ const navGroups=[
 const nav=navGroups.flatMap(group=>group.items)
 const sectionDescriptions={
   'Tổng quan':'Ưu tiên công việc, theo dõi hồ sơ và tiến độ chương trình.',
-  'Tác phẩm':'Theo dõi trọn luồng Đã nhận → Hợp lệ → Công bố → HOLA Maps.',
+  'Góc nhìn':'Theo dõi trọn luồng Đã nhận → Đủ thông tin → Biên tập → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
   'Công bố':'Kiểm soát tác phẩm nào được hiển thị ra website công khai.',
   'Đội ảnh':'Cấp tài khoản và nhận địa điểm cùng link Google Drive từ đội nhiếp ảnh.',
@@ -195,7 +195,7 @@ export default function AdminPage(){
        loading={loading}
        onNavigate={go}
        onRefresh={load}
-       onOpenSubmission={(item)=>{setSelected(item);go('Tác phẩm')}}
+       onOpenSubmission={(item)=>{setSelected(item);go('Góc nhìn')}}
      />:
      active==='Trang chủ'?<HomepageManager/>:
      active==='Chủ đề'?<ThemeManagementManager/>:
@@ -227,7 +227,7 @@ export default function AdminPage(){
        <div className="admin-panel-head"><h2>TOP52</h2><span>{submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').length} tác phẩm</span></div>
        <p className="admin-helper">TOP52 là danh sách góc nhìn được Ban Biên tập tuyển chọn. Việc nội dung có xuất hiện ngoài website hay không được kiểm soát riêng tại <button className="text-button" onClick={()=>go('Công bố')}>Công bố</button>.</p>
        <div className="admin-top52-grid">
-         {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Tác phẩm')}}>
+         {submissions.filter(s=>s.status==='TOP52'||s.status==='AWARDED').map(a=><button key={a.id} onClick={()=>{setSelected(a);go('Góc nhìn')}}>
            <div>{a.media?.[0]?.url?<img src={a.media[0].url} alt=""/>:<Images/>}</div>
            <b>{a.title||'Tác phẩm chưa đặt tên'}</b><small>{a.display_name||a.name} · {a.code}</small>
          </button>)}
