@@ -123,7 +123,7 @@ async function storeOriginalFiles(client, submission, files = []) {
   return media;
 }
 
-export async function createSubmission(data, files = []) {
+export async function createSubmission(data, files = [], { contributorId = null } = {}) {
   return withTransaction(async (client) => {
     const code = await generateCode(client);
     const result = await client.query(
@@ -131,8 +131,8 @@ export async function createSubmission(data, files = []) {
        (code,name,display_name,email,phone,bio,title,captured_at,external_link,previous_award,previous_award_note,
         rights_confirmed,image_consent_confirmed,is_minor,guardian_name,guardian_consent,
         type,theme,color,location,hola_map_place_id,hola_map_place_slug,location_lat,location_lng,location_address,location_source,
-        story,allow_media_use,allow_newsletter)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29)
+        story,allow_media_use,allow_newsletter,contributor_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
        RETURNING *`,
       [
         code,
@@ -163,9 +163,23 @@ export async function createSubmission(data, files = []) {
         data.locationSource || 'TEXT',
         data.story,
         truthy(data.allowMediaUse, true),
-        truthy(data.allowNewsletter, false)
+        truthy(data.allowNewsletter, false),
+        contributorId
       ]
     );
+
+    if (contributorId) {
+      await client.query(
+        `UPDATE community_accounts SET
+           name=CASE WHEN COALESCE(name,'')='' THEN $2 ELSE name END,
+           display_name=CASE WHEN COALESCE(display_name,'')='' THEN NULLIF($3,'') ELSE display_name END,
+           phone=CASE WHEN COALESCE(phone,'')='' THEN NULLIF($4,'') ELSE phone END,
+           bio=CASE WHEN COALESCE(bio,'')='' THEN NULLIF($5,'') ELSE bio END,
+           updated_at=NOW()
+         WHERE id=$1`,
+        [contributorId,data.name,data.displayName||'',data.phone||'',data.bio||'']
+      );
+    }
 
     const submission = result.rows[0];
     const media = await storeOriginalFiles(client, submission, files);

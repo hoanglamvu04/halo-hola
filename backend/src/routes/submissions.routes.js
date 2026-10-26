@@ -14,6 +14,7 @@ import { logReceivedNotification } from '../services/submissionNotification.serv
 import { verifyToken } from '../utils/jwt.js';
 import { pool } from '../database/pool.js';
 import { env } from '../config/env.js';
+import { resolveCommunityAccount } from '../services/communityAccount.service.js';
 
 const router = Router();
 
@@ -160,13 +161,15 @@ router.post('/', submissionRateLimiter, submissionUpload.fields([
   const previews=req.files?.previews||[];
   try {
     const data = submissionSchema.parse(req.body);
+    const communityAccount = await resolveCommunityAccount(req);
+    if (communityAccount) data.email = communityAccount.email;
     if (!originals.length && !data.externalLink) {
       throw new AppError('Cần ít nhất một file gốc hoặc link tác phẩm.', 400);
     }
 
     validateFilesForArtworkType(data.type, originals);
 
-    const created = await createSubmission(data, originals);
+    const created = await createSubmission(data, originals, { contributorId: communityAccount?.id || null });
     let optimizedMedia={stored:0,skipped:previews.length};
     if(previews.length){
       optimizedMedia=await storeSubmissionMediaVariants(created,previews).catch(async(error)=>{

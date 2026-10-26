@@ -169,3 +169,24 @@ HALO HOLA 2026`,
 export function getSubmissionStatusLabel(status) {
   return STATUS_COPY[status]?.label || status;
 }
+
+
+export async function sendCommunityLoginCode({to,code,expiresInMinutes=10}) {
+  const tx=transporter();
+  if(!tx)return {skipped:true,reason:'SMTP_NOT_CONFIGURED'};
+  const accountUrl=`${siteUrl()}/tai-khoan`;
+  await tx.sendMail({
+    from:fromAddress(),
+    to,
+    subject:'Mã đăng nhập HALO HOLA',
+    text:`Mã đăng nhập HALO HOLA của bạn là: ${code}
+
+Mã có hiệu lực trong ${expiresInMinutes} phút.
+Không chia sẻ mã này cho người khác.
+
+Tài khoản: ${accountUrl}
+HALO HOLA`,
+    html:`<!doctype html><html lang="vi"><body style="margin:0;background:#f7f3ea;font-family:Arial,sans-serif;color:#173d2d"><div style="max-width:560px;margin:0 auto;padding:32px 18px"><div style="background:#fff;border:1px solid #e8dfd0;border-radius:24px;padding:30px"><div style="font-size:12px;letter-spacing:.12em;font-weight:700;color:#c45b32">HALO HOLA · TÀI KHOẢN CỘNG ĐỒNG</div><h1 style="font-size:26px;margin:10px 0 8px">Mã đăng nhập của bạn</h1><p style="font-size:15px;line-height:1.6">Nhập mã dưới đây để xác minh email và mở hồ sơ đóng góp.</p><div style="margin:22px 0;padding:18px;border-radius:16px;background:#f8f6f0;text-align:center;font-size:32px;font-weight:800;letter-spacing:.18em">${escapeHtml(code)}</div><p style="font-size:13px;color:#69736d;line-height:1.6">Mã có hiệu lực trong ${expiresInMinutes} phút. Không chia sẻ mã này cho người khác.</p><a href="${escapeHtml(accountUrl)}" style="display:inline-block;margin-top:8px;background:#173d2d;color:#fff;text-decoration:none;padding:12px 18px;border-radius:999px;font-weight:700">Mở tài khoản HALO HOLA</a></div></div></body></html>`
+  });
+  return {skipped:false};
+}

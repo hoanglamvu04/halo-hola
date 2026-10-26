@@ -24,6 +24,7 @@ import adminPreviewRoutes from './routes/adminPreview.routes.js';
 import publicationRoutes from './routes/publication.routes.js';
 import tourRegistrationsRoutes from './routes/tourRegistrations.routes.js';
 import communityRegistrationsRoutes from './routes/communityRegistrations.routes.js';
+import communityAuthRoutes from './routes/communityAuth.routes.js';
 import siteRoutes from './routes/site.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import colorAdminRoutes from './routes/colorAdmin.routes.js';
@@ -33,6 +34,7 @@ import photographerAdminRoutes from './routes/photographerAdmin.routes.js';
 
 function isSensitivePath(pathname='') {
   return pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/community-auth') ||
     pathname.startsWith('/api/admin') ||
     pathname.startsWith('/api/photographer') ||
     pathname.startsWith('/api/submissions/lookup') ||
@@ -45,7 +47,7 @@ export function createApp() {
   app.disable('x-powered-by');
   if (env.nodeEnv === 'production') app.set('trust proxy', 1);
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-  app.use(cors({ origin: resolveCorsOrigin }));
+  app.use(cors({ origin: resolveCorsOrigin, credentials: true }));
   app.use((req,res,next)=>{
     req.requestId=crypto.randomUUID();
     res.set('X-Request-Id',req.requestId);
@@ -102,6 +104,7 @@ export function createApp() {
   app.use('/api/submission-operations', submissionOperationsRoutes);
   app.use('/api/tour-registrations', tourRegistrationsRoutes);
   app.use('/api/community-registrations', communityRegistrationsRoutes);
+  app.use('/api/community-auth', communityAuthRoutes);
   app.use('/api/top52', top52Routes);
   app.use('/api/sitemap', sitemapRoutes);
   app.use('/api', siteRoutes);

@@ -38,3 +38,12 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Bạn đăng nhập quá nhiều lần. Hãy thử lại sau.' }
 });
+
+
+export const communityAuthRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Bạn thao tác đăng nhập quá nhiều lần. Hãy thử lại sau.' }
+});
