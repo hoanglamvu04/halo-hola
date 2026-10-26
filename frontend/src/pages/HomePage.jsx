@@ -407,7 +407,7 @@ export default function HomePage() {
             <p>{storiesCopy.description}</p>
           </div>
           <div className="home-story-head-side">
-            <p>Mỗi tác phẩm là một lát cắt thật về con người, cảnh quan và nhịp sống Hòa Lạc — được cộng đồng gửi về và Ban Tổ chức công bố.</p>
+            <p>Mỗi góc nhìn là một lát cắt thật về con người, cảnh quan và nhịp sống Hòa Lạc — được cộng đồng gửi về, biên tập và công bố trên HALO HOLA.</p>
             <Link className="home-story-all-link" to="/kham-pha">Xem tất cả góc nhìn <ArrowRight/></Link>
           </div>
         </header>
@@ -417,7 +417,7 @@ export default function HomePage() {
           {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="home-story-card" key={a.id||a.slug}>
             <div className="home-story-media">
               {a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
-              <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'ĐẠT GIẢI':a.status==='TOP52'?'TOP52':'GÓC NHÌN'}</span>
+              <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'GÓC NHÌN TIÊU BIỂU':a.status==='TOP52'?'TOP52':a.status==='SHORTLIST'?'ĐƯỢC CHỌN BIÊN TẬP':'GÓC NHÌN'}</span>
               <span className="home-story-heart"><Heart/></span>
             </div>
             <div className="home-story-card-body">
@@ -428,7 +428,7 @@ export default function HomePage() {
                 <b>{a.author||'Tác giả HALO HOLA'}</b>
               </div>
               <div className="home-story-card-meta">
-                <span><Eye/> {Number(a.juryScore||0).toFixed(1)} điểm BGK</span>
+                <span><Eye/> {a.type||'Góc nhìn cộng đồng'}</span>
                 <span><MapPin/> {a.location||'Hòa Lạc'}</span>
               </div>
             </div>
