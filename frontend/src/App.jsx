@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
@@ -44,7 +44,7 @@ const SEO_ROUTES={
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố, ghi nhận những dấu mốc của HALO HOLA 2026.'],
   '/calendar-2027':['HALO HOLA Calendar 2027 — 52 tuần · 52 câu chuyện Hòa Lạc','Calendar 2027 là phiên bản vật lý của hành trình kể chuyện HALO HOLA 2027, mỗi tuần mở một góc nhìn và dẫn tới câu chuyện đầy đủ bằng QR.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác cùng đóng góp, kết nối và xây dựng HALO HOLA.'],
-  '/the-le-giai-thuong':['Chiến dịch đóng góp góc nhìn | HALO HOLA 2026','Cùng đóng góp ảnh, video, câu chuyện và sáng tạo thị giác để xây dựng kho tư liệu cộng đồng về Hòa Lạc. Đây không phải cuộc thi; mỗi góc nhìn đều có giá trị.'],
+  '/chien-dich':['Chiến dịch đóng góp góc nhìn | HALO HOLA 2026','Cùng đóng góp ảnh, video, câu chuyện và sáng tạo thị giác để xây dựng kho tư liệu cộng đồng về Hòa Lạc. Đây không phải cuộc thi; mỗi góc nhìn đều có giá trị.'],
   '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn, mức hoàn thiện, trạng thái công bố và các bước ghi nhận trong HALO HOLA 2026.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
@@ -242,7 +242,8 @@ function SiteShell() {
           <Route path="/stories/:slug" element={<StoryDetailPage />} />
           <Route path="/we-hola" element={<WeHolaPage />} />
           <Route path="/dong-hanh" element={<PartnersPage />} />
-          <Route path="/the-le-giai-thuong" element={<RulesAwardsPage />} />
+          <Route path="/chien-dich" element={<RulesAwardsPage />} />
+          <Route path="/the-le-giai-thuong" element={<Navigate to="/chien-dich" replace />} />
           <Route path="/hello" element={<HelloPage />} />
           <Route path="/chu-de" element={<ThemesPage />} />
           <Route path="/chu-de/:slug" element={<ThemePage />} />
