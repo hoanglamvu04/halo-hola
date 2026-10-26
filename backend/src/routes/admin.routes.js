@@ -32,6 +32,8 @@ import {
   revokeAdminCommunityLoginCode
 } from '../services/communityAccount.service.js';
 const router = Router();
+// Authenticate every admin route before checking granular ADMIN permissions.
+router.use(authenticateAdmin);
 const smtpSchema=z.object({
   enabled:z.boolean(), host:z.string().trim().max(255),
   port:z.coerce.number().int().min(1).max(65535),
@@ -79,8 +81,6 @@ router.post('/connections/smtp/test',requireRoles('ADMIN'),async(_req,res,next)=
     res.json({ok:false,message:'Không xác minh được SMTP. Kiểm tra host, cổng, TLS và tài khoản.'});
   }
 });
-router.use(authenticateAdmin);
-
 router.get('/site/homepage', async (_req, res, next) => {
   try {
     res.json(await getHomepageSections());
