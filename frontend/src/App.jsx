@@ -44,7 +44,7 @@ const SEO_ROUTES={
   '/hola-day':['HOLA DAY 2026 | HALO HOLA','Ngày hội cộng đồng và điểm hẹn công bố, ghi nhận những dấu mốc của HALO HOLA 2026.'],
   '/calendar-2027':['HALO HOLA Calendar 2027 — 52 tuần · 52 câu chuyện Hòa Lạc','Calendar 2027 là phiên bản vật lý của hành trình kể chuyện HALO HOLA 2027, mỗi tuần mở một góc nhìn và dẫn tới câu chuyện đầy đủ bằng QR.'],
   '/dong-hanh':['Đồng hành cùng HALO HOLA','Thông tin dành cho các đơn vị, cộng đồng và đối tác cùng đóng góp, kết nối và xây dựng HALO HOLA.'],
-  '/the-le-giai-thuong':['Cách tham gia & Ghi nhận | HALO HOLA 2026','Hướng dẫn gửi góc nhìn, nguyên tắc đóng góp, mốc thời gian và các hạng mục ghi nhận của chương trình cộng đồng HALO HOLA 2026.'],
+  '/the-le-giai-thuong':['Chiến dịch đóng góp góc nhìn | HALO HOLA 2026','Cùng đóng góp ảnh, video, câu chuyện và sáng tạo thị giác để xây dựng kho tư liệu cộng đồng về Hòa Lạc. Đây không phải cuộc thi; mỗi góc nhìn đều có giá trị.'],
   '/tra-cuu':['Theo dõi góc nhìn | HALO HOLA','Theo dõi hồ sơ góc nhìn, mức hoàn thiện, trạng thái công bố và các bước ghi nhận trong HALO HOLA 2026.'],
   '/hello':['Hello Hòa Lạc | HALO HOLA',DEFAULT_DESCRIPTION]
 }
