@@ -5,6 +5,7 @@ import { pool } from '../database/pool.js';
 import { env } from '../config/env.js';
 import {
   createR2Client,
+  hasR2Config,
   getR2Buckets,
   putR2Object,
   createDownloadUrl
@@ -18,15 +19,6 @@ function safeName(name='image') {
     .replace(/^-+|-+$/g,'')
     .slice(0,90) || 'image';
   return base+ext;
-}
-
-function hasR2Public() {
-  return Boolean(
-    process.env.R2_ENDPOINT &&
-    process.env.R2_ACCESS_KEY_ID &&
-    process.env.R2_SECRET_ACCESS_KEY &&
-    process.env.R2_BUCKET_PUBLIC
-  );
 }
 
 export async function getHomepageSections() {
@@ -83,7 +75,7 @@ export async function listSiteAssets(sectionKey) {
 
 export async function saveSiteAsset({ sectionKey, file }) {
   if(!file?.path) throw new Error('Missing uploaded file');
-  const useR2=hasR2Public();
+  const useR2=hasR2Config('public');
   let provider='LOCAL';
   let bucket=null;
   let objectKey=file.filename;
