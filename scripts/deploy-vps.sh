@@ -7,8 +7,6 @@ CONTENT_SEED_MARKER="$ROOT/.official-content-seed-v1"
 DEMO_SEED_MARKER="$ROOT/.full-demo-seed-v1"
 MEDIA_DEMO_SEED_MARKER="$ROOT/.media-demo-seed-v1"
 SHOWCASE_SEED_MARKER="$ROOT/.meeting-showcase-seed-v1"
-AWARDS_2026_VALUES_MARKER="$ROOT/.awards-2026-values-v1"
-AWARDS_2026_STRUCTURE_V2_MARKER="$ROOT/.awards-2026-structure-v2"
 
 echo "==> HALO HOLA deploy"
 echo "    root:   $ROOT"
@@ -41,52 +39,29 @@ else
   echo "==> Official content seed already applied; keeping CMS edits intact"
 fi
 
-if [[ ! -f "$DEMO_SEED_MARKER" ]]; then
-  echo "==> Seed full admin demo dataset (one time)"
-  npm run db:seed:demo --prefix backend
-  touch "$DEMO_SEED_MARKER"
-else
-  echo "==> Full admin demo dataset already applied"
-fi
+if [[ "${HALO_HOLA_ENABLE_DEMO_SEEDS:-0}" == "1" ]]; then
+  echo "==> Demo seed mode enabled"
 
-if [[ ! -f "$MEDIA_DEMO_SEED_MARKER" ]]; then
-  echo "==> Seed demo Media Library (one time)"
-  npm run db:seed:media-demo --prefix backend
-  touch "$MEDIA_DEMO_SEED_MARKER"
-else
-  echo "==> Demo Media Library already applied"
-fi
+  if [[ ! -f "$DEMO_SEED_MARKER" ]]; then
+    npm run db:seed:demo --prefix backend
+    touch "$DEMO_SEED_MARKER"
+  fi
 
-if [[ ! -f "$SHOWCASE_SEED_MARKER" ]]; then
-  echo "==> Seed 52-item meeting showcase dataset (one time)"
-  npm run db:seed:showcase --prefix backend
-  touch "$SHOWCASE_SEED_MARKER"
-else
-  echo "==> Meeting showcase seed already applied"
-fi
+  if [[ ! -f "$MEDIA_DEMO_SEED_MARKER" ]]; then
+    npm run db:seed:media-demo --prefix backend
+    touch "$MEDIA_DEMO_SEED_MARKER"
+  fi
 
-npm run db:seed:showcase:scores --prefix backend
-npm run db:seed:showcase:dates --prefix backend
-npm run db:seed:showcase:public --prefix backend
+  if [[ ! -f "$SHOWCASE_SEED_MARKER" ]]; then
+    npm run db:seed:showcase --prefix backend
+    touch "$SHOWCASE_SEED_MARKER"
+  fi
+else
+  echo "==> Production mode: skip all demo/showcase seed mutations"
+fi
 
 echo "==> Synchronize authoritative HOLA Tour 2026 data"
 npm run db:content:tours-2026 --prefix backend
-
-if [[ ! -f "$AWARDS_2026_VALUES_MARKER" ]]; then
-  echo "==> Update HALO HOLA 2026 prize values"
-  npm run db:content:awards-2026-values --prefix backend
-  touch "$AWARDS_2026_VALUES_MARKER"
-else
-  echo "==> Previous HALO HOLA 2026 prize values already applied"
-fi
-
-if [[ ! -f "$AWARDS_2026_STRUCTURE_V2_MARKER" ]]; then
-  echo "==> Apply revised HALO HOLA 2026 prize structure (26m cash)"
-  npm run db:content:awards-2026-structure-v2 --prefix backend
-  touch "$AWARDS_2026_STRUCTURE_V2_MARKER"
-else
-  echo "==> Revised HALO HOLA 2026 prize structure already applied; keeping Admin edits intact"
-fi
 
 echo "==> Build frontend"
 npm run build --prefix frontend
