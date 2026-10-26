@@ -13,9 +13,9 @@ const flow=['PENDING','VALID','SHORTLIST','TOP52','AWARDED']
 const labels={
   PENDING:'Đã nhận',
   VALID:'Hợp lệ',
-  SHORTLIST:'Nổi bật',
+  SHORTLIST:'Được chọn biên tập',
   TOP52:'TOP52',
-  AWARDED:'Được vinh danh',
+  AWARDED:'Góc nhìn tiêu biểu',
   REJECTED:'Cần bổ sung'
 }
 const missingLabels={
@@ -25,7 +25,7 @@ const missingLabels={
   FACEBOOK_CONFIRMATION:'Xác nhận bài Facebook'
 }
 const notificationStatusLabels={
-  PENDING:'Đã nhận',VALID:'Hợp lệ',SHORTLIST:'Nổi bật',TOP52:'TOP52',AWARDED:'Được vinh danh',REJECTED:'Cần bổ sung'
+  PENDING:'Đã nhận',VALID:'Hợp lệ',SHORTLIST:'Được chọn biên tập',TOP52:'TOP52',AWARDED:'Góc nhìn tiêu biểu',REJECTED:'Cần bổ sung'
 }
 
 function publicationCopy(item){
@@ -93,7 +93,7 @@ export default function LookupPage(){
         <div className="lookup-modern-copy">
           <div className="lookup-modern-eyebrow">HỒ SƠ GÓC NHÌN · HALO HOLA 2026</div>
           <h1>Theo dõi <em>góc nhìn của bạn</em></h1>
-          <p>Nhập Mã góc nhìn và email đã dùng khi gửi. Bạn sẽ xem được mức hoàn thiện, trạng thái kiểm tra, công bố, HOLA Maps và các bước ghi nhận từ chương trình.</p>
+          <p>Nhập Mã góc nhìn và email đã dùng khi gửi. Bạn sẽ xem được mức hoàn thiện, trạng thái kiểm tra, biên tập, công bố và tình trạng đồng bộ lên HOLA Maps.</p>
           <div className="lookup-modern-quick">
             <div><span>01</span><b>Nhập Mã góc nhìn</b></div>
             <div><span>02</span><b>Xác nhận email</b></div>
@@ -108,7 +108,7 @@ export default function LookupPage(){
           <div className="lookup-ticket-sample">
             <small>Mã góc nhìn mẫu</small>
             <strong>HH26-00428</strong>
-            <p>Mỗi góc nhìn có một mã riêng để theo dõi hành trình từ lúc đóng góp, kiểm tra, công bố đến các bước ghi nhận tiếp theo.</p>
+            <p>Mỗi góc nhìn có một mã riêng để theo dõi hành trình từ lúc đóng góp, kiểm tra, biên tập đến khi được công bố.</p>
           </div>
           <div className="lookup-ticket-status"><i/> Hệ thống theo dõi đang hoạt động</div>
         </aside>
