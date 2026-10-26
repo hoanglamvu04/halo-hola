@@ -175,7 +175,6 @@ export default function ArtworkPage({preview=false}){
  const backLabel=isCurated?'TOP52':'Góc nhìn cộng đồng'
  const story=String(item.story||'').trim()||'Tác phẩm được công bố trong hành trình HALO HOLA 2026.'
  const lead=story.split(/\n+/)[0]
- const score=Number(item.juryScore||0)
  const facebookUrl=safeHttpUrl(item.facebookPostUrl)
 
  return <main className="artwork-showcase">
@@ -238,7 +237,7 @@ export default function ArtworkPage({preview=false}){
          <div><MapPin/><span><small>Địa điểm</small><b>{item.location||'Hòa Lạc'}</b></span></div>
          <div><CalendarDays/><span><small>Thời gian thực hiện</small><b>{formatDate(item.capturedAt)}</b></span></div>
          <div><ImageIcon/><span><small>Media</small><b>{mediaItems.length||0} file</b></span></div>
-         <div><Eye/><span><small>Điểm TB Hội đồng</small><b>{score.toFixed(1)}/100</b></span></div>
+         <div><Sparkles/><span><small>Bộ sưu tập</small><b>{badge}</b></span></div>
        </div>
 
        <div className="artwork-showcase-actions">
