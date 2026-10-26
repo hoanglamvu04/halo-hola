@@ -11,6 +11,7 @@ const SECRETS = {
 };
 let managed = new Map();
 
+
 function defaults(key) {
   if (key === 'smtp') return {
     enabled: true,
@@ -65,9 +66,10 @@ export function decryptConnectionSecret(value) {
 
 function hydrate(key, stored) {
   const configuration = { ...defaults(key), ...stored };
+  // Only database-managed credentials are decrypted; environment defaults are not serialized.
   for (const field of SECRETS[key]) {
     const encrypted = configuration[field + 'Encrypted'];
-    configuration[field] = encrypted ? decryptConnectionSecret(encrypted) : '';
+    configuration[field] = encrypted ? decryptConnectionSecret(encrypted) : (stored[field] ? '' : defaults(key)[field]);
     delete configuration[field + 'Encrypted'];
   }
   return configuration;
