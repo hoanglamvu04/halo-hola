@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Award, BookOpen, CheckCircle2, Grid2X2, Map, Search, SlidersHorizontal, Trophy } from 'lucide-react'
+import { BookOpen, CheckCircle2, Compass, Grid2X2, Map, Search, SlidersHorizontal, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ArtworkCard from '../components/ArtworkCard.jsx'
 import { getPublicTop52, getThemes } from '../services/api.js'
@@ -11,11 +11,11 @@ const types=['Photo','Video','Story & Creative','Art & Design']
 
 function badgeForTop52(item){
   const tags=Array.isArray(item.selectionTypes)?item.selectionTypes:[]
-  if(tags.includes('TITLE_FINALIST')) return 'ĐỀ CỬ DANH HIỆU'
+  if(tags.includes('TITLE_FINALIST')) return 'GÓC NHÌN DẪN CHUYỆN'
   if(tags.includes('THEME_WINNER')) return 'TIÊU BIỂU CHỦ ĐỀ'
   if(tags.includes('COLOR_WINNER')) return 'TIÊU BIỂU SẮC MÀU'
-  if(tags.includes('TOP3_THEME')) return 'TOP 3 CHỦ ĐỀ'
-  if(item.status==='AWARDED') return 'ĐƯỢC VINH DANH'
+  if(tags.includes('TOP3_THEME')) return 'NỔI BẬT CHỦ ĐỀ'
+  if(item.status==='AWARDED') return 'GÓC NHÌN TIÊU BIỂU'
   return 'TOP52'
 }
 
@@ -24,7 +24,7 @@ export default function Top52Page(){
   const [items,setItems]=useState([])
   const [total,setTotal]=useState(0)
   const [meta,setMeta]=useState({})
-  const [filters,setFilters]=useState({q:'',theme:'',type:'',award:false})
+  const [filters,setFilters]=useState({q:'',theme:'',type:''})
   const [loading,setLoading]=useState(true)
   const [loadingMore,setLoadingMore]=useState(false)
   const [error,setError]=useState('')
@@ -40,7 +40,6 @@ export default function Top52Page(){
         q:filters.q||undefined,
         theme:filters.theme||undefined,
         type:filters.type||undefined,
-        award:filters.award?'true':undefined,
         limit:PAGE_SIZE,
         offset
       })
@@ -56,7 +55,7 @@ export default function Top52Page(){
     setItems([]);setTotal(0);setMeta({})
     const timer=setTimeout(()=>load({append:false}),220)
     return()=>clearTimeout(timer)
-  },[filters.q,filters.theme,filters.type,filters.award])
+  },[filters.q,filters.theme,filters.type])
 
   const heroImage=items.find(x=>x.image)?.image||themes.find(x=>x.image)?.image||''
   const selectedCount=Number(meta?.selectedCount||0)
@@ -65,17 +64,17 @@ export default function Top52Page(){
   const statusText=selectedCount?`${publishedCount||total}/${selectedCount} góc nhìn trong bộ sưu tập`:`${total} góc nhìn trong bộ sưu tập`
   const statusDetail=meta?.round?.status==='LOCKED'?'Bộ TOP52 đã được chốt':'52 góc nhìn · 1 Hòa Lạc'
   const themeTitle=useMemo(()=>themes.find(x=>x.title===filters.theme)?.title||'Tất cả chủ đề',[themes,filters.theme])
-  const clearFilters=()=>setFilters({q:'',theme:'',type:'',award:false})
-  const hasFilters=filters.q||filters.theme||filters.type||filters.award
+  const clearFilters=()=>setFilters({q:'',theme:'',type:''})
+  const hasFilters=filters.q||filters.theme||filters.type
 
   return <main className="top52-live-page">
     <section className="top52-live-hero">
       <div className="container top52-live-hero-grid">
         <div className="top52-live-copy">
-          <span className="top52-live-eyebrow"><Trophy/> BỘ SƯU TẬP GÓC NHÌN NỔI BẬT · HALO HOLA 2026</span>
+          <span className="top52-live-eyebrow"><Sparkles/> BỘ SƯU TẬP GÓC NHÌN ĐƯỢC CHỌN · HALO HOLA 2026</span>
           <h1>TOP<span>52</span></h1>
           <h2>52 góc nhìn · 1 Hòa Lạc</h2>
-          <p>52 đóng góp nổi bật được ghi nhận từ cộng đồng — cùng kể về thiên nhiên, con người, văn hóa, tri thức và một Hòa Lạc đang chuyển mình.</p>
+          <p>52 góc nhìn được Ban biên tập tuyển chọn từ kho đóng góp cộng đồng — cùng kể về thiên nhiên, con người, văn hóa, tri thức và một Hòa Lạc đang chuyển mình.</p>
           <div className="top52-live-status"><span><CheckCircle2/></span><div><b>{statusText}</b><small>{statusDetail}</small></div></div>
           <div className="top52-live-actions">
             <a href="#gallery" className="btn btn-green"><Grid2X2/> Xem bộ sưu tập</a>
@@ -87,14 +86,14 @@ export default function Top52Page(){
         <div className="top52-live-visual">
           {heroImage?<img src={heroImage} alt="TOP52 HALO HOLA 2026"/>:<div className="top52-live-placeholder"/>}
           <div className="top52-live-number"><b>{total||publishedCount||0}</b><span>GÓC NHÌN<br/>TOP52</span></div>
-          <div className="top52-live-seal"><Award/><span>HALO HOLA<br/><b>2026</b></span></div>
+          <div className="top52-live-seal"><Compass/><span>HALO HOLA<br/><b>2026</b></span></div>
         </div>
       </div>
     </section>
 
     <section className="container top52-live-gallery" id="gallery">
       <div className="top52-live-heading">
-        <div><span className="eyebrow">TOP52 COLLECTION</span><h2>Những góc nhìn được ghi nhận</h2></div>
+        <div><span className="eyebrow">TOP52 COLLECTION</span><h2>Những góc nhìn được chọn</h2></div>
         <p>{total} kết quả phù hợp · {themeTitle}</p>
       </div>
 
@@ -103,14 +102,13 @@ export default function Top52Page(){
         <div className="top52-filter-row"><SlidersHorizontal/><b>Chủ đề</b><button className={!filters.theme?'active':''} onClick={()=>setFilters(v=>({...v,theme:''}))}>Tất cả</button>{themes.map(t=><button key={t.slug} className={filters.theme===t.title?'active':''} onClick={()=>setFilters(v=>({...v,theme:t.title}))}>{t.title}</button>)}</div>
         <div className="top52-filter-controls">
           <select value={filters.type} onChange={e=>setFilters(v=>({...v,type:e.target.value}))}><option value="">Tất cả loại hình</option>{types.map(type=><option key={type} value={type}>{type}</option>)}</select>
-          <label><input type="checkbox" checked={filters.award} onChange={e=>setFilters(v=>({...v,award:e.target.checked}))}/> Chỉ góc nhìn được vinh danh</label>
           {hasFilters&&<button onClick={clearFilters}>Xóa bộ lọc</button>}
         </div>
       </div>
 
       {loading&&<div className="top52-live-state"><span className="top52-spinner"/>Đang tải TOP52...</div>}
       {error&&<div className="form-error">{error}</div>}
-      {!loading&&!error&&items.length===0&&<div className="top52-live-empty"><Trophy/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử thay đổi bộ lọc hoặc quay lại khi chương trình công bố thêm góc nhìn TOP52.</p></div>}
+      {!loading&&!error&&items.length===0&&<div className="top52-live-empty"><Sparkles/><h3>Chưa có góc nhìn phù hợp</h3><p>Thử thay đổi bộ lọc hoặc quay lại khi chương trình công bố thêm góc nhìn TOP52.</p></div>}
 
       {!loading&&items.length>0&&<>
         <div className="art-grid top52-live-grid">{items.map(item=><ArtworkCard key={item.id} item={item}/>)}</div>
