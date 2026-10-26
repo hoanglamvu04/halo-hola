@@ -24,7 +24,7 @@ const TAXONOMY_SEPARATOR = ' • '
 
 const initialForm = {
   name:'', display:'', email:'', phone:'', bio:'',
-  title:'', capturedAt:'', externalLink:'', previousAward:false, previousAwardNote:'',
+  title:'', capturedAt:'', externalLink:'',
   type:'Photo', theme:'', color:'', themes:[], colors:[],
   location:'', locationPlaceId:'', locationPlaceSlug:'', locationLat:'', locationLng:'', locationAddress:'', locationSource:'TEXT', story:'',
   rightsConfirmed:false, imageConsentConfirmed:false,
@@ -443,8 +443,6 @@ export default function SubmitPage(){
             />
             <div className="form-grid location-story-grid">
               <label className="full">Câu chuyện phía sau góc nhìn *<textarea rows="7" value={form.story} onChange={e=>upd('story',e.target.value)} placeholder="Điều gì khiến khoảnh khắc, nơi chốn hoặc câu chuyện này đáng được lưu lại?"/><small>{storyLength} ký tự · cần tối thiểu 20 ký tự để gửi</small></label>
-              <label className="full check-row"><input type="checkbox" checked={form.previousAward} onChange={e=>upd('previousAward',e.target.checked)}/> Nội dung này từng tham gia hoặc được ghi nhận ở chương trình khác</label>
-              {form.previousAward&&<label className="full">Thông tin chương trình / ghi nhận<textarea value={form.previousAwardNote} onChange={e=>upd('previousAwardNote',e.target.value)} placeholder="Tên chương trình, năm, hạng mục ghi nhận..."/></label>}
             </div>
           </div>}
 
