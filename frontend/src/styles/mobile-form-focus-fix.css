@@ -1,0 +1,23 @@
+/*
+ * Mobile form focus stabilization
+ * Keep iOS Safari from auto-zooming form controls whose page-specific styles
+ * render text below 16 CSS px. This intentionally preserves pinch zoom.
+ */
+@media (max-width:760px){
+  input,
+  textarea,
+  select,
+  [contenteditable="true"]{
+    font-size:16px!important;
+    -webkit-text-size-adjust:100%;
+    touch-action:manipulation;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus,
+  [contenteditable="true"]:focus{
+    transform:none!important;
+    zoom:1;
+  }
+}
