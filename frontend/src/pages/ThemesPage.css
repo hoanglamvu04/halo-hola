@@ -252,6 +252,22 @@
 }
 
 @media(max-width:700px){
+  .theme-index-page .stories-intro-inner > div:first-child > h1,
+  .theme-index-page .stories-intro-inner > div:first-child > h2{
+    display:inline!important;
+    width:auto!important;
+    max-width:none!important;
+    vertical-align:baseline;
+  }
+
+  .theme-index-page .stories-intro-inner > div:first-child > h1{
+    margin:0 .22em 0 0!important;
+  }
+
+  .theme-index-page .stories-intro-inner > div:first-child > h2{
+    margin:0!important;
+  }
+
   .theme-index-page .themes-showcase{padding:10px 0 26px!important}
   .theme-index-page .themes-showcase-inner{width:calc(100% - 24px)!important}
 
