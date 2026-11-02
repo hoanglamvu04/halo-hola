@@ -178,4 +178,16 @@ export function getStoryBySlug(slug) { return unwrap(client.get('/stories/' + en
 export function getPartners() { return unwrap(client.get('/partners')); }
 export function getSiteSettings() { return unwrap(client.get('/site-settings')); }
 
+// HOLA Embed Platform V1: public iframe identifier, unrelated to the Browser API key
+// or to the server-only HOLA_MAPS_HALO_SECRET used by submission sync.
+export function getPublicHolaEmbedConfig({ signal } = {}) {
+  return unwrap(client.get('/hola-embed', { signal, timeout: 8000 }));
+}
+export function getAdminHolaEmbedConfig() {
+  return unwrap(client.get('/admin/hola-embed'));
+}
+export function updateAdminHolaEmbedConfig(embedUrl) {
+  return unwrap(client.put('/admin/hola-embed', { embedUrl }));
+}
+
 export { API_URL };
