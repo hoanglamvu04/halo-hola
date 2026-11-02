@@ -498,3 +498,167 @@
     grid-column:2;
   }
 }
+
+
+/* HOLA Embed Platform V1 — public approved iframe configuration */
+.settings-hola-embed{
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:18px;
+  align-items:start;
+}
+.settings-hola-embed-guide,
+.settings-hola-embed-config{
+  min-width:0;
+  padding:22px;
+  border:1px solid #e3e5dd;
+  border-radius:16px;
+  background:#fff;
+}
+.settings-hola-embed-guide{
+  background:linear-gradient(155deg,#f3f7f1,#faf6ed);
+}
+.settings-hola-embed h3{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:9px 0 12px;
+  color:#173d2d;
+  font-size:1.08rem;
+}
+.settings-hola-embed h3 svg{width:20px;height:20px}
+.settings-hola-embed p,
+.settings-hola-embed small{
+  color:#607066;
+  line-height:1.7;
+  font-size:.79rem;
+}
+.settings-hola-embed-guide-link{
+  display:inline-flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+  margin:10px 0 17px;
+  padding:12px 16px;
+  border-radius:12px;
+  background:#173d2d;
+  color:#fff;
+  font-size:.78rem;
+  font-weight:800;
+  text-decoration:none;
+}
+.settings-hola-embed-guide-link:hover{color:#fff;background:#22533e}
+.settings-hola-embed-guide-link svg{width:16px;height:16px}
+.settings-hola-embed-origins{
+  display:grid;
+  gap:9px;
+  padding:14px;
+  border:1px solid #d7e3d5;
+  border-radius:12px;
+  background:rgba(255,255,255,.73);
+}
+.settings-hola-embed-origins b{font-size:.78rem}
+.settings-hola-embed-origins code,
+.settings-hola-embed-config code{
+  overflow-wrap:anywhere;
+  color:#325b46;
+}
+.settings-hola-embed-origins code{
+  padding:8px 10px;
+  border:1px solid #dfe8df;
+  border-radius:9px;
+  background:#f7f9f6;
+  font-size:.77rem;
+}
+.settings-hola-embed-config>label{
+  display:grid;
+  gap:9px;
+  margin-top:18px;
+  color:#244536;
+  font-weight:800;
+  font-size:.78rem;
+}
+.settings-hola-embed-config input{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  padding:11px 13px;
+  border:1px solid #cbd7ce;
+  border-radius:11px;
+  background:#fff;
+  color:#173d2d;
+  font-family:inherit;
+  font-size:.8rem;
+}
+.settings-hola-embed-config input:focus-visible{
+  outline:3px solid #afccb5;
+  outline-offset:1px;
+}
+.settings-hola-embed-config input[aria-invalid=true]{
+  border-color:#cf987e;
+}
+.settings-hola-embed-validation{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  padding:11px 13px;
+  margin:12px 0;
+  border-radius:11px;
+  background:#f6f3ec;
+  color:#986039;
+  font-size:.75rem;
+  line-height:1.5;
+}
+.settings-hola-embed-validation.valid{background:#edf6ef;color:#267046}
+.settings-hola-embed-validation svg{width:18px;height:18px;flex-shrink:0}
+.settings-hola-embed-hint{margin-top:10px}
+.settings-hola-embed-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:9px;
+  margin-top:18px;
+}
+.settings-hola-embed-actions .btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:40px;
+  padding:9px 13px;
+  text-decoration:none;
+  font-size:.74rem;
+}
+.settings-hola-embed-actions .btn svg{width:15px;height:15px}
+.settings-hola-embed-actions button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.settings-hola-embed-preview{
+  margin-top:18px;
+  padding:12px;
+  border:1px solid #dfe5dd;
+  border-radius:14px;
+  background:#f8faf7;
+}
+.settings-hola-embed-preview iframe{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  height:360px;
+  border:0;
+  border-radius:9px;
+  background:#e7ece7;
+}
+.settings-hola-embed-preview p{margin:10px 3px 0;font-size:.7rem}
+@media(max-width:1100px){
+  .settings-hola-embed{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .settings-hola-embed-guide,
+  .settings-hola-embed-config{padding:15px}
+  .settings-hola-embed-actions .btn{width:100%}
+  .settings-hola-embed-preview iframe{height:280px}
+}
