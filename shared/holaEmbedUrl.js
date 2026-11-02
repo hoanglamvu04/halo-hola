@@ -61,3 +61,48 @@ export function getHolaEmbedViewState(input) {
     ? { mode: 'embed', embedUrl: validation.url }
     : { mode: 'waiting', embedUrl: '' };
 }
+
+
+/**
+ * The picker is covered by the SAME approved HOLA Embed Platform V1 key
+ * as /embed. Use only the public key from the validated site setting.
+ * Other picker query arguments are allowed by the upstream /embed/* gateway.
+ */
+export function buildHolaPickerUrl(embedUrl, { origin, lat, lng, label } = {}) {
+  const checked = validateHolaEmbedUrl(embedUrl);
+  if (!checked.valid) return '';
+
+  // The picker posts its location to this exact parent origin. Never use
+  // arbitrary origins from API responses or URL query parameters.
+  const requestedOrigin = String(origin || '');
+  let parent;
+  try { parent = new URL(requestedOrigin); } catch { return ''; }
+  const localDevelopment = parent.protocol === 'http:' &&
+    ['localhost', '127.0.0.1'].includes(parent.hostname);
+  if (!(parent.protocol === 'https:' || localDevelopment) ||
+      parent.origin !== requestedOrigin || parent.username || parent.password ||
+      parent.search || parent.hash || parent.pathname !== '/') {
+    return '';
+  }
+
+  const issuedKey = new URL(checked.url).searchParams.get('key');
+  const picker = new URL('/embed/picker', HOLA_MAPS_HOME_URL);
+  picker.searchParams.set('key', issuedKey);
+  picker.searchParams.set('origin', parent.origin);
+
+  const hasLat = lat !== null && lat !== undefined && String(lat).trim() !== '';
+  const hasLng = lng !== null && lng !== undefined && String(lng).trim() !== '';
+  if (hasLat && hasLng) {
+    const latitude = Number(lat);
+    const longitude = Number(lng);
+    if (Number.isFinite(latitude) && Number.isFinite(longitude) &&
+        latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+      picker.searchParams.set('lat', String(latitude));
+      picker.searchParams.set('lng', String(longitude));
+    }
+  }
+
+  const safeLabel = String(label || '').trim().slice(0, 240);
+  if (safeLabel) picker.searchParams.set('label', safeLabel);
+  return picker.toString();
+}
