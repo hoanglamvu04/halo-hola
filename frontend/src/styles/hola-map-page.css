@@ -1,28 +1,24 @@
 .hm-page{
   --halo-header-height:72px;
-  background:#e9eeea;
   min-height:calc(100vh - var(--halo-header-height));
+  min-height:calc(100dvh - var(--halo-header-height));
+  background:#e9eeea;
 }
 
-.hm-official-page{
-  overflow:hidden;
-}
+.hm-official-page{overflow:hidden}
 
 .hm-official-shell{
   position:relative;
+  isolation:isolate;
   width:100%;
   height:calc(100vh - var(--halo-header-height));
-  min-height:640px;
+  height:calc(100dvh - var(--halo-header-height));
+  min-height:min(440px,calc(100dvh - var(--halo-header-height)));
   overflow:hidden;
-  background:#dfe6df;
   border-top:1px solid rgba(23,61,45,.08);
+  background:#dfe7df;
 }
 
-/*
- * Keep the HOLA Maps embed fully inside the content area below the HALO HOLA
- * header. The old negative top offset cropped the upper map controls and made
- * the sticky site header look like it was covering the map.
- */
 .hm-map-crop{
   position:absolute;
   inset:0;
@@ -40,109 +36,193 @@
   background:#e7ece7;
 }
 
+/* Only a small progress chip: never cover or disable the iframe. */
 .hm-official-loading{
   position:absolute;
-  inset:0;
   z-index:12;
-  display:grid;
-  place-items:center;
-  align-content:center;
-  gap:10px;
-  background:#edf1ed;
-  color:#425149;
-  font-size:.82rem;
-  font-weight:700;
+  top:18px;
+  left:18px;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  max-width:calc(100% - 36px);
+  padding:10px 15px;
+  border:1px solid #e5eae5;
+  border-radius:999px;
+  background:rgba(255,255,255,.96);
+  color:#355546;
+  font-size:.78rem;
+  font-weight:750;
+  box-shadow:0 6px 22px rgba(21,52,37,.10);
   pointer-events:none;
 }
 
-.hm-official-loading svg{
-  width:28px;
-  height:28px;
-  color:var(--forest);
-  animation:hmOfficialSpin .85s linear infinite;
+.hm-official-loading svg,
+.hm-standby-spinner{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+  animation:hmOfficialSpin 1s linear infinite;
 }
+@keyframes hmOfficialSpin{to{transform:rotate(360deg)}}
 
-@keyframes hmOfficialSpin{
-  to{transform:rotate(360deg)}
+.hm-official-actions{
+  position:absolute;
+  z-index:9;
+  bottom:20px;
+  left:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  max-width:calc(100% - 32px);
+  transform:translateX(-50%);
 }
 
 .hm-official-open{
-  position:absolute;
-  z-index:9;
-  left:50%;
-  bottom:22px;
-  transform:translateX(-50%);
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  min-width:190px;
-  padding:13px 18px;
-  border:1px solid rgba(255,255,255,.2);
+  min-height:46px;
+  min-width:162px;
+  padding:10px 16px;
+  border:1px solid rgba(255,255,255,.18);
   border-radius:999px;
-  background:rgba(23,61,45,.96);
+  background:rgba(23,61,45,.97);
   color:#fff;
-  font-size:.78rem;
+  font-size:.77rem;
   font-weight:800;
-  box-shadow:0 12px 30px rgba(23,61,45,.24);
+  text-align:center;
+  text-decoration:none;
+  white-space:nowrap;
+  box-shadow:0 9px 26px rgba(23,61,45,.20);
   backdrop-filter:blur(12px);
-  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+  transition:background .16s ease;
 }
 
-.hm-official-open:hover{
-  transform:translateX(-50%) translateY(-2px);
-  background:#123526;
-  box-shadow:0 16px 34px rgba(23,61,45,.28);
+.hm-official-open:hover{background:#123526;color:#fff}
+.hm-official-open:focus-visible{outline:3px solid #eab47f;outline-offset:2px}
+.hm-official-open svg{width:15px;height:15px;flex:0 0 auto}
+
+.hm-official-open-secondary{
+  background:rgba(255,255,255,.97);
+  color:#173d2d;
+  border-color:rgba(23,61,45,.18);
+}
+.hm-official-open-secondary:hover{background:#eaf0e9;color:#173d2d}
+
+.hm-embed-assistance{
+  max-width:230px;
+  padding:9px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 5px 19px rgba(23,61,45,.09);
+  color:#4e6256;
+  font-size:.66rem;
+  line-height:1.5;
 }
 
-.hm-official-open svg{
-  width:15px;
-  height:15px;
+.hm-standby{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  padding:30px 24px;
+  background:
+    radial-gradient(ellipse at 70% 25%,rgba(200,224,191,.48),transparent 52%),
+    radial-gradient(ellipse at 15% 80%,rgba(240,219,181,.45),transparent 44%),
+    #f6f4ed;
+  color:#173d2d;
+  text-align:center;
+}
+.hm-standby-symbol{
+  display:grid;
+  place-items:center;
+  width:76px;
+  height:76px;
+  border:1px solid #d9e3d5;
+  border-radius:22px;
+  background:#eef4ec;
+}
+.hm-standby-symbol svg{width:36px;height:36px;color:#286248}
+.hm-standby-kicker{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#bd5e38;
+  font-size:.68rem;
+  font-weight:850;
+  letter-spacing:.13em;
+}
+.hm-standby-kicker svg{width:14px;height:14px}
+.hm-standby h1{
+  margin:0;
+  max-width:780px;
+  font-family:Fraunces,Georgia,serif;
+  font-size:clamp(1.9rem,4.7vw,3.7rem);
+  font-weight:750;
+  line-height:1.13;
+}
+.hm-standby p{
+  margin:0;
+  max-width:560px;
+  color:#617467;
+  font-size:clamp(.84rem,1.5vw,1rem);
+  line-height:1.65;
+}
+.hm-standby-open{margin-top:10px}
+.hm-standby-spinner{width:26px;height:26px;color:#286248}
+
+@media(max-width:900px){
+  /* Bottom navigation is fixed on mobile/tablets; keep escape actions reachable. */
+  .hm-official-actions{
+    left:14px;
+    right:14px;
+    bottom:calc(80px + env(safe-area-inset-bottom,0px));
+    max-width:none;
+    justify-content:center;
+    flex-wrap:wrap;
+    transform:none;
+  }
+  .hm-embed-assistance{
+    flex-basis:100%;
+    max-width:480px;
+    margin:0 auto;
+    text-align:center;
+  }
 }
 
 @media(max-width:820px){
-  .hm-page{
-    --halo-header-height:72px;
-    min-height:calc(100dvh - var(--halo-header-height));
-  }
-
-  .hm-official-shell{
-    height:calc(100dvh - var(--halo-header-height));
-    min-height:520px;
-  }
-
-  .hm-official-frame{
-    inset:0;
-    height:100%;
-  }
-
-  .hm-official-open{
-    bottom:18px;
-    min-width:176px;
-    padding:12px 16px;
-    font-size:.74rem;
-  }
+  .hm-page{--halo-header-height:62px}
 }
 
 @media(max-width:520px){
-  .hm-page{
-    min-height:calc(100dvh - var(--halo-header-height));
-  }
-
   .hm-official-shell{
-    height:calc(100dvh - var(--halo-header-height));
-    min-height:430px;
+    min-height:min(390px,calc(100dvh - var(--halo-header-height)));
   }
-
-  .hm-official-frame{
-    inset:0;
-    height:100%;
-  }
-
+  .hm-official-loading{top:12px;left:12px;font-size:.68rem;padding:8px 12px}
+  .hm-official-actions{gap:7px;left:10px;right:10px}
   .hm-official-open{
-    bottom:14px;
-    min-width:164px;
-    padding:11px 14px;
-    font-size:.7rem;
+    min-width:0;
+    min-height:43px;
+    flex:1 1 135px;
+    padding:9px 11px;
+    font-size:.67rem;
   }
+  .hm-embed-assistance{font-size:.62rem;padding:8px 10px}
+  .hm-standby{gap:13px;padding:22px 19px}
+  .hm-standby-symbol{width:62px;height:62px;border-radius:18px}
+  .hm-standby-symbol svg{width:29px;height:29px}
+  .hm-standby h1{font-size:clamp(1.75rem,7vw,2.35rem)}
+  .hm-standby p{font-size:.79rem}
+  .hm-standby-open{flex:none;min-width:180px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hm-official-loading svg,.hm-standby-spinner{animation:none}
+  .hm-official-open{transition:none}
 }
