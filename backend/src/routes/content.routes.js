@@ -2,8 +2,19 @@ import { Router } from 'express';
 import { pool } from '../database/pool.js';
 import { getMediaDownloadUrl } from '../services/submission.service.js';
 import { getOptimizedMediaUrl } from '../services/mediaVariants.service.js';
+import { getPublicHolaEmbedConfig } from '../services/holaEmbed.service.js';
 
 const router = Router();
+
+// Public read-only embed identifier. This response intentionally contains only
+// the iframe URL, never server-to-server HOLA Maps credentials.
+router.get('/hola-embed', async (_req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await getPublicHolaEmbedConfig());
+  }catch(error){next(error);}
+});
+
 const PUBLIC_STATUSES="('VALID','SHORTLIST','TOP52','AWARDED')";
 const TAXONOMY_SEPARATOR=' • ';
 const publicArtworkCondition=(alias='s')=>`(${alias}.publication_state='PUBLISHED' OR (${alias}.publication_state='SCHEDULED' AND ${alias}.publish_scheduled_at IS NOT NULL AND ${alias}.publish_scheduled_at<=NOW()))`;
