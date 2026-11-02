@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Save, Settings, Search, PanelBottom, PanelTop, Palette, Upload, Image as ImageIcon, X, Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react'
-import { getAdminCmsSettings, updateAdminCmsSetting, uploadAdminSiteAsset } from '../services/api.js'
+import { Save, Settings, Search, PanelBottom, PanelTop, Palette, Upload, Image as ImageIcon, X, Plus, Trash2, ArrowUp, ArrowDown, MapPinned, ExternalLink, Eye, EyeOff, ShieldCheck, AlertCircle } from 'lucide-react'
+import { getAdminCmsSettings, updateAdminCmsSetting, uploadAdminSiteAsset, updateAdminHolaEmbedConfig } from '../services/api.js'
+import { validateHolaEmbedUrl, HOLA_MAPS_HOME_URL } from '../../../shared/holaEmbedUrl.js'
 import './SiteSettingsManager.css'
 
 const DEFAULT_HEADER_LINKS=[
@@ -17,7 +18,8 @@ const sections=[
   ['brand','Thương hiệu',Palette],
   ['header','Header & điều hướng',PanelTop],
   ['seo','SEO mặc định',Search],
-  ['footer','Footer & liên hệ',PanelBottom]
+  ['footer','Footer & liên hệ',PanelBottom],
+  ['hola_embed','Tích hợp HOLA Maps',MapPinned]
 ]
 
 function BrandAssetField({label,field,value,accept='image/*',hint,onChange,onUpload,uploading}){
@@ -77,6 +79,7 @@ export default function SiteSettingsManager(){
   const [message,setMessage]=useState('')
   const [saving,setSaving]=useState(false)
   const [uploading,setUploading]=useState('')
+  const [showEmbedPreview,setShowEmbedPreview]=useState(false)
 
   useEffect(()=>{
     getAdminCmsSettings().then(result=>{
@@ -87,6 +90,7 @@ export default function SiteSettingsManager(){
 
   useEffect(()=>{
     const current=data[active]||{}
+    setShowEmbedPreview(false)
     if(active==='header'){
       setDraft({
         enabled:current.enabled!==false,
@@ -105,6 +109,7 @@ export default function SiteSettingsManager(){
   },[active,data])
 
   const patch=(key,value)=>setDraft(v=>({...v,[key]:value}))
+  const embedCheck=validateHolaEmbedUrl(draft?.embedUrl||'')
   const navLinks=Array.isArray(draft.navLinks)?draft.navLinks:[]
   const patchNav=(index,key,value)=>patch('navLinks',navLinks.map((item,i)=>i===index?{...item,[key]:value}:item))
   const addNav=()=>patch('navLinks',[...navLinks,{label:'Menu mới',href:'/'}])
@@ -136,9 +141,17 @@ export default function SiteSettingsManager(){
   const save=async()=>{
     setSaving(true);setMessage('')
     try{
-      const result=await updateAdminCmsSetting(active,draft)
-      setData(v=>({...v,[active]:result.value}))
-      setMessage('Đã lưu cài đặt và áp dụng lên website.')
+      if(active==='hola_embed'){
+        const result=await updateAdminHolaEmbedConfig(String(draft.embedUrl||''))
+        setData(v=>({...v,hola_embed:{embedUrl:result.embedUrl}}))
+        setMessage(result.embedUrl
+          ? 'Đã lưu URL nhúng. Hãy mở /hola-map và kiểm tra CSP/Network thực tế để xác minh quyền.'
+          : 'Đã xóa URL nhúng. /hola-map sẽ hiển thị trạng thái chờ kết nối.')
+      }else{
+        const result=await updateAdminCmsSetting(active,draft)
+        setData(v=>({...v,[active]:result.value}))
+        setMessage('Đã lưu cài đặt và áp dụng lên website.')
+      }
     }catch(err){setMessage(err.message)}
     finally{setSaving(false)}
   }
@@ -151,7 +164,7 @@ export default function SiteSettingsManager(){
     </aside>
 
     <section>
-      <header><div><span className="eyebrow">{active.toUpperCase()}</span><h2>{sections.find(x=>x[0]===active)?.[1]}</h2><p>Cấu hình dùng chung toàn website.</p></div><button className="btn btn-green btn-sm" onClick={save} disabled={saving}><Save/>{saving?'Đang lưu':'Lưu thay đổi'}</button></header>
+      <header><div><span className="eyebrow">{active.toUpperCase()}</span><h2>{sections.find(x=>x[0]===active)?.[1]}</h2><p>Cấu hình dùng chung toàn website.</p></div><button className="btn btn-green btn-sm" onClick={save} disabled={saving||(active==='hola_embed'&&Boolean(String(draft?.embedUrl||'').trim())&&!embedCheck.valid)}><Save/>{saving?'Đang lưu':'Lưu thay đổi'}</button></header>
       {message&&<div className="cms-message">{message}</div>}
 
       {active==='brand'&&<div className="settings-fields settings-brand-fields">
@@ -226,6 +239,58 @@ export default function SiteSettingsManager(){
         <label className="full">Default description<textarea rows="4" value={draft.defaultDescription||''} onChange={e=>patch('defaultDescription',e.target.value)}/></label>
         <label>OG Image URL<input value={draft.ogImage||''} onChange={e=>patch('ogImage',e.target.value)}/></label>
         <label>Canonical domain<input value={draft.canonicalDomain||'https://halohola.vn'} onChange={e=>patch('canonicalDomain',e.target.value)}/></label>
+      </div>}
+
+      {active==='hola_embed'&&<div className="settings-hola-embed">
+        <div className="settings-hola-embed-guide">
+          <span className="eyebrow">HOLA EMBED PLATFORM V1</span>
+          <h3><MapPinned/> Yêu cầu cấp quyền nhúng</h3>
+          <p>HALO HOLA không thể tự tạo hay phê duyệt mã nhúng. Hãy đăng nhập HOLA Maps, gửi yêu cầu cho ứng dụng <strong>HALO HOLA</strong> và chờ HOLA Maps Admin duyệt.</p>
+          <a href="https://maps.dothihoalac.vn/developers/embed" target="_blank" rel="noopener noreferrer" className="settings-hola-embed-guide-link">
+            Mở trang yêu cầu cấp quyền nhúng <ExternalLink/>
+          </a>
+          <div className="settings-hola-embed-origins">
+            <b>Domain HTTPS cần khai báo với HOLA Maps:</b>
+            <code>https://halohola.vn</code>
+            <code>https://www.halohola.vn</code>
+            <small>Chỉ khai báo domain www nếu thực sự sử dụng. HOLA Maps áp dụng CSP frame-ancestors theo từng domain đã duyệt.</small>
+          </div>
+        </div>
+
+        <div className="settings-hola-embed-config">
+          <h3>URL nhúng đã được cấp</h3>
+          <p>Dán nguyên URL <code>embedUrl</code> từ HOLA Maps, không tự tạo key và không điền secret đồng bộ hay Browser API Key.</p>
+          <label htmlFor="hola-embed-url">Embed URL (công khai)
+            <input id="hola-embed-url" type="url" spellCheck={false}
+              value={draft.embedUrl||''}
+              onChange={e=>patch('embedUrl',e.target.value)}
+              placeholder="https://maps.dothihoalac.vn/embed?key=he_..."
+              aria-invalid={Boolean(String(draft.embedUrl||'').trim())&&!embedCheck.valid}
+            />
+          </label>
+          <div className={'settings-hola-embed-validation '+(embedCheck.valid?'valid':'invalid')} role="status">
+            {embedCheck.valid?<ShieldCheck/>:<AlertCircle/>}
+            <span>{embedCheck.message}</span>
+          </div>
+          <p className="settings-hola-embed-hint">Đường dẫn được hỗ trợ: <code>/embed</code>, <code>/embed/halo</code>, <code>/embed/picker</code>. Xóa URL và lưu để tắt iframe. Định dạng hợp lệ không đồng nghĩa với mã đã được duyệt hoặc còn hiệu lực.</p>
+          <div className="settings-hola-embed-actions">
+            <button type="button" className="btn btn-outline" disabled={!embedCheck.valid}
+              onClick={()=>setShowEmbedPreview(v=>!v)}>
+              {showEmbedPreview?<EyeOff/>:<Eye/>}{showEmbedPreview?'Ẩn xem trước':'Xem trước'}
+            </button>
+            <a className="btn btn-outline" href="/hola-map" target="_blank" rel="noopener noreferrer">
+              Mở /hola-map <ExternalLink/>
+            </a>
+            <a className="btn btn-outline" href={HOLA_MAPS_HOME_URL} target="_blank" rel="noopener noreferrer">
+              Mở HOLA Maps <ExternalLink/>
+            </a>
+          </div>
+          {showEmbedPreview&&embedCheck.valid&&<div className="settings-hola-embed-preview">
+            <iframe src={embedCheck.url} title="Xem trước HOLA Maps Embed Platform V1"
+              loading="lazy" referrerPolicy="no-referrer" allow="geolocation; fullscreen"/>
+            <p>Khung xem trước chỉ giúp kiểm tra hiển thị. Sự kiện iframe onLoad không xác nhận đã cấp quyền; nếu khung trắng hoặc bị chặn, kiểm tra Network 403 và CSP frame-ancestors trong trình duyệt.</p>
+          </div>}
+        </div>
       </div>}
 
       {active==='footer'&&<div className="settings-fields">
