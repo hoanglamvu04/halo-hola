@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { CheckCircle2, Crosshair, ExternalLink, Loader2, MapPin, Search, X } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Crosshair, ExternalLink, Loader2, MapPin, Search, X } from 'lucide-react'
 import {
   getHolaNearbyPlaces,
   normalizeHolaPlace,
   searchHolaPlaces
 } from '../services/holaMapsApi.js'
+import { getPublicHolaEmbedConfig } from '../services/api.js'
+import { buildHolaPickerUrl, getHolaEmbedViewState } from '../../../shared/holaEmbedUrl.js'
 
 const configuredOrigin = String(import.meta.env.VITE_HOLA_MAPS_ORIGIN || 'https://maps.dothihoalac.vn').trim()
 const HOLA_MAPS_ORIGIN = (() => {
@@ -15,6 +17,7 @@ const HOLA_MAPS_URL = `${HOLA_MAPS_ORIGIN}/`
 
 const clean = value => String(value ?? '').trim()
 const validCoordinates = (lat, lng) => {
+  if (lat === '' || lat === null || lat === undefined || lng === '' || lng === null || lng === undefined) return false
   const y = Number(lat)
   const x = Number(lng)
   return Number.isFinite(y) && Number.isFinite(x) && y >= -90 && y <= 90 && x >= -180 && x <= 180
@@ -39,6 +42,11 @@ export default function HolaLocationPicker({ value, onChange }) {
   const [searching, setSearching] = useState(false)
   const [locating, setLocating] = useState(false)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [embedUrl, setEmbedUrl] = useState('')
+  const [pickerConfigStatus, setPickerConfigStatus] = useState('idle')
+  const [pickerFrameStatus, setPickerFrameStatus] = useState('idle')
+  const [pickerRetry, setPickerRetry] = useState(0)
+  const pickerIframeRef = useRef(null)
   const [mapMessage, setMapMessage] = useState('')
   const [searchError, setSearchError] = useState('')
 
@@ -47,16 +55,55 @@ export default function HolaLocationPicker({ value, onChange }) {
     return [Number(value.locationLat), Number(value.locationLng)]
   }, [value.locationLat, value.locationLng])
 
+  // The picker must use the same officially approved public embed identifier
+  // that the /hola-map page uses. Keyless /embed/picker now returns 403.
   const pickerUrl = useMemo(() => {
-    if (typeof window === 'undefined') return `${HOLA_MAPS_ORIGIN}/embed/picker`
-    const params = new URLSearchParams({ origin: window.location.origin })
-    if (position) {
-      params.set('lat', String(position[0]))
-      params.set('lng', String(position[1]))
+    if (typeof window === 'undefined') return ''
+    return buildHolaPickerUrl(embedUrl, {
+      origin: window.location.origin,
+      lat: position?.[0],
+      lng: position?.[1],
+      label: value.location
+    })
+  }, [embedUrl, position, value.location])
+
+  useEffect(() => {
+    if (!pickerOpen) return undefined
+
+    let active = true
+    const controller = new AbortController()
+    setPickerConfigStatus('loading')
+    setPickerFrameStatus('idle')
+    setEmbedUrl('')
+
+    getPublicHolaEmbedConfig({ signal: controller.signal })
+      .then(result => {
+        if (!active) return
+        const state = getHolaEmbedViewState(result?.embedUrl)
+        setEmbedUrl(state.embedUrl)
+        setPickerConfigStatus(state.mode === 'embed' ? 'ready' : 'unavailable')
+      })
+      .catch(() => {
+        if (active) setPickerConfigStatus('error')
+      })
+
+    return () => {
+      active = false
+      controller.abort()
     }
-    if (clean(value.location)) params.set('label', clean(value.location))
-    return `${HOLA_MAPS_ORIGIN}/embed/picker?${params.toString()}`
-  }, [position, value.location])
+  }, [pickerOpen, pickerRetry])
+
+  useEffect(() => {
+    if (!pickerOpen || pickerConfigStatus !== 'ready' || !pickerUrl) return undefined
+    setPickerFrameStatus('loading')
+
+    // Do not trust iframe onLoad: it can fire for HTTP 403 or CSP-blocked frames.
+    // HOLA Maps explicitly sends HOLA_MAP_PICKER_READY after its React app loads.
+    const timer = window.setTimeout(() => {
+      setPickerFrameStatus(previous => previous === 'ready' ? previous : 'timeout')
+    }, 10000)
+    return () => window.clearTimeout(timer)
+  }, [pickerOpen, pickerConfigStatus, pickerUrl])
 
   useEffect(() => {
     if (value.location && value.location !== query) setQuery(value.location)
@@ -109,7 +156,13 @@ export default function HolaLocationPicker({ value, onChange }) {
 
   useEffect(() => {
     const receiveLocation = event => {
-      if (event.origin !== HOLA_MAPS_ORIGIN) return
+      if (!pickerOpen || !pickerUrl || event.origin !== new URL(pickerUrl).origin ||
+          event.source !== pickerIframeRef.current?.contentWindow) return
+
+      if (event.data?.type === 'HOLA_MAP_PICKER_READY') {
+        setPickerFrameStatus('ready')
+        return
+      }
       if (event.data?.type !== 'HOLA_MAP_LOCATION_SELECTED') return
 
       const payload = event.data?.payload || {}
@@ -138,7 +191,7 @@ export default function HolaLocationPicker({ value, onChange }) {
 
     window.addEventListener('message', receiveLocation)
     return () => window.removeEventListener('message', receiveLocation)
-  }, [onChange])
+  }, [onChange, pickerOpen, pickerUrl])
 
   useEffect(() => {
     if (!pickerOpen) return undefined
@@ -273,14 +326,47 @@ export default function HolaLocationPicker({ value, onChange }) {
         <div className="hola-map-picker-panel">
           <header>
             <div><span>HOLA MAPS</span><b>Chọn vị trí thực hiện tác phẩm</b></div>
-            <button type="button" onClick={() => setPickerOpen(false)} aria-label="Đóng HOLA Maps"><X size={20}/></button>
+            <div className="hola-map-picker-header-actions">
+              <a href={HOLA_MAPS_URL} target="_blank" rel="noopener noreferrer" title="Mở HOLA Maps trực tiếp">
+                Mở HOLA Maps <ExternalLink size={15}/>
+              </a>
+              <button type="button" onClick={() => setPickerOpen(false)} aria-label="Đóng HOLA Maps"><X size={20}/></button>
+            </div>
           </header>
-          <iframe
-            src={pickerUrl}
-            title="HOLA Maps — chọn vị trí tác phẩm"
-            allow="geolocation; fullscreen"
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
+          <div className="hola-map-picker-frame-shell">
+            {pickerConfigStatus === 'ready' && pickerUrl ? <>
+              <iframe
+                ref={pickerIframeRef}
+                src={pickerUrl}
+                title="HOLA Maps — chọn vị trí tác phẩm"
+                allow="geolocation; fullscreen"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+              {pickerFrameStatus === 'loading' && <div className="hola-map-picker-status-chip" role="status">
+                <Loader2 size={17} className="spin"/> Đang tải bản đồ chọn địa điểm…
+              </div>}
+              {pickerFrameStatus === 'timeout' && <div className="hola-map-picker-frame-warning" role="alert">
+                <AlertTriangle size={19}/>
+                <p>Chưa nhận được tín hiệu từ HOLA Maps. Khung có thể bị chặn (403/CSP) hoặc tải chậm. Bạn có thể thử lại hoặc đóng để dùng tìm kiếm/GPS.</p>
+                <button type="button" onClick={() => setPickerRetry(v => v + 1)}>Thử lại</button>
+              </div>}
+            </> : <div className="hola-map-picker-unavailable" role="status">
+              {pickerConfigStatus === 'loading'
+                ? <><Loader2 className="spin" size={26}/><p>Đang kiểm tra quyền nhúng HOLA Maps…</p></>
+                : <>
+                  <MapPin size={32}/>
+                  <h2>Chưa mở được bản đồ chọn địa điểm</h2>
+                  <p>{pickerConfigStatus === 'error'
+                    ? 'Không tải được cấu hình kết nối. Vui lòng kiểm tra mạng và thử lại.'
+                    : 'Chưa có URL nhúng được cấp hợp lệ trong Cài đặt HOLA Maps. Không thể sử dụng khung nhúng không có mã.'}</p>
+                  <div className="hola-map-picker-fallback-actions">
+                    <button type="button" onClick={() => setPickerRetry(v => v + 1)}>Thử kết nối lại</button>
+                    <a href={HOLA_MAPS_URL} target="_blank" rel="noopener noreferrer">Mở HOLA Maps <ExternalLink size={15}/></a>
+                    <button type="button" className="secondary" onClick={() => setPickerOpen(false)}>Trở lại tìm kiếm / GPS</button>
+                  </div>
+                </>}
+            </div>}
+          </div>
         </div>
       </div>,
       document.body
