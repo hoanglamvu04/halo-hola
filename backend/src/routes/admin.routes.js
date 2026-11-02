@@ -5,6 +5,7 @@ import { authenticateAdmin, requireRoles } from '../middleware/auth.js';
 import { listConnectionStatuses, saveConnectionSettings, resetConnectionSettings } from '../services/connectionSettings.service.js';
 import { verifySmtpConnection, sendSmtpTestEmail } from '../services/mail.service.js';
 import { AppError } from '../utils/AppError.js';
+import { getPublicHolaEmbedConfig, saveHolaEmbedConfig } from '../services/holaEmbed.service.js';
 import { statusSchema } from '../validators/submission.validators.js';
 import { listTourRegistrations } from '../services/tourRegistration.service.js';
 import { upload } from '../middleware/upload.js';
@@ -228,11 +229,32 @@ router.delete('/cms/partners/:id', async (req,res,next)=>{
   }catch(error){next(error);}
 });
 
+// Embed approval remains with HOLA Maps; only HALO HOLA ADMIN can set its public URL.
+router.get('/hola-embed', requireRoles('ADMIN'), async(_req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await getPublicHolaEmbedConfig());
+  }catch(error){next(error);}
+});
+router.put('/hola-embed', requireRoles('ADMIN'), async(req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json(await saveHolaEmbedConfig(req.body));
+  }catch(error){next(error);}
+});
+
 router.get('/cms/settings', async (_req,res,next)=>{
   try{res.json(await getSiteSettings());}catch(error){next(error);}
 });
 router.put('/cms/settings/:key', async (req,res,next)=>{
-  try{res.json(await updateSiteSetting(req.params.key,req.body||{}));}catch(error){next(error);}
+  try{
+    // Do not let MODERATOR or an unvalidated generic CMS write bypass
+    // the dedicated ADMIN-only HOLA Embed URL endpoint.
+    if(req.params.key==='hola_embed'){
+      throw new AppError('Dùng mục Tích hợp HOLA Maps để cập nhật URL nhúng.',403);
+    }
+    res.json(await updateSiteSetting(req.params.key,req.body||{}));
+  }catch(error){next(error);}
 });
 
 router.get('/media-library', async (req,res,next)=>{
