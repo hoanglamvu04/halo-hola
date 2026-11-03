@@ -21,17 +21,18 @@ async function renderVariant(bitmap,width,type,quality){
 export async function buildSubmissionImageVariants(files=[]){
   if(typeof document==='undefined'||typeof createImageBitmap!=='function')return[]
   const output=[]
+  // Large photo sets on mobile should not upload up to six derivatives
+  // per original. One 1600px WebP is enough for the public map/gallery.
+  const widths=files.length>=6?[1600]:WIDTHS
   for(let index=0;index<files.length;index+=1){
     const file=files[index]
     if(!SOURCE_TYPES.has(String(file?.type||'').toLowerCase()))continue
     let bitmap
     try{
       bitmap=await createImageBitmap(file,{imageOrientation:'from-image'})
-      for(const width of WIDTHS){
+      for(const width of widths){
         const webp=await renderVariant(bitmap,width,'image/webp',.82)
         if(webp)output.push({blob:webp,name:`variant-${index}-${width}.webp`})
-        const avif=await renderVariant(bitmap,width,'image/avif',.68)
-        if(avif)output.push({blob:avif,name:`variant-${index}-${width}.avif`})
       }
     }catch{
       // RAW/TIFF/unsupported browser codecs keep the immutable original only.
