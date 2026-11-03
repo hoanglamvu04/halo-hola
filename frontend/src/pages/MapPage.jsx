@@ -52,15 +52,15 @@ export default function MapPage(){
 
         <div className="hm-official-actions">
           <div className="hm-embed-assistance">
-            Nếu khung nhúng bị chặn (403/CSP), hãy mở HOLA Maps trực tiếp.
+            Nếu bản đồ báo từ chối kết nối, hãy kiểm tra quyền nhúng của halohola.xspace.vn trên HOLA Maps hoặc mở lớp ảnh trực tiếp.
           </div>
           <a className="hm-official-open hm-official-open-secondary"
             href={config.embedUrl} target="_blank" rel="noopener noreferrer">
             Mở bản đồ ở tab mới <ExternalLink aria-hidden="true"/>
           </a>
           <a className="hm-official-open"
-            href={HOLA_MAPS_HOME_URL} target="_blank" rel="noopener noreferrer">
-            Mở HOLA Maps <ExternalLink aria-hidden="true"/>
+            href={HOLA_MAPS_HOME_URL + 'halo'} target="_blank" rel="noopener noreferrer">
+            Xem ảnh Góc nhìn <ExternalLink aria-hidden="true"/>
           </a>
         </div>
       </>:config.mode==='loading'?<div className="hm-standby">
