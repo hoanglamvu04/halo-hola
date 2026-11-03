@@ -79,7 +79,7 @@
   object-fit:contain;
   background:#10271e;
 }
-.artwork-main-media>img{object-fit:cover}
+.artwork-main-media>img{object-fit:contain;object-position:center}
 .artwork-main-media>video{outline:0}
 .artwork-media-empty{
   min-height:680px;
@@ -416,7 +416,7 @@
     height:100%;
     aspect-ratio:4/3;
   }
-  .artwork-main-media>img{object-fit:cover}
+  .artwork-main-media>img{object-fit:contain;object-position:center}
   .artwork-media-badges{left:10px;top:10px;gap:5px;max-width:calc(100% - 70px)}
   .artwork-media-badges span{min-height:26px;padding:5px 8px;font-size:.52rem}
   .artwork-media-counter{right:10px;top:10px;height:26px;min-width:38px;font-size:.55rem}
