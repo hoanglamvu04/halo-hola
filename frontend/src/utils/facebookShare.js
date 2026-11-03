@@ -68,7 +68,6 @@ export async function shareSubmission({ caption, url, files = [] } = {}) {
   const mediaFiles = files.filter(file => /^image\//i.test(file?.type || '') || /^video\//i.test(file?.type || ''))
   const canShareFiles = mediaFiles.length > 0 && typeof navigator.canShare === 'function' && navigator.canShare({ files: mediaFiles })
   const payload = {
-    title: 'HALO HOLA 2026',
     text: caption,
     ...(url ? { url } : {}),
     ...(canShareFiles ? { files: mediaFiles } : {})
