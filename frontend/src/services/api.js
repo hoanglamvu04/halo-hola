@@ -32,6 +32,7 @@ function unwrap(promise) {
     const wrapped = new Error(message);
     wrapped.status = error.response?.status;
     wrapped.details = error.response?.data?.details;
+    wrapped.requestId = error.response?.data?.requestId;
     throw wrapped;
   });
 }
