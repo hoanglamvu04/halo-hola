@@ -431,6 +431,7 @@ export default function HomePage() {
             <div className="home-story-card-body">
               <span className="home-story-category">{a.theme||'Góc nhìn Hòa Lạc'} · {a.location||'Hòa Lạc'}</span>
               <h3>{a.title||a.code}</h3>
+              <p className="home-story-excerpt">{String(a.story||'').replace(/\\s+/g,' ').trim()||`Khám phá câu chuyện và góc nhìn về ${a.location||'Hòa Lạc'} qua tác phẩm này.`}</p>
               <div className="home-story-author-row">
                 <span className="home-story-avatar">{String(a.author||'?').trim().charAt(0)||'?'}</span>
                 <b>{a.author||'Tác giả HALO HOLA'}</b>
