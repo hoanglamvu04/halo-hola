@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle, Check, CheckCircle2, Circle, Download, ExternalLink, Facebook,
   FileCheck2, FileText, Filter, Globe2, Images, Link2, Mail, MapPin, MoreHorizontal,
@@ -7,6 +7,7 @@ import {
 import { client } from '../services/api.js'
 import { resyncSubmissionHolaMaps } from '../services/adminOperationsApi.js'
 import './AdminSubmissionOperations.css'
+import './AdminSubmissionWorkspace.css'
 
 const statuses=['PENDING','VALID','SHORTLIST','TOP52','AWARDED','REJECTED']
 const statusLabels={PENDING:'Mới nhận',VALID:'Đủ thông tin',SHORTLIST:'Được chọn biên tập',TOP52:'TOP52',AWARDED:'Góc nhìn tiêu biểu',REJECTED:'Cần bổ sung'}
@@ -79,6 +80,14 @@ function Pipeline({item,compact=false}){
   </div>
 }
 
+function ArtworkThumbnail({src,fallbackClass='admin-v2-thumb-placeholder'}){
+  const [broken,setBroken]=useState(false)
+  useEffect(()=>setBroken(false),[src])
+  return src&&!broken
+    ? <img src={src} loading="lazy" alt="" onError={()=>setBroken(true)}/>
+    : <span className={fallbackClass}><Images aria-hidden="true"/></span>
+}
+
 function csvCell(value){
   return `"${String(value??'').replaceAll('"','""')}"`
 }
@@ -87,6 +96,8 @@ export default function AdminSubmissionOperations({
   submissions=[],selected,setSelected,query,setQuery,statusFilter,
   loading,onLoad,onSetStatus,onOpenOriginal,onNavigate,onError
 }){
+  const closeButtonRef=useRef(null)
+  const lastOpenedRowRef=useRef(null)
   const [opsOverview,setOpsOverview]=useState(null)
   const [opsItems,setOpsItems]=useState([])
   const [opsLoading,setOpsLoading]=useState(false)
@@ -156,10 +167,6 @@ export default function AdminSubmissionOperations({
   const selectedItem=useMemo(()=>mergedItems.find(item=>String(item.id)===String(selected?.id))||selected,[mergedItems,selected])
 
   useEffect(()=>{
-    if(!selectedItem&&filteredItems.length)setSelected?.(filteredItems[0])
-  },[selectedItem,filteredItems,setSelected])
-
-  useEffect(()=>{
     if(!selectedItem)return
     setFacebookEdit({
       url:selectedItem.facebook_post_url||'',
@@ -170,6 +177,44 @@ export default function AdminSubmissionOperations({
     })
     setSyncMessage('')
   },[selectedItem?.id,selectedItem?.facebook_post_url,selectedItem?.facebook_post_verified_at,selectedItem?.facebook_reactions,selectedItem?.facebook_comments,selectedItem?.facebook_shares])
+
+  const openDetail=(item,event)=>{
+    if(event?.currentTarget)lastOpenedRowRef.current=event.currentTarget
+    setSelected?.(item)
+  }
+  const closeDetail=()=>{
+    setSelected?.(null)
+    window.requestAnimationFrame(()=>lastOpenedRowRef.current?.focus?.())
+  }
+
+  useEffect(()=>{
+    if(!selectedItem)return undefined
+    const previousOverflow=document.body.style.overflow
+    document.body.style.overflow='hidden'
+    const frame=window.requestAnimationFrame(()=>closeButtonRef.current?.focus())
+    const onKeyDown=(event)=>{
+      if(event.key==='Escape'){
+        event.preventDefault()
+        setSelected?.(null)
+        window.requestAnimationFrame(()=>lastOpenedRowRef.current?.focus?.())
+      }
+      if(event.key!=='Tab')return
+      const dialog=closeButtonRef.current?.closest('[role="dialog"]')
+      if(!dialog)return
+      const controls=[...dialog.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),summary')]
+        .filter(element=>element.getClientRects().length)
+      if(!controls.length)return
+      const first=controls[0],last=controls[controls.length-1]
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+      if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+    }
+    document.addEventListener('keydown',onKeyDown)
+    return ()=>{
+      window.cancelAnimationFrame(frame)
+      document.removeEventListener('keydown',onKeyDown)
+      document.body.style.overflow=previousOverflow
+    }
+  },[selectedItem?.id])
 
   const refreshAll=async()=>{
     await Promise.all([Promise.resolve(onLoad?.()),loadOperations()])
@@ -286,22 +331,36 @@ export default function AdminSubmissionOperations({
     <div className="admin-v2-layout">
       <section className="admin-v2-list-card">
         <div className="admin-v2-list-title"><div><h2>Danh sách góc nhìn</h2><span>{filteredItems.length} / {total} góc nhìn</span></div>{activeIssue&&<button onClick={()=>setActiveIssue('')}><X/> Bỏ lọc nhanh</button>}</div>
-        <div className="admin-v2-table-head"><span></span><span>Góc nhìn</span><span>Tác giả</span><span>Nguồn</span><span>Tiến trình</span><span>Facebook</span><span>Maps</span><span>Trạng thái</span><span></span></div>
+        <div className="admin-v2-table-head" aria-hidden="true"><span></span><span>Góc nhìn</span><span>Tác giả</span><span>Tiến trình</span><span>Trạng thái</span><span>Thao tác</span></div>
         <div className="admin-v2-rows">
           {filteredItems.map(item=>{
             const state=getOperationalState(item)
             const preview=firstPreview(item)
             const isSelected=String(selectedItem?.id)===String(item.id)
-            return <div className={'admin-v2-row '+(isSelected?'selected':'')} key={item.id} role="button" tabIndex="0" onClick={()=>setSelected?.(item)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' ')setSelected?.(item)}}>
+            return <div className={'admin-v2-row '+(isSelected?'selected':'')} key={item.id} role="button" tabIndex={0}
+              aria-label={'Xem hồ sơ '+(item.code||item.title||'góc nhìn')}
+              onClick={e=>openDetail(item,e)}
+              onKeyDown={e=>{if(e.target===e.currentTarget&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openDetail(item,e)}}}>
               <span className={'admin-v2-select '+(isSelected?'checked':'')}>{isSelected?<Check/>:null}</span>
-              <div className="admin-v2-artwork-cell">{preview?<img src={preview} alt=""/>:<span className="admin-v2-thumb-placeholder"><Images/></span>}<div><b>{item.title||'Góc nhìn chưa đặt tên'}</b><small>{item.code||'Chưa có mã'}</small><em><MapPin/> {item.location||'Chưa có địa điểm'}</em></div></div>
+              <div className="admin-v2-artwork-cell">
+                <ArtworkThumbnail src={preview}/>
+                <div>
+                  <b>{item.title||'Góc nhìn chưa đặt tên'}</b>
+                  <small>{item.code||'Chưa có mã'}</small>
+                  <em><MapPin/> {item.location||'Chưa có địa điểm'}</em>
+                  <span className="admin-v2-row-metadata">
+                    <span className={'admin-v2-source '+(sourceLabel(item)==='Facebook'?'facebook':'')}>{sourceLabel(item)}</span>
+                    <span className={'admin-v2-signal '+(item.facebook_post_url?(item.facebook_post_verified_at?'good':'pending'):'danger')}
+                      title={item.facebook_post_url?(item.facebook_post_verified_at?'Facebook đã xác minh':'Facebook chưa xác minh'):'Chưa có Facebook'}><Facebook/></span>
+                    <span className={'admin-v2-signal '+mapTone(item)}
+                      title={isMapped(item)?'Đã lên HOLA Maps':item.hola_maps_sync_status||'Chưa đồng bộ'}><MapPin/></span>
+                  </span>
+                </div>
+              </div>
               <div className="admin-v2-author-cell"><b>{item.display_name||item.name||'Chưa có tên'}</b><small>{item.email||'—'}</small></div>
-              <span className={'admin-v2-source '+(sourceLabel(item)==='Facebook'?'facebook':'')}>{sourceLabel(item)}</span>
               <Pipeline item={item} compact/>
-              <span className={'admin-v2-signal '+(item.facebook_post_url?(item.facebook_post_verified_at?'good':'pending'):'danger')} title={item.facebook_post_url?(item.facebook_post_verified_at?'Facebook đã xác minh':'Facebook chưa xác minh'):'Chưa có Facebook'}><Facebook/></span>
-              <span className={'admin-v2-signal '+mapTone(item)} title={isMapped(item)?'Đã lên HOLA Maps':item.hola_maps_sync_status||'Chưa đồng bộ'}><MapPin/></span>
               <span className={'admin-v2-status '+state.tone}>{state.label}</span>
-              <button className="admin-v2-view" onClick={e=>{e.stopPropagation();setSelected?.(item)}}>Xem</button>
+              <button type="button" className="admin-v2-view" onClick={e=>{e.stopPropagation();openDetail(item,e)}}>Xem <span aria-hidden="true">→</span></button>
             </div>
           })}
           {!filteredItems.length&&!busy&&<div className="admin-v2-empty"><Search/><b>Không có góc nhìn phù hợp</b><span>Thử bỏ bớt bộ lọc hoặc tìm bằng từ khóa khác.</span></div>}
@@ -309,14 +368,33 @@ export default function AdminSubmissionOperations({
         </div>
       </section>
 
-      <aside className="admin-v2-detail-card">
-        {!selectedItem?<div className="admin-v2-detail-empty"><Images/><h3>Chọn một góc nhìn</h3><p>Thông tin hồ sơ, Facebook, file gốc và các hành động vận hành sẽ hiển thị tại đây.</p></div>:<>
+      {selectedItem&&<>
+        <button type="button" className="admin-v2-drawer-backdrop" aria-label="Đóng chi tiết" onClick={closeDetail}/>
+        <aside className="admin-v2-detail-card" role="dialog" aria-modal="true" aria-label={'Chi tiết góc nhìn '+(selectedItem.code||'')}>
+          <div className="admin-v2-detail-toolbar">
+            <div><small>HỒ SƠ GÓC NHÌN</small><b>{selectedItem.code||'Chi tiết góc nhìn'}</b></div>
+            <button type="button" ref={closeButtonRef} onClick={closeDetail} aria-label="Đóng chi tiết góc nhìn"><X size={17}/> Đóng</button>
+          </div>
           <div className="admin-v2-detail-head">
-            {firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<span className="admin-v2-detail-placeholder"><Images/></span>}
+            <ArtworkThumbnail src={firstPreview(selectedItem)} fallbackClass="admin-v2-detail-placeholder"/>
             <div><span className="admin-v2-code">{selectedItem.code}</span><h2>{selectedItem.title||'Góc nhìn chưa đặt tên'}</h2><span className={'admin-v2-status '+getOperationalState(selectedItem).tone}>{getOperationalState(selectedItem).label}</span></div>
           </div>
           <div className="admin-v2-meta-line"><span><MapPin/> {selectedItem.location||'Chưa có địa điểm'}</span><span>Nhận: {formatDate(selectedItem.created_at)}</span></div>
           <Pipeline item={selectedItem}/>
+
+          <section className="admin-v2-detail-section actions-section">
+            <div className="admin-v2-section-title"><FileCheck2/><h3>Hành động</h3></div>
+            <label className="admin-v2-status-select"><span>Trạng thái duyệt</span><select value={selectedItem.status||'PENDING'} onChange={e=>onSetStatus?.(selectedItem.id,e.target.value)}>{statuses.map(status=><option key={status} value={status}>{statusLabels[status]}</option>)}</select></label>
+            <div className="admin-v2-action-grid">
+              {!approvedStatuses.has(selectedItem.status)&&<button className="admin-v2-btn primary" onClick={()=>onSetStatus?.(selectedItem.id,'VALID')}><Check/> Đánh dấu hợp lệ</button>}
+              <button className="admin-v2-btn ghost" onClick={()=>onNavigate?.('Công bố')}><Globe2/> Công bố</button>
+              <button className="admin-v2-btn ghost" disabled={syncing===selectedItem.id} onClick={()=>resync(selectedItem)}><MapPin/> {syncing===selectedItem.id?'Đang đồng bộ...':isMapped(selectedItem)?'Đồng bộ lại Maps':'Đưa vào HOLA Maps'}</button>
+              <button className="admin-v2-btn ghost" disabled={notifyBusy} onClick={notify}><Mail/> {notifyBusy?'Đang gửi...':'Gửi email trạng thái'}</button>
+            </div>
+            {syncMessage&&<div className="admin-v2-notice good"><CheckCircle2/>{syncMessage}</div>}
+            {selectedItem.hola_maps_last_sync_error&&<div className="admin-v2-notice danger"><AlertTriangle/><span><b>Lỗi Maps gần nhất</b>{selectedItem.hola_maps_last_sync_error}</span></div>}
+          </section>
+
 
           <section className="admin-v2-detail-section">
             <div className="admin-v2-section-title"><UserRound/><h3>Thông tin tác giả</h3></div>
@@ -326,7 +404,7 @@ export default function AdminSubmissionOperations({
           <section className="admin-v2-detail-section">
             <div className="admin-v2-section-title"><Images/><h3>File & liên kết</h3></div>
             <div className="admin-v2-file-grid">
-              <div className="admin-v2-file-summary"><span className="admin-v2-file-thumb">{firstPreview(selectedItem)?<img src={firstPreview(selectedItem)} alt=""/>:<Images/>}</span><div><small>File góc nhìn</small><b>{selectedItem.media?.[0]?.originalName||`${Number(selectedItem.media_count||0)} file đã lưu`}</b></div>{selectedItem.media?.[0]?.id&&<button title="Tải file gốc" onClick={()=>onOpenOriginal?.(selectedItem.media[0].id)}><Download/></button>}</div>
+              <div className="admin-v2-file-summary"><span className="admin-v2-file-thumb"><ArtworkThumbnail src={firstPreview(selectedItem)} fallbackClass="admin-v2-file-missing"/></span><div><small>File góc nhìn</small><b>{selectedItem.media?.[0]?.originalName||`${Number(selectedItem.media_count||0)} file đã lưu`}</b></div>{selectedItem.media?.[0]?.id&&<button title="Tải file gốc" onClick={()=>onOpenOriginal?.(selectedItem.media[0].id)}><Download/></button>}</div>
               <div className="admin-v2-link-summary"><div><small>Link góc nhìn</small><b>{selectedItem.external_link?'Đã có liên kết':'Chưa có liên kết'}</b></div>{selectedItem.external_link&&<a href={selectedItem.external_link} target="_blank" rel="noreferrer"><ExternalLink/></a>}</div>
             </div>
           </section>
@@ -348,26 +426,14 @@ export default function AdminSubmissionOperations({
             </div>
           </section>
 
-          <section className="admin-v2-detail-section actions-section">
-            <div className="admin-v2-section-title"><FileCheck2/><h3>Hành động</h3></div>
-            <label className="admin-v2-status-select"><span>Trạng thái duyệt</span><select value={selectedItem.status||'PENDING'} onChange={e=>onSetStatus?.(selectedItem.id,e.target.value)}>{statuses.map(status=><option key={status} value={status}>{statusLabels[status]}</option>)}</select></label>
-            <div className="admin-v2-action-grid">
-              {!approvedStatuses.has(selectedItem.status)&&<button className="admin-v2-btn primary" onClick={()=>onSetStatus?.(selectedItem.id,'VALID')}><Check/> Đánh dấu hợp lệ</button>}
-              <button className="admin-v2-btn ghost" onClick={()=>onNavigate?.('Công bố')}><Globe2/> Công bố</button>
-              <button className="admin-v2-btn ghost" disabled={syncing===selectedItem.id} onClick={()=>resync(selectedItem)}><MapPin/> {syncing===selectedItem.id?'Đang đồng bộ...':isMapped(selectedItem)?'Đồng bộ lại Maps':'Đưa vào HOLA Maps'}</button>
-              <button className="admin-v2-btn ghost" disabled={notifyBusy} onClick={notify}><Mail/> {notifyBusy?'Đang gửi...':'Gửi email trạng thái'}</button>
-            </div>
-            {syncMessage&&<div className="admin-v2-notice good"><CheckCircle2/>{syncMessage}</div>}
-            {selectedItem.hola_maps_last_sync_error&&<div className="admin-v2-notice danger"><AlertTriangle/><span><b>Lỗi Maps gần nhất</b>{selectedItem.hola_maps_last_sync_error}</span></div>}
-          </section>
 
           {(selectedItem.media?.length>1||selectedItem.story)&&<details className="admin-v2-more-detail">
             <summary>Thông tin mở rộng</summary>
             {selectedItem.media?.length>1&&<div className="admin-v2-vault"><h4>Original Vault · {selectedItem.media.length} file</h4>{selectedItem.media.map(media=><div key={media.id}><div><b>{media.originalName}</b><small>{(Number(media.size||0)/1024/1024).toFixed(2)} MB · {media.provider||'storage'}</small></div><button onClick={()=>onOpenOriginal?.(media.id)}><Download/></button></div>)}</div>}
             {selectedItem.story&&<div className="admin-v2-story"><h4>Câu chuyện</h4><p>{selectedItem.story}</p></div>}
           </details>}
-        </>}
-      </aside>
+        </aside>
+      </>}
     </div>
   </div>
 }
