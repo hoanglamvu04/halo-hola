@@ -1612,3 +1612,92 @@
     padding-bottom: 16px !important;
   }
 }
+
+
+/* Home uses the same approved HOLA Embed V1 URL as /hola-map.
+   A missing/revoked URL must never silently fall back to keyless /embed. */
+.home-map-live-frame.home-map-live-frame-fallback{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(135deg,#e8f0e8 0%,#f9f5eb 100%)!important;
+}
+.home-map-live-standby{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  gap:13px;
+  padding:24px;
+  text-align:center;
+  color:#153e2e;
+}
+.home-map-live-standby-icon{
+  display:grid;
+  place-items:center;
+  width:64px;
+  height:64px;
+  border-radius:20px;
+  background:#e4f0e7;
+  border:1px solid #d5e4d8;
+  color:#23664a;
+}
+.home-map-live-standby b{
+  font-family:inherit;
+  font-weight:850;
+  font-size:clamp(1.03rem,2vw,1.45rem);
+}
+.home-map-live-standby p{
+  max-width:360px;
+  margin:0;
+  color:#5e7667;
+  font-size:.81rem;
+  line-height:1.55;
+}
+.home-map-live-standby a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:40px;
+  padding:8px 17px;
+  border-radius:999px;
+  background:#173d2d;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  font-size:.77rem;
+}
+.home-map-live-standby a:hover{color:#fff;background:#245540}
+.home-map-live-direct{
+  position:absolute;
+  z-index:4;
+  right:16px;
+  bottom:16px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid rgba(23,61,45,.15);
+  background:rgba(255,255,255,.95);
+  color:#173d2d;
+  text-decoration:none;
+  font-size:.7rem;
+  font-weight:800;
+  box-shadow:0 5px 18px rgba(28,47,38,.12);
+}
+.home-map-live-direct:hover{color:#174d39;background:#f3f9f5}
+@media(max-width:760px){
+  .home-map-live-standby{gap:8px;padding:14px}
+  .home-map-live-standby-icon{width:42px;height:42px;border-radius:14px}
+  .home-map-live-standby-icon svg{width:22px;height:22px}
+  .home-map-live-standby b{font-size:.9rem}
+  .home-map-live-standby p{font-size:.68rem;line-height:1.35}
+  .home-map-live-standby a{min-height:35px;font-size:.69rem}
+  .home-map-live-direct{right:9px;bottom:9px;padding:7px 10px;font-size:.66rem}
+}
