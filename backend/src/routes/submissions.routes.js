@@ -153,6 +153,12 @@ router.get('/media/:mediaId/halo', async (req, res, next) => {
   }
 });
 
+// Let the public submission UI enforce the same file limits as the server.
+router.get('/upload-policy', (_req, res) => {
+  res.set('Cache-Control', 'public, max-age=120');
+  res.json({ maxFiles: env.maxUploadFileCount, maxFileSizeMb: env.maxUploadFileSizeMb });
+});
+
 router.post('/', submissionRateLimiter, submissionUpload.fields([
   {name:'files',maxCount:env.maxUploadFileCount},
   {name:'previews',maxCount:env.maxUploadFileCount*6}
