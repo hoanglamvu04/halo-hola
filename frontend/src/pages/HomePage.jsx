@@ -3,8 +3,8 @@ import { ArrowRight, ArrowLeft, MapPin, Leaf, BookOpen, Users, Sun, Map, HeartHa
 import { Link } from 'react-router-dom'
 import ThemeCard from '../components/ThemeCard.jsx'
 import { img } from '../data/siteData.js'
-import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPublicArtworks } from '../services/api.js'
-import { getHolaMapConfig } from '../services/holaMapsApi.js'
+import { getCampaignStats, getHomepageContent, getThemes, getColors, getTours, getPublicArtworks, getPublicHolaEmbedConfig } from '../services/api.js'
+import { getHolaEmbedViewState, HOLA_MAPS_HOME_URL } from '../../../shared/holaEmbedUrl.js'
 import { normalizeTour } from '../utils/contentAdapters.js'
 import { campaignCssVars, normalizeCampaignConfig, OFFICIAL_CAMPAIGN_MILESTONES } from '../utils/campaignConfig.js'
 
@@ -14,7 +14,7 @@ export default function HomePage() {
   const [themes,setThemes]=useState([])
   const [colors,setColors]=useState([])
   const [tours,setTours]=useState([])
-  const [holaMapEmbedUrl,setHolaMapEmbedUrl]=useState('')
+  const [holaMapEmbed,setHolaMapEmbed]=useState({mode:'loading',embedUrl:''})
   const [artworks,setArtworks]=useState([])
   const [heroSlide,setHeroSlide]=useState(0)
 
@@ -24,7 +24,7 @@ export default function HomePage() {
     getThemes().then(data=>setThemes(Array.isArray(data)?data:[])).catch(()=>{})
     getColors().then(data=>setColors(Array.isArray(data)?data:[])).catch(()=>{})
     getTours().then(data=>setTours((data||[]).map(normalizeTour))).catch(()=>{})
-    getHolaMapConfig().then(config=>setHolaMapEmbedUrl(config?.embedUrl||'https://maps.dothihoalac.vn/embed')).catch(()=>setHolaMapEmbedUrl('https://maps.dothihoalac.vn/embed'))
+    getPublicHolaEmbedConfig().then(config=>setHolaMapEmbed(getHolaEmbedViewState(config?.embedUrl))).catch(()=>setHolaMapEmbed({mode:'waiting',embedUrl:''}))
     getPublicArtworks({limit:5}).then(data=>setArtworks(Array.isArray(data)?data:[])).catch(()=>{})
   },[])
 
@@ -384,16 +384,24 @@ export default function HomePage() {
           <Link className="btn btn-green" to="/hola-map"><Map size={17}/> Mở HOLA Map</Link>
         </div>
 
-        <div className="home-map-live-frame">
-          {holaMapEmbedUrl
+        <div className={'home-map-live-frame '+(holaMapEmbed.mode!=='embed'?'home-map-live-frame-fallback':'')}>
+          {holaMapEmbed.mode==='embed'
             ? <iframe
-                src={holaMapEmbedUrl}
-                title="Hola Maps - Bản đồ Hòa Lạc"
+                src={holaMapEmbed.embedUrl}
+                title="HOLA Maps — Bản đồ Hòa Lạc tương tác"
                 loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
+                referrerPolicy="no-referrer"
+                allow="geolocation; fullscreen"
               />
-            : <div className="home-map-live-loading"><MapPin/><span>Đang tải Hola Maps…</span></div>}
-          <div className="home-map-live-badge"><span className="home-map-live-dot"/>LIVE · HOLA MAPS</div>
+            : <div className="home-map-live-standby" role="status">
+                <span className="home-map-live-standby-icon"><MapPin size={29}/></span>
+                <b>{holaMapEmbed.mode==='loading'?'Đang kết nối HOLA Maps':'HOLA Maps đang chờ kết nối'}</b>
+                <p>{holaMapEmbed.mode==='loading'
+                  ? 'Đang tải bản đồ từ HOLA Maps…'
+                  : 'Bản đồ nhúng hiện chưa sẵn sàng. Bạn vẫn có thể khám phá HOLA Maps trực tiếp.'}</p>
+                <a href={HOLA_MAPS_HOME_URL} target="_blank" rel="noopener noreferrer">Mở HOLA Maps <ArrowRight size={16}/></a>
+              </div>}
+          {holaMapEmbed.mode==='embed'&&<a className="home-map-live-direct" href={HOLA_MAPS_HOME_URL} target="_blank" rel="noopener noreferrer">Mở trực tiếp <ArrowRight size={13}/></a>}
         </div>
       </div>
     </section>}
