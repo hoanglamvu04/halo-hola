@@ -44,6 +44,7 @@ export async function storeSubmissionMediaVariants(submission,variantFiles=[]){
         key,
         body:fsSync.createReadStream(file.path),
         contentType:mimeType,
+        contentLength:file.size,
         metadata:{submission:submission.code,media:String(parent.id),width:String(meta.width),format:meta.format}
       });
       await pool.query(
