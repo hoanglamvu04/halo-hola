@@ -74,18 +74,24 @@ async function storeOriginalFiles(client, submission, files = []) {
     let storedUrl = '/uploads/' + file.filename;
 
     if (useR2) {
-      await putR2Object({
-        client: r2,
-        bucket: buckets.originals,
-        key: objectKey,
-        body: fs.createReadStream(file.path),
-        contentType: file.mimetype,
-        metadata: {
-          submission: submission.code,
-          sha256,
-          originalname: encodeURIComponent(file.originalname)
-        }
-      });
+      try {
+        await putR2Object({
+          client: r2,
+          bucket: buckets.originals,
+          key: objectKey,
+          body: fs.createReadStream(file.path),
+          contentType: file.mimetype,
+          contentLength: file.size,
+          metadata: {
+            submission: submission.code,
+            sha256,
+            originalname: encodeURIComponent(file.originalname)
+          }
+        });
+      } catch (error) {
+        console.error('R2 original media upload failed:', error);
+        throw new AppError('Không thể lưu ảnh/file lên kho lưu trữ. Vui lòng thử lại sau. Bản nháp vẫn được giữ trên thiết bị.', 503);
+      }
       storageProvider = 'R2';
       bucket = buckets.originals;
       storedUrl = `r2://${bucket}/${objectKey}`;
