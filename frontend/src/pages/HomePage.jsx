@@ -8,6 +8,12 @@ import { getHolaEmbedViewState, HOLA_MAPS_HOME_URL } from '../../../shared/holaE
 import { normalizeTour } from '../utils/contentAdapters.js'
 import { campaignCssVars, normalizeCampaignConfig, OFFICIAL_CAMPAIGN_MILESTONES } from '../utils/campaignConfig.js'
 
+function formatArtworkCardDate(value) {
+  if (!value) return 'HALO HOLA 2026'
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? 'HALO HOLA 2026' : date.toLocaleDateString('vi-VN')
+}
+
 export default function HomePage() {
   const [stats,setStats]=useState({submissions:0,creators:0,locations:0,top52:0})
   const [homepage,setHomepage]=useState({})
@@ -424,21 +430,20 @@ export default function HomePage() {
           {artworks.length===0&&<div className="home-story-empty">Các góc nhìn đã công bố sẽ xuất hiện tại đây.</div>}
           {artworks.slice(0,5).map(a=><Link to={'/tac-pham/'+a.slug} className="home-story-card" key={a.id||a.slug}>
             <div className="home-story-media">
-              {a.image?<img src={a.image} alt={a.title||a.code}/>:<div className="theme-card-placeholder"/>}
+              {a.image?<img src={a.image} alt={a.title||a.code} loading="lazy" decoding="async"/>:<div className="theme-card-placeholder"/>}
               <span className={`home-story-badge ${a.status==='AWARDED'?'awarded':''}`}>{a.status==='AWARDED'?'GÓC NHÌN TIÊU BIỂU':a.status==='TOP52'?'TOP52':a.status==='SHORTLIST'?'ĐƯỢC CHỌN BIÊN TẬP':'GÓC NHÌN'}</span>
-              <span className="home-story-heart"><Heart/></span>
+              <span className="home-story-type">{a.type||'Photo'}</span>
             </div>
             <div className="home-story-card-body">
               <span className="home-story-category">{a.theme||'Góc nhìn Hòa Lạc'} · {a.location||'Hòa Lạc'}</span>
               <h3>{a.title||a.code}</h3>
               <p className="home-story-excerpt">{String(a.story||'').replace(/\s+/g,' ').trim()||`Khám phá câu chuyện và góc nhìn về ${a.location||'Hòa Lạc'} qua tác phẩm này.`}</p>
-              <div className="home-story-author-row">
-                <span className="home-story-avatar">{String(a.author||'?').trim().charAt(0)||'?'}</span>
-                <b>{a.author||'Tác giả HALO HOLA'}</b>
-              </div>
-              <div className="home-story-card-meta">
-                <span><Eye/> {a.type||'Góc nhìn cộng đồng'}</span>
-                <span><MapPin/> {a.location||'Hòa Lạc'}</span>
+              <div className="home-story-card-footer">
+                <div className="home-story-card-credit">
+                  <b title={a.author||'Tác giả HALO HOLA'}>{a.author||'Tác giả HALO HOLA'}</b>
+                  <small><CalendarDays aria-hidden="true"/> {formatArtworkCardDate(a.publishedAt||a.createdAt||a.capturedAt)}</small>
+                </div>
+                <span className="home-story-readmore">Xem bài <ArrowRight aria-hidden="true"/></span>
               </div>
             </div>
           </Link>)}
