@@ -17,6 +17,8 @@ export function createR2Client() {
   if(!hasR2Config())throw new Error('R2 is not configured.');
   return new S3Client({
     region: 'auto',endpoint:config.endpoint,
+    // R2 does not support every optional trailing-checksum mode from recent AWS SDKs.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
     credentials:{accessKeyId:config.accessKeyId,secretAccessKey:config.secretAccessKey}
   });
 }
@@ -29,11 +31,12 @@ export async function assertR2BucketAccess(client, bucket) {
   await client.send(new HeadBucketCommand({ Bucket: bucket }));
 }
 
-export async function putR2Object({ client, bucket, key, body, contentType, metadata = {} }) {
+export async function putR2Object({ client, bucket, key, body, contentType, contentLength, metadata = {} }) {
   return client.send(new PutObjectCommand({
     Bucket: bucket,
     Key: key,
     Body: body,
+    ...(Number.isSafeInteger(contentLength) && contentLength >= 0 ? { ContentLength: contentLength } : {}),
     ContentType: contentType,
     Metadata: metadata
   }));
