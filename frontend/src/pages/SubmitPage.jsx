@@ -7,7 +7,7 @@ import {
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero.jsx'
 import HolaLocationPicker from '../components/HolaLocationPicker.jsx'
-import { getColors, getCommunityAccount, getSiteSettings, getThemes, submitArtwork } from '../services/api.js'
+import { getColors, getCommunityAccount, getSiteSettings, getSubmissionUploadPolicy, getThemes, submitArtwork } from '../services/api.js'
 import {
   buildSubmissionFacebookCaption,
   CHECKIN_GROUP_SEARCH_URL,
@@ -109,6 +109,7 @@ export default function SubmitPage(){
   const [communityAccount,setCommunityAccount]=useState(null)
   const [editingContributor,setEditingContributor]=useState(false)
   const [files,setFiles]=useState([])
+  const [uploadPolicy,setUploadPolicy]=useState({maxFiles:10,maxFileSizeMb:25})
   const [previewUrl,setPreviewUrl]=useState('')
   const [submitting,setSubmitting]=useState(false)
   const [result,setResult]=useState(()=>restoredReceipt?.result||null)
@@ -148,6 +149,13 @@ export default function SubmitPage(){
 
   useEffect(()=>{
     getSiteSettings().then(settings=>setSiteSettings(settings||{})).catch(()=>{})
+    getSubmissionUploadPolicy().then(policy=>{
+      const maxFiles=Number(policy?.maxFiles)
+      const maxFileSizeMb=Number(policy?.maxFileSizeMb)
+      if(Number.isInteger(maxFiles)&&maxFiles>0&&Number.isFinite(maxFileSizeMb)&&maxFileSizeMb>0){
+        setUploadPolicy({maxFiles,maxFileSizeMb})
+      }
+    }).catch(()=>{})
   },[])
 
   useEffect(()=>{
@@ -268,6 +276,8 @@ export default function SubmitPage(){
     if(clean(form.title).length<2) issues.push({step:2,key:'title',label:'Tên góc nhìn'})
     if(!isValidUrl(form.externalLink)) issues.push({step:2,key:'externalLink',label:'Link nội dung hợp lệ'})
     if(!files.length&&!clean(form.externalLink)&&!result) issues.push({step:3,key:'files',label:'File gốc hoặc link nội dung'})
+    if(files.length>uploadPolicy.maxFiles) issues.push({step:3,key:'fileCount',label:`Tối đa ${uploadPolicy.maxFiles} file`})
+    if(files.some(file=>file.size>uploadPolicy.maxFileSizeMb*1024*1024)) issues.push({step:3,key:'fileSize',label:`Mỗi file không quá ${uploadPolicy.maxFileSizeMb} MB`})
     if(!selectionArray(form.themes,form.theme).length) issues.push({step:4,key:'theme',label:'Ít nhất một chủ đề'})
     if(clean(form.location).length<2) issues.push({step:5,key:'location',label:'Địa điểm'})
     if(hasCoordinate(form.locationLat)!==hasCoordinate(form.locationLng)) issues.push({step:5,key:'coordinates',label:'Tọa độ địa điểm đầy đủ'})
@@ -378,7 +388,7 @@ export default function SubmitPage(){
       const detail=Array.isArray(err.details)&&err.details.length
         ? ' ' + err.details.map(item=>item?.message).filter(Boolean).join(' · ')
         : ''
-      setError((err.message || 'Có lỗi xảy ra khi gửi góc nhìn') + detail)
+      setError((err.message || 'Có lỗi xảy ra khi gửi góc nhìn') + detail + (err.requestId?` (Mã yêu cầu: ${err.requestId})`:''))
     } finally {
       setSubmitting(false)
     }
@@ -453,8 +463,8 @@ export default function SubmitPage(){
             <div className="upload-box" onClick={()=>inputRef.current?.click()}>
               <Upload size={34}/><b>Kéo thả tệp vào đây hoặc</b>
               <button type="button" className="btn btn-terra">Chọn tệp từ thiết bị</button>
-              <small>JPG, PNG, WEBP, MP4, MOV, PDF, DOC/DOCX, MP3 · tối đa theo cấu hình server.</small>
-              <input ref={inputRef} hidden multiple type="file" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" onChange={e=>{setError('');setFiles(Array.from(e.target.files || []).slice(0,10))}}/>
+              <small>JPG, PNG, WEBP, MP4, MOV, PDF, DOC/DOCX, MP3 · tối đa {uploadPolicy.maxFiles} file, mỗi file {uploadPolicy.maxFileSizeMb} MB.</small>
+              <input ref={inputRef} hidden multiple type="file" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" onChange={e=>{setError('');setFiles(Array.from(e.target.files || []))}}/>
             </div>
             <div className="upload-thumbs">{files.length?files.map((file,i)=><div className="file-chip" key={file.name + '-' + i}><ImageIcon/><span title={file.name}>{file.name}<small>{(file.size/1024/1024).toFixed(2)} MB</small></span><button onClick={(e)=>{e.stopPropagation();setError('');setFiles(v=>v.filter((_,idx)=>idx!==i))}}>×</button></div>):<button onClick={()=>inputRef.current?.click()}><ImageIcon/> Chưa có tệp · Thêm tệp</button>}</div>
           </div>}
