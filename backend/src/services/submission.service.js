@@ -90,7 +90,7 @@ async function storeOriginalFiles(client, submission, files = []) {
         });
       } catch (error) {
         console.error('R2 original media upload failed:', error);
-        throw new AppError('Không thể lưu ảnh/file lên kho lưu trữ. Vui lòng thử lại sau. Bản nháp vẫn được giữ trên thiết bị.', 503);
+        throw new AppError('Không thể lưu ảnh/file lên kho lưu trữ. Vui lòng giữ trang đang mở và thử gửi lại sau.', 503);
       }
       storageProvider = 'R2';
       bucket = buckets.originals;
