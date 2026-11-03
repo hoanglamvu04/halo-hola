@@ -61,6 +61,8 @@ export function updateCommunityAccount(payload) { return unwrap(client.patch('/c
 export function getCommunityContributionHistory() { return unwrap(client.get('/community-auth/submissions')); }
 export function logoutCommunityAccount() { return unwrap(client.post('/community-auth/logout')); }
 
+export function getSubmissionUploadPolicy() { return unwrap(client.get('/submissions/upload-policy', { timeout: 8000 })); }
+
 export async function submitArtwork(payload) {
   const form = new FormData();
   Object.entries(payload.fields || {}).forEach(([key, value]) => {
