@@ -123,7 +123,7 @@ export default function SubmitPage(){
   const lookupPath=result?.code?`/tra-cuu?code=${encodeURIComponent(result.code)}`:'/tra-cuu'
   const lookupLink=result?.code&&typeof window!=='undefined'?`${window.location.origin}${lookupPath}`:''
   const checkinGroupUrl=useMemo(()=>resolveCheckinGroupUrl(siteSettings),[siteSettings])
-  const facebookCaption=useMemo(()=>result?buildSubmissionFacebookCaption({form,code:result.code}):'',[form,result])
+  const facebookCaption=useMemo(()=>result?buildSubmissionFacebookCaption({form}):'',[form,result])
 
   useEffect(()=>{
     Promise.all([getThemes(),getColors()]).then(([themeRows,colorRows])=>{
@@ -244,7 +244,7 @@ export default function SubmitPage(){
     }
 
     try{
-      const status=await shareSubmission({caption:facebookCaption,url:lookupLink,files})
+      const status=await shareSubmission({caption:facebookCaption,files})
       showCopiedCaptionState()
       setShareNotice(status.filesIncluded
         ? 'Đã mở bảng chia sẻ với ảnh/video. Nội dung cũng đã được sao chép sẵn để bạn Dán nếu Facebook không giữ caption.'
