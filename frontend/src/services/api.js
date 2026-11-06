@@ -130,6 +130,8 @@ export function sendAdminSmtpTestEmail() { return unwrap(client.post('/admin/con
 export function getAdminCommunityLoginCodes(params = {}) { return unwrap(client.get('/admin/community-login-codes', { params })); }
 export function createAdminCommunityLoginCode(payload) { return unwrap(client.post('/admin/community-login-codes', payload)); }
 export function revokeAdminCommunityLoginCode(id) { return unwrap(client.delete('/admin/community-login-codes/' + encodeURIComponent(id))); }
+export function getAdminCommunityPublishers(params = {}) { return unwrap(client.get('/admin/community-publishers', { params })); }
+export function setAdminCommunityPublisherAccess(id,payload) { return unwrap(client.patch('/admin/community-publishers/' + encodeURIComponent(id) + '/auto-publish', payload)); }
 export function getAdminSubmissions(params = {}) { return unwrap(client.get('/admin/submissions', { params })); }
 export function getAdminPublicPreviewArtworks(params = {}) { return unwrap(client.get('/admin/public-preview/artworks', { params })); }
 export function getAdminPublicPreviewArtwork(id) { return unwrap(client.get('/admin/public-preview/artworks/' + encodeURIComponent(id))); }
