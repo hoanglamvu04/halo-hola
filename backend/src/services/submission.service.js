@@ -5,7 +5,7 @@ import path from 'node:path';
 import { pool, withTransaction } from '../database/pool.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
-import { kickHolaMapsSyncJob } from './holaMaps.service.js';
+import { kickHolaMapsSyncJob, reconcileSubmissionHolaMaps } from './holaMaps.service.js';
 import {
   createR2Client,
   hasR2Config,
@@ -122,15 +122,43 @@ async function storeOriginalFiles(client, submission, files = []) {
 }
 
 export async function createSubmission(data, files = [], { contributorId = null } = {}) {
-  return withTransaction(async (client) => {
+  const created = await withTransaction(async (client) => {
+    let autoPublishEnabled = false;
+    if (contributorId) {
+      const { rows: accountRows } = await client.query(
+        `SELECT status,auto_publish_enabled
+         FROM community_accounts WHERE id=$1 FOR SHARE`,
+        [contributorId]
+      );
+      const account = accountRows[0];
+      autoPublishEnabled = account?.status === 'ACTIVE' && truthy(account.auto_publish_enabled);
+    }
+
+    const hasImage = files.some(file => String(file?.mimetype || '').toLowerCase().startsWith('image/'));
+    const hasStructuredLocation = Boolean(String(data.locationPlaceId || '').trim()) ||
+      (data.locationLat !== undefined && data.locationLat !== null && data.locationLng !== undefined && data.locationLng !== null);
+    const rightsAreComplete = truthy(data.rightsConfirmed) &&
+      truthy(data.imageConsentConfirmed) &&
+      truthy(data.allowMediaUse, true) &&
+      (!truthy(data.isMinor) || truthy(data.guardianConsent));
+    const autoPublished = autoPublishEnabled && hasImage && hasStructuredLocation && rightsAreComplete;
+    const autoPublishSkippedReason = autoPublishEnabled && !autoPublished
+      ? (!hasImage
+          ? 'Cần ít nhất một ảnh để tự công bố lên HOLA Maps.'
+          : !hasStructuredLocation
+            ? 'Cần chọn địa điểm HOLA Maps hoặc ghim tọa độ.'
+            : 'Chưa đủ xác nhận quyền tác giả, hình ảnh hoặc quyền sử dụng media.')
+      : null;
+    const publicationAt = autoPublished ? new Date() : null;
+
     const code = await generateCode(client);
     const result = await client.query(
       `INSERT INTO submissions
        (code,name,display_name,email,phone,bio,title,captured_at,external_link,previous_award,previous_award_note,
         rights_confirmed,image_consent_confirmed,is_minor,guardian_name,guardian_consent,
         type,theme,color,location,hola_map_place_id,hola_map_place_slug,location_lat,location_lng,location_address,location_source,
-        story,allow_media_use,allow_newsletter,contributor_id)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+        story,allow_media_use,allow_newsletter,contributor_id,status,publication_state,published_at,publication_updated_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)
        RETURNING *`,
       [
         code,
@@ -162,7 +190,11 @@ export async function createSubmission(data, files = [], { contributorId = null 
         data.story,
         truthy(data.allowMediaUse, true),
         truthy(data.allowNewsletter, false),
-        contributorId
+        contributorId,
+        autoPublished ? 'VALID' : 'PENDING',
+        autoPublished ? 'PUBLISHED' : 'HIDDEN',
+        publicationAt,
+        publicationAt || new Date()
       ]
     );
 
@@ -181,8 +213,54 @@ export async function createSubmission(data, files = [], { contributorId = null 
 
     const submission = result.rows[0];
     const media = await storeOriginalFiles(client, submission, files);
-    return { ...submission, media };
+    if (autoPublished) {
+      const after = {
+        status: 'VALID',
+        publicationState: 'PUBLISHED',
+        publishedAt: publicationAt.toISOString(),
+        autoPublished: true
+      };
+      await client.query(
+        `INSERT INTO submission_publication_logs
+           (submission_id,actor_id,action,before_data,after_data,reason)
+         VALUES($1,NULL,'PUBLISH',$2::jsonb,$3::jsonb,$4)`,
+        [
+          submission.id,
+          JSON.stringify({status:'PENDING',publicationState:'HIDDEN'}),
+          JSON.stringify(after),
+          'Tự động công bố theo quyền tài khoản cộng đồng được ủy quyền.'
+        ]
+      );
+      await client.query(
+        `INSERT INTO community_auto_publish_audit
+           (community_account_id,submission_id,action,note,details)
+         VALUES($1,$2,'AUTO_PUBLISH',$3,$4::jsonb)`,
+        [
+          contributorId,
+          submission.id,
+          'Tác phẩm đủ ảnh, vị trí và xác nhận quyền để tự công bố.',
+          JSON.stringify({code:submission.code,title:submission.title})
+        ]
+      );
+    }
+    return {
+      ...submission,
+      media,
+      autoPublishEnabled,
+      autoPublished,
+      autoPublishSkippedReason
+    };
   });
+
+  if (created.autoPublished) {
+    try {
+      created.holaMapsSync = await reconcileSubmissionHolaMaps(created.id);
+    } catch (error) {
+      console.warn('Auto-published submission HOLA Maps queue failed:', error.message);
+      created.holaMapsSync = { action: 'ERROR', error: error.message };
+    }
+  }
+  return created;
 }
 
 export async function lookupSubmission(code, email) {
