@@ -124,14 +124,26 @@ async function storeOriginalFiles(client, submission, files = []) {
 export async function createSubmission(data, files = [], { contributorId = null } = {}) {
   const created = await withTransaction(async (client) => {
     let autoPublishEnabled = false;
+    let effectiveContributorId = null;
     if (contributorId) {
+      // Update/lock the account row once, so a concurrent revoke cannot deadlock
+      // against a later profile update in this same submission transaction.
       const { rows: accountRows } = await client.query(
-        `SELECT status,auto_publish_enabled
-         FROM community_accounts WHERE id=$1 FOR SHARE`,
-        [contributorId]
+        `UPDATE community_accounts SET
+           name=CASE WHEN COALESCE(name,'')='' THEN $2 ELSE name END,
+           display_name=CASE WHEN COALESCE(display_name,'')='' THEN NULLIF($3,'') ELSE display_name END,
+           phone=CASE WHEN COALESCE(phone,'')='' THEN NULLIF($4,'') ELSE phone END,
+           bio=CASE WHEN COALESCE(bio,'')='' THEN NULLIF($5,'') ELSE bio END,
+           updated_at=NOW()
+         WHERE id=$1 AND status='ACTIVE'
+         RETURNING status,auto_publish_enabled`,
+        [contributorId,data.name,data.displayName||'',data.phone||'',data.bio||'']
       );
       const account = accountRows[0];
-      autoPublishEnabled = account?.status === 'ACTIVE' && truthy(account.auto_publish_enabled);
+      if (account) {
+        effectiveContributorId = contributorId;
+        autoPublishEnabled = truthy(account.auto_publish_enabled);
+      }
     }
 
     const hasImage = files.some(file => String(file?.mimetype || '').toLowerCase().startsWith('image/'));
@@ -190,26 +202,13 @@ export async function createSubmission(data, files = [], { contributorId = null 
         data.story,
         truthy(data.allowMediaUse, true),
         truthy(data.allowNewsletter, false),
-        contributorId,
+        effectiveContributorId,
         autoPublished ? 'VALID' : 'PENDING',
         autoPublished ? 'PUBLISHED' : 'HIDDEN',
         publicationAt,
         publicationAt || new Date()
       ]
     );
-
-    if (contributorId) {
-      await client.query(
-        `UPDATE community_accounts SET
-           name=CASE WHEN COALESCE(name,'')='' THEN $2 ELSE name END,
-           display_name=CASE WHEN COALESCE(display_name,'')='' THEN NULLIF($3,'') ELSE display_name END,
-           phone=CASE WHEN COALESCE(phone,'')='' THEN NULLIF($4,'') ELSE phone END,
-           bio=CASE WHEN COALESCE(bio,'')='' THEN NULLIF($5,'') ELSE bio END,
-           updated_at=NOW()
-         WHERE id=$1`,
-        [contributorId,data.name,data.displayName||'',data.phone||'',data.bio||'']
-      );
-    }
 
     const submission = result.rows[0];
     const media = await storeOriginalFiles(client, submission, files);
@@ -236,7 +235,7 @@ export async function createSubmission(data, files = [], { contributorId = null 
            (community_account_id,submission_id,action,note,details)
          VALUES($1,$2,'AUTO_PUBLISH',$3,$4::jsonb)`,
         [
-          contributorId,
+          effectiveContributorId,
           submission.id,
           'Tác phẩm đủ ảnh, vị trí và xác nhận quyền để tự công bố.',
           JSON.stringify({code:submission.code,title:submission.title})
