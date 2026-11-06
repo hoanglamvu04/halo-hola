@@ -185,8 +185,9 @@ router.post('/', submissionRateLimiter, submissionUpload.fields([
       });
     }
 
-    // Important: a newly received submission is NOT sent to HOLA Maps here.
-    // HOLA Maps synchronization starts only after Admin approval + publication.
+    // Ordinary submissions remain in the review queue. A delegated publisher
+    // has already been marked VALID + PUBLISHED by createSubmission and its
+    // HOLA Maps sync job is queued after the database transaction.
     sendSubmissionReceived({
       to: created.email,
       name: created.display_name || created.name,
@@ -209,7 +210,14 @@ router.post('/', submissionRateLimiter, submissionUpload.fields([
       source: created.submission_source || 'WEB',
       facebookCompletionStatus: created.facebook_completion_status || 'PENDING',
       createdAt: created.created_at,
-      holaMapsSyncStatus: 'WAITING_PUBLICATION',
+      publicationState: created.publication_state || 'HIDDEN',
+      autoPublishEnabled: Boolean(created.autoPublishEnabled),
+      autoPublished: Boolean(created.autoPublished),
+      autoPublishSkippedReason: created.autoPublishSkippedReason || null,
+      holaMapsSyncStatus: created.autoPublished
+        ? (created.holaMapsSync?.action === 'ERROR' ? 'FAILED' : 'PENDING')
+        : 'WAITING_PUBLICATION',
+      holaMapsSyncAction: created.holaMapsSync?.action || null,
       optimizedMedia,
       media: created.media.map((m) => ({
         id: m.id,
