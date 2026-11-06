@@ -289,7 +289,7 @@ export async function setCommunityAutoPublishAccess({accountId,enabled,actorId,n
     const {rows}=await client.query(
       `UPDATE community_accounts SET
          auto_publish_enabled=$2,
-         auto_publish_granted_by=CASE WHEN $2 THEN $3 ELSE NULL END,
+         auto_publish_granted_by=CASE WHEN $2 THEN $3::uuid ELSE NULL::uuid END,
          auto_publish_granted_at=CASE WHEN $2 THEN NOW() ELSE NULL END,
          auto_publish_note=CASE WHEN $2 THEN NULLIF($4,'') ELSE NULL END,
          updated_at=NOW()
