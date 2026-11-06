@@ -37,6 +37,8 @@ function serializeAccount(row){
     avatarUrl:row.avatar_url||'',
     emailVerifiedAt:row.email_verified_at,
     hasPassword:Boolean(row.password_hash),
+    autoPublishEnabled:Boolean(row.auto_publish_enabled),
+    autoPublishGrantedAt:row.auto_publish_granted_at||null,
     createdAt:row.created_at,
     updatedAt:row.updated_at
   };
@@ -236,4 +238,74 @@ export async function revokeAdminCommunityLoginCode(id){
     [id]
   );
   return rows[0]||null;
+}
+
+
+export async function listAdminCommunityPublisherAccounts({q='',limit=200}={}) {
+  const values=[];
+  const conditions=[];
+  const needle=clean(q).toLowerCase();
+  if(needle){
+    values.push('%'+needle+'%');
+    conditions.push(`(LOWER(a.email) LIKE $1 OR LOWER(a.name) LIKE $1 OR LOWER(COALESCE(a.display_name,'')) LIKE $1)`);
+  }
+  values.push(Math.max(1,Math.min(500,Number(limit)||200)));
+  const limitParam=values.length;
+  const where=conditions.length?'WHERE '+conditions.join(' AND '):'';
+  const {rows}=await pool.query(
+    `SELECT
+       a.id,a.email,a.name,a.display_name AS "displayName",a.status,
+       a.email_verified_at AS "emailVerifiedAt",a.last_login_at AS "lastLoginAt",
+       a.auto_publish_enabled AS "autoPublishEnabled",
+       a.auto_publish_granted_at AS "autoPublishGrantedAt",
+       a.auto_publish_note AS "autoPublishNote",
+       a.created_at AS "createdAt",
+       COUNT(s.id)::int AS "submissionCount",
+       COUNT(s.id) FILTER (WHERE s.publication_state='PUBLISHED')::int AS "publishedCount"
+     FROM community_accounts a
+     LEFT JOIN submissions s ON s.contributor_id=a.id AND s.is_demo=FALSE
+     ${where}
+     GROUP BY a.id
+     ORDER BY a.auto_publish_enabled DESC,a.created_at DESC
+     LIMIT $${limitParam}`,
+    values
+  );
+  return rows;
+}
+
+export async function setCommunityAutoPublishAccess({accountId,enabled,actorId,note=''}) {
+  return withTransaction(async(client)=>{
+    const {rows:locked}=await client.query(
+      `SELECT id,status,email_verified_at
+       FROM community_accounts WHERE id=$1 FOR UPDATE`,
+      [accountId]
+    );
+    const account=locked[0];
+    if(!account)throw new AppError('Không tìm thấy tài khoản cộng đồng.',404);
+    if(enabled&&(account.status!=='ACTIVE'||!account.email_verified_at)){
+      throw new AppError('Chỉ cấp quyền cho tài khoản đang hoạt động và đã xác minh email.',400);
+    }
+
+    const {rows}=await client.query(
+      `UPDATE community_accounts SET
+         auto_publish_enabled=$2,
+         auto_publish_granted_by=CASE WHEN $2 THEN $3 ELSE NULL END,
+         auto_publish_granted_at=CASE WHEN $2 THEN NOW() ELSE NULL END,
+         auto_publish_note=CASE WHEN $2 THEN NULLIF($4,'') ELSE NULL END,
+         updated_at=NOW()
+       WHERE id=$1
+       RETURNING id,email,name,display_name AS "displayName",status,
+                 auto_publish_enabled AS "autoPublishEnabled",
+                 auto_publish_granted_at AS "autoPublishGrantedAt",
+                 auto_publish_note AS "autoPublishNote"`,
+      [accountId,Boolean(enabled),actorId||null,clean(note).slice(0,1000)]
+    );
+    await client.query(
+      `INSERT INTO community_auto_publish_audit
+         (community_account_id,actor_id,action,note,details)
+       VALUES($1,$2,$3,$4,$5::jsonb)`,
+      [accountId,actorId||null,enabled?'GRANT':'REVOKE',clean(note).slice(0,1000)||null,JSON.stringify({email:account.email})]
+    );
+    return rows[0];
+  });
 }
