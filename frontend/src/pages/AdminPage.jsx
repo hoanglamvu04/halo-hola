@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Images, Users, Map as MapIcon, CalendarDays, BookOpen, Handshake, Settings,
   LogIn, RefreshCw, ExternalLink, Home, FolderOpen, Globe2,
-  Activity, Layers3, Palette, ChevronRight, Camera, KeyRound, PlugZap
+  Activity, Layers3, Palette, ChevronRight, Camera, KeyRound, PlugZap, ShieldCheck
 } from 'lucide-react'
 import HomepageManager from '../components/HomepageManager.jsx'
 import ThemeManagementManager from '../components/ThemeManagementManager.jsx'
@@ -18,6 +18,7 @@ import AdminSubmissionOperations from '../components/AdminSubmissionOperations.j
 import PhotographerManager from '../components/PhotographerManager.jsx'
 import AdminConnectionsManager from '../components/AdminConnectionsManager.jsx'
 import AdminCommunityCodesManager from '../components/AdminCommunityCodesManager.jsx'
+import AdminPublisherAccessManager from '../components/AdminPublisherAccessManager.jsx'
 import {
   adminLogin, getAdminSubmissions, getAdminToken, setAdminToken,
   updateSubmissionStatus, getOriginalDownload, getAdminTourRegistrations
@@ -31,6 +32,7 @@ const navGroups=[
       {label:'Tổng quan',icon:LayoutDashboard,path:'/admin'},
       {label:'Góc nhìn',icon:Images,path:'/admin/submissions'},
       {label:'Tác giả',icon:Users,path:'/admin/authors'},
+      {label:'Ủy quyền',icon:ShieldCheck,path:'/admin/publishers'},
       {label:'Công bố',icon:Globe2,path:'/admin/publication'},
       {label:'Đội ảnh',icon:Camera,path:'/admin/photographers'}
     ]
@@ -69,6 +71,7 @@ const sectionDescriptions={
   'Tổng quan':'Ưu tiên công việc, theo dõi hồ sơ và tiến độ chương trình.',
   'Góc nhìn':'Theo dõi trọn luồng Đã nhận → Đủ thông tin → Biên tập → Công bố → HOLA Maps.',
   'Tác giả':'Danh sách người gửi và thông tin liên hệ theo hồ sơ.',
+  'Ủy quyền':'Chọn tài khoản được tự công bố góc nhìn và đồng bộ HOLA Maps.',
   'Công bố':'Kiểm soát góc nhìn nào được hiển thị ra website công khai.',
   'Đội ảnh':'Cấp tài khoản và nhận địa điểm cùng link Google Drive từ đội nhiếp ảnh.',
   'Trang chủ':'Biên tập các khối nội dung đang xuất hiện trên trang chủ.',
@@ -214,6 +217,7 @@ export default function AdminPage(){
      active==='Analytics'?<AnalyticsManager/>:
      active==='Mã xác minh'?<AdminCommunityCodesManager/>:
      active==='Kết nối'?<AdminConnectionsManager/>:
+     active==='Ủy quyền'?<AdminPublisherAccessManager/>:
      active==='Công bố'?<PublicationManager/>:
      active==='Đội ảnh'?<PhotographerManager/>:
      active==='HOLA Tour'?<div className="admin-cms-stack">
