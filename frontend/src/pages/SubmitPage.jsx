@@ -525,8 +525,12 @@ export default function SubmitPage(){
               <div className="submit-success-receipt">
                 <div className="submit-success-icon"><Check/></div>
                 <span className="submit-success-kicker">ĐÃ GHI NHẬN GÓC NHÌN</span>
-                <h3>Hãy lưu mã góc nhìn để theo dõi hành trình</h3>
-                <p>HALO HOLA đã nhận nội dung và file của bạn. Mã dưới đây giúp bạn theo dõi trạng thái kiểm tra, công bố, HOLA Maps và các bước ghi nhận tiếp theo.</p>
+                <h3>{result.autoPublished?'Góc nhìn đã tự động công bố':'Hãy lưu mã góc nhìn để theo dõi hành trình'}</h3>
+                <p>{result.autoPublished
+                  ? 'Tài khoản của bạn được ủy quyền xuất bản. Góc nhìn đã hiển thị trên website HALO HOLA và ảnh đang được xếp hàng đồng bộ lên HOLA Maps.'
+                  : 'HALO HOLA đã nhận nội dung và file của bạn. Mã dưới đây giúp bạn theo dõi trạng thái kiểm tra, công bố, HOLA Maps và các bước ghi nhận tiếp theo.'}</p>
+                {result.autoPublishEnabled&&!result.autoPublished&&result.autoPublishSkippedReason&&<div className="submit-success-reminder"><b>Chưa thể tự công bố:</b> {result.autoPublishSkippedReason} Bài đã được lưu để Ban Biên tập xử lý.</div>}
+                {result.autoPublished&&<div className="submit-success-reminder"><b>HOLA Maps:</b> {result.holaMapsSyncStatus==='FAILED'?'Chưa xếp hàng đồng bộ thành công; Admin có thể kiểm tra và đồng bộ lại.':'Đang chờ đồng bộ ảnh và vị trí.'}</div>}
 
                 <div className="submit-success-code">
                   <small>Mã góc nhìn</small>
