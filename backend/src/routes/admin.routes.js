@@ -31,7 +31,9 @@ import {
 import {
   issueAdminCommunityLoginCode,
   listAdminCommunityLoginCodes,
-  revokeAdminCommunityLoginCode
+  revokeAdminCommunityLoginCode,
+  listAdminCommunityPublisherAccounts,
+  setCommunityAutoPublishAccess
 } from '../services/communityAccount.service.js';
 const router = Router();
 // Authenticate every admin route before checking granular ADMIN permissions.
@@ -280,6 +282,30 @@ router.delete('/media-library/:id', async (req,res,next)=>{
     if(!item) throw new AppError('Không tìm thấy media.',404);
     res.json(item);
   }catch(error){next(error);}
+});
+
+const communityAutoPublishSchema=z.object({
+  enabled:z.boolean(),
+  note:z.string().trim().max(1000).optional().default('')
+});
+
+router.get('/community-publishers',requireRoles('ADMIN'),async(req,res,next)=>{
+  try{
+    res.set('Cache-Control','no-store');
+    res.json({items:await listAdminCommunityPublisherAccounts({q:req.query.q,limit:req.query.limit})});
+  }catch(error){next(error);}
+});
+
+router.patch('/community-publishers/:id/auto-publish',requireRoles('ADMIN'),async(req,res,next)=>{
+  try{
+    const accountId=z.string().uuid().parse(req.params.id);
+    const input=communityAutoPublishSchema.parse(req.body||{});
+    res.set('Cache-Control','no-store');
+    res.json(await setCommunityAutoPublishAccess({...input,accountId,actorId:req.user?.id}));
+  }catch(error){
+    if(error?.name==='ZodError')return next(new AppError('Thông tin ủy quyền chưa hợp lệ.',400,error.issues));
+    next(error);
+  }
 });
 
 const adminCommunityCodeSchema=z.object({
